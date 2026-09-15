@@ -148,6 +148,49 @@ GPL-3.0 Virastyar rules, and its source corpus states only that it merged
 `finglish`/`pinglish`/`persian transliteration`/`romanized persian` combined,
 three of which are GPT-generated TTS data with no declared licence.
 
+## 4c. The pronunciation dictionary — **found, wired in, and it made things worse**
+
+The generator's oldest documented weakness is that Persian does not write short
+vowels, so it infers where one belongs and *samples which one* — کتاب is an even
+chance of `ketab` or `kotab`. This document previously recorded that no
+permissively licensed Persian pronunciation dictionary existed. That was wrong:
+
+**[HomoRich G2P Persian](https://huggingface.co/datasets/MahtaFetrat/HomoRich-G2P-Persian)
+— CC0-1.0, 528,875 grapheme/phoneme pairs**, from Common Voice (CC0), ManaTTS
+(CC0), GPT-4o and human annotation. It gives کتاب `ketAb`, بزرگ `bozorg`,
+دانشگاه `dAneSgAh` — exactly the information the generator was inventing.
+
+Wiring it in and ablating at three rates, same 102k model, same recipe:
+
+| pronunciation used | fixtures | real Finglish |
+|---|---:|---:|
+| **0% (sampled)** | **74.8%** | **44.6%** |
+| 75% (blended) | 69.6% | 41.2% |
+| 100% (verbatim) | 65.2% | 37.7% |
+
+**Monotonic in the wrong direction, on both evaluation sets.** More correct
+data, worse model.
+
+The mechanism is diversity. Fixing each vowel to its true value cut distinct
+spellings per word from **4.72 to 4.09**. A model that only ever sees `ketaab`
+never learns that `ketab` and `ketob` are also کتاب, and real people type all
+three. The variation that looked like noise was doing the work: it was teaching
+robustness to how users actually type.
+
+> For this task, **correct** training data is worse than **varied** training
+> data. Stated here because it is counterintuitive and was not predicted.
+
+`USE_PRONUNCIATION` is therefore `False`. The dictionary, the build script and
+the leakage guard stay in the repository: the finding is worth keeping, and the
+value should rise if coverage improves past today's 23.9% of the lexicon.
+Turning it on requires a new measurement, not an assumption.
+
+**Leakage guard, which is not optional.** HomoRich and the gold set both draw on
+Common Voice: **97.3% of gold sentences (1,855 of 1,906) appear in HomoRich**.
+`build_pronunciation.py` excludes every matching row — 17,215 of them, ~3% of
+the source — before building. Without that, training on this dictionary and
+reporting a gold score would be testing on the training data.
+
 ## 4b. Informal Persian data — **still the binding problem**
 
 Finglish is chat Persian: `میرم`, `میخوام`, `چطوری`, `نمیدونم`. Formal corpora

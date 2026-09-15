@@ -80,8 +80,14 @@ Two negative results are worth more than the headline:
    bought +5.2 points on the hand-authored fixtures, +9.6 on the author-written
    set, and **−0.3** on real human Finglish.
 
-Both point the same way: the synthetic corpus is not the binding constraint.
-The missing sentence-context model is.
+3. **Adding a real pronunciation dictionary made it worse**, monotonically:
+   74.8% / 69.6% / 65.2% on fixtures at 0% / 75% / 100% pronunciation use, and
+   44.6% / 41.2% / 37.7% on real Finglish. Correcting the short vowels cut
+   spelling diversity from 4.72 to 4.09 per word, and the diversity was what
+   made the model robust.
+
+All three point the same way: the synthetic corpus is not the binding
+constraint. The missing sentence-context model is.
 
 ## Limitations
 

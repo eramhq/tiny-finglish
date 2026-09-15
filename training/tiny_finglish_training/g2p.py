@@ -71,6 +71,38 @@ SHORT_VOWEL_PRIOR = (("a", 0.45), ("e", 0.35), ("o", 0.20))
 #: is exactly what makes these systems robust.
 VARIANT_RATE = 0.30
 
+#: How often a known short vowel is used verbatim when the dictionary is
+#: enabled at all. See USE_PRONUNCIATION below for why it is not, by default.
+PRONUNCIATION_RATE = 0.75
+
+#: Whether to use the real pronunciation dictionary. **Off, and that is a
+#: measured decision, not an oversight.**
+#:
+#: Persian does not write short vowels, so this generator infers where one
+#: belongs and samples which one. That is the weakness this module's docstring
+#: has always flagged, and `data/lexicon/fa-pronunciation.bin` (CC0) fixes it
+#: in principle: کتاب really is `ketab`, بزرگ really is `bozorg`.
+#:
+#: Using it makes the model worse. Ablated at three rates, same 102k model,
+#: same recipe, word accuracy:
+#:
+#:     pronunciation    fixtures    real Finglish
+#:       0% (sampled)      74.8%           44.6%
+#:      75% (blended)      69.6%           41.2%
+#:     100% (verbatim)     65.2%           37.7%
+#:
+#: Monotonic in the wrong direction, on both evaluation sets. The mechanism is
+#: diversity: fixing the vowel to the correct one cut distinct spellings per
+#: word from 4.72 to 4.09. A model that only ever sees `ketaab` never learns
+#: that `ketab` and `ketob` are also کتاب — and real people type all three.
+#:
+#: So for this task, *correct* training data is worse than *varied* training
+#: data. The dictionary stays in the repository because the finding is worth
+#: keeping and because its value should rise if coverage improves past today's
+#: 23.9% of the lexicon — but it is off, and turning it on needs a new
+#: measurement, not an assumption.
+USE_PRONUNCIATION = False
+
 #: How often a vowel is written as a diphthong (`ow` for و, `ey` for ی).
 #: Measured as low single digits in real Finglish, not the ~15% the old
 #: variant_rate/2 heuristic produced.
@@ -90,10 +122,12 @@ class FinglishGenerator:
         self,
         seed: int | None = None,
         variant_rate: float = VARIANT_RATE,
-        use_pronunciation: bool = True,
+        use_pronunciation: bool = USE_PRONUNCIATION,
+        pronunciation_rate: float = PRONUNCIATION_RATE,
     ):
         self.rng = random.Random(seed)
         self.variant_rate = variant_rate
+        self.pronunciation_rate = pronunciation_rate
         #: Persian word -> phoneme. Supplies the short vowels the script omits.
         #: Empty when the artifact is absent, in which case they are sampled.
         self.pronunciation = load_pronunciation() if use_pronunciation else {}
@@ -155,11 +189,15 @@ class FinglishGenerator:
         return options[0]
 
     def _short_vowel(self) -> str:
-        # Real pronunciation first, in order. A word can need more vowel slots
-        # than the phoneme string supplies (ezafe, clitics), so the fallback
-        # stays live rather than being an error path.
+        # Real pronunciation first, in order — but only `pronunciation_rate` of
+        # the time. The queue is consumed either way so later slots stay
+        # aligned with the word. A word can also need more vowel slots than the
+        # phoneme string supplies (ezafe, clitics), so the fallback stays live
+        # rather than being an error path.
         if self._vowels:
-            return self._vowels.pop(0)
+            known = self._vowels.pop(0)
+            if self.rng.random() < self.pronunciation_rate:
+                return known
         r = self.rng.random()
         cumulative = 0.0
         for vowel, p in SHORT_VOWEL_PRIOR:
