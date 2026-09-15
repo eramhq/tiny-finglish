@@ -1,0 +1,77 @@
+{
+  "$comment": "Hand-authored normalization inputs. Both src/normalize.ts and training/tiny_finglish_training/normalize.py run every case and must agree with normalization.jsonl. Each group targets one hazard the plan calls out.",
+  "groups": {
+    "arabic-vs-persian-letters": [
+      "كتاب",
+      "يكروز",
+      "عربي",
+      "موسى",
+      "ڪوچک",
+      "براے",
+      "پېش"
+    ],
+    "heh-variants-and-the-ezafe-trap": [
+      "ۀ",
+      "ۀ",
+      "هٔ",
+      "خانۀ ما",
+      "نامة",
+      "مدرسة",
+      "ہمه"
+    ],
+    "diacritics-and-tatweel": [
+      "سَلام",
+      "مُحمَّد",
+      "سلامـــ",
+      "كــتـاب",
+      "اللٰه"
+    ],
+    "presentation-forms": [
+      "ﻢﻣ",
+      "ﻻ",
+      "ﷲ",
+      "﷼",
+      "ﻳﺎ"
+    ],
+    "digits": [
+      "١٢٣",
+      "۱۲۳",
+      "123",
+      "سال ١٣٩٩",
+      "خیابان ۱۵ پلاک 123"
+    ],
+    "zwnj-hygiene": [
+      "می‌روم",
+      "تن‌‌ها",
+      "تنها",
+      "‌سلام‌",
+      "سلام ‌ خوبی؟",
+      "کتاب‌های من",
+      "می‌روم‌."
+    ],
+    "invisibles": [
+      "﻿سلام",
+      "س‍لام",
+      "‎سلام‏",
+      "؜سلام"
+    ],
+    "hamza-carriers": [
+      "مسأله",
+      "إیران",
+      "رئیس",
+      "مؤمن",
+      "اشیاء",
+      "آب"
+    ],
+    "mixed-and-passthrough": [
+      "salam donya",
+      "سلام world",
+      "https://example.ir/سلام",
+      "ali@example.com",
+      "",
+      " ",
+      "\n\n",
+      "😀 سلام"
+    ]
+  }
+}

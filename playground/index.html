@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>tiny-finglish playground</title>
+    <link rel="stylesheet" href="./src/style.css" />
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>tiny-finglish</h1>
+        <p class="sub">
+          Finglish &rarr; Persian, entirely in this tab. No server, no API key.
+        </p>
+      </header>
+
+      <section class="io">
+        <label for="input">Finglish</label>
+        <textarea id="input" rows="3" spellcheck="false"
+          placeholder="salam, man emrooz miram Muscat">salam, man emrooz miram Muscat</textarea>
+
+        <label for="output">Persian</label>
+        <output id="output" dir="rtl" lang="fa"></output>
+
+        <div class="meta">
+          <span id="confidence"></span>
+          <span id="timing"></span>
+          <span id="engine"></span>
+        </div>
+      </section>
+
+      <section class="controls">
+        <label><input type="checkbox" id="use-model" checked /> use learned model</label>
+        <label><input type="checkbox" id="use-lexicon" checked /> rank with lexicon</label>
+        <label><input type="checkbox" id="use-snap" /> lexicon snap (tier 4)</label>
+        <label>beam <input type="number" id="beam" value="8" min="1" max="32" /></label>
+      </section>
+
+      <section>
+        <h2>Alternatives</h2>
+        <ol id="alternatives" dir="rtl" lang="fa"></ol>
+      </section>
+
+      <section>
+        <h2>Spans</h2>
+        <p class="hint">
+          Every span shows what happened to it and why. Converted spans list
+          each candidate the decoder considered with its probability.
+        </p>
+        <div id="spans"></div>
+      </section>
+
+      <footer>
+        <p>
+          Confidence is the length-normalized likelihood of the best path, so a
+          long word is not penalized for being long. Protected spans &mdash;
+          URLs, emails, <code>@mentions</code>, numbers, code, English &mdash;
+          pass through byte-identical and are never scored.
+        </p>
+      </footer>
+    </main>
+    <script type="module" src="./src/main.ts"></script>
+  </body>
+</html>

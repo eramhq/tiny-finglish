@@ -1,0 +1,71 @@
+{"id": "gold-001", "input": "ruz", "expected": "روز", "alternatives": []}
+{"id": "gold-002", "input": "shab", "expected": "شب", "alternatives": []}
+{"id": "gold-003", "input": "sobh bekheir", "expected": "صبح بخیر", "alternatives": []}
+{"id": "gold-004", "input": "shab bekheir", "expected": "شب بخیر", "alternatives": []}
+{"id": "gold-005", "input": "khodahafez", "expected": "خداحافظ", "alternatives": []}
+{"id": "gold-006", "input": "bebakhshid", "expected": "ببخشید", "alternatives": []}
+{"id": "gold-007", "input": "lotfan", "expected": "لطفا", "alternatives": []}
+{"id": "gold-008", "input": "khahesh mikonam", "expected": "خواهش میکنم", "alternatives": []}
+{"id": "gold-009", "input": "esme man", "expected": "اسم من", "alternatives": []}
+{"id": "gold-010", "input": "chand sale", "expected": "چند ساله", "alternatives": []}
+{"id": "gold-011", "input": "koja zendegi mikoni", "expected": "کجا زندگی میکنی", "alternatives": []}
+{"id": "gold-012", "input": "hava sard ast", "expected": "هوا سرد است", "alternatives": []}
+{"id": "gold-013", "input": "baran mibarad", "expected": "باران میبارد", "alternatives": []}
+{"id": "gold-014", "input": "aftab", "expected": "آفتاب", "alternatives": []}
+{"id": "gold-015", "input": "zemestan", "expected": "زمستان", "alternatives": []}
+{"id": "gold-016", "input": "tabestan", "expected": "تابستان", "alternatives": []}
+{"id": "gold-017", "input": "bahar", "expected": "بهار", "alternatives": []}
+{"id": "gold-018", "input": "paeez", "expected": "پاییز", "alternatives": []}
+{"id": "gold-019", "input": "gorbe", "expected": "گربه", "alternatives": []}
+{"id": "gold-020", "input": "sag", "expected": "سگ", "alternatives": []}
+{"id": "gold-021", "input": "asb", "expected": "اسب", "alternatives": []}
+{"id": "gold-022", "input": "parande", "expected": "پرنده", "alternatives": []}
+{"id": "gold-023", "input": "mahi", "expected": "ماهی", "alternatives": []}
+{"id": "gold-024", "input": "derakht", "expected": "درخت", "alternatives": []}
+{"id": "gold-025", "input": "gol", "expected": "گل", "alternatives": []}
+{"id": "gold-026", "input": "jangal", "expected": "جنگل", "alternatives": []}
+{"id": "gold-027", "input": "darya", "expected": "دریا", "alternatives": []}
+{"id": "gold-028", "input": "kooh", "expected": "کوه", "alternatives": []}
+{"id": "gold-029", "input": "aseman", "expected": "آسمان", "alternatives": []}
+{"id": "gold-030", "input": "setare", "expected": "ستاره", "alternatives": []}
+{"id": "gold-031", "input": "mah", "expected": "ماه", "alternatives": []}
+{"id": "gold-032", "input": "khorshid", "expected": "خورشید", "alternatives": []}
+{"id": "gold-033", "input": "dast chap", "expected": "دست چپ", "alternatives": []}
+{"id": "gold-034", "input": "dast rast", "expected": "دست راست", "alternatives": []}
+{"id": "gold-035", "input": "bala", "expected": "بالا", "alternatives": []}
+{"id": "gold-036", "input": "paeen", "expected": "پایین", "alternatives": []}
+{"id": "gold-037", "input": "jelo", "expected": "جلو", "alternatives": []}
+{"id": "gold-038", "input": "aghab", "expected": "عقب", "alternatives": []}
+{"id": "gold-039", "input": "nazdik", "expected": "نزدیک", "alternatives": []}
+{"id": "gold-040", "input": "door", "expected": "دور", "alternatives": []}
+{"id": "gold-041", "input": "gorosne", "expected": "گرسنه", "alternatives": []}
+{"id": "gold-042", "input": "teshne", "expected": "تشنه", "alternatives": []}
+{"id": "gold-043", "input": "khaste", "expected": "خسته", "alternatives": []}
+{"id": "gold-044", "input": "khoshhal", "expected": "خوشحال", "alternatives": []}
+{"id": "gold-045", "input": "narahat", "expected": "ناراحت", "alternatives": []}
+{"id": "gold-046", "input": "asabani", "expected": "عصبانی", "alternatives": []}
+{"id": "gold-047", "input": "aroom", "expected": "آروم", "alternatives": []}
+{"id": "gold-048", "input": "tanha", "expected": "تنها", "alternatives": []}
+{"id": "gold-049", "input": "pool", "expected": "پول", "alternatives": []}
+{"id": "gold-050", "input": "gheymat", "expected": "قیمت", "alternatives": []}
+{"id": "gold-051", "input": "arzoon", "expected": "ارزون", "alternatives": []}
+{"id": "gold-052", "input": "geroon", "expected": "گرون", "alternatives": []}
+{"id": "gold-053", "input": "foroushgah", "expected": "فروشگاه", "alternatives": []}
+{"id": "gold-054", "input": "bazar", "expected": "بازار", "alternatives": []}
+{"id": "gold-055", "input": "restoran", "expected": "رستوران", "alternatives": []}
+{"id": "gold-056", "input": "telefon", "expected": "تلفن", "alternatives": []}
+{"id": "gold-057", "input": "computer", "expected": "کامپیوتر", "alternatives": []}
+{"id": "gold-058", "input": "barname", "expected": "برنامه", "alternatives": []}
+{"id": "gold-059", "input": "axs", "expected": "عکس", "alternatives": []}
+{"id": "gold-060", "input": "sedaye", "expected": "صدای", "alternatives": []}
+{"id": "gold-061", "input": "zaban", "expected": "زبان", "alternatives": []}
+{"id": "gold-062", "input": "farsi", "expected": "فارسی", "alternatives": []}
+{"id": "gold-063", "input": "englisi", "expected": "انگلیسی", "alternatives": []}
+{"id": "gold-064", "input": "man farda be shomal miram", "expected": "من فردا به شمال میرم", "alternatives": []}
+{"id": "gold-065", "input": "in ghaza kheili khoshmaze bood", "expected": "این غذا خیلی خوشمزه بود", "alternatives": []}
+{"id": "gold-066", "input": "bebakhshid, saat chande?", "expected": "ببخشید، ساعت چنده؟", "alternatives": []}
+{"id": "gold-067", "input": "mitoonid komakam konid?", "expected": "میتونید کمکم کنید؟", "alternatives": []}
+{"id": "gold-068", "input": "hanooz kar daram", "expected": "هنوز کار دارم", "alternatives": []}
+{"id": "gold-069", "input": "fekr mikonam behtar bashe", "expected": "فکر میکنم بهتر باشه", "alternatives": []}
+{"id": "gold-070", "input": "az didanet khoshhal shodam", "expected": "از دیدنت خوشحال شدم", "alternatives": []}
+{"id": "gold-071", "input": "hichvaght faramoosh nemikonam", "expected": "هیچوقت فراموش نمیکنم", "alternatives": []}

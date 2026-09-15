@@ -1,0 +1,54 @@
+{"group": "arabic-vs-persian-letters", "input": "كتاب", "output": "کتاب", "fold": "کتاب"}
+{"group": "arabic-vs-persian-letters", "input": "يكروز", "output": "یکروز", "fold": "یکروز"}
+{"group": "arabic-vs-persian-letters", "input": "عربي", "output": "عربی", "fold": "عربی"}
+{"group": "arabic-vs-persian-letters", "input": "موسى", "output": "موسی", "fold": "موسی"}
+{"group": "arabic-vs-persian-letters", "input": "ڪوچک", "output": "کوچک", "fold": "کوچک"}
+{"group": "arabic-vs-persian-letters", "input": "براے", "output": "برای", "fold": "برای"}
+{"group": "arabic-vs-persian-letters", "input": "پېش", "output": "پیش", "fold": "پیش"}
+{"group": "heh-variants-and-the-ezafe-trap", "input": "ۀ", "output": "هٔ", "fold": "ه"}
+{"group": "heh-variants-and-the-ezafe-trap", "input": "ۀ", "output": "هٔ", "fold": "ه"}
+{"group": "heh-variants-and-the-ezafe-trap", "input": "هٔ", "output": "هٔ", "fold": "ه"}
+{"group": "heh-variants-and-the-ezafe-trap", "input": "خانۀ ما", "output": "خانهٔ ما", "fold": "خانه ما"}
+{"group": "heh-variants-and-the-ezafe-trap", "input": "نامة", "output": "نامه", "fold": "نامه"}
+{"group": "heh-variants-and-the-ezafe-trap", "input": "مدرسة", "output": "مدرسه", "fold": "مدرسه"}
+{"group": "heh-variants-and-the-ezafe-trap", "input": "ہمه", "output": "همه", "fold": "همه"}
+{"group": "diacritics-and-tatweel", "input": "سَلام", "output": "سلام", "fold": "سلام"}
+{"group": "diacritics-and-tatweel", "input": "مُحمَّد", "output": "محمد", "fold": "محمد"}
+{"group": "diacritics-and-tatweel", "input": "سلامـــ", "output": "سلام", "fold": "سلام"}
+{"group": "diacritics-and-tatweel", "input": "كــتـاب", "output": "کتاب", "fold": "کتاب"}
+{"group": "diacritics-and-tatweel", "input": "اللٰه", "output": "الله", "fold": "الله"}
+{"group": "presentation-forms", "input": "ﻢﻣ", "output": "مم", "fold": "مم"}
+{"group": "presentation-forms", "input": "ﻻ", "output": "لا", "fold": "لا"}
+{"group": "presentation-forms", "input": "ﷲ", "output": "الله", "fold": "الله"}
+{"group": "presentation-forms", "input": "﷼", "output": "ریال", "fold": "ریال"}
+{"group": "presentation-forms", "input": "ﻳﺎ", "output": "یا", "fold": "یا"}
+{"group": "digits", "input": "١٢٣", "output": "۱۲۳", "fold": "123"}
+{"group": "digits", "input": "۱۲۳", "output": "۱۲۳", "fold": "123"}
+{"group": "digits", "input": "123", "output": "123", "fold": "123"}
+{"group": "digits", "input": "سال ١٣٩٩", "output": "سال ۱۳۹۹", "fold": "سال 1399"}
+{"group": "digits", "input": "خیابان ۱۵ پلاک 123", "output": "خیابان ۱۵ پلاک 123", "fold": "خیابان 15 پلاک 123"}
+{"group": "zwnj-hygiene", "input": "می‌روم", "output": "می‌روم", "fold": "میروم"}
+{"group": "zwnj-hygiene", "input": "تن‌‌ها", "output": "تن‌ها", "fold": "تنها"}
+{"group": "zwnj-hygiene", "input": "تنها", "output": "تنها", "fold": "تنها"}
+{"group": "zwnj-hygiene", "input": "‌سلام‌", "output": "سلام", "fold": "سلام"}
+{"group": "zwnj-hygiene", "input": "سلام ‌ خوبی؟", "output": "سلام  خوبی؟", "fold": "سلام خوبی؟"}
+{"group": "zwnj-hygiene", "input": "کتاب‌های من", "output": "کتاب‌های من", "fold": "کتابهای من"}
+{"group": "zwnj-hygiene", "input": "می‌روم‌.", "output": "می‌روم.", "fold": "میروم."}
+{"group": "invisibles", "input": "﻿سلام", "output": "سلام", "fold": "سلام"}
+{"group": "invisibles", "input": "س‍لام", "output": "سلام", "fold": "سلام"}
+{"group": "invisibles", "input": "‎سلام‏", "output": "سلام", "fold": "سلام"}
+{"group": "invisibles", "input": "؜سلام", "output": "سلام", "fold": "سلام"}
+{"group": "hamza-carriers", "input": "مسأله", "output": "مساله", "fold": "مساله"}
+{"group": "hamza-carriers", "input": "إیران", "output": "ایران", "fold": "ایران"}
+{"group": "hamza-carriers", "input": "رئیس", "output": "رئیس", "fold": "رئیس"}
+{"group": "hamza-carriers", "input": "مؤمن", "output": "مؤمن", "fold": "مؤمن"}
+{"group": "hamza-carriers", "input": "اشیاء", "output": "اشیاء", "fold": "اشیاء"}
+{"group": "hamza-carriers", "input": "آب", "output": "آب", "fold": "آب"}
+{"group": "mixed-and-passthrough", "input": "salam donya", "output": "salam donya", "fold": "salam donya"}
+{"group": "mixed-and-passthrough", "input": "سلام world", "output": "سلام world", "fold": "سلام world"}
+{"group": "mixed-and-passthrough", "input": "https://example.ir/سلام", "output": "https://example.ir/سلام", "fold": "https://example.ir/سلام"}
+{"group": "mixed-and-passthrough", "input": "ali@example.com", "output": "ali@example.com", "fold": "ali@example.com"}
+{"group": "mixed-and-passthrough", "input": "", "output": "", "fold": ""}
+{"group": "mixed-and-passthrough", "input": " ", "output": " ", "fold": ""}
+{"group": "mixed-and-passthrough", "input": "\n\n", "output": "\n\n", "fold": ""}
+{"group": "mixed-and-passthrough", "input": "😀 سلام", "output": "😀 سلام", "fold": "😀 سلام"}

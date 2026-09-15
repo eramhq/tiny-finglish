@@ -1,0 +1,18 @@
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+
+# Training artifacts. Corpora and checkpoints are NOT committed: licenses and
+# sizes make that inappropriate. Exported weights and parity fixtures ARE.
+training/.venv/
+training/runs/
+training/corpora/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+
+# Large upstream sources, fetched by scripts/fetch-lexicon.sh and rebuilt into
+# the small committed artifact under data/lexicon/.
+data/lexicon/upstream/

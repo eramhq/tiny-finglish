@@ -1,0 +1,175 @@
+{"id": "ordinary-001", "category": "ordinary", "input": "salam", "expected": "سلام", "alternatives": []}
+{"id": "ordinary-002", "category": "ordinary", "input": "khoob", "expected": "خوب", "alternatives": []}
+{"id": "ordinary-003", "category": "ordinary", "input": "khoobi", "expected": "خوبی", "alternatives": []}
+{"id": "ordinary-004", "category": "ordinary", "input": "merci", "expected": "مرسی", "alternatives": []}
+{"id": "ordinary-005", "category": "ordinary", "input": "man", "expected": "من", "alternatives": []}
+{"id": "ordinary-006", "category": "ordinary", "input": "to", "expected": "تو", "alternatives": []}
+{"id": "ordinary-007", "category": "ordinary", "input": "ma", "expected": "ما", "alternatives": []}
+{"id": "ordinary-008", "category": "ordinary", "input": "shoma", "expected": "شما", "alternatives": []}
+{"id": "ordinary-009", "category": "ordinary", "input": "oo", "expected": "او", "alternatives": []}
+{"id": "ordinary-010", "category": "ordinary", "input": "anha", "expected": "آنها", "alternatives": []}
+{"id": "ordinary-011", "category": "ordinary", "input": "emrooz", "expected": "امروز", "alternatives": []}
+{"id": "ordinary-012", "category": "ordinary", "input": "farda", "expected": "فردا", "alternatives": []}
+{"id": "ordinary-013", "category": "ordinary", "input": "dirooz", "expected": "دیروز", "alternatives": []}
+{"id": "ordinary-014", "category": "ordinary", "input": "emshab", "expected": "امشب", "alternatives": []}
+{"id": "ordinary-015", "category": "ordinary", "input": "ketab", "expected": "کتاب", "alternatives": []}
+{"id": "ordinary-016", "category": "ordinary", "input": "daftar", "expected": "دفتر", "alternatives": []}
+{"id": "ordinary-017", "category": "ordinary", "input": "ghalam", "expected": "قلم", "alternatives": []}
+{"id": "ordinary-018", "category": "ordinary", "input": "miz", "expected": "میز", "alternatives": []}
+{"id": "ordinary-019", "category": "ordinary", "input": "khane", "expected": "خانه", "alternatives": []}
+{"id": "ordinary-020", "category": "ordinary", "input": "dar", "expected": "در", "alternatives": []}
+{"id": "ordinary-021", "category": "ordinary", "input": "panjere", "expected": "پنجره", "alternatives": []}
+{"id": "ordinary-022", "category": "ordinary", "input": "otagh", "expected": "اتاق", "alternatives": []}
+{"id": "ordinary-023", "category": "ordinary", "input": "doost", "expected": "دوست", "alternatives": []}
+{"id": "ordinary-024", "category": "ordinary", "input": "madar", "expected": "مادر", "alternatives": []}
+{"id": "ordinary-025", "category": "ordinary", "input": "pedar", "expected": "پدر", "alternatives": []}
+{"id": "ordinary-026", "category": "ordinary", "input": "baradar", "expected": "برادر", "alternatives": []}
+{"id": "ordinary-027", "category": "ordinary", "input": "khahar", "expected": "خواهر", "alternatives": []}
+{"id": "ordinary-028", "category": "ordinary", "input": "farzand", "expected": "فرزند", "alternatives": []}
+{"id": "ordinary-029", "category": "ordinary", "input": "bache", "expected": "بچه", "alternatives": []}
+{"id": "ordinary-030", "category": "ordinary", "input": "shahr", "expected": "شهر", "alternatives": []}
+{"id": "ordinary-031", "category": "ordinary", "input": "keshvar", "expected": "کشور", "alternatives": []}
+{"id": "ordinary-032", "category": "ordinary", "input": "roosta", "expected": "روستا", "alternatives": []}
+{"id": "ordinary-033", "category": "ordinary", "input": "khiaban", "expected": "خیابان", "alternatives": []}
+{"id": "ordinary-034", "category": "ordinary", "input": "daneshgah", "expected": "دانشگاه", "alternatives": []}
+{"id": "ordinary-035", "category": "ordinary", "input": "madrese", "expected": "مدرسه", "alternatives": []}
+{"id": "ordinary-036", "category": "ordinary", "input": "bimarestan", "expected": "بیمارستان", "alternatives": []}
+{"id": "ordinary-037", "category": "ordinary", "input": "mashin", "expected": "ماشین", "alternatives": []}
+{"id": "ordinary-038", "category": "ordinary", "input": "havapeyma", "expected": "هواپیما", "alternatives": []}
+{"id": "ordinary-039", "category": "ordinary", "input": "ghatar", "expected": "قطار", "alternatives": []}
+{"id": "ordinary-040", "category": "ordinary", "input": "docharkhe", "expected": "دوچرخه", "alternatives": []}
+{"id": "ordinary-041", "category": "ordinary", "input": "ab", "expected": "آب", "alternatives": []}
+{"id": "ordinary-042", "category": "ordinary", "input": "nan", "expected": "نان", "alternatives": []}
+{"id": "ordinary-043", "category": "ordinary", "input": "ghaza", "expected": "غذا", "alternatives": []}
+{"id": "ordinary-044", "category": "ordinary", "input": "chai", "expected": "چای", "alternatives": []}
+{"id": "ordinary-045", "category": "ordinary", "input": "ghahve", "expected": "قهوه", "alternatives": []}
+{"id": "ordinary-046", "category": "ordinary", "input": "sib", "expected": "سیب", "alternatives": []}
+{"id": "ordinary-047", "category": "ordinary", "input": "portoghal", "expected": "پرتقال", "alternatives": []}
+{"id": "ordinary-048", "category": "ordinary", "input": "hendune", "expected": "هندوانه", "alternatives": []}
+{"id": "ordinary-049", "category": "ordinary", "input": "bozorg", "expected": "بزرگ", "alternatives": []}
+{"id": "ordinary-050", "category": "ordinary", "input": "koochak", "expected": "کوچک", "alternatives": []}
+{"id": "ordinary-051", "category": "ordinary", "input": "ziba", "expected": "زیبا", "alternatives": []}
+{"id": "ordinary-052", "category": "ordinary", "input": "bad", "expected": "بد", "alternatives": []}
+{"id": "ordinary-053", "category": "ordinary", "input": "sefid", "expected": "سفید", "alternatives": []}
+{"id": "ordinary-054", "category": "ordinary", "input": "siah", "expected": "سیاه", "alternatives": []}
+{"id": "ordinary-055", "category": "ordinary", "input": "ghermez", "expected": "قرمز", "alternatives": []}
+{"id": "ordinary-056", "category": "ordinary", "input": "abi", "expected": "آبی", "alternatives": []}
+{"id": "ordinary-057", "category": "ordinary", "input": "sabz", "expected": "سبز", "alternatives": []}
+{"id": "ordinary-058", "category": "ordinary", "input": "yek", "expected": "یک", "alternatives": []}
+{"id": "ordinary-059", "category": "ordinary", "input": "do", "expected": "دو", "alternatives": []}
+{"id": "ordinary-060", "category": "ordinary", "input": "se", "expected": "سه", "alternatives": []}
+{"id": "ordinary-061", "category": "ordinary", "input": "chahar", "expected": "چهار", "alternatives": []}
+{"id": "ordinary-062", "category": "ordinary", "input": "panj", "expected": "پنج", "alternatives": []}
+{"id": "ordinary-063", "category": "ordinary", "input": "kar", "expected": "کار", "alternatives": []}
+{"id": "ordinary-064", "category": "ordinary", "input": "zendegi", "expected": "زندگی", "alternatives": []}
+{"id": "ordinary-065", "category": "ordinary", "input": "eshgh", "expected": "عشق", "alternatives": []}
+{"id": "ordinary-066", "category": "ordinary", "input": "del", "expected": "دل", "alternatives": []}
+{"id": "ordinary-067", "category": "ordinary", "input": "dast", "expected": "دست", "alternatives": []}
+{"id": "ambiguous-001", "category": "ambiguous", "input": "sabr", "expected": "صبر", "alternatives": [], "notes": "ص not س — Arabic loan; contrast `sabz` سبز."}
+{"id": "ambiguous-002", "category": "ambiguous", "input": "sabz", "expected": "سبز", "alternatives": [], "notes": "س not ص — Persian-origin; contrast `sabr` صبر."}
+{"id": "ambiguous-003", "category": "ambiguous", "input": "sad", "expected": "صد", "alternatives": [], "notes": "Genuine minimal pair with سد (dam); the only high-traffic one."}
+{"id": "ambiguous-004", "category": "ambiguous", "input": "sobh", "expected": "صبح", "alternatives": [], "notes": "ص; coda cluster بح is attested."}
+{"id": "ambiguous-005", "category": "ambiguous", "input": "salam", "expected": "سلام", "alternatives": [], "notes": "س — the common greeting, not سلم."}
+{"id": "ambiguous-006", "category": "ambiguous", "input": "hayat", "expected": "حیات", "alternatives": [], "notes": "ح; حیاط (courtyard) is an equally valid reading."}
+{"id": "ambiguous-007", "category": "ambiguous", "input": "zohr", "expected": "ظهر", "alternatives": [], "notes": "ظ, the rarest of the four z letters."}
+{"id": "ambiguous-008", "category": "ambiguous", "input": "zarf", "expected": "ظرف", "alternatives": [], "notes": "ظ not ز."}
+{"id": "ambiguous-009", "category": "ambiguous", "input": "zabt", "expected": "ضبط", "alternatives": [], "notes": "Two Arabic letters in one word: ض and ط."}
+{"id": "ambiguous-010", "category": "ambiguous", "input": "tabiat", "expected": "طبیعت", "alternatives": [], "notes": "ط and ع."}
+{"id": "ambiguous-011", "category": "ambiguous", "input": "tebb", "expected": "طب", "alternatives": [], "notes": "ط."}
+{"id": "ambiguous-012", "category": "ambiguous", "input": "hazer", "expected": "حاضر", "alternatives": [], "notes": "ح and ض."}
+{"id": "ambiguous-013", "category": "ambiguous", "input": "ghalb", "expected": "قلب", "alternatives": [], "notes": "ق not غ."}
+{"id": "ambiguous-014", "category": "ambiguous", "input": "gharb", "expected": "غرب", "alternatives": [], "notes": "غ not ق — contrast `ghalb` قلب."}
+{"id": "ambiguous-015", "category": "ambiguous", "input": "gharib", "expected": "غریب", "alternatives": [], "notes": "غ."}
+{"id": "ambiguous-016", "category": "ambiguous", "input": "aziz", "expected": "عزیز", "alternatives": [], "notes": "Initial ع is written but unpronounced in Finglish."}
+{"id": "ambiguous-017", "category": "ambiguous", "input": "elm", "expected": "علم", "alternatives": [], "notes": "Initial ع."}
+{"id": "ambiguous-018", "category": "ambiguous", "input": "asr", "expected": "عصر", "alternatives": [], "notes": "ع and ص in one short word."}
+{"id": "ambiguous-019", "category": "ambiguous", "input": "soal", "expected": "سوال", "alternatives": [], "notes": "س; also spelled سؤال with hamza."}
+{"id": "ambiguous-020", "category": "ambiguous", "input": "tarif", "expected": "تعریف", "alternatives": [], "notes": "Medial ع, invisible on the Latin side."}
+{"id": "ambiguous-021", "category": "ambiguous", "input": "mohem", "expected": "مهم", "alternatives": [], "notes": "ه twice, neither written as a vowel."}
+{"id": "ambiguous-022", "category": "ambiguous", "input": "sath", "expected": "سطح", "alternatives": [], "notes": "ط and ح."}
+{"id": "ambiguous-023", "category": "ambiguous", "input": "dar", "expected": "در", "alternatives": ["دار"], "notes": "Short vowel. With `aa` convention `daar` would be دار."}
+{"id": "ambiguous-024", "category": "ambiguous", "input": "daar", "expected": "دار", "alternatives": ["در"], "notes": "Long ɒː written `aa` — the convention that removes the ambiguity."}
+{"id": "ambiguous-025", "category": "ambiguous", "input": "bar", "expected": "بر", "alternatives": ["بار"], "notes": "Short."}
+{"id": "ambiguous-026", "category": "ambiguous", "input": "baar", "expected": "بار", "alternatives": ["بر"], "notes": "Long."}
+{"id": "ambiguous-027", "category": "ambiguous", "input": "asar", "expected": "اثر", "alternatives": ["آثار"], "notes": "Both are real and frequent; genuinely ambiguous."}
+{"id": "ambiguous-028", "category": "ambiguous", "input": "hal", "expected": "حال", "alternatives": ["حل"], "notes": "حال (state) vs حل (solution)."}
+{"id": "ambiguous-029", "category": "ambiguous", "input": "madar", "expected": "مادر", "alternatives": ["مدار"], "notes": "مادر (mother) vs مدار (orbit)."}
+{"id": "ambiguous-030", "category": "ambiguous", "input": "adam", "expected": "آدم", "alternatives": ["عدم"], "notes": "آدم (person) vs عدم (absence)."}
+{"id": "ambiguous-031", "category": "ambiguous", "input": "sakht", "expected": "سخت", "alternatives": ["ساخت"], "notes": "سخت (hard) vs ساخت (built)."}
+{"id": "informal-001", "category": "informal", "input": "miram", "expected": "میرم", "alternatives": [], "notes": "Colloquial. Formal is می‌روم / `miravam`."}
+{"id": "informal-002", "category": "informal", "input": "mikham", "expected": "میخوام", "alternatives": [], "notes": "Colloquial for می‌خواهم."}
+{"id": "informal-003", "category": "informal", "input": "nemidoonam", "expected": "نمیدونم", "alternatives": [], "notes": "Colloquial for نمی‌دانم."}
+{"id": "informal-004", "category": "informal", "input": "chetori", "expected": "چطوری", "alternatives": []}
+{"id": "informal-005", "category": "informal", "input": "koja", "expected": "کجا", "alternatives": []}
+{"id": "informal-006", "category": "informal", "input": "chera", "expected": "چرا", "alternatives": []}
+{"id": "informal-007", "category": "informal", "input": "bashe", "expected": "باشه", "alternatives": [], "notes": "Colloquial for باشد."}
+{"id": "informal-008", "category": "informal", "input": "are", "expected": "آره", "alternatives": [], "notes": "Colloquial for بله."}
+{"id": "informal-009", "category": "informal", "input": "na", "expected": "نه", "alternatives": []}
+{"id": "informal-010", "category": "informal", "input": "dige", "expected": "دیگه", "alternatives": [], "notes": "Colloquial for دیگر."}
+{"id": "informal-011", "category": "informal", "input": "hala", "expected": "حالا", "alternatives": []}
+{"id": "informal-012", "category": "informal", "input": "alan", "expected": "الان", "alternatives": []}
+{"id": "informal-013", "category": "informal", "input": "bebin", "expected": "ببین", "alternatives": []}
+{"id": "informal-014", "category": "informal", "input": "boro", "expected": "برو", "alternatives": []}
+{"id": "informal-015", "category": "informal", "input": "biya", "expected": "بیا", "alternatives": []}
+{"id": "informal-016", "category": "informal", "input": "mitoonam", "expected": "میتونم", "alternatives": [], "notes": "Colloquial for می‌توانم."}
+{"id": "informal-017", "category": "informal", "input": "khoone", "expected": "خونه", "alternatives": [], "notes": "Colloquial for خانه — both spellings are in use."}
+{"id": "informal-018", "category": "informal", "input": "nun", "expected": "نون", "alternatives": [], "notes": "Colloquial for نان."}
+{"id": "informal-019", "category": "informal", "input": "chie", "expected": "چیه", "alternatives": [], "notes": "Colloquial contraction of چه است."}
+{"id": "informal-020", "category": "informal", "input": "nadaram", "expected": "ندارم", "alternatives": []}
+{"id": "informal-021", "category": "informal", "input": "bekhatere", "expected": "بخاطر", "alternatives": []}
+{"id": "zwnj-001", "category": "zwnj", "input": "miravam", "expected": "می‌روم", "alternatives": [], "notes": "Formal verb: می always takes a ZWNJ."}
+{"id": "zwnj-002", "category": "zwnj", "input": "mikonam", "expected": "می‌کنم", "alternatives": [], "notes": "می + کنم."}
+{"id": "zwnj-003", "category": "zwnj", "input": "nemikonam", "expected": "نمی‌کنم", "alternatives": [], "notes": "نمی always takes a ZWNJ."}
+{"id": "zwnj-004", "category": "zwnj", "input": "mitavanam", "expected": "می‌توانم", "alternatives": []}
+{"id": "zwnj-005", "category": "zwnj", "input": "ketabha", "expected": "کتاب‌ها", "alternatives": [], "notes": "Plural ها."}
+{"id": "zwnj-006", "category": "zwnj", "input": "bacheha", "expected": "بچه‌ها", "alternatives": [], "notes": "ها after a silent ه."}
+{"id": "zwnj-007", "category": "zwnj", "input": "daneshjooha", "expected": "دانشجوها", "alternatives": [], "notes": "No ZWNJ: و is a non-joining final, so it is a visual no-op."}
+{"id": "zwnj-008", "category": "zwnj", "input": "bozorgtar", "expected": "بزرگ‌تر", "alternatives": [], "notes": "Comparative تر takes a ZWNJ."}
+{"id": "zwnj-009", "category": "zwnj", "input": "behtar", "expected": "بهتر", "alternatives": [], "notes": "EXCEPTION: بهتر is one of the five words where تر does not take a ZWNJ."}
+{"id": "zwnj-010", "category": "zwnj", "input": "bishtar", "expected": "بیشتر", "alternatives": [], "notes": "EXCEPTION, same closed list as بهتر."}
+{"id": "zwnj-011", "category": "zwnj", "input": "behtarin", "expected": "بهترین", "alternatives": [], "notes": "EXCEPTION carries through to ترین."}
+{"id": "zwnj-012", "category": "zwnj", "input": "khanevadeam", "expected": "خانواده‌ام", "alternatives": [], "notes": "Possessive ام after a silent ه."}
+{"id": "zwnj-013", "category": "zwnj", "input": "ketabam", "expected": "کتابم", "alternatives": [], "notes": "No ZWNJ: م attaches directly after a consonant."}
+{"id": "zwnj-014", "category": "zwnj", "input": "binazir", "expected": "بی‌نظیر", "alternatives": [], "notes": "Prefix بی takes a ZWNJ."}
+{"id": "zwnj-015", "category": "zwnj", "input": "bichare", "expected": "بیچاره", "alternatives": [], "notes": "EXCEPTION: بیچاره is written solid."}
+{"id": "zwnj-016", "category": "zwnj", "input": "hamkar", "expected": "همکار", "alternatives": [], "notes": "EXCEPTION: monosyllabic هم compounds are solid."}
+{"id": "zwnj-017", "category": "zwnj", "input": "hamshahri", "expected": "همشهری", "alternatives": [], "notes": "EXCEPTION."}
+{"id": "zwnj-018", "category": "zwnj", "input": "tanha", "expected": "تنها", "alternatives": [], "notes": "No ZWNJ = alone. With one, تن‌ها = bodies. The canonical minimal pair."}
+{"id": "mixed-001", "category": "mixed", "input": "salam, man emrooz miram Muscat", "expected": "سلام، من امروز میرم Muscat", "alternatives": [], "notes": "The plan's worked example. Muscat is capitalized mid-sentence, so it is preserved."}
+{"id": "mixed-002", "category": "mixed", "input": "man React kar mikonam", "expected": "من React کار می‌کنم", "alternatives": [], "notes": "Framework name preserved."}
+{"id": "mixed-003", "category": "mixed", "input": "in link ro bebin", "expected": "این لینک رو ببین", "alternatives": [], "notes": "`link` is a Persian loanword and should convert."}
+{"id": "mixed-004", "category": "mixed", "input": "email et ro befrest", "expected": "ایمیل ات رو بفرست", "alternatives": [], "notes": "KNOWN LIMITATION: `email` is in the English list, so it is preserved rather than converted to ایمیل."}
+{"id": "mixed-005", "category": "mixed", "input": "farda ba Google meeting daram", "expected": "فردا با Google meeting دارم", "alternatives": []}
+{"id": "mixed-006", "category": "mixed", "input": "az iPhone estefade mikonam", "expected": "از iPhone استفاده می‌کنم", "alternatives": [], "notes": "camelCase product name."}
+{"id": "mixed-007", "category": "mixed", "input": "Ali be Tehran raft", "expected": "علی به تهران رفت", "alternatives": [], "notes": "Persian proper nouns must convert even though capitalized — they are in the homograph override list."}
+{"id": "protected-001", "category": "protected", "input": "https://example.ir/salam", "expected": "https://example.ir/salam", "alternatives": [], "notes": "Must pass through byte-identical (url).", "expectAction": "copy"}
+{"id": "protected-002", "category": "protected", "input": "www.example.com", "expected": "www.example.com", "alternatives": [], "notes": "Must pass through byte-identical (url).", "expectAction": "copy"}
+{"id": "protected-003", "category": "protected", "input": "ali@example.com", "expected": "ali@example.com", "alternatives": [], "notes": "Must pass through byte-identical (email).", "expectAction": "copy"}
+{"id": "protected-004", "category": "protected", "input": "@navid", "expected": "@navid", "alternatives": [], "notes": "Must pass through byte-identical (mention).", "expectAction": "copy"}
+{"id": "protected-005", "category": "protected", "input": "#tehran", "expected": "#tehran", "alternatives": [], "notes": "Must pass through byte-identical (hashtag).", "expectAction": "copy"}
+{"id": "protected-006", "category": "protected", "input": "021-12345678", "expected": "021-12345678", "alternatives": [], "notes": "Must pass through byte-identical (number).", "expectAction": "copy"}
+{"id": "protected-007", "category": "protected", "input": "3.5", "expected": "3.5", "alternatives": [], "notes": "Must pass through byte-identical (number).", "expectAction": "copy"}
+{"id": "protected-008", "category": "protected", "input": "100%", "expected": "100%", "alternatives": [], "notes": "Must pass through byte-identical (number).", "expectAction": "copy"}
+{"id": "protected-009", "category": "protected", "input": "`npm install`", "expected": "`npm install`", "alternatives": [], "notes": "Must pass through byte-identical (code).", "expectAction": "copy"}
+{"id": "protected-010", "category": "protected", "input": "API_KEY", "expected": "API_KEY", "alternatives": [], "notes": "Must pass through byte-identical (code).", "expectAction": "copy"}
+{"id": "protected-011", "category": "protected", "input": "userName", "expected": "userName", "alternatives": [], "notes": "Must pass through byte-identical (code).", "expectAction": "copy"}
+{"id": "protected-012", "category": "protected", "input": "IPv6", "expected": "IPv6", "alternatives": [], "notes": "Must pass through byte-identical (code).", "expectAction": "copy"}
+{"id": "protected-013", "category": "protected", "input": "😀", "expected": "😀", "alternatives": [], "notes": "Must pass through byte-identical (emoji).", "expectAction": "copy"}
+{"id": "sentence-001", "category": "sentence", "input": "chetori? khoobi?", "expected": "چطوری؟ خوبی؟", "alternatives": [], "notes": "ASCII ? localizes to ؟ (U+061F), which is strong-RTL and a free bidi fix."}
+{"id": "sentence-002", "category": "sentence", "input": "man emrooz kheili khaste am", "expected": "من امروز خیلی خسته ام", "alternatives": []}
+{"id": "sentence-003", "category": "sentence", "input": "farda saat 8 miam", "expected": "فردا ساعت 8 میام", "alternatives": [], "notes": "Latin digits are a protected span and stay Latin; Persian text legitimately mixes both."}
+{"id": "sentence-004", "category": "sentence", "input": "salam, hale shoma chetore?", "expected": "سلام، حال شما چطوره؟", "alternatives": []}
+{"id": "sentence-005", "category": "sentence", "input": "in ketab ro az daneshgah gereftam", "expected": "این کتاب رو از دانشگاه گرفتم", "alternatives": []}
+{"id": "sentence-006", "category": "sentence", "input": "mamnoon az komaket", "expected": "ممنون از کمکت", "alternatives": []}
+{"id": "sentence-007", "category": "sentence", "input": "kojaei? man injam", "expected": "کجایی؟ من اینجام", "alternatives": []}
+{"id": "adversarial-001", "category": "adversarial", "input": "", "expected": "", "alternatives": [], "notes": "Empty input must not throw."}
+{"id": "adversarial-002", "category": "adversarial", "input": "   ", "expected": "   ", "alternatives": [], "notes": "Whitespace preserved exactly."}
+{"id": "adversarial-003", "category": "adversarial", "input": "!!!", "expected": "!!!", "alternatives": [], "notes": "Punctuation-only; ! has no Persian variant."}
+{"id": "adversarial-004", "category": "adversarial", "input": "aaaaaaa", "expected": "اااااا", "alternatives": [], "notes": "Degenerate repetition; any stable output is acceptable, it must not hang."}
+{"id": "adversarial-005", "category": "adversarial", "input": "kh", "expected": "خ", "alternatives": [], "notes": "A bare digraph."}
+{"id": "adversarial-006", "category": "adversarial", "input": "SALAM", "expected": "SALAM", "alternatives": [], "notes": "KNOWN LIMITATION: ALLCAPS matches the identifier pattern and is preserved. Someone shouting gets no conversion.", "expectAction": "copy"}
+{"id": "adversarial-007", "category": "adversarial", "input": "Salam", "expected": "سلام", "alternatives": [], "notes": "Sentence-initial capital still converts."}
+{"id": "adversarial-008", "category": "adversarial", "input": "salamsalamsalamsalamsalamsalamsalamsalamsalamsalamsalamsalamsalamsalamsalamsalamsalamsalamsalamsalam", "expected": null, "alternatives": [], "notes": "Long single token; latency guard only, no expected output."}
+{"id": "adversarial-009", "category": "adversarial", "input": "man\n\nto", "expected": "من\n\nتو", "alternatives": [], "notes": "Blank lines preserved."}
+{"id": "adversarial-010", "category": "adversarial", "input": "سلام", "expected": "سلام", "alternatives": [], "notes": "Already Persian — non-Latin script passes through untouched.", "expectAction": "copy"}
+{"id": "adversarial-011", "category": "adversarial", "input": "salam سلام salam", "expected": "سلام سلام سلام", "alternatives": [], "notes": "Mixed script in one line."}

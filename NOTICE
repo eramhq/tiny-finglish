@@ -1,0 +1,41 @@
+tiny-finglish
+Copyright (c) 2026 tiny-finglish contributors
+
+This product includes software and data developed by third parties.
+
+--------------------------------------------------------------------------
+Lilak, Persian Spell Checking Dictionary
+--------------------------------------------------------------------------
+data/lexicon/fa-stems.bin is derived from the Lilak fa-IR dictionary.
+
+    Copyright 2015 Mostafa Sedaghat Joo
+    Licensed under the Apache License, Version 2.0
+    https://www.apache.org/licenses/LICENSE-2.0
+    https://github.com/b00f/lilak
+
+The derived artifact contains the dictionary's stem list, normalized to the
+canonical Persian form used throughout this project, deduplicated, sorted and
+front-coded. Affix rules are not applied. No modification of meaning is made.
+
+Obtained via the npm package `dictionary-fa@2.0.0`, which redistributes the
+same dictionary under the same license. See data/provenance/lexicon.json for
+the upstream SHA-256 and byte counts.
+
+--------------------------------------------------------------------------
+Deliberate exclusions
+--------------------------------------------------------------------------
+The following widely used Persian resources are NOT included, because their
+licensing is incompatible with an MIT-licensed package. They are listed here
+so the exclusion is a recorded decision rather than an oversight:
+
+  * Hazm `words.dat` — the repository is MIT, but its annotations derive from
+    the Peykare/Bijankhan corpus, which is research/non-commercial.
+  * `behnam/persian-words-frequency` — CC BY-SA 3.0. ShareAlike would infect a
+    shipped frequency table, which is exactly the artifact it would apply to.
+  * Virastyar, perstem, PersianStemmer, Vajehdan — GPL/AGPL.
+  * Several large GitHub word lists (240k/494k/700k entries) — no license file.
+  * `Arshia82sbn/Finglish-To-Persian-Dataset-Large` — tagged Apache-2.0, but
+    built in part from GPLv3 Virastyar rules over a corpus with no stated
+    provenance.
+
+See docs/open-items.md for the full survey.
