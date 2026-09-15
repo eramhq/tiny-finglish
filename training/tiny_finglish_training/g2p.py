@@ -40,6 +40,7 @@ import unicodedata
 from dataclasses import dataclass
 
 from .normalize import ZWNJ, normalize
+from .pronunciation import load as load_pronunciation, short_vowels
 from .rules import spellings_by_role
 
 CONSONANTS = set("بپتثجچحخدذرزژسشصضطظعغفقکگلمنهی")
@@ -85,9 +86,18 @@ class Chunk:
 
 
 class FinglishGenerator:
-    def __init__(self, seed: int | None = None, variant_rate: float = VARIANT_RATE):
+    def __init__(
+        self,
+        seed: int | None = None,
+        variant_rate: float = VARIANT_RATE,
+        use_pronunciation: bool = True,
+    ):
         self.rng = random.Random(seed)
         self.variant_rate = variant_rate
+        #: Persian word -> phoneme. Supplies the short vowels the script omits.
+        #: Empty when the artifact is absent, in which case they are sampled.
+        self.pronunciation = load_pronunciation() if use_pronunciation else {}
+        self._vowels: list[str] = []
 
     # -- public ------------------------------------------------------------
 
@@ -96,6 +106,11 @@ class FinglishGenerator:
         word = normalize(word)
         if not word:
             return []
+        # Queue this word's real short vowels, if we know them. `_short_vowel`
+        # pops from the queue and only samples once it is empty — so کتاب comes
+        # out `ketab`, not the coin-flip between `ketab` and `kotab` that this
+        # generator produced before the dictionary existed.
+        self._vowels = short_vowels(self.pronunciation.get(word, ""))
         chunks: list[Chunk] = []
         for run in _split_runs(word):
             chunks.extend(self._emit_run(run))
@@ -140,6 +155,11 @@ class FinglishGenerator:
         return options[0]
 
     def _short_vowel(self) -> str:
+        # Real pronunciation first, in order. A word can need more vowel slots
+        # than the phoneme string supplies (ezafe, clitics), so the fallback
+        # stays live rather than being an error path.
+        if self._vowels:
+            return self._vowels.pop(0)
         r = self.rng.random()
         cumulative = 0.0
         for vowel, p in SHORT_VOWEL_PRIOR:
@@ -216,7 +236,13 @@ class FinglishGenerator:
                 continue
 
             rest = letters[i:limit]
-            if len(rest) <= 2 and _is_legal_coda(rest):
+            # An exhausted vowel queue is evidence, not an edge case: if we know
+            # this word's pronunciation and it has no vowels left, the remaining
+            # consonants really are a coda. That is what makes صبر come out
+            # `sabr` rather than `sabar` even though بر is not in the attested
+            # cluster list.
+            pronunciation_says_coda = bool(self.pronunciation) and not self._vowels
+            if len(rest) <= 2 and (_is_legal_coda(rest) or pronunciation_says_coda):
                 for ch in rest:
                     chunks.append(Chunk(ch, self._spell(ch, "consonant")))
                 i = limit
