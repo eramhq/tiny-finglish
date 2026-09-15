@@ -11,11 +11,19 @@ misses a frame is paid on every character, forever.
 
 | workload | measured | budget | |
 |---|---:|---:|---|
-| cold init (decode + unpack weights) | ~25 ms | — | |
+| cold init (decode + unpack weights, build dictionary index) | ~34 ms | — | |
 | keystroke, incremental word | < 0.01 ms | 16 ms | ok |
 | keystroke, end of sentence, warm cache | 0.02 ms | 16 ms | ok |
-| sentence, cold cache | ~22 ms | 100 ms | ok |
+| sentence, cold cache | ~36 ms | 100 ms | ok |
 | paragraph, ~640 chars, warm | 0.12 ms | — | |
+| one uncached word, rule engine with dictionary | 0.11 ms mean, ~1 ms worst | — | |
+
+The cold figures rose from ~25 and ~22 ms when the rule engine gained its
+skeleton dictionary (`src/dictionary.ts`), which indexes the 25k-word frequency
+table at construction: 15.6 ms, down from 31 ms before its buckets were sorted
+individually instead of as one 25k-entry sort. The uncached-word row is the one
+the keystroke gate cares about when the memo misses: 1,732 distinct dev-set
+words average 0.11 ms each.
 
 Enforced in CI. A build that exceeds either budget fails.
 
@@ -28,14 +36,17 @@ that because the memo absorbs repeated prefixes.
 
 | component | raw | gzip | Brotli |
 |---|---:|---:|---:|
-| runtime + rules + tokenizer (JS) | 26.1 KiB | 10.3 KiB | **9.1 KiB** |
-| model weights, int6, 102,348 params | 120.5 KiB | 82.1 KiB | **76.0 KiB** |
-| word frequency, 25k words | 119.9 KiB | — | **54.2 KiB** |
-| **shipped total** | | | **139.3 KiB** |
+| runtime + rules + tokenizer + dictionary + fitted channel (JS) | 39.6 KiB | 14.6 KiB | **12.9 KiB** |
+| model weights, int6, 110,018 params | 131.0 KiB | 89.1 KiB | **83.7 KiB** |
+| word frequency, 25k words | 119.9 KiB | — | **54.1 KiB** |
+| **shipped total** | | | **150.7 KiB** |
 | word bigrams, 30k pairs (optional, not shipped by default) | | | 73.6 KiB |
 | lexicon, 100,761 stems (optional, not shipped by default) | | | 98.3 KiB |
 
-Soft cap is ~250 KiB Brotli; the current build uses 56% of it.
+Soft cap is ~250 KiB Brotli; the current build uses 60% of it. The weights
+grew 7.7 KiB when the retrained model's label set grew (ع-bearing labels the
+old generator never produced), and the JS 3.8 KiB for the dictionary, the
+morphology module (off) and the 1 KiB fitted channel table.
 
 The data rows are already Brotli on disk and are reported as-is rather than
 double-compressed. None is bundled: all are separate fetches, so a consumer who
@@ -48,6 +59,13 @@ wants the rules alone pays 6.7 KiB via `tiny-finglish/rules`.
 | word frequency | 54.2 KiB | +6.1 | **8.9** |
 | word bigrams | 73.6 KiB | +0.9 | **81.8** |
 | model weights | 76.0 KiB | −11.1 | negative |
+| fitted channel table (Sept 2026) | 1.0 KiB | +0.8 on dev | **1.2** |
+
+The first three rows are as measured when they were decided, on the 1,835-row
+gold before its audit. The fitted channel's row is measured on dev, the tuning
+surface. The retrained model is still negative on its own (69.2% against the
+rules' 73.5% on audited gold), and adds orthographic accuracy only as a feature
+in the hybrid.
 
 Frequency ships. The bigram is built, committed and measured but opt-in, at nine
 times the cost per point. The model ships because it wins ZWNJ, adversarial

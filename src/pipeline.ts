@@ -194,7 +194,10 @@ export abstract class Pipeline {
    *   * `e` or `ie` is dropped, with the space before it;
    *   * `ye` after a word whose Latin ends in a vowel is dropped the same way,
    *     and its word gets a ی if its Persian ends in ا or و (not after ی: `zendegi ye`
-   *     is زندگی, not زندگیی). After a consonant,
+   *     is زندگی, not زندگیی). After a silent he nothing is added either:
+   *     `khaane ye bozorg` is the ezafe خانهٔ بزرگ, which both real evaluation
+   *     sets write خانه بزرگ. The colloquial "one" comes *before* its noun —
+   *     `ye bache`, not `bache ye` — which is why this cannot eat it. After a consonant,
    *     or with no word before it, `ye` is the colloquial یه ("one") and is left
    *     alone: `ye maadar`, `shohar jaan ye daste gol`.
    *

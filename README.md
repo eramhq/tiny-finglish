@@ -73,8 +73,8 @@ Four entry points, measured with `node scripts/size.ts --tiers`:
 
 | entry | contents | gzip | Brotli |
 |---|---|---:|---:|
-| `tiny-finglish` | tokenizer, rules, beam, model runtime, sentence pass | 10.3 KiB | **9.1 KiB** |
-| `tiny-finglish/rules` | the same, without the model runtime | 7.7 KiB | **6.7 KiB** |
+| `tiny-finglish` | tokenizer, rules, dictionary, beam, model runtime, sentence pass | 14.8 KiB | **13.0 KiB** |
+| `tiny-finglish/rules` | the same, without the model runtime | 11.8 KiB | **10.4 KiB** |
 | `tiny-finglish/normalize` | Persian text normalization alone | 0.9 KiB | **0.8 KiB** |
 | `tiny-finglish/metrics` | word accuracy and CER, to score it yourself | 0.5 KiB | **0.4 KiB** |
 
@@ -89,16 +89,20 @@ the accuracy you choose:
 
 | + data | Brotli | gold word accuracy |
 |---|---:|---:|
-| nothing | 6.7 KiB | 56.2% |
-| **frequency** | **60.9 KiB** | **62.3%** |
-| frequency + bigrams (opt-in) | 134.5 KiB | 63.2% |
-| ...and the model (`"."`) | 139.3 KiB | 51.2% |
+| nothing | 10.4 KiB | 64.5% |
+| **frequency** | **64.5 KiB** | **73.5%** |
+| frequency + bigrams (opt-in) | 138.1 KiB | 74.1% |
+| ...and the model (`"."`) | 150.7 KiB | 69.2% |
+| ...model and rules ranked jointly (`hybrid: true`) | 150.7 KiB | 71.4% (76.3% orthographic) |
 
-Two of those rows are worth reading twice.
+Measured on the 1,669-row audited gold set, September 2026. The previous
+figures (62.3% for rules + frequency, 51.2% for the model) were on the
+1,835-row set before its audit; see
+[the September 2026 round](#september-2026-dictionary-decoding-llm-distillation-llm-measurement).
 
-**The last one is not a typo.** On real human Finglish the 102k-parameter model
-is **11.1 points behind** the rules it was built to replace; it earns its bytes
-on ZWNJ, adversarial input and mixed English, and nowhere else.
+**The model is still behind the rules on real input**, by 4.3 points, down from
+11. It earns its bytes on ZWNJ, adversarial input and mixed English, and it
+adds orthographic accuracy when ranked jointly with the rules.
 
 **The bigram row is opt-in**, because 73.6 KiB for +0.9 points is 82 KiB per
 point against 8.9 for the frequency table — the worst accuracy-per-byte
@@ -148,6 +152,63 @@ of 504 candidates per word and a p99 of ~92,000.
 Full detail in [`docs/architecture.md`](docs/architecture.md).
 
 ## Measured results
+
+### September 2026: dictionary decoding, LLM distillation, LLM measurement
+
+**Headline: rules + frequency 73.5% strict word accuracy on real human
+Finglish**, up from 62.3%. Of that, 4.6 points is a metric correction and the
+rest is the converter. Full account in
+[`docs/llm-work.md`](docs/llm-work.md) and
+[`docs/error-taxonomy.md`](docs/error-taxonomy.md).
+
+Rules + frequency on gold, strict:
+
+| step | gold | kind |
+|---|---:|---|
+| as previously published (1,835 rows) | 62.3% | |
+| 160 more misaligned rows quarantined by a two-family LLM audit | 66.9% | **metric correction** |
+| dictionary candidates + noisy-channel ranking, detached-affix passes, rule-table fixes | 72.6% | 0 bytes |
+| channel re-fitted from 3,000 LLM-typed sentences | **73.5%** | +1 KiB |
+
+Every engine, the same 1,669 rows:
+
+| engine | strict | orthographic | judged-acceptable (418-row sample) | dev: strict / faithful / judged |
+|---|---:|---:|---:|---:|
+| **rules + frequency** | **73.5%** | 75.7% | 85.6% | 58.2 / 69.2 / 79.1 |
+| model + frequency | 69.2% | 73.9% | — | 55.6 / 66.3 / — |
+| hybrid (`hybrid: true`) | 71.4% | 76.3% | 85.8% | 57.6 / 68.6 / 81.3 |
+| rules + frequency + bigrams (opt-in) | 74.1% | — | — |
+| *reference: Claude Opus 5, zero-shot* | *77.7%* | *84.0%* | — |
+| *reference: GPT-5.6 luna, zero-shot (418 rows)* | *76.7%* | *83.0%* | — |
+| elektito/finglish 1.5.1 (Python) | 67.8% | — | — |
+
+The three tiers:
+
+* **Strict** is the headline and unchanged.
+* **Orthographic** folds spelling conventions Persian writers disagree on:
+  آ/ا, digit scripts, and می/ها-style affixes joined or spaced.
+* **Judged-acceptable** refunds only word runs that *both* an LLM judge from
+  each family accept as an orthographic variant or a faithful rendering of
+  what was typed. The judges agreed with 100 hand-labelled runs at κ 0.90, with
+  zero false accepts. It is secondary, it is on a fixed sample, and it is never
+  the headline.
+
+What made the difference, in order of size:
+
+1. **Candidate generation, not data.** 87% of the words the old engine got
+   wrong were already in its frequency table. A consonant-skeleton index
+   proposes them, and a noisy channel ranks them without charging a rare letter
+   twice (`src/dictionary.ts`).
+2. **Reading the errors.** An LLM classified all 1,545 remaining error runs on
+   a new real dev set. That found the typist's detached ezafe (`sal e`) and
+   detached plurals (`ketaab haa`). Handling those is +9.2 dev points, and +5.1
+   of it is an orthographic convention, labelled as one.
+3. **LLM-typed training data.** 3,000 sentences typed by calibrated LLM personas
+   took the model from 55.0% to 69.2% on gold, and re-fitted the rule engine's
+   channel.
+
+Tuning happened only on [`data/dev/`](data/dev/README.md), and gold was scored
+once per phase. The older sections below are kept as they were measured.
 
 ### Scaling curve (M2)
 
@@ -203,8 +264,8 @@ after Brotli at 500k, for no measurable accuracy cost — which is what makes th
 |---|---:|---:|
 | keystroke, incremental word | < 0.01 ms | 16 ms |
 | keystroke, end of sentence (warm) | 0.03 ms | 16 ms |
-| sentence, cold | ~23 ms | 100 ms |
-| shipped bundle, Brotli | **139.3 KiB** | ~250 KiB soft cap |
+| sentence, cold | ~36 ms | 100 ms |
+| shipped bundle, Brotli | **150.7 KiB** | ~250 KiB soft cap |
 
 The bundle is 9.1 KiB of code, 76.0 KiB of weights and 54.2 KiB of frequency;
 the last is a separate fetch, never bundled, so a consumer who wants only the
@@ -539,7 +600,7 @@ never contained. A trigram would cost several times the bytes for a slice of a
 shrinking remainder. See [sentence
 context](#sentence-context-measured-and-not-shipped-by-default).
 
-**The gold set is real, but it is one annotator.** 1,835 pairs of genuinely
+**The gold set is real, but it is one annotator.** 1,669 pairs of genuinely
 human-typed Finglish — a large improvement on the author-written set it
 replaced — but written by a single person for a text-to-speech project, so it
 is read-aloud register rather than chat, with that writer's habits baked in.
@@ -553,8 +614,9 @@ scoring 44.4% against 62.2% on the rest, and twenty probes is a floor. The
 information needed to pick the colloquial form is not in the input. Subtract it
 from any claim about remaining headroom.
 
-**Realistic ceiling: 85–92% word accuracy.** This model is at 51.2% on real
-input and the rule baseline at 62.3% — 63.2% with sentence context enabled — so
+**Realistic ceiling: 85–92% word accuracy.** This model is at 69.2% on real
+input and the rule baseline at 73.5% — 74.1% with sentence context enabled — and
+a frontier LLM zero-shot at 77.7%, so
 there is a lot of headroom, but it is
 not all reachable, and most of what is reachable is candidate generation before
 it is the language model. Anything claiming above 95% offline in this budget
@@ -597,10 +659,13 @@ the page, not an appendix to it.
 
 ```bash
 npm install
-npm test                      # 79 JS tests
+npm test                      # 126 JS tests
 npm run typecheck
 node scripts/run-fixtures.ts  # fixture report with per-candidate reasons
 node scripts/run-fixtures.ts --verbose --rules   # rule baseline, every failure
+node scripts/run-fixtures.ts --dev --rules       # the tuning surface, all three tiers
+node scripts/sweep.ts --grid frequency=4,5,7     # tune scoring constants on dev + fixtures
+node scripts/judge.ts --export DIR --dev         # charged word runs for the LLM judges
 node scripts/bench.ts         # latency budget
 node scripts/size.ts          # Brotli size report
 node scripts/parity.ts        # PyTorch vs browser
@@ -622,7 +687,7 @@ Training:
 ```bash
 cd training
 uv venv --python 3.12 .venv && uv pip install --python .venv/bin/python torch numpy pytest brotli
-.venv/bin/python -m pytest tests -q                       # 226 tests
+.venv/bin/python -m pytest tests -q                       # 232 tests
 
 .venv/bin/python -c "from tiny_finglish_training.corpus import build; \
   from pathlib import Path; build(out_dir=Path('corpora/full'), variants=6)"
@@ -669,6 +734,7 @@ Not committed: training corpora, `.pt` checkpoints, the upstream dictionary.
 | M4 — quantized export + runtime + parity | **done** — parity holds at 6.7e-6 against a 2e-3 tolerance, both int8 and int6 |
 | M5 — open-source release | **not started** — not published to npm; `exports` subpaths and the tier table are in place |
 | M7 — accuracy, measured rather than assumed | **done** — metric corrected, oracle measured, segmentation prior, 30k-bigram sentence pass |
+| M8 — dictionary decoding, LLM measurement and distillation | **done** — gold audited, dev set built, noisy-channel dictionary, three scoring tiers, model retrained on LLM-typed data; 73.5% rules, 69.2% model on audited gold |
 
 Where the accuracy work stands, and why it stops here. Real human Finglish,
 rules + frequency + context:

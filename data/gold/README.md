@@ -1,8 +1,12 @@
 # Gold set — untouched
 
-`gold.jsonl` is the honest evaluation set: **1,835 pairs of real, human-written
-Finglish** with their Persian originals. A further 71 pairs sit in
+`gold.jsonl` is the honest evaluation set: **1,669 pairs of real, human-written
+Finglish** with their Persian originals. A further 237 pairs sit in
 `gold-misaligned.jsonl`, quarantined but not deleted — see below.
+
+**Tuning happens on `data/dev/`, not here.** Since September 2026 there is a
+second real set, built from the rows the gold build rejected and disjoint from
+this one, so there is somewhere legitimate to tune (`data/dev/README.md`).
 
 Two rules govern it:
 
@@ -22,7 +26,7 @@ Two rules govern it:
 | Licence | **MIT** |
 | Persian side | Mozilla Common Voice Persian (**CC0**) |
 | Finglish side | written by a human annotator for a text-to-speech project |
-| Raw rows | 3,846 → 2,769 unique pairs → 1,906 aligned → **1,835 kept** |
+| Raw rows | 3,846 → 2,769 unique pairs → 1,906 aligned → **1,669 kept** |
 
 Rebuild in two stages — `python -m tiny_finglish_training.build_gold`, then
 `node scripts/split-gold.ts --write`. Hashes and drop counts for both land in
@@ -37,10 +41,12 @@ It is also what corrected the corpus generator: measured over the 21,874 word
 tokens of the 1,906-row set as first built, `x` for خ occurs in **0.1%** of
 cases and `q` for ق in **3.9%**, where the generator had been emitting both at
 30%. See `latinWeights` in `src/rules.ts`. Those weights were fitted before the
-quarantine below and have not been refitted; the `x` share is unchanged on the
-1,835 rows that remain.
+quarantine below and have not been refitted. The `x` share was unchanged on the
+1,835 rows left after the first, CER-only quarantine. The rule engine's channel
+no longer depends on them alone: `src/channel-fitted.ts` is re-estimated from
+LLM-typed Finglish, never from this file.
 
-## `gold-misaligned.jsonl` — 71 rows whose two sides are different sentences
+## `gold-misaligned.jsonl` — 237 rows whose two sides are different sentences
 
 The word-count filter above drops 826 rows whose Persian and Finglish sides
 disagree in length by more than one word. It cannot see a row where the counts
@@ -51,9 +57,26 @@ happen to agree and the *content* does not:
 | input | `4 you have to call` |
 | expected | `چهارم، توزیع مجدد ثروت` |
 
-71 of the 1,906 aligned rows (3.7%) are like this. They score 0% for every
-engine, at every beam width, and always will. Leaving them in understates every
-number in this repository by about 1.5 points while measuring nothing.
+237 of the 1,906 aligned rows (12.4%) are like this. They score 0% for every
+engine, at every beam width, and always will.
+
+They were found in two passes, and every row in the file carries a `reason`:
+
+* **`cer` — 77 rows.** Character error rate above 0.9 against the strongest
+  shipped rule configuration. This catches only rows that no engine output
+  resembles.
+* **`audit` — 160 more rows.** Every one of the 1,906 rows went, independently,
+  to a Claude subagent and to Codex GPT-5.6 luna. Each saw only the two sides,
+  never an engine's output, and labelled the row aligned, partial or
+  misaligned (`data/provenance/prompts/gold-audit.md`). A row moves only when
+  **both** say misaligned. They agreed on 1,887 of 1,906 rows. The lead session
+  read all 14 disagreements and moved none. All 77 CER rows are also inside the
+  audit's 237, so the split does not depend on which engine runs the CER rule.
+  Verdicts are in `audit.jsonl`, keyed to each row's content hash.
+
+Quarantining the audit's 160 rows moved rules + frequency from 62.3% to 66.9%
+and the model from 51.2% to 55.1%, with no code change. That is a metric
+correction, and it is reported as one wherever those numbers appear.
 
 They are **moved, not deleted**: they are evidence about how the source dataset
 was collected, and a provenance record that silently discarded them would be
@@ -73,7 +96,7 @@ returns it to the set rather than leaving it stranded.
 * **~30% of source rows were dropped as misaligned.** The filter keeps pairs
   whose Persian and Finglish word counts differ by at most one. That is
   conservative and will have discarded some valid long pairs.
-* **The Persian side contains no ZWNJ at all.** Zero of 1,835 references, where
+* **The Persian side contains no ZWNJ at all.** Zero of 1,669 references, where
   ordinary Persian uses one in about 23% of word types — `میکنم`, never
   `می‌کنم`. So this file cannot measure ZWNJ placement (the metric has no
   denominator here; only `data/fixtures/` does), and it actively penalizes an

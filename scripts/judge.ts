@@ -2,7 +2,7 @@
  * The judged-acceptable tier: LLM judges decide which charged word runs are
  * legitimate renderings, and the verdicts are cached in the repository.
  *
- *   node scripts/judge.ts --export DIR [--dev|--gold] [--engines rules,model] [--shards N]
+ *   node scripts/judge.ts --export DIR [--dev|--gold] [--engines rules,model] [--shards N] [--every K]
  *   node scripts/judge.ts --import DIR
  *   node scripts/judge.ts --calibrate FILE        # judges against hand labels
  *
@@ -47,7 +47,10 @@ function exportShards(dir: string): void {
   const engines = (value("engines") ?? "rules,model").split(",");
   const shards = Number(value("shards") ?? 4);
   const judged = loadJudgments();
-  const rows = loadFixtures(file).filter((row) => row.expected !== null);
+  // `--every K` judges a fixed sample, every Kth row, when judging the whole
+  // set would cost more than the tier is worth. The report then says which.
+  const every = Number(value("every") ?? 1);
+  const rows = loadFixtures(file).filter((row, index) => row.expected !== null && index % every === 0);
 
   const pending = new Map<string, Triple>();
   for (const engine of engines) {

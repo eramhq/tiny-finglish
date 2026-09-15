@@ -187,7 +187,7 @@ interface Subject {
   id: string;
   label: string;
   language: string;
-  kind: "ours" | "third-party" | "baseline";
+  kind: "ours" | "third-party" | "baseline" | "reference";
   /** Whether it can run in a browser at all — the question the page is about. */
   runsInBrowser: boolean;
   /** False for subjects this script cannot install; those carry a citation. */
@@ -609,6 +609,57 @@ subjects.push({
   preservesProtectedSpans: null,
   size: { raw: 22_800_000, gzip: null, note: "Publisher's figure. Not measured here." },
 });
+
+// -- LLM references: a ceiling, not a comparable -------------------------------
+
+/**
+ * Frontier LLMs, zero-shot, on the same gold inputs. Their outputs were
+ * produced in-session (Claude subagents; Codex GPT-5.6 luna in herdr panes),
+ * seeing only the Finglish, with `data/provenance/prompts/zero-shot.md`, and
+ * committed to `data/results/llm-reference.jsonl`. This script only scores
+ * them, with the same `wordAccuracy`.
+ *
+ * They are context for how much of the gap is the task and how much is the
+ * budget: a frontier model is on the order of 20,000 times the compute and
+ * cannot run in a browser. `kind: "reference"` keeps them out of every
+ * comparison between installable subjects.
+ */
+const referenceFile = new URL("data/results/llm-reference.jsonl", root);
+if (existsSync(referenceFile)) {
+  const byModel = new Map<string, Map<string, string>>();
+  for (const line of readFileSync(referenceFile, "utf8").split("\n")) {
+    if (!line) continue;
+    const row = JSON.parse(line) as { model: string; id: string; output: string };
+    const outputs = byModel.get(row.model) ?? new Map<string, string>();
+    outputs.set(row.id, row.output);
+    byModel.set(row.model, outputs);
+  }
+  const labels: Record<string, string> = {
+    "claude-opus-5": "Claude Opus 5, zero-shot (reference)",
+    "gpt-5.6-luna": "GPT-5.6 luna xhigh, zero-shot (reference)",
+  };
+  for (const [model, outputs] of byModel) {
+    const gold = datasets.find((set) => set.id === "gold")!;
+    const covered = gold.cases.filter((c) => outputs.has(c.id));
+    subjects.push({
+      id: `llm-${model}`,
+      label: labels[model] ?? `${model}, zero-shot (reference)`,
+      language: "LLM",
+      kind: "reference",
+      runsInBrowser: false,
+      measured: true,
+      source: "data/results/llm-reference.jsonl",
+      note:
+        `Not in-browser; on the order of 20,000x this project's compute. Scored on ${covered.length} of ` +
+        `${gold.cases.length} gold rows it was run on, with the same wordAccuracy. Context for the ceiling, ` +
+        "not a comparable.",
+      accuracy: { gold: score(covered, covered.map((c) => outputs.get(c.id)!)) },
+      latencyMsPerSentence: null,
+      size: null,
+      preservesProtectedSpans: null,
+    });
+  }
+}
 
 // -- context, explicitly not benchmarked --------------------------------------
 

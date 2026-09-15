@@ -9,6 +9,46 @@ as a result, and what remains genuinely open.
 
 ---
 
+## 0. September 2026 — what the LLM-in-the-loop round settled
+
+Full record in `docs/llm-work.md` and `docs/error-taxonomy.md`. What changed
+here as a result:
+
+* **"Recall-limited, not ranking-limited" was right, and it was fixable
+  without data.** 87% of the reference words the rule engine got wrong were
+  already in the 25k frequency table. A consonant-skeleton index over that
+  table plus a noisy-channel score (`src/dictionary.ts`) moved rules +
+  frequency from 66.9% to 72.6% on the audited gold, at zero bytes on the wire.
+  The oracle's never-proposed share fell from 20.3% to 14.5%.
+* **The gold set was worse than the CER quarantine could see.** A two-family
+  LLM audit found 160 more rows whose two sides are different sentences, 237
+  in all. Quarantining them is a +4.6 metric correction, reported as one.
+* **There is now somewhere legitimate to tune.** `data/dev/`, 304 rows of real
+  typing that the gold build rejected, repaired and labelled by two LLM
+  families with a blind adjudicator.
+* **The model's real-input deficit was a data problem.** 3,000 LLM-typed
+  sentences took the same architecture from 55.0% to 69.2% on gold. Part of
+  the old deficit was also a generator bug that wrote Persian letters into 5%
+  of the synthetic Latin.
+* **The bigram question is unchanged.** It is still opt-in, and still about
+  +0.6 on top of everything else (74.1% vs 73.5%).
+
+Still open, in order of expected value:
+
+1. **Scale the LLM-typed corpus** (plan: ~20k sentences). The learning curve is
+   +2 points per doubling and still rising, which plausibly closes the model's
+   remaining 4.3-point gap to the rules. It is the largest cost item left.
+2. **The register gap** is still the largest error bucket (24% of the rules'
+   remaining errors on dev): formal typing over a colloquial reference. It is
+   not reachable from the input. The `faithful` reference measures around it;
+   nothing fixes it.
+3. **LLM typing is 10–17 points easier to convert than human typing** of the
+   same sentences. A distilled corpus that captured human noise (typos,
+   mishearing, inconsistency) would be closer to the target distribution. No
+   prompt tried here produced it.
+
+---
+
 ## 1. Persian corpus and lexicon licensing — **resolved**
 
 **Decision: ship Lilak.** 100,909 Persian stems, Apache-2.0, clean provenance.

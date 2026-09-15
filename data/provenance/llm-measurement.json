@@ -1,0 +1,181 @@
+{
+  "$comment": "Written by hand at merge time. judgments.jsonl is merged by scripts/judge.ts --import; llm-reference.jsonl is scored by scripts/compare.ts.",
+  "date": "2026-09-15",
+  "workers": {
+    "claude": "Claude Opus 5 (claude-opus-5), in-session subagents",
+    "luna": "Codex CLI 0.154.0, gpt-5.6-luna, reasoning xhigh, herdr panes, fresh session per job"
+  },
+  "judgedTier": {
+    "prompt": {
+      "file": "data/provenance/prompts/judge-span.md",
+      "sha256": "d39c77a246150c8fb764a958fb3753e09cee7c55ce9f868140ef0627da467f56"
+    },
+    "rule": "a charged word run is refunded only when both families accept it (orthographic variant, or faithful rendering of the typed input)",
+    "calibration": {
+      "file": "data/results/judge-calibration.jsonl",
+      "sha256": "1bc42d5405693d3355ded20dcf3a3a15ffd40e663a0bb9c41a64d1e31f0772b1",
+      "n": 100,
+      "labeller": "the lead session (Claude Opus 5), blind to judge output",
+      "agreement": {
+        "claude": {
+          "agree": "96%",
+          "kappa": 0.92,
+          "falseAccepts": 1,
+          "falseRejects": 3
+        },
+        "luna": {
+          "agree": "93%",
+          "kappa": 0.86,
+          "falseAccepts": 2,
+          "falseRejects": 5
+        },
+        "bothAccept": {
+          "agree": "95%",
+          "kappa": 0.9,
+          "falseAccepts": 0,
+          "falseRejects": 5
+        }
+      },
+      "caveat": "the labeller shares a model family with the Claude judge; luna is the independent check"
+    },
+    "scope": {
+      "dev": "all 304 rows, engines rules and hybrid, 896 runs",
+      "gold": "every 4th row (418 of 1,669), engines rules and hybrid, 692 runs",
+      "why": "luna weekly budget; the sample is fixed and labelled wherever the tier is reported"
+    },
+    "disagreements": {
+      "dev": 50,
+      "gold": 48
+    },
+    "shards": {
+      "judge-calib": {
+        "claude-0.jsonl": "4e2c544b7d2bf5a6",
+        "luna-0.jsonl": "7597758e8cc0e05d",
+        "shard-0.jsonl": "f002e673323b788d"
+      },
+      "judge-dev": {
+        "claude-0.jsonl": "5c621192ce36fb99",
+        "claude-1.jsonl": "70fc73dbdc398fd2",
+        "claude-2.jsonl": "eed7b7081bbcd656",
+        "claude-3.jsonl": "8927a75601856b47",
+        "luna-0.jsonl": "f9831e6531267101",
+        "luna-1.jsonl": "a8b3efbd6e44766b",
+        "luna-2.jsonl": "d07596f95a7f4fe5",
+        "luna-3.jsonl": "4551bba53ffa5166",
+        "shard-0.jsonl": "de3af40e8c1aa64c",
+        "shard-1.jsonl": "58aa67d0bb2a8fb4",
+        "shard-2.jsonl": "82c2aa1b59b38480",
+        "shard-3.jsonl": "cccb98c34377da3f"
+      },
+      "judge-gold": {
+        "claude-0.jsonl": "2ca4190847d32ed5",
+        "claude-1.jsonl": "a851322b255fa979",
+        "claude-2.jsonl": "6ef6e07db8b3d35c",
+        "claude-3.jsonl": "6121fd69b97635f7",
+        "luna-0.jsonl": "527df6d30183ad63",
+        "luna-1.jsonl": "524055cd1b4b7c40",
+        "luna-2.jsonl": "d1377fd34c584843",
+        "luna-3.jsonl": "e7ba7a1872fd84eb",
+        "shard-0.jsonl": "0a7af70d15abff7f",
+        "shard-1.jsonl": "a36f0f9faaf676cb",
+        "shard-2.jsonl": "80c58c7857c28cfd",
+        "shard-3.jsonl": "c6a2ca8a3ab71179"
+      }
+    },
+    "judgments": {
+      "file": "data/results/judgments.jsonl",
+      "sha256": "1be9c4d6b361b6291945988846813e89296fc0de4b1caaa3dfe8d4ce8c971dc9",
+      "n": 1688
+    },
+    "results": {
+      "dev": {
+        "rules": {
+          "strict": 58.2,
+          "judged": 79.1
+        },
+        "hybrid": {
+          "strict": 57.6,
+          "judged": 81.3
+        }
+      },
+      "goldSample": {
+        "rules": {
+          "strict": 75,
+          "judged": 85.6
+        },
+        "hybrid": {
+          "strict": 72,
+          "judged": 85.8
+        }
+      }
+    }
+  },
+  "zeroShotReference": {
+    "prompt": {
+      "file": "data/provenance/prompts/zero-shot.md",
+      "sha256": "59d5280a46304e25e4e669ddd79ea397b5ab246889de70edeeb2a92fe74e911b"
+    },
+    "sawOnly": "gold id and Finglish input",
+    "coverage": {
+      "claude-opus-5": "all 1,669 gold rows",
+      "gpt-5.6-luna": "every 4th row, 418"
+    },
+    "file": "data/results/llm-reference.jsonl",
+    "sha256": "887eacc5e0ea7317063498673f382905a1cce89e92971d149d0704f2edc5346f",
+    "shards": {
+      "claude-0.jsonl": "e69fe07a2c02831d",
+      "claude-1.jsonl": "9d236d3150d008db",
+      "claude-2.jsonl": "fb723297b65de8e8",
+      "claude-3.jsonl": "5cab091352f256d0",
+      "claude-4.jsonl": "404a58bf261d6a01",
+      "claude-5.jsonl": "01523cadeafa1605",
+      "claude-merged.jsonl": "8b9770e1e9771119",
+      "luna-0.jsonl": "350326effef1b57f",
+      "luna-1.jsonl": "fcc67e988f5141a1",
+      "luna-shard-0.jsonl": "9990fab99cd94064",
+      "luna-shard-1.jsonl": "dce90e2570aa02eb",
+      "shard-0.jsonl": "a8b50b76ef5ee048",
+      "shard-1.jsonl": "26f6a61117c09bd1",
+      "shard-2.jsonl": "b8a8600e5dc707c4",
+      "shard-3.jsonl": "0bff89ac93746fcb",
+      "shard-4.jsonl": "0666ef8e33156462",
+      "shard-5.jsonl": "671c5690299bdc30"
+    },
+    "results": {
+      "all1669": {
+        "claude-opus-5": {
+          "strict": 77.7,
+          "orthographic": 84
+        }
+      },
+      "same418": {
+        "claude-opus-5": {
+          "strict": 78.1,
+          "orthographic": 84.8
+        },
+        "gpt-5.6-luna": {
+          "strict": 76.7,
+          "orthographic": 83
+        },
+        "rules": {
+          "strict": 75,
+          "orthographic": 76.9
+        },
+        "hybrid": {
+          "strict": 72,
+          "orthographic": 77.4
+        }
+      }
+    },
+    "label": "not in-browser, on the order of 20,000x the compute; context for the ceiling, not a comparable"
+  },
+  "errorTaxonomy": {
+    "prompt": {
+      "file": "data/provenance/prompts/error-taxonomy.md",
+      "sha256": "29c8431d5aaf00fee1cb267cca59362bb8cb314e131833bbf7ed534bcf68a12d"
+    },
+    "labels": "data/results/error-taxonomy.jsonl",
+    "classifiers": "six Claude subagents",
+    "verification": "lead session read a 10% sample (142): 4 clear disagreements, 4 borderline"
+  }
+}

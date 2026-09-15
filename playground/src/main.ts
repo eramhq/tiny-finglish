@@ -451,7 +451,7 @@ interface CmpSubject {
   id: string;
   label: string;
   language: string;
-  kind: "ours" | "third-party" | "baseline";
+  kind: "ours" | "third-party" | "baseline" | "reference";
   runsInBrowser: boolean;
   measured: boolean;
   source: string;

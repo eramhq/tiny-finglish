@@ -1,0 +1,100 @@
+{"key":"00a8dbf1c726824b","id":"dev-e13f5d9537","refSpan":"قران میگذارند","hypSpan":"قرن میگذراند","verdict":"reject"}
+{"key":"030126a8a071a008","id":"dev-3c7cd1c359","refSpan":"بعضیارم قراره بعد دوسال بیینم","hypSpan":"بازیها را هم قرار است باد دو سال ببینم","verdict":"reject"}
+{"key":"070b3f005c8288d3","id":"dev-f806654575","refSpan":"میراثی","hypSpan":"میرسی","verdict":"reject"}
+{"key":"0b7351aec6c060fa","id":"dev-99516bafd0","refSpan":"می کنم","hypSpan":"میکنم","verdict":"accept"}
+{"key":"0da9f7a48a8a897b","id":"dev-76081f2058","refSpan":"متفاوت","hypSpan":"مختلف","verdict":"accept"}
+{"key":"109eca62b86aa872","id":"dev-9c7eb82247","refSpan":"برنامه","hypSpan":"برنامهها","verdict":"accept"}
+{"key":"11f8da0a4feaeee8","id":"dev-cdf132f060","refSpan":"مامانه منه","hypSpan":"مامان من است","verdict":"accept"}
+{"key":"13f360861b061c28","id":"dev-d29394c0dd","refSpan":"حلقه","hypSpan":"هلقیه","verdict":"reject"}
+{"key":"173442c1bdb73bb9","id":"dev-4d7f9b37e5","refSpan":"می کنی","hypSpan":"میکنی","verdict":"accept"}
+{"key":"193306de17b1e51b","id":"dev-e917944b84","refSpan":"همپیمانان","hypSpan":"هم پیمانان","verdict":"accept"}
+{"key":"1b32f6aa2bfd18df","id":"dev-2260a521da","refSpan":"چندتامثال","hypSpan":"چند تا مثال","verdict":"accept"}
+{"key":"1d80523dd8cbf37d","id":"dev-4114009a25","refSpan":"اونجا","hypSpan":"آنجا","verdict":"accept"}
+{"key":"1fcf00ad8a0bab1d","id":"dev-a3662769d7","refSpan":"تلفن","hypSpan":"تلپهن","verdict":"reject"}
+{"key":"2515ef64db6b0539","id":"dev-3860b109b5","refSpan":"چیکار","hypSpan":"چی کار","verdict":"accept"}
+{"key":"280c3e72e1f11d1f","id":"dev-f806654575","refSpan":"آنها","hypSpan":"انها","verdict":"accept"}
+{"key":"2b081d945391fdfa","id":"dev-25e72f09df","refSpan":"نگهدارید","hypSpan":"نگاه دارید","verdict":"reject"}
+{"key":"2cb626252bb9a38b","id":"dev-4bae788a95","refSpan":"طبله","hypSpan":"طبل است","verdict":"accept"}
+{"key":"2f575771a864b18e","id":"dev-7f7a69495d","refSpan":"نابغهٔ ۲۵ سالهای","hypSpan":"نبوغ بیست و پنج سالی","verdict":"reject"}
+{"key":"32a2d904e2489628","id":"dev-b5ff24b3ec","refSpan":"درباره ی","hypSpan":"درباریه","verdict":"reject"}
+{"key":"353938cb3617736c","id":"dev-e731415739","refSpan":"اومده","hypSpan":"آماده","verdict":"reject"}
+{"key":"3c30478645189840","id":"dev-75298132f6","refSpan":"می خوای","hypSpan":"میخوای","verdict":"accept"}
+{"key":"3d67c893350851bd","id":"dev-fb1d04b223","refSpan":"ریزخشونتها","hypSpan":"ریز خشونتها","verdict":"accept"}
+{"key":"3fca319a1cd1017c","id":"dev-8b4769377f","refSpan":"نباشه لباسش","hypSpan":"نباشد لباس آش","verdict":"reject"}
+{"key":"43a00c35d7244657","id":"dev-328afbd51b","refSpan":"می اوری","hypSpan":"میاوری","verdict":"accept"}
+{"key":"443d1b9a788da521","id":"dev-16d5c8d93a","refSpan":"قله ی","hypSpan":"قلی","verdict":"reject"}
+{"key":"47945b41ecb58c93","id":"dev-5b140b7ab1","refSpan":"بهتره","hypSpan":"بهتر است","verdict":"accept"}
+{"key":"496e05d1d170bd63","id":"dev-5b140b7ab1","refSpan":"چطوره","hypSpan":"چطور","verdict":"reject"}
+{"key":"4c2b386cd4b90d89","id":"dev-91bba5db61","refSpan":"االهی بحق","hypSpan":"الهی به حق","verdict":"accept"}
+{"key":"4e9031d3003b5558","id":"dev-83196bb13c","refSpan":"خارج","hypSpan":"خرج","verdict":"reject"}
+{"key":"50b7b253959faf69","id":"dev-eb9d87fcb6","refSpan":"برای چندماه قبله","hypSpan":"بار چند ماه قابل است","verdict":"reject"}
+{"key":"54430f6c245a0d49","id":"dev-9b69a11bff","refSpan":"ایرانی الاصل تونست","hypSpan":"ایرنیل واصل توانست","verdict":"reject"}
+{"key":"56215cfb10c8f691","id":"dev-b062bd5d3a","refSpan":"قربون دست تون","hypSpan":"قربان دستتان","verdict":"accept"}
+{"key":"57329bd8437acc5a","id":"dev-0778503413","refSpan":"براحتی","hypSpan":"به راحتی","verdict":"accept"}
+{"key":"590439d84ff45305","id":"dev-8856f94406","refSpan":"ظاهرا","hypSpan":"زهرن","verdict":"reject"}
+{"key":"5ab994d50cbc526e","id":"dev-3f65ad4a3a","refSpan":"خرج","hypSpan":"خارج","verdict":"reject"}
+{"key":"5d06b9f76d720a2d","id":"dev-dc8d9b54f2","refSpan":"داشتن","hypSpan":"داشتند","verdict":"reject"}
+{"key":"5eff3352fb74bdcb","id":"dev-8c288b5396","refSpan":"اره","hypSpan":"آره","verdict":"accept"}
+{"key":"6176bedc89f79204","id":"dev-3885aedecb","refSpan":"وومن","hypSpan":"و من","verdict":"accept"}
+{"key":"63fd616a868f386c","id":"dev-eeb24660f7","refSpan":"بخای می کنم","hypSpan":"بخوای میمکنم","verdict":"reject"}
+{"key":"67134444b320f1a3","id":"dev-93babbc1c5","refSpan":"پراز","hypSpan":"پر از","verdict":"accept"}
+{"key":"6861d3037a01c5e3","id":"dev-cdf7aec3ac","refSpan":"داشتند","hypSpan":"داشتم","verdict":"accept"}
+{"key":"6b549aaff22080ca","id":"dev-23dcf7bbcf","refSpan":"می کنم","hypSpan":"میکنم","verdict":"accept"}
+{"key":"6d614d2703984ea0","id":"dev-d7e64d3612","refSpan":"اما بعضی ها","hypSpan":"ولی بازیها","verdict":"reject"}
+{"key":"6fac1a7cc9832134","id":"dev-29f1f67ddf","refSpan":"می فرمودید","hypSpan":"میفرمودین","verdict":"accept"}
+{"key":"71bf8e7d3d4553aa","id":"dev-efa187cda5","refSpan":"سکه ها","hypSpan":"سکهها","verdict":"accept"}
+{"key":"744e7dc49aa7a24c","id":"dev-1c5f6fe92a","refSpan":"کمکت احتیاجی","hypSpan":"کمک تو اهتیجی","verdict":"reject"}
+{"key":"776c0dd74692e04f","id":"dev-1f353773ed","refSpan":"می زد","hypSpan":"میزد","verdict":"accept"}
+{"key":"796373e227ce16a5","id":"dev-0e0b139e6e","refSpan":"دوگ کونانت","hypSpan":"دکنت","verdict":"reject"}
+{"key":"7af0c6eec8d3691b","id":"dev-eb7a63a540","refSpan":"تنها کس","hypSpan":"تنه کاسه","verdict":"reject"}
+{"key":"7ce0bfacd810322d","id":"dev-09a0b8eb01","refSpan":"راهحلهای","hypSpan":"راه حالهای","verdict":"reject"}
+{"key":"8339d54424ab78d8","id":"dev-715c737990","refSpan":"دانلود نمایید","hypSpan":"download نمایی","verdict":"reject"}
+{"key":"847fe641b6f86a97","id":"dev-205216cfe3","refSpan":"چقدر","hypSpan":"چه قادر","verdict":"reject"}
+{"key":"86acc6586e6c0da8","id":"dev-f924ca2e1b","refSpan":"بااینحال","hypSpan":"با این حال","verdict":"accept"}
+{"key":"8a12f1a832901b04","id":"dev-963ebf3ab5","refSpan":"می آید","hypSpan":"میاید","verdict":"accept"}
+{"key":"8ba5e341aa222354","id":"dev-3885aedecb","refSpan":"وتنها دخترمو","hypSpan":"و تنها دخترم رو","verdict":"accept"}
+{"key":"8d53226f636e6d33","id":"dev-c18e7c5b4b","refSpan":"مورد","hypSpan":"مرد","verdict":"reject"}
+{"key":"8e33c47d72d8292a","id":"dev-ea5a619337","refSpan":"بین","hypSpan":"بینه","verdict":"reject"}
+{"key":"8feac60b7318d819","id":"dev-2dc7bf75f7","refSpan":"انجا","hypSpan":"آنجا","verdict":"accept"}
+{"key":"9105e593965c659b","id":"dev-4114009a25","refSpan":"می کنن","hypSpan":"میکنند","verdict":"accept"}
+{"key":"92f9f16956212878","id":"dev-3454136d92","refSpan":"یهوگفت","hypSpan":"یه گفت","verdict":"reject"}
+{"key":"95ccae163ec33974","id":"dev-0e0b139e6e","refSpan":"۲۰۰۱ مدیرعامل","hypSpan":"دو هزار یک مدیر عامل","verdict":"reject"}
+{"key":"9777e54ff369756a","id":"dev-e9b2d8a9c5","refSpan":"می افتد","hypSpan":"میفتد","verdict":"reject"}
+{"key":"99d443d27c74b9e4","id":"dev-2fa6cae30d","refSpan":"اوه","hypSpan":"اه","verdict":"reject"}
+{"key":"9ba960e677f78424","id":"dev-9092e201a2","refSpan":"بزنه","hypSpan":"بیزند","verdict":"reject"}
+{"key":"9df9b6cdeda0a56c","id":"dev-0a94d1d829","refSpan":"بوده","hypSpan":"بود","verdict":"accept"}
+{"key":"a0a2255682c0ceb0","id":"dev-1564ad1e46","refSpan":"مهرماه","hypSpan":"مهر ماه","verdict":"accept"}
+{"key":"a1fe49546e8d8ac1","id":"dev-135b5da503","refSpan":"فیزیک","hypSpan":"","verdict":"accept"}
+{"key":"a3d320f64b433859","id":"dev-19e8665595","refSpan":"کارکنان","hypSpan":"کار کونن","verdict":"reject"}
+{"key":"a588b705da52db1e","id":"dev-2c81e9ba4d","refSpan":"رسانهای","hypSpan":"رسانی","verdict":"reject"}
+{"key":"a7d1fc1da9dece0e","id":"dev-9092e201a2","refSpan":"باشم","hypSpan":"بودم","verdict":"accept"}
+{"key":"ab79a007180da7e7","id":"dev-ffcfc4a164","refSpan":"برنمیداشتن همون مردایی","hypSpan":"بار نمیدشتند همان مردهای","verdict":"reject"}
+{"key":"adfbb46a550d1be2","id":"dev-52f289862e","refSpan":"بخوابید دیگه","hypSpan":"بخبید دیگر","verdict":"reject"}
+{"key":"b1056a4908042941","id":"dev-428cdd6688","refSpan":"سریع حرکت کردهاند","hypSpan":"ساره حرکات کرده اند","verdict":"reject"}
+{"key":"b4e5bf39a2e919e1","id":"dev-cc146b3d70","refSpan":"انجامشان","hypSpan":"انجامشون","verdict":"reject"}
+{"key":"b67207c2dd0d7c8e","id":"dev-7124fa57f4","refSpan":"چگونگیاش","hypSpan":"قگونی آن","verdict":"reject"}
+{"key":"b8c8dd304d8330d9","id":"dev-1f9fb5651b","refSpan":"هرکجا","hypSpan":"هر کجا","verdict":"accept"}
+{"key":"b9f977876d59983e","id":"dev-e731415739","refSpan":"بگیرین","hypSpan":"بگیرید","verdict":"accept"}
+{"key":"bb1b868e4a5df0a6","id":"dev-efa187cda5","refSpan":"از جاده","hypSpan":"","verdict":"accept"}
+{"key":"bd429b41392cb446","id":"dev-a5076a08e3","refSpan":"چپ","hypSpan":"چاپ","verdict":"reject"}
+{"key":"c1aeef5d21a92baa","id":"dev-cc767600d5","refSpan":"چقد","hypSpan":"چه قادر","verdict":"reject"}
+{"key":"c4f6618c94911562","id":"dev-78db95e5dd","refSpan":"بعدی","hypSpan":"بادی","verdict":"reject"}
+{"key":"c79cf02f09515ad7","id":"dev-e80446b94e","refSpan":"قلهای","hypSpan":"قلی","verdict":"reject"}
+{"key":"c8e00e476b0830ce","id":"dev-19e8665595","refSpan":"راه","hypSpan":"روح","verdict":"accept"}
+{"key":"ca373811a4dba967","id":"dev-327cdaa3ce","refSpan":"بیادبی","hypSpan":"بی ادبی","verdict":"accept"}
+{"key":"cdcdb2aa313abab5","id":"dev-a5076a08e3","refSpan":"میره","hypSpan":"میرود","verdict":"accept"}
+{"key":"d0c7f6807b4ea99a","id":"dev-547419dae3","refSpan":"نمی دونم","hypSpan":"نمیدونم","verdict":"accept"}
+{"key":"d32e241824eb5d5f","id":"dev-845e18d5aa","refSpan":"هرروز","hypSpan":"هر روز","verdict":"accept"}
+{"key":"d60ad6a84bc03f88","id":"dev-d134f89f1e","refSpan":"بهترازاینه","hypSpan":"بهتر از این است","verdict":"accept"}
+{"key":"d7ea110d005bc807","id":"dev-e752a816d8","refSpan":"آمریکایی","hypSpan":"آمریکای","verdict":"accept"}
+{"key":"d95c151b093db6e4","id":"dev-703a0b33ed","refSpan":"بیادبانه","hypSpan":"بی ادبانه","verdict":"accept"}
+{"key":"dc88d1622f0be5d0","id":"dev-826fbd3445","refSpan":"اینگونه","hypSpan":"این گونه","verdict":"accept"}
+{"key":"dde4aa9cd8b2fbe6","id":"dev-1dfe8ea81b","refSpan":"ببینم","hypSpan":"ببینیم","verdict":"accept"}
+{"key":"e0c1c601de60c71e","id":"dev-d0cdba6dfa","refSpan":"ادم","hypSpan":"آدم","verdict":"accept"}
+{"key":"e21e0224f555fde8","id":"dev-2a8c296ff0","refSpan":"دفاعن","hypSpan":"دفاعند","verdict":"accept"}
+{"key":"e46499ef328777b8","id":"dev-53b7829785","refSpan":"اونجاست","hypSpan":"آن جا است","verdict":"accept"}
+{"key":"e69bbe525bf2fae8","id":"dev-9273c10790","refSpan":"سر کار","hypSpan":"سرکار","verdict":"accept"}
+{"key":"e878382e105838e2","id":"dev-33febc6df5","refSpan":"بعنوان اسباببازی","hypSpan":"به عنوان اسباب بازی","verdict":"accept"}
+{"key":"ebd62ac8357c2654","id":"dev-b1d3232c63","refSpan":"گوشیشو","hypSpan":"گوشیاش را","verdict":"accept"}
+{"key":"f078e068a7cea92b","id":"dev-d29394c0dd","refSpan":"تکمیلشده","hypSpan":"تکمیل شده","verdict":"accept"}
+{"key":"f38ea45aef057cec","id":"dev-19e8665595","refSpan":"","hypSpan":"به اونها","verdict":"accept"}

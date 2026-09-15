@@ -128,6 +128,7 @@ button:disabled { opacity: 0.6; cursor: default; }
 .tag.ours { color: var(--convert); }
 .tag.third-party { color: var(--punct); }
 .tag.baseline { color: var(--muted); }
+.tag.reference { color: var(--muted); font-style: italic; }
 .tag.live { color: var(--copy); }
 .tag.offline { color: var(--muted); }
 
