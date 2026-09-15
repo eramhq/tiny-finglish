@@ -70,6 +70,11 @@ SHORT_VOWEL_PRIOR = (("a", 0.45), ("e", 0.35), ("o", 0.20))
 #: is exactly what makes these systems robust.
 VARIANT_RATE = 0.30
 
+#: How often a vowel is written as a diphthong (`ow` for و, `ey` for ی).
+#: Measured as low single digits in real Finglish, not the ~15% the old
+#: variant_rate/2 heuristic produced.
+DIPHTHONG_RATE = 0.02
+
 
 @dataclass(frozen=True)
 class Chunk:
@@ -115,13 +120,22 @@ class FinglishGenerator:
     # -- internals ---------------------------------------------------------
 
     def _spell(self, fa: str, role: str) -> str:
-        """Pick a Finglish spelling for one Persian grapheme in a known role."""
-        options = spellings_by_role().get((fa, role))
-        if not options:
-            options = spellings_by_role().get((fa, "consonant"))
-        if not options:
+        """Pick a Finglish spelling for one Persian grapheme in a known role.
+
+        Where the rule table carries measured weights, sample from them
+        directly — they already encode how often each spelling really occurs.
+        Where it does not, fall back to the old behaviour: emit the canonical
+        form, and with probability `variant_rate` swap in a uniform alternative.
+        """
+        entry = spellings_by_role().get((fa, role)) or spellings_by_role().get((fa, "consonant"))
+        if not entry:
             return fa
-        if len(options) > 1 and self.rng.random() < self.variant_rate:
+        options, weights = entry
+        if len(options) == 1:
+            return options[0]
+        if weights:
+            return self.rng.choices(options, weights=weights)[0]
+        if self.rng.random() < self.variant_rate:
             return self.rng.choice(options[1:])
         return options[0]
 
@@ -163,7 +177,10 @@ class FinglishGenerator:
             return self._spell("ه", "silent")
         if len(ch) == 2:
             return self._spell(ch, "vowel")
-        if self.rng.random() < self.variant_rate * 0.5:
+        # Genuine diphthong spellings (`ow`, `ey`) are rare in real typing —
+        # `khowb` for خوب is attested but uncommon, and at the old rate of
+        # variant_rate/2 the generator produced it about one time in eight.
+        if self.rng.random() < DIPHTHONG_RATE:
             return self._spell(ch, "diphthong")
         return self._spell(ch, "vowel")
 

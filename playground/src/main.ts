@@ -11,10 +11,12 @@
  * what".
  */
 import { Transliterator, decodeFrontCoded, normalize } from "../../src/index.ts";
+import { wordAccuracy } from "../../src/metrics.ts";
 import type { Span } from "../../src/index.ts";
 import type { WeightArtifact } from "../../src/quant.ts";
 import fixturesRaw from "../../data/fixtures/fixtures.jsonl?raw";
 import goldRaw from "../../data/gold/gold.jsonl?raw";
+import authoredRaw from "../../data/gold/authored.jsonl?raw";
 import curve from "../../data/results/m2-curve.json";
 
 const LEXICON_URL = "/lexicon.bin";
@@ -34,6 +36,7 @@ const parse = (raw: string): Fixture[] =>
   raw.split("\n").filter(Boolean).map((l) => JSON.parse(l) as Fixture);
 const FIXTURES = parse(fixturesRaw);
 const GOLD = parse(goldRaw).map((f) => ({ ...f, category: "gold" }));
+const AUTHORED = parse(authoredRaw).map((f) => ({ ...f, category: "authored" }));
 
 let weights: WeightArtifact | undefined;
 let lexicon: Set<string> | undefined;
@@ -179,10 +182,11 @@ function renderSpan(span: Span): HTMLElement {
 // --------------------------------------------------------- fixture panel
 
 function runFixtures(): void {
-  const set = $<HTMLSelectElement>("fx-set").value === "gold" ? GOLD : FIXTURES;
+  const choice = $<HTMLSelectElement>("fx-set").value;
+  const set = choice === "gold" ? GOLD : choice === "authored" ? AUTHORED : FIXTURES;
   const runner = build($<HTMLInputElement>("fx-model").checked, $<HTMLInputElement>("fx-lexicon").checked);
 
-  const buckets = new Map<string, { n: number; top1: number; top3: number }>();
+  const buckets = new Map<string, { n: number; top1: number; top3: number; wc: number; wt: number }>();
   const failures: Array<{ fixture: Fixture; got: string; alts: string[]; spans: Span[] }> = [];
   let copyTotal = 0;
   let copyOk = 0;
@@ -202,11 +206,14 @@ function runFixtures(): void {
     const top1 = accepted.includes(got);
     const top3 = top1 || result.alternatives.some((a) => accepted.includes(normalize(a)));
 
+    const words = wordAccuracy(accepted[0]!, got);
     const key = fixture.category ?? "gold";
-    const bucket = buckets.get(key) ?? { n: 0, top1: 0, top3: 0 };
+    const bucket = buckets.get(key) ?? { n: 0, top1: 0, top3: 0, wc: 0, wt: 0 };
     bucket.n++;
     bucket.top1 += top1 ? 1 : 0;
     bucket.top3 += top3 ? 1 : 0;
+    bucket.wc += words.correct;
+    bucket.wt += words.total;
     buckets.set(key, bucket);
 
     if (!top1) failures.push({ fixture, got: result.text, alts: result.alternatives, spans: result.spans });
@@ -214,23 +221,26 @@ function runFixtures(): void {
   const elapsed = performance.now() - started;
 
   const total = [...buckets.values()].reduce(
-    (acc, b) => ({ n: acc.n + b.n, top1: acc.top1 + b.top1, top3: acc.top3 + b.top3 }),
-    { n: 0, top1: 0, top3: 0 },
+    (acc, b) => ({ n: acc.n + b.n, top1: acc.top1 + b.top1, top3: acc.top3 + b.top3,
+                   wc: acc.wc + b.wc, wt: acc.wt + b.wt }),
+    { n: 0, top1: 0, top3: 0, wc: 0, wt: 0 },
   );
   const pct = (a: number, b: number) => (b ? `${((a / b) * 100).toFixed(1)}%` : "n/a");
 
   const table = el("table", "grid");
   table.innerHTML =
-    "<thead><tr><th>category</th><th>n</th><th>top-1</th><th>top-3</th></tr></thead>";
+    "<thead><tr><th>category</th><th>n</th><th>word acc</th><th>sentence</th><th>top-3</th></tr></thead>";
   const body = document.createElement("tbody");
   for (const [name, b] of [...buckets].sort((a, b) => b[1].n - a[1].n)) {
     const tr = document.createElement("tr");
-    tr.innerHTML = `<td>${name}</td><td>${b.n}</td><td>${pct(b.top1, b.n)}</td><td>${pct(b.top3, b.n)}</td>`;
+    tr.innerHTML = `<td>${name}</td><td>${b.n}</td><td>${pct(b.wc, b.wt)}</td>` +
+                   `<td>${pct(b.top1, b.n)}</td><td>${pct(b.top3, b.n)}</td>`;
     body.append(tr);
   }
   const totalRow = document.createElement("tr");
   totalRow.className = "total";
-  totalRow.innerHTML = `<td>all</td><td>${total.n}</td><td>${pct(total.top1, total.n)}</td><td>${pct(total.top3, total.n)}</td>`;
+  totalRow.innerHTML = `<td>all</td><td>${total.n}</td><td>${pct(total.wc, total.wt)}</td>` +
+                       `<td>${pct(total.top1, total.n)}</td><td>${pct(total.top3, total.n)}</td>`;
   body.append(totalRow);
   table.append(body);
 
@@ -323,33 +333,38 @@ function renderCurve(): void {
     <p><strong>Quantization is free</strong> at every size, so the choice is decided purely
        on bytes. int6 is ~30% smaller than int8 after Brotli.</p>
     <p class="bad"><strong>The caveat that outranks the table:</strong> these are synthetic
-       numbers — held-out words from a corpus this project generated. On the untouched gold
-       set, going from 27k to 100k parameters bought nothing
-       (${(curve.evaluation.gold.top1 * 100).toFixed(1)}% at 100k versus 49.3% at 27k, a
-       difference of one example out of ${curve.evaluation.gold.n}). The curve measures how
-       well each model inverts the generator; whether that transfers to real Finglish is not
-       established here.</p>`;
+       numbers — held-out words from a corpus this project generated. On
+       ${curve.evaluation.gold.n.toLocaleString()} pairs of <em>real human-typed</em> Finglish
+       the same model scores
+       <strong>${(curve.evaluation.gold.wordAcc * 100).toFixed(1)}%</strong>. Neither scaling
+       the model nor correcting the generator's spelling distribution moved that number
+       (${(curve.generatorFix.before.gold * 100).toFixed(1)}% →
+       ${(curve.generatorFix.after.gold * 100).toFixed(1)}%), while the same fix bought
+       +${((curve.generatorFix.after.fixtures - curve.generatorFix.before.fixtures) * 100).toFixed(1)}
+       points on the hand-authored fixtures. The corpus is not the bottleneck — the missing
+       sentence-context model is.</p>`;
 
+  const ev = curve.evaluation;
+  const pctOf = (v: number) => `${(v * 100).toFixed(1)}%`;
   const compare = el("table", "grid");
   compare.innerHTML =
-    "<thead><tr><th>evaluation set</th><th>n</th><th>top-1</th><th>top-3</th><th>CER</th></tr></thead>" +
+    "<thead><tr><th>evaluation set</th><th>n</th><th>word acc</th><th>sentence</th><th>CER</th></tr></thead>" +
     `<tbody>
-      <tr><td>synthetic held-out words</td><td>26,925</td><td>85.4%</td><td>—</td><td>—</td></tr>
-      <tr><td>hand-authored fixtures</td><td>${curve.evaluation.fixtures.n}</td>
-          <td>${(curve.evaluation.fixtures.top1 * 100).toFixed(1)}%</td>
-          <td>${(curve.evaluation.fixtures.top3 * 100).toFixed(1)}%</td>
-          <td>${curve.evaluation.fixtures.cer.toFixed(3)}</td></tr>
-      <tr class="total"><td>untouched gold</td><td>${curve.evaluation.gold.n}</td>
-          <td>${(curve.evaluation.gold.top1 * 100).toFixed(1)}%</td>
-          <td>${(curve.evaluation.gold.top3 * 100).toFixed(1)}%</td>
-          <td>${curve.evaluation.gold.cer.toFixed(3)}</td></tr>
+      <tr><td>synthetic held-out words</td><td>${ev.synthetic.n.toLocaleString()}</td>
+          <td>${pctOf(ev.synthetic.wordAcc)}</td><td>—</td><td>—</td></tr>
+      <tr><td>hand-authored fixtures</td><td>${ev.fixtures.n}</td>
+          <td>${pctOf(ev.fixtures.wordAcc)}</td><td>${pctOf(ev.fixtures.sentence)}</td>
+          <td>${ev.fixtures.cer.toFixed(3)}</td></tr>
+      <tr class="total"><td><strong>real human Finglish</strong></td><td>${ev.gold.n.toLocaleString()}</td>
+          <td><strong>${pctOf(ev.gold.wordAcc)}</strong></td><td>${pctOf(ev.gold.sentence)}</td>
+          <td>${ev.gold.cer.toFixed(3)}</td></tr>
     </tbody>`;
 
   $("curve").replaceChildren(
     table, notes,
     el("h2", "", "Same model, three evaluation sets"),
     compare,
-    el("p", "hint", "Each step down is a step closer to the real task. Quote the last one."),
+    el("p", "hint", `${curve.evaluation.gold.source}. Word accuracy is word-level edit distance with ZWNJ folded to a space; sentence exact-match collapses to ~3% on 8-word sentences and stops discriminating. Quote the last row.`),
   );
 }
 

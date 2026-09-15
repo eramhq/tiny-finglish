@@ -56,21 +56,32 @@ Held-out **words**, not held-out spellings.
 | 100k | 102,348 | 0.8535 | 0.8533 | 0.8527 | 0.8955 | +0.0420 |
 | 500k | 541,516 | 0.8753 | 0.8754 | 0.8743 | 0.9066 | +0.0312 |
 
-With the shipped 100k model:
+With the shipped 100k model, reporting **word accuracy** (the metric the
+literature uses; sentence exact-match collapses to ~3% on 8-word sentences and
+stops discriminating):
 
-| set | top-1 | top-3 | CER |
+| set | n | word acc | sentence |
 |---|---:|---:|---:|
-| synthetic held-out words | 85.4% | — | — |
-| hand-authored fixtures (n=174) | 66.1% | 79.9% | 0.104 |
-| untouched gold (n=71) | 47.9% | 62.0% | 0.140 |
+| synthetic held-out words | 23,933 | 80.9% | — |
+| hand-authored fixtures | 174 | 74.8% | 71.3% |
+| **real human Finglish** | **1,906** | **44.6%** | 2.8% |
 
 Copy-span preservation is 100% on every set that contains one.
 
-**The gap between 85% and 48% is the number to trust the least and think about
-the most.** Worse: going from 27k to 100k parameters moved the synthetic number
-+3.3 points and the gold number −1.4 (one example, i.e. flat). The model is
-demonstrably getting better at inverting the generator and not demonstrably
-better at the task.
+**44.6% is the number to quote.** The others are measured against data this
+project generated or wrote.
+
+Two negative results are worth more than the headline:
+
+1. **Scaling did not transfer.** 27k → 100k parameters moved the synthetic
+   number +3.3 points and the real number not at all.
+2. **Fixing the generator did not transfer either.** Correcting the spelling
+   distribution from measured real data (`x` at 0.1% not 30%, and so on)
+   bought +5.2 points on the hand-authored fixtures, +9.6 on the author-written
+   set, and **−0.3** on real human Finglish.
+
+Both point the same way: the synthetic corpus is not the binding constraint.
+The missing sentence-context model is.
 
 ## Limitations
 

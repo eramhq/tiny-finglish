@@ -203,32 +203,61 @@ The rule baseline wins on top-3 because it generates more diverse candidates;
 the model's distribution is more peaked. Worth remembering if you use
 `alternatives` rather than `text`.
 
-### The untouched gold set
+### The untouched gold set — real human Finglish
 
-`node scripts/run-fixtures.ts --gold`, 100k model: **47.9% top-1, 62.0% top-3,
-CER 0.140.**
+**1,906 pairs of Finglish that real people typed**, from
+[mmahdibarghi/finglish-dataset](https://github.com/mmahdibarghi/finglish-dataset)
+(MIT), whose Persian side comes from Mozilla Common Voice Persian (CC0).
+Nothing in this repository is tuned against it.
 
-Lower than the fixture number, and it should be: the gold set is *all*
-conversion, with none of the protected spans that score 100% by construction.
-Nothing in this repository is tuned against it — see `data/gold/README.md`.
+```
+node scripts/run-fixtures.ts --gold
+```
 
-So the three numbers to hold in mind:
+| evaluation set | n | word acc | sentence |
+|---|---:|---:|---:|
+| synthetic held-out words | 23,933 | 80.9% | — |
+| hand-authored fixtures | 174 | 74.8% | 71.3% |
+| **real human Finglish** | **1,906** | **44.6%** | 2.8% |
 
-| set | what it measures | 27k | 100k |
-|---|---|---:|---:|
-| synthetic held-out words | how well the model inverts the generator | 82.1% | **85.4%** |
-| hand-authored fixtures | mixed, incl. protected spans and adversarial cases | 60.3% | **66.1%** |
-| **untouched gold** | **closest to the real task** | **49.3%** | **47.9%** |
+**44.6% is the number to quote.** Everything above it is measured against data
+this project wrote, and the gap is the cost of that.
 
-**Read that last row carefully.** Scaling the model from 27k to 100k buys
-+3.3 points on the synthetic set and +5.8 on the fixtures, and **nothing on the
-untouched gold set** — 49.3% to 47.9% is one example out of 71, i.e. flat within
-noise.
+Report **word accuracy**, not sentence exact-match. At ~8 words per sentence
+the latter collapses to ~3% and stops telling you anything — a system that gets
+90% of words right still fails most sentences.
 
-That is the synthetic-data bias landing exactly where the plan's risk register
-said it would. The model is getting better at inverting the generator, not
-necessarily at the task. Until the gold set is rebuilt from native speakers
-typing naturally, treat improvements on the first two rows as unproven.
+### A negative result worth more than the positive one
+
+Real data exposed a real bug in the corpus generator. Measured over 21,874 word
+tokens of actual typing:
+
+| spelling | generator emitted | people actually write |
+|---|---:|---:|
+| `x` for خ | 30% | **0.1%** |
+| `q` for ق | 30% | **3.9%** |
+| `w` for و | 30% | 1.6% |
+| `ee` for ی | 30% | 0.9% |
+| `aa` for long ɒː | canonical | **23%** (`a` is 69%) |
+
+Those weights are now measured and encoded (`latinWeights` in `src/rules.ts`).
+Retraining on the corrected distribution:
+
+| evaluation set | before | after |
+|---|---:|---:|
+| hand-authored fixtures | 69.6% | **74.8%** |
+| author-written gold | 51.4% | **61.0%** |
+| **real human Finglish** | 44.9% | **44.6%** |
+
+It bought +5 and +10 points on the sets *I* wrote, and **nothing** on the set
+real people wrote.
+
+That is the same trap as before, one level up: the curated sets share the
+author's assumptions and the real one does not. The conclusion is that **the
+synthetic corpus is not the bottleneck** — and by elimination the cap is the
+missing sentence-context model, which the prior art puts at ~21 WER points
+against under one point for architecture changes. That is where the next work
+goes, not into more generator tuning.
 
 ## Known limitations
 
@@ -252,13 +281,16 @@ where the remaining accuracy lives — on the closest comparable task, adding
 context moved word error from 33.8% to 12.2%, while swapping the model
 architecture moved it under one point.
 
-**The gold set is author-written, not collected from native speakers typing
-naturally.** An author who knows the rule table writes Finglish the rule table
-handles. See `data/gold/README.md` for the protocol that would fix it.
+**The gold set is real, but it is one annotator.** 1,906 pairs of genuinely
+human-typed Finglish — a large improvement on the author-written set it
+replaced — but written by a single person for a text-to-speech project, so it
+is read-aloud register rather than chat, with that writer's habits baked in.
+`data/gold/README.md` has the panel protocol that would fix it.
 
-**Realistic ceiling: 85–92% word accuracy**, roughly 40–60% sentence accuracy.
-Anything above 95% offline in this budget should be assumed to be leakage until
-proven otherwise.
+**Realistic ceiling: 85–92% word accuracy.** This model is at 44.6% on real
+input, so there is a lot of headroom and most of it is the missing language
+model. Anything claiming above 95% offline in this budget should be assumed to
+be leakage until proven otherwise.
 
 **Specific known misses**, each with a fixture: `SALAM` in all-caps is preserved
 as an identifier; `email` is preserved as English rather than converted to

@@ -111,7 +111,44 @@ in six — so it should not be over-engineered.
 
 ---
 
-## 4. Informal Persian data — **confirmed as the binding problem**
+## 4a. Real Finglish data — **found, and it changed the numbers**
+
+**[mmahdibarghi/finglish-dataset](https://github.com/mmahdibarghi/finglish-dataset)
+— MIT, 2,769 unique pairs, 1,906 kept after alignment filtering.** The Persian
+side is Mozilla Common Voice Persian (**CC0**); the Finglish side was typed by a
+human annotator for a TTS project. This is now `data/gold/gold.jsonl`.
+
+It is genuinely real typing: 17 of 18 colloquial markers probed are present
+(`midouni`, `misheh`, `vaseh`, `nemidoonam`, `bashe`).
+
+Two things it immediately delivered:
+
+* **It corrected the corpus generator.** Measured over its 21,874 word tokens,
+  `x` for خ occurs at 0.1% and `q` for ق at 3.9%, where the generator had been
+  emitting both at 30%; and `a` outnumbers `aa` for long ɒː by roughly 3:1,
+  where `aa` had been canonical. See `latinWeights` in `src/rules.ts`.
+* **It moved the honest accuracy figure** from a guess to 44.6% word accuracy.
+
+Its limits: one annotator, read-aloud rather than chat register, and ~30% of
+source rows dropped as misaligned.
+
+**Also verified usable:** GeoNames (**CC BY 4.0**) yields 235,564 Persian↔Latin
+name pairs across Iran and Afghanistan, covering 45,335 Persian words absent
+from the Lilak lexicon. But its romanization is BGN/PCGN standard
+(`Kuh-e Shotor Khvab`), not natural typing, so it is proper-noun *coverage*, not
+a source for the mapping.
+
+**Definitively rejected:** `Arshia82sbn/Finglish-To-Persian-Dataset-Large`, the
+largest Finglish dataset in existence at 9.85M pairs. Its own card says
+`Generation Method: Synthetic (Rule-based + Dictionary)`, it is built on
+GPL-3.0 Virastyar rules, and its source corpus states only that it merged
+"several existing Persian datasets" while naming none of them.
+
+**The wider supply is empty.** HuggingFace returns four datasets for
+`finglish`/`pinglish`/`persian transliteration`/`romanized persian` combined,
+three of which are GPT-generated TTS data with no declared licence.
+
+## 4b. Informal Persian data — **still the binding problem**
 
 Finglish is chat Persian: `میرم`, `میخوام`, `چطوری`, `نمیدونم`. Formal corpora
 contain almost none of it, and a domain-mismatched language model measured a

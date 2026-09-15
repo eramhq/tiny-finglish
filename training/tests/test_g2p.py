@@ -55,33 +55,50 @@ def test_lossless_over_a_lexicon_sample():
     assert not failures, f"{len(failures)} of {len(words)} words failed: {failures[:10]}"
 
 
+#: Spelling alternatives the weighted sampler may legitimately produce. The
+#: structure tests below pin the *syllable skeleton*, not the spelling — since
+#: weights were measured from real Finglish, every one of these is something a
+#: real person writes.
+U = r"(?:oo|u|ou|o|ow|au)"   # long uː / oː
+A = r"(?:aa|a|â)"            # long ɒː
+I = r"(?:i|ee|y|ey|ei|ay|ai)"  # long iː and its diphthong spellings
+V = r"[aeo]"                 # an inserted (unwritten) short vowel
+W = r"(?:v|w)"               # consonantal و; `w` is rare but attested (1.6%)
+
+
 @pytest.mark.parametrize(
     "word,pattern",
     [
-        ("امروز", r"^[aeo]mrooz$"),      # و is a vowel, not /v/
-        ("خوب", r"^khoob$"),
-        ("دوست", r"^doost$"),
-        ("خواب", r"^khaab$"),            # the silent و of خوا
-        ("خواهر", r"^khaah[aeo]r$"),
-        ("ایران", r"^iraan$"),           # word-initial ای is one long vowel
-        ("دانش", r"^daan[aeo]sh$"),      # نش is not a legal coda: a vowel is inserted
-        ("جنگ", r"^j[aeo]ng$"),          # نگ is a legal coda: none is
-        ("دست", r"^d[aeo]st$"),
-        ("بزرگ", r"^b[aeo]z[aeo]rg$"),   # maximal onset: bo-zorg, not ba-zrag
-        ("مسقط", r"^m[aeo]s(gh|q)[aeo]t$"),  # forced coda: mas-ghat, not me-se-ghet
-        ("دویدن", r"^d[aeo]vid[aeo]n$"),  # و before ی is a consonant
+        ("امروز", rf"^{V}mr{U}z$"),        # و is a vowel, not /v/
+        ("خوب", rf"^kh{U}b$"),
+        ("دوست", rf"^d{U}st$"),
+        ("خواب", rf"^kh{A}b$"),            # the silent و of خوا
+        ("خواهر", rf"^kh{A}h{V}r$"),
+        ("ایران", rf"^{I}r{A}n$"),         # word-initial ای is one long vowel
+        ("دانش", rf"^d{A}n{V}sh$"),        # نش is not a legal coda: a vowel is inserted
+        ("جنگ", rf"^j{V}ng$"),             # نگ is, so none is
+        ("دست", rf"^d{V}st$"),
+        ("بزرگ", rf"^b{V}z{V}rg$"),        # maximal onset: bo-zorg, not ba-zrag
+        ("مسقط", rf"^m{V}s(?:gh|q){V}t$"), # forced coda: mas-ghat, not me-se-ghet
+        ("دویدن", rf"^d{V}{W}{I}d{V}n$"),  # و before ی is a consonant
     ],
 )
 def test_syllable_structure(word, pattern):
-    """Pin the consonant/long-vowel skeleton, not short-vowel quality.
+    """Pin the consonant/long-vowel skeleton, not the spelling.
 
-    The syllabifier is engineered and must be correct; short-vowel *quality* is
-    sampled from a prior because we have no pronunciation dictionary, so
-    asserting an exact string here would be asserting a coin flip. See the
-    module docstring of ``g2p.py``.
+    The syllabifier is engineered and must be correct. Two things around it are
+    deliberately stochastic and must NOT be asserted exactly:
+
+      * short-vowel *quality*, sampled from a prior because there is no
+        pronunciation dictionary (see the module docstring of ``g2p.py``);
+      * variant *spellings*, sampled from weights measured over real Finglish
+        (`latinWeights` in ``src/rules.ts``) — `khoob`, `khub` and `khoub` are
+        all things people actually write for خوب.
+
+    So the patterns fix the skeleton and leave both free.
     """
-    generator = FinglishGenerator(seed=7, variant_rate=0.0)
-    seen = {generator.romanize(word) for _ in range(30)}
+    generator = FinglishGenerator(seed=7)
+    seen = {generator.romanize(word) for _ in range(60)}
     bad = [s for s in seen if not re.match(pattern, s)]
     assert not bad, f"{word}: {bad} do not match {pattern} (all: {sorted(seen)})"
 

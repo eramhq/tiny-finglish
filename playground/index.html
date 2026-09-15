@@ -60,9 +60,11 @@
       <!-- --------------------------------------------------- fixtures -->
       <section id="tab-fixtures" class="tab-panel" hidden>
         <p class="hint">
-          All 175 committed fixtures, run in this tab against the current engine
+          Committed evaluation sets, run in this tab against the current engine
           settings. Failures are listed in full &mdash; this page is for seeing
-          what the model gets wrong, not for looking good.
+          what the model gets wrong, not for looking good. <strong>Word
+          accuracy is the headline</strong>; sentence exact-match collapses to a
+          few percent on real sentences and stops discriminating.
         </p>
         <div class="controls">
           <label><input type="checkbox" id="fx-model" checked /> learned model</label>
@@ -71,7 +73,8 @@
             set
             <select id="fx-set">
               <option value="fixtures">fixtures (dev, 175)</option>
-              <option value="gold">gold (untouched, 71)</option>
+              <option value="gold">gold — real human Finglish (1,906)</option>
+              <option value="authored">gold — author-written (71)</option>
             </select>
           </label>
           <button id="fx-run">Run</button>

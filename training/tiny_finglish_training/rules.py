@@ -22,6 +22,7 @@ class Grapheme:
     pos: tuple[str, ...]
     role: str
     w: float
+    latin_weights: tuple[float, ...] | None = None
 
 
 @lru_cache(maxsize=1)
@@ -41,6 +42,7 @@ def graphemes() -> tuple[Grapheme, ...]:
             pos=tuple(g.get("pos", all_positions)),
             role=g["role"],
             w=float(g["w"]),
+            latin_weights=tuple(g["latinWeights"]) if g.get("latinWeights") else None,
         )
         for g in data["graphemes"]
     )
@@ -52,16 +54,19 @@ def latin_units() -> tuple[str, ...]:
 
 
 @lru_cache(maxsize=1)
-def spellings_by_role() -> dict[tuple[str, str], tuple[str, ...]]:
-    """(persian grapheme, role) -> spellings, canonical first.
+def spellings_by_role() -> dict[tuple[str, str], tuple[tuple[str, ...], tuple[float, ...] | None]]:
+    """(persian grapheme, role) -> (spellings, weights).
 
     Keyed by role because و and ی each serve as both consonant and vowel, and
     drawing from the wrong table is the difference between `emrooz` and `emrvz`.
+
+    Weights, where present, are measured from real human-written Finglish. See
+    the `latinWeights` docstring in ``src/rules.ts``.
     """
-    out: dict[tuple[str, str], list[str]] = {}
+    out: dict[tuple[str, str], tuple[tuple[str, ...], tuple[float, ...] | None]] = {}
     for g in graphemes():
-        bucket = out.setdefault((g.fa, g.role), [])
-        for latin in g.latin:
-            if latin not in bucket:
-                bucket.append(latin)
-    return {k: tuple(v) for k, v in out.items()}
+        key = (g.fa, g.role)
+        if key in out:
+            continue
+        out[key] = (g.latin, g.latin_weights)
+    return out

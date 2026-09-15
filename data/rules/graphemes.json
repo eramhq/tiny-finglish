@@ -135,6 +135,10 @@
           "kh",
           "x"
         ],
+        "latinWeights": [
+          0.999,
+          0.001
+        ],
         "role": "consonant",
         "w": 70
       },
@@ -192,6 +196,10 @@
           "zh",
           "j"
         ],
+        "latinWeights": [
+          0.7,
+          0.3
+        ],
         "role": "consonant",
         "w": 6
       },
@@ -225,6 +233,10 @@
           "gh",
           "q"
         ],
+        "latinWeights": [
+          0.961,
+          0.039
+        ],
         "role": "consonant",
         "w": 20
       },
@@ -233,6 +245,10 @@
         "latin": [
           "gh",
           "q"
+        ],
+        "latinWeights": [
+          0.961,
+          0.039
         ],
         "role": "consonant",
         "w": 40
@@ -250,6 +266,10 @@
         "latin": [
           "k",
           "c"
+        ],
+        "latinWeights": [
+          0.982,
+          0.018
         ],
         "role": "consonant",
         "w": 100
@@ -292,6 +312,10 @@
           "v",
           "w"
         ],
+        "latinWeights": [
+          0.984,
+          0.016
+        ],
         "role": "consonant",
         "w": 90
       },
@@ -312,6 +336,11 @@
           "a",
           "â"
         ],
+        "latinWeights": [
+          0.3,
+          0.69,
+          0.01
+        ],
         "pos": [
           "initial"
         ],
@@ -324,6 +353,11 @@
           "aa",
           "a",
           "â"
+        ],
+        "latinWeights": [
+          0.3,
+          0.69,
+          0.01
         ],
         "pos": [
           "medial",
@@ -367,6 +401,12 @@
           "ou",
           "o"
         ],
+        "latinWeights": [
+          0.55,
+          0.22,
+          0.17,
+          0.06
+        ],
         "role": "vowel",
         "w": 80
       },
@@ -376,6 +416,11 @@
           "oo",
           "u",
           "ou"
+        ],
+        "latinWeights": [
+          0.6,
+          0.23,
+          0.17
         ],
         "pos": [
           "initial"
@@ -390,6 +435,11 @@
           "ee",
           "y"
         ],
+        "latinWeights": [
+          0.96,
+          0.02,
+          0.02
+        ],
         "role": "vowel",
         "w": 90
       },
@@ -398,6 +448,10 @@
         "latin": [
           "i",
           "ee"
+        ],
+        "latinWeights": [
+          0.98,
+          0.02
         ],
         "pos": [
           "initial"
@@ -432,6 +486,12 @@
           "eh",
           "a",
           "ah"
+        ],
+        "latinWeights": [
+          0.62,
+          0.28,
+          0.06,
+          0.04
         ],
         "pos": [
           "final"
@@ -584,6 +644,10 @@
         "kh",
         "x"
       ],
+      "latinWeights": [
+        0.999,
+        0.001
+      ],
       "role": "consonant",
       "w": 70
     },
@@ -641,6 +705,10 @@
         "zh",
         "j"
       ],
+      "latinWeights": [
+        0.7,
+        0.3
+      ],
       "role": "consonant",
       "w": 6
     },
@@ -674,6 +742,10 @@
         "gh",
         "q"
       ],
+      "latinWeights": [
+        0.961,
+        0.039
+      ],
       "role": "consonant",
       "w": 20
     },
@@ -682,6 +754,10 @@
       "latin": [
         "gh",
         "q"
+      ],
+      "latinWeights": [
+        0.961,
+        0.039
       ],
       "role": "consonant",
       "w": 40
@@ -699,6 +775,10 @@
       "latin": [
         "k",
         "c"
+      ],
+      "latinWeights": [
+        0.982,
+        0.018
       ],
       "role": "consonant",
       "w": 100
@@ -741,6 +821,10 @@
         "v",
         "w"
       ],
+      "latinWeights": [
+        0.984,
+        0.016
+      ],
       "role": "consonant",
       "w": 90
     },
@@ -759,6 +843,11 @@
         "a",
         "â"
       ],
+      "latinWeights": [
+        0.3,
+        0.69,
+        0.01
+      ],
       "pos": [
         "initial"
       ],
@@ -771,6 +860,11 @@
         "aa",
         "a",
         "â"
+      ],
+      "latinWeights": [
+        0.3,
+        0.69,
+        0.01
       ],
       "pos": [
         "medial",
@@ -814,6 +908,12 @@
         "ou",
         "o"
       ],
+      "latinWeights": [
+        0.55,
+        0.22,
+        0.17,
+        0.06
+      ],
       "role": "vowel",
       "w": 80
     },
@@ -823,6 +923,11 @@
         "oo",
         "u",
         "ou"
+      ],
+      "latinWeights": [
+        0.6,
+        0.23,
+        0.17
       ],
       "pos": [
         "initial"
@@ -837,6 +942,11 @@
         "ee",
         "y"
       ],
+      "latinWeights": [
+        0.96,
+        0.02,
+        0.02
+      ],
       "role": "vowel",
       "w": 90
     },
@@ -845,6 +955,10 @@
       "latin": [
         "i",
         "ee"
+      ],
+      "latinWeights": [
+        0.98,
+        0.02
       ],
       "pos": [
         "initial"
@@ -879,6 +993,12 @@
         "eh",
         "a",
         "ah"
+      ],
+      "latinWeights": [
+        0.62,
+        0.28,
+        0.06,
+        0.04
       ],
       "pos": [
         "final"

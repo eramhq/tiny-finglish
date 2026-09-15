@@ -1,5 +1,5 @@
 {
-  "$comment": "GENERATED from training/runs/m2/curve.json. Committed because runs/ is gitignored and the playground, README and model card all cite these numbers.",
+  "$comment": "GENERATED from training/runs/m2/curve.json plus the evaluation runs. Committed because runs/ is gitignored and the playground, README and model card all cite these numbers.",
   "milestone": "M2",
   "corpus": {
     "words": 100761,
@@ -82,23 +82,50 @@
     "runtimeJs": 8192
   },
   "evaluation": {
+    "metric": "word accuracy (word-level edit distance, ZWNJ folded to space)",
+    "synthetic": {
+      "n": 23933,
+      "wordAcc": 0.809
+    },
     "fixtures": {
       "n": 174,
-      "top1": 0.661,
-      "top3": 0.799,
-      "cer": 0.104
+      "wordAcc": 0.748,
+      "sentence": 0.713,
+      "cer": 0.093
     },
     "gold": {
-      "n": 71,
-      "top1": 0.479,
-      "top3": 0.62,
-      "cer": 0.14
+      "n": 1906,
+      "wordAcc": 0.446,
+      "sentence": 0.028,
+      "cer": 0.246,
+      "source": "mmahdibarghi/finglish-dataset (MIT), Persian side from Common Voice fa (CC0)",
+      "note": "Real human-typed Finglish. This is the number to quote."
     },
-    "ruleBaselineFixtures": {
-      "n": 174,
-      "top1": 0.563,
-      "top3": 0.816,
-      "cer": 0.155
+    "authored": {
+      "n": 71,
+      "wordAcc": 0.61,
+      "note": "Author-written; superseded by gold."
     }
+  },
+  "shippedModel": {
+    "params": 102348,
+    "quant": "int6",
+    "bundleBrotliBytes": 86016,
+    "corpus": "6014cea2bac6a503",
+    "note": "Retrained on the measured-weights generator; see docs/open-items.md section 4a."
+  },
+  "generatorFix": {
+    "description": "Variant spelling weights measured from 21,874 word tokens of real Finglish.",
+    "before": {
+      "fixtures": 0.696,
+      "authored": 0.514,
+      "gold": 0.449
+    },
+    "after": {
+      "fixtures": 0.748,
+      "authored": 0.61,
+      "gold": 0.446
+    },
+    "conclusion": "Large gains on author-written sets, none on real data. The synthetic corpus is not the bottleneck; the missing sentence-context model is."
   }
 }

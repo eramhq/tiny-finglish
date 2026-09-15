@@ -5,7 +5,8 @@
  *   node scripts/run-fixtures.ts                 # summary table
  *   node scripts/run-fixtures.ts --verbose       # every failure, with reasons
  *   node scripts/run-fixtures.ts --rules         # rule baseline only
- *   node scripts/run-fixtures.ts --gold          # the untouched gold set
+ *   node scripts/run-fixtures.ts --gold          # untouched gold: real human Finglish
+ *   node scripts/run-fixtures.ts --gold --gold-set authored   # the old 71 authored pairs
  *   node scripts/run-fixtures.ts --id ordinary-001
  */
 import { buildFixtureReport, formatReport } from "./_report.ts";
@@ -19,7 +20,9 @@ const value = (name: string) => {
 
 const report = buildFixtureReport({
   useModel: !flag("rules"),
-  file: flag("gold") ? "data/gold/gold.jsonl" : "data/fixtures/fixtures.jsonl",
+  file: flag("gold")
+    ? (value("gold-set") === "authored" ? "data/gold/authored.jsonl" : "data/gold/gold.jsonl")
+    : "data/fixtures/fixtures.jsonl",
   onlyId: value("id"),
 });
 

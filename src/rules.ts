@@ -29,6 +29,21 @@ export interface Grapheme {
   fa: string;
   /** Finglish spellings. Index 0 is the canonical/most common form. */
   latin: readonly string[];
+  /**
+   * Relative likelihood of each entry in `latin`, used by the corpus generator.
+   *
+   * **Measured, not guessed.** Counted over 21,874 word tokens of real
+   * human-written Finglish (`data/gold/gold.jsonl`). Before this existed the
+   * generator sampled variants uniformly at a 30% rate, which taught the model
+   * that `x` for خ and `q` for ق were ordinary — in real typing they are 0.1%
+   * and 3.9%. Generating spellings nobody writes is not robustness, it is a
+   * corrupted prior.
+   *
+   * Omitted where the measurement is confounded: a raw count of `j` cannot
+   * separate ژ from ج, and a raw count of `a` cannot separate long ɒː from the
+   * unwritten short vowels. Those keep hand-set priors and say so.
+   */
+  latinWeights?: readonly number[];
   /** Positions in which this correspondence is legal. */
   pos?: readonly Position[];
   /** Which table the generator should draw this from. */
@@ -59,26 +74,26 @@ export const CONSONANTS: readonly Grapheme[] = [
   { fa: "چ", latin: ["ch"], role: "consonant", w: 35 },
   { fa: "ح", latin: ["h"], role: "consonant", w: 18 },
   { fa: "ه", latin: ["h"], role: "consonant", w: 100 },
-  { fa: "خ", latin: ["kh", "x"], role: "consonant", w: 70 },
+  { fa: "خ", latin: ["kh", "x"], latinWeights: [0.999, 0.001], role: "consonant", w: 70 },
   { fa: "د", latin: ["d"], role: "consonant", w: 100 },
   { fa: "ذ", latin: ["z"], role: "consonant", w: 4 },
   { fa: "ر", latin: ["r"], role: "consonant", w: 100 },
   { fa: "ز", latin: ["z"], role: "consonant", w: 70 },
   { fa: "ض", latin: ["z"], role: "consonant", w: 5 },
   { fa: "ظ", latin: ["z"], role: "consonant", w: 3 },
-  { fa: "ژ", latin: ["zh", "j"], role: "consonant", w: 6 },
+  { fa: "ژ", latin: ["zh", "j"], latinWeights: [0.7, 0.3], role: "consonant", w: 6 },
   { fa: "س", latin: ["s"], role: "consonant", w: 100 },
   { fa: "ص", latin: ["s"], role: "consonant", w: 12 },
   { fa: "ش", latin: ["sh"], role: "consonant", w: 70 },
-  { fa: "غ", latin: ["gh", "q"], role: "consonant", w: 20 },
-  { fa: "ق", latin: ["gh", "q"], role: "consonant", w: 40 },
+  { fa: "غ", latin: ["gh", "q"], latinWeights: [0.961, 0.039], role: "consonant", w: 20 },
+  { fa: "ق", latin: ["gh", "q"], latinWeights: [0.961, 0.039], role: "consonant", w: 40 },
   { fa: "ف", latin: ["f"], role: "consonant", w: 80 },
-  { fa: "ک", latin: ["k", "c"], role: "consonant", w: 100 },
+  { fa: "ک", latin: ["k", "c"], latinWeights: [0.982, 0.018], role: "consonant", w: 100 },
   { fa: "گ", latin: ["g"], role: "consonant", w: 60 },
   { fa: "ل", latin: ["l"], role: "consonant", w: 90 },
   { fa: "م", latin: ["m"], role: "consonant", w: 100 },
   { fa: "ن", latin: ["n"], role: "consonant", w: 100 },
-  { fa: "و", latin: ["v", "w"], role: "consonant", w: 90 },
+  { fa: "و", latin: ["v", "w"], latinWeights: [0.984, 0.016], role: "consonant", w: 90 },
   { fa: "ی", latin: ["y"], role: "consonant", w: 100 },
 ];
 
@@ -94,25 +109,25 @@ export const CONSONANTS: readonly Grapheme[] = [
  */
 export const VOWELS: readonly Grapheme[] = [
   // Long ɒː. Word-initial it is آ; medially and finally it is ا.
-  { fa: "آ", latin: ["aa", "a", "â"], pos: ["initial"], role: "vowel", w: 60 },
-  { fa: "ا", latin: ["aa", "a", "â"], pos: ["medial", "final"], role: "vowel", w: 100 },
+  { fa: "آ", latin: ["aa", "a", "â"], latinWeights: [0.30, 0.69, 0.01], pos: ["initial"], role: "vowel", w: 60 },
+  { fa: "ا", latin: ["aa", "a", "â"], latinWeights: [0.30, 0.69, 0.01], pos: ["medial", "final"], role: "vowel", w: 100 },
   // Short vowels at word start ride on an alef carrier: امروز `emrooz`.
   { fa: "ا", latin: ["a", "e", "o"], pos: ["initial"], role: "carrier", w: 100 },
   // Short vowels elsewhere are simply unwritten in the abjad. This is the
   // empty label, and it is the most frequent label in the whole set.
   { fa: "", latin: ["a", "e", "o"], pos: ["medial", "final"], role: "carrier", w: 150 },
   // Long uː / oː.
-  { fa: "و", latin: ["oo", "u", "ou", "o"], role: "vowel", w: 80 },
-  { fa: "او", latin: ["oo", "u", "ou"], pos: ["initial"], role: "vowel", w: 25 },
+  { fa: "و", latin: ["oo", "u", "ou", "o"], latinWeights: [0.55, 0.22, 0.17, 0.06], role: "vowel", w: 80 },
+  { fa: "او", latin: ["oo", "u", "ou"], latinWeights: [0.6, 0.23, 0.17], pos: ["initial"], role: "vowel", w: 25 },
   // Long iː.
-  { fa: "ی", latin: ["i", "ee", "y"], role: "vowel", w: 90 },
-  { fa: "ای", latin: ["i", "ee"], pos: ["initial"], role: "vowel", w: 25 },
+  { fa: "ی", latin: ["i", "ee", "y"], latinWeights: [0.96, 0.02, 0.02], role: "vowel", w: 90 },
+  { fa: "ای", latin: ["i", "ee"], latinWeights: [0.98, 0.02], pos: ["initial"], role: "vowel", w: 25 },
   // Diphthongs.
   { fa: "ی", latin: ["ey", "ei", "ay", "ai"], role: "diphthong", w: 20 },
   { fa: "و", latin: ["ow", "au"], role: "diphthong", w: 10 },
   // Final silent he: `khune` خونه, `name` نامه. Extremely common, and only
   // silent after a consonant — دانشگاه `daneshgah` keeps a real /h/.
-  { fa: "ه", latin: ["e", "eh", "a", "ah"], pos: ["final"], role: "silent", w: 90 },
+  { fa: "ه", latin: ["e", "eh", "a", "ah"], latinWeights: [0.62, 0.28, 0.06, 0.04], pos: ["final"], role: "silent", w: 90 },
 ];
 
 /**

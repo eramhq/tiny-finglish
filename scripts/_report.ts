@@ -11,7 +11,10 @@ import { createHash } from "node:crypto";
 import { existsSync, readFileSync } from "node:fs";
 import { buildTransliterator, loadFixtures, type Fixture } from "./_load.ts";
 import { normalize } from "../src/normalize.ts";
+import { characterErrorRate, wordAccuracy } from "../src/metrics.ts";
 import type { TransliterationResult } from "../src/types.ts";
+
+export { characterErrorRate, wordAccuracy };
 
 const ZWNJ = "‌";
 
@@ -22,16 +25,30 @@ export interface CaseResult {
   top3: boolean;
   cer: number;
   actionOk: boolean;
+  /** Converted words matching the reference, and how many were compared. */
+  wordsCorrect: number;
+  wordsTotal: number;
+}
+
+export interface Bucket {
+  count: number;
+  top1: number;
+  top3: number;
+  cer: number;
+  wordsCorrect: number;
+  wordsTotal: number;
 }
 
 export interface Report {
   cases: CaseResult[];
-  byCategory: Map<string, { count: number; top1: number; top3: number; cer: number }>;
+  byCategory: Map<string, Bucket>;
   totals: {
     count: number;
     top1: number;
     top3: number;
     cer: number;
+    wordsCorrect: number;
+    wordsTotal: number;
     zwnjCorrect: number;
     zwnjTotal: number;
     copyPreserved: number;
@@ -52,9 +69,9 @@ export function buildFixtureReport(options: {
   if (options.onlyId) fixtures = fixtures.filter((f) => f.id === options.onlyId);
 
   const cases: CaseResult[] = [];
-  const byCategory = new Map<string, { count: number; top1: number; top3: number; cer: number }>();
+  const byCategory = new Map<string, Bucket>();
   const totals = {
-    count: 0, top1: 0, top3: 0, cer: 0,
+    count: 0, top1: 0, top3: 0, cer: 0, wordsCorrect: 0, wordsTotal: 0,
     zwnjCorrect: 0, zwnjTotal: 0, copyPreserved: 0, copyTotal: 0,
   };
 
@@ -73,7 +90,7 @@ export function buildFixtureReport(options: {
     }
 
     if (fixture.expected === null) {
-      cases.push({ fixture, result, top1: true, top3: true, cer: 0, actionOk: true });
+      cases.push({ fixture, result, top1: true, top3: true, cer: 0, actionOk: true, wordsCorrect: 0, wordsTotal: 0 });
       continue;
     }
 
@@ -93,18 +110,24 @@ export function buildFixtureReport(options: {
       if (zwnjPositions(expected) === zwnjPositions(got)) totals.zwnjCorrect++;
     }
 
-    const bucket = byCategory.get(category) ?? { count: 0, top1: 0, top3: 0, cer: 0 };
+    const words = wordAccuracy(expected, got);
+
+    const bucket = byCategory.get(category) ?? { count: 0, top1: 0, top3: 0, cer: 0, wordsCorrect: 0, wordsTotal: 0 };
     bucket.count++;
     bucket.top1 += top1 ? 1 : 0;
     bucket.top3 += top3 ? 1 : 0;
     bucket.cer += cer;
+    bucket.wordsCorrect += words.correct;
+    bucket.wordsTotal += words.total;
     byCategory.set(category, bucket);
 
     totals.count++;
     totals.top1 += top1 ? 1 : 0;
     totals.top3 += top3 ? 1 : 0;
     totals.cer += cer;
-    cases.push({ fixture, result, top1, top3, cer, actionOk });
+    totals.wordsCorrect += words.correct;
+    totals.wordsTotal += words.total;
+    cases.push({ fixture, result, top1, top3, cer, actionOk, wordsCorrect: words.correct, wordsTotal: words.total });
   }
 
   return {
@@ -121,25 +144,6 @@ function hashFile(relative: string): string | null {
   return createHash("sha256").update(readFileSync(path)).digest("hex").slice(0, 12);
 }
 
-/** Levenshtein distance normalized by reference length. */
-export function characterErrorRate(reference: string, hypothesis: string): number {
-  if (reference === hypothesis) return 0;
-  if (!reference.length) return hypothesis.length ? 1 : 0;
-  let previous = Array.from({ length: hypothesis.length + 1 }, (_, i) => i);
-  for (let i = 1; i <= reference.length; i++) {
-    const current = [i];
-    for (let j = 1; j <= hypothesis.length; j++) {
-      current[j] = Math.min(
-        previous[j]! + 1,
-        current[j - 1]! + 1,
-        previous[j - 1]! + (reference[i - 1] === hypothesis[j - 1] ? 0 : 1),
-      );
-    }
-    previous = current;
-  }
-  return previous[hypothesis.length]! / reference.length;
-}
-
 function zwnjPositions(text: string): string {
   const out: number[] = [];
   for (let i = 0; i < text.length; i++) if (text[i] === ZWNJ) out.push(i);
@@ -152,15 +156,19 @@ export function formatReport(report: Report, options: { verbose?: boolean } = {}
 
   lines.push(`engine=${report.engine}  model=${report.modelHash ?? "none"}  dataset=${report.datasetHash}`);
   lines.push("");
-  lines.push("| category | n | top-1 | top-3 | CER |");
-  lines.push("|---|---:|---:|---:|---:|");
+  lines.push("| category | n | word acc | sentence | top-3 | CER |");
+  lines.push("|---|---:|---:|---:|---:|---:|");
   for (const [category, b] of [...report.byCategory].sort()) {
     lines.push(
-      `| ${category} | ${b.count} | ${pct(b.top1, b.count)} | ${pct(b.top3, b.count)} | ${(b.cer / b.count).toFixed(3)} |`,
+      `| ${category} | ${b.count} | ${pct(b.wordsCorrect, b.wordsTotal)} | ${pct(b.top1, b.count)} | ` +
+      `${pct(b.top3, b.count)} | ${(b.cer / b.count).toFixed(3)} |`,
     );
   }
   const t = report.totals;
-  lines.push(`| **all** | ${t.count} | **${pct(t.top1, t.count)}** | ${pct(t.top3, t.count)} | ${(t.cer / t.count).toFixed(3)} |`);
+  lines.push(
+    `| **all** | ${t.count} | **${pct(t.wordsCorrect, t.wordsTotal)}** | ${pct(t.top1, t.count)} | ` +
+    `${pct(t.top3, t.count)} | ${(t.cer / t.count).toFixed(3)} |`,
+  );
   lines.push("");
   lines.push(`copy-span preservation  ${pct(t.copyPreserved, t.copyTotal)}  (${t.copyPreserved}/${t.copyTotal})`);
   lines.push(`ZWNJ placement          ${pct(t.zwnjCorrect, t.zwnjTotal)}  (${t.zwnjCorrect}/${t.zwnjTotal})`);
