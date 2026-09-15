@@ -15,6 +15,7 @@
 
 import { RuleBaseline } from "./baseline.ts";
 import { beamDecode, scoreHypotheses, snapToLexicon, type Hypothesis } from "./decode.ts";
+import { frequencyScore, type FrequencyTable } from "./frequency.ts";
 import { normalize } from "./normalize.ts";
 import { decodeArtifact, type WeightArtifact } from "./quant.ts";
 import { Transducer } from "./runtime.ts";
@@ -37,6 +38,7 @@ export type {
 export { normalize, foldForMatch, isNormalized } from "./normalize.ts";
 export { tokenize } from "./tokenize.ts";
 export { decodeFrontCoded, encodeFrontCoded } from "./frontcode.ts";
+export { decodeFrequencyTable, type FrequencyTable } from "./frequency.ts";
 export type { WeightArtifact } from "./quant.ts";
 
 export interface TransliteratorOptions {
@@ -48,6 +50,11 @@ export interface TransliteratorOptions {
    */
   lexicon?: ReadonlySet<string>;
   /**
+   * Word frequencies, from `decodeFrequencyTable`. Used to rerank candidates:
+   * the model says which spellings are plausible, this says which are likely.
+   */
+  frequency?: FrequencyTable;
+  /**
    * Tier [4]. Off by default: the plan's position going into M2 is that the
    * model absorbs the vocabulary and the lexicon stays a training and
    * evaluation artifact. Turn it on only if the scaling curve says otherwise.
@@ -56,6 +63,18 @@ export interface TransliteratorOptions {
   /** Words cached on the incremental typing path. */
   cacheSize?: number;
 }
+
+/**
+ * Weight on corpus frequency when reranking the model's candidates.
+ *
+ * A small noisy-channel correction: the transducer says which spellings are
+ * *plausible* given the Finglish, and frequency says which are *likely* Persian.
+ * Kept modest deliberately — the model is usually right, and a large weight
+ * lets a common word override a confident, correct, rarer one.
+ *
+ * Tuned on the fixtures only. The gold set is never used for tuning.
+ */
+const FREQUENCY_RERANK = 2.0;
 
 const DEFAULT_OPTIONS: Required<Pick<TransliterateOptions,
   "alternatives" | "beamWidth" | "candidatesPerSpan" | "persianPunctuation" | "backend">> = {
@@ -73,6 +92,7 @@ export class Transliterator {
   private readonly inputIndex: ReadonlyMap<string, number>;
   private readonly unkId: number;
   private readonly lexicon: ReadonlySet<string> | undefined;
+  private readonly frequency: FrequencyTable | undefined;
   private readonly useLexiconSnap: boolean;
   /**
    * Word-level memo. This is what keeps the typing path inside a 16 ms frame:
@@ -83,9 +103,13 @@ export class Transliterator {
 
   constructor(options: TransliteratorOptions = {}) {
     this.lexicon = options.lexicon;
+    this.frequency = options.frequency;
     this.useLexiconSnap = options.useLexiconSnap ?? false;
     this.cacheSize = options.cacheSize ?? 2048;
-    this.baseline = new RuleBaseline({ ...(options.lexicon ? { lexicon: options.lexicon } : {}) });
+    this.baseline = new RuleBaseline({
+      ...(options.lexicon ? { lexicon: options.lexicon } : {}),
+      ...(options.frequency ? { frequency: options.frequency } : {}),
+    });
 
     if (options.model) {
       const weights = decodeArtifact(options.model);
@@ -192,6 +216,14 @@ export class Transliterator {
     });
     if (this.useLexiconSnap && this.lexicon) {
       hypotheses = snapToLexicon(hypotheses, this.lexicon);
+    }
+    if (this.frequency) {
+      hypotheses = [...hypotheses]
+        .map((h) => ({
+          ...h,
+          logProb: h.logProb + FREQUENCY_RERANK * frequencyScore(this.frequency, normalize(h.output)),
+        }))
+        .sort((a, b) => b.logProb - a.logProb);
     }
     const { probabilities } = scoreHypotheses(hypotheses, word.length);
     return hypotheses.map((h: Hypothesis, i: number) => ({

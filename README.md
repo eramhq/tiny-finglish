@@ -227,6 +227,38 @@ Report **word accuracy**, not sentence exact-match. At ~8 words per sentence
 the latter collapses to ~3% and stops telling you anything — a system that gets
 90% of words right still fails most sentences.
 
+### The rule baseline beats the learned model on real input
+
+Adding corpus word frequencies — 25,000 words from a CC0 source, 55 KiB — is
+the largest single accuracy gain in the project. It also produced its most
+uncomfortable result:
+
+| engine | hand-authored fixtures | **real human Finglish** |
+|---|---:|---:|
+| model, no frequency | 74.8% | 44.6% |
+| model + frequency | **78.7%** | 46.8% |
+| **rule baseline + frequency** | 69.1% | **56.4%** |
+
+On the fixtures *I wrote*, the neural model wins by 9.6 points. On Finglish
+*real people typed*, the deterministic baseline wins by 9.6 points.
+
+Per category on the fixtures, the model's wins are real and specific: ZWNJ
+(70.4% vs 33.3% — rule tables structurally cannot emit U+200C), adversarial
+input (90.9% vs 54.5%), mixed English (90.6% vs 75.0%). But on ordinary running
+text from real users, broader candidate generation plus a good frequency prior
+beats a transducer trained on a generator.
+
+This is what the prior art predicted and I did not expect to reproduce so
+cleanly: on comparable tasks, dictionary-plus-rules-plus-language-model systems
+beat fine-tuned neural models at this scale, and architecture choice moves
+accuracy by under a point while the language model moves it by twenty.
+
+**So the learned model does not currently earn its place on real data.** It
+earns it on ZWNJ and on adversarial robustness; it loses the average. The
+honest reading is that the transducer is overfit to its generator, and that a
+hybrid — model for ZWNJ-bearing and mixed spans, rules-plus-frequency
+otherwise — is the obvious next experiment.
+
 ### A negative result worth more than the positive one
 
 Real data exposed a real bug in the corpus generator. Measured over 21,874 word

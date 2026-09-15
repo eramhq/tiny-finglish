@@ -19,6 +19,7 @@
  * are why the learned transducer exists.
  */
 
+import { frequencyScore, type FrequencyTable } from "./frequency.ts";
 import { foldForMatch } from "./normalize.ts";
 import {
   buildReverseTable,
@@ -39,8 +40,10 @@ export interface BaselineOptions {
   beamWidth?: number;
   /** Candidates returned. */
   results?: number;
-  /** Attested Persian words. Membership is the strongest ranking signal there is. */
+  /** Attested Persian words. */
   lexicon?: ReadonlySet<string> | undefined;
+  /** Word frequencies. Membership says a word exists; this says how likely it is. */
+  frequency?: FrequencyTable | undefined;
   /** Segmentations of the Latin string to explore. */
   maxSegmentations?: number;
 }
@@ -52,15 +55,27 @@ const DEFAULTS = {
 };
 
 /** Log-odds bonus for an output that is an attested Persian word. */
-const LEXICON_BONUS = 4.0;
+const LEXICON_BONUS = 2.5;
+
+/**
+ * Weight on log-quantized corpus frequency.
+ *
+ * Membership alone cannot separate two real words: سلام and سلم are both
+ * Persian, and with only the attested bonus the baseline ranked سلم first
+ * because the grapheme prior preferred the shorter spelling. Frequency is what
+ * breaks that tie, so it carries more weight than membership does.
+ */
+const FREQUENCY_BONUS = 5.0;
 
 export class RuleBaseline {
   private readonly table: ReverseTable;
   private readonly lexicon: ReadonlySet<string> | undefined;
+  private readonly frequency: FrequencyTable | undefined;
 
-  constructor(options: { lexicon?: ReadonlySet<string> } = {}) {
+  constructor(options: { lexicon?: ReadonlySet<string>; frequency?: FrequencyTable } = {}) {
     this.table = buildReverseTable();
     this.lexicon = options.lexicon;
+    this.frequency = options.frequency;
   }
 
   transliterate(word: string, options: BaselineOptions = {}): BaselineCandidate[] {
@@ -69,16 +84,21 @@ export class RuleBaseline {
     const lower = word.toLowerCase();
     if (!lower) return [];
 
+    const frequency = options.frequency ?? this.frequency;
     const segmentations = segment(lower, opts.maxSegmentations);
     const pool = new Map<string, BaselineCandidate>();
 
     for (const units of segmentations) {
       for (const candidate of this.walk(units, opts.beamWidth)) {
         const attested = lexicon?.has(candidate.output) ?? false;
-        const score = candidate.score + (attested ? LEXICON_BONUS : 0);
-        const reason = attested
-          ? `rules(${units.join("·")}) + attested`
-          : `rules(${units.join("·")})`;
+        const frequent = frequencyScore(frequency, candidate.output);
+        const score =
+          candidate.score + (attested ? LEXICON_BONUS : 0) + FREQUENCY_BONUS * frequent;
+        const reason = frequent > 0
+          ? `rules(${units.join("·")}) + freq ${(frequent * 100).toFixed(0)}`
+          : attested
+            ? `rules(${units.join("·")}) + attested`
+            : `rules(${units.join("·")})`;
         const existing = pool.get(candidate.output);
         if (!existing || score > existing.score) {
           pool.set(candidate.output, { output: candidate.output, score, reason });

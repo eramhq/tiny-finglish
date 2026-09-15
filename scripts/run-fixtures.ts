@@ -20,6 +20,7 @@ const value = (name: string) => {
 
 const report = buildFixtureReport({
   useModel: !flag("rules"),
+  useFrequency: !flag("no-frequency"),
   file: flag("gold")
     ? (value("gold-set") === "authored" ? "data/gold/authored.jsonl" : "data/gold/gold.jsonl")
     : "data/fixtures/fixtures.jsonl",

@@ -61,10 +61,14 @@ export interface Report {
 
 export function buildFixtureReport(options: {
   useModel?: boolean;
+  useFrequency?: boolean;
   file?: string;
   onlyId?: string | undefined;
 }): Report {
-  const transliterator = buildTransliterator({ model: options.useModel !== false });
+  const transliterator = buildTransliterator({
+    model: options.useModel !== false,
+    frequency: options.useFrequency !== false,
+  });
   let fixtures = loadFixtures(options.file);
   if (options.onlyId) fixtures = fixtures.filter((f) => f.id === options.onlyId);
 

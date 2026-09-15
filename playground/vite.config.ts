@@ -5,6 +5,7 @@ import { brotliDecompressSync } from "node:zlib";
 
 const repoRoot = fileURLToPath(new URL("..", import.meta.url));
 const LEXICON_ROUTE = "/lexicon.bin";
+const FREQUENCY_ROUTE = "/frequency.bin";
 
 /**
  * Serve the lexicon front-coded but *uncompressed*.
@@ -20,23 +21,23 @@ const LEXICON_ROUTE = "/lexicon.bin";
 function lexiconPlugin(): Plugin {
   const load = () =>
     brotliDecompressSync(readFileSync(new URL("../data/lexicon/fa-stems.bin", import.meta.url)));
+  const loadFrequency = () =>
+    brotliDecompressSync(readFileSync(new URL("../data/lexicon/fa-frequency.bin", import.meta.url)));
 
   return {
     name: "tiny-finglish-lexicon",
     configureServer(server) {
-      server.middlewares.use(LEXICON_ROUTE, (_request, response) => {
-        const bytes = load();
-        response.setHeader("Content-Type", "application/octet-stream");
-        response.setHeader("Cache-Control", "no-cache");
-        response.end(bytes);
-      });
+      for (const [route, read] of [[LEXICON_ROUTE, load], [FREQUENCY_ROUTE, loadFrequency]] as const) {
+        server.middlewares.use(route, (_request, response) => {
+          response.setHeader("Content-Type", "application/octet-stream");
+          response.setHeader("Cache-Control", "no-cache");
+          response.end(read());
+        });
+      }
     },
     generateBundle() {
-      this.emitFile({
-        type: "asset",
-        fileName: "lexicon.bin",
-        source: load(),
-      });
+      this.emitFile({ type: "asset", fileName: "lexicon.bin", source: load() });
+      this.emitFile({ type: "asset", fileName: "frequency.bin", source: loadFrequency() });
     },
   };
 }

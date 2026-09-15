@@ -11,6 +11,7 @@
  * what".
  */
 import { Transliterator, decodeFrontCoded, normalize } from "../../src/index.ts";
+import { decodeFrequencyTable, type FrequencyTable } from "../../src/frequency.ts";
 import { wordAccuracy } from "../../src/metrics.ts";
 import type { Span } from "../../src/index.ts";
 import type { WeightArtifact } from "../../src/quant.ts";
@@ -20,6 +21,7 @@ import authoredRaw from "../../data/gold/authored.jsonl?raw";
 import curve from "../../data/results/m2-curve.json";
 
 const LEXICON_URL = "/lexicon.bin";
+const FREQUENCY_URL = "/frequency.bin";
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
 
 interface Fixture {
@@ -40,6 +42,7 @@ const AUTHORED = parse(authoredRaw).map((f) => ({ ...f, category: "authored" }))
 
 let weights: WeightArtifact | undefined;
 let lexicon: Set<string> | undefined;
+let frequency: FrequencyTable | undefined;
 let engine: Transliterator;
 
 // ---------------------------------------------------------------- loading
@@ -67,11 +70,19 @@ async function loadAssets(): Promise<void> {
     }
   }
 
+  try {
+    const response = await fetch(FREQUENCY_URL);
+    if (!response.ok) throw new Error(String(response.status));
+    frequency = decodeFrequencyTable(new Uint8Array(await response.arrayBuffer()));
+  } catch {
+    frequency = undefined;
+  }
+
   const params = weights
     ? weights.tensors.reduce((sum, t) => sum + t.shape.reduce((a, b) => a * b, 1), 0)
     : 0;
   $("badge").textContent = weights
-    ? `${params.toLocaleString()} params · ${weights.quant} · ${lexicon ? `${lexicon.size.toLocaleString()} stems` : "no lexicon"}`
+    ? `${params.toLocaleString()} params · ${weights.quant} · ${lexicon ? `${lexicon.size.toLocaleString()} stems` : "no lexicon"}${frequency ? ` · ${frequency.size.toLocaleString()} frequencies` : ""}`
     : "rule baseline only — no weights loaded";
 }
 
@@ -79,6 +90,7 @@ function build(model: boolean, lex: boolean, snap = false): Transliterator {
   return new Transliterator({
     ...(model && weights ? { model: weights } : {}),
     ...(lex && lexicon ? { lexicon } : {}),
+    ...(lex && frequency ? { frequency } : {}),
     useLexiconSnap: snap,
   });
 }

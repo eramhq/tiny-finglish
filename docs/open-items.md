@@ -49,7 +49,23 @@ ships a 7.1 MB frequency file that is byte-identical to the CC BY-SA 3.0
 `behnam` list, header included, inside an MIT package. That is the exact trap
 this survey existed to avoid.
 
-### Still open: frequency ranking
+### Frequency ranking — **resolved**
+
+Built from the Persian side of HomoRich (CC0-1.0): 25,000 words, 97.4% token
+coverage, **55 KiB Brotli**, gold sentences excluded by the same guard as the
+pronunciation dictionary. `data/lexicon/fa-frequency.bin`.
+
+Worth **+13.0 points** to the rule baseline and **+3.9** to the model on the
+fixtures — the best accuracy-per-byte in the project by a wide margin. It also
+revealed that the rule baseline beats the learned model on real input (56.4% vs
+46.8%); see the README.
+
+A larger web corpus (MADLAD-400 fa, CC-BY-4.0) would extend coverage past
+25,000 types. Register matters more than size here, and HomoRich's
+conversational register is closer to Finglish than encyclopedic text, so the
+gain from raw scale may be small.
+
+### Superseded: the original frequency problem
 
 **The lexicon ships without frequencies, and that costs real accuracy.**
 

@@ -61,7 +61,20 @@ export function encodeFrontCoded(words: readonly string[]): Uint8Array {
 }
 
 export function decodeFrontCoded(bytes: Uint8Array): string[] {
-  let offset = 0;
+  return decodeFrontCodedAt(bytes, 0).words;
+}
+
+/**
+ * Decode starting at `offset`, also returning where the word list ended.
+ *
+ * The frequency artifact appends a parallel byte array after the words, so its
+ * reader needs to know where they stop.
+ */
+export function decodeFrontCodedAt(
+  bytes: Uint8Array,
+  start: number,
+): { words: string[]; offset: number } {
+  let offset = start;
   const alphabetLength = bytes[offset++]!;
   const alphabet: string[] = [];
   for (let i = 0; i < alphabetLength; i++) {
@@ -82,5 +95,5 @@ export function decodeFrontCoded(bytes: Uint8Array): string[] {
     previous = previous.slice(0, shared) + suffix;
     words[i] = previous;
   }
-  return words;
+  return { words, offset };
 }

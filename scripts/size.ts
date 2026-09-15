@@ -51,6 +51,18 @@ if (existsSync(weightsPath)) {
   });
 }
 
+// Frequency is counted as shipped: it is worth +13 points to the rule
+// baseline and +3.9 to the model, which is the best accuracy-per-byte in the
+// project. The lexicon below is not — see the M2 decision.
+const frequencyPath = new URL("data/lexicon/fa-frequency.bin", root);
+if (existsSync(frequencyPath)) {
+  const frequency = readFileSync(frequencyPath);
+  rows.push({
+    component: "word frequency (25k words, pre-Brotli on disk)",
+    raw: frequency.length, gzip: frequency.length, brotli: frequency.length,
+  });
+}
+
 const lexiconPath = new URL("data/lexicon/fa-stems.bin", root);
 let lexiconRow: Row | null = null;
 if (existsSync(lexiconPath)) {
