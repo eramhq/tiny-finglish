@@ -25,9 +25,30 @@ const ZWNJ = "‌";
  * every later word and marks the rest of the sentence wrong — on the real gold
  * set that alone cost about seven points of apparent accuracy.
  *
- * **ZWNJ folds to a space before splitting**, on both sides, because the gold
- * source is not internally consistent about it. ZWNJ placement is still
+ * **ZWNJ folds to a space before splitting**, on both sides, because real
+ * corpora are not internally consistent about it: می‌کنی is one token with a
+ * ZWNJ and می کنی is two with a space, and both occur. ZWNJ placement is still
  * measured, separately, against references that agree with themselves.
+ *
+ * Know what that fold costs on the collected gold set, because it is not zero.
+ * **Not one of its 1,835 references contains a ZWNJ** — its Persian side comes
+ * from a pipeline that never emits one, where ordinary Persian puts one in
+ * about 23% of word types. So a correct می‌کنم folds to two words against a
+ * reference that spells میکنم solid, and scores as a miss. Measured: folding
+ * ZWNJ *away* instead of to a space moves the model from 51.2% to 54.3% on
+ * gold and leaves the rule baseline, which emits none, at 62.3%. The fold is
+ * kept as it is — it is the published metric and it is right for a corpus that
+ * mixes both conventions — but any comparison between a ZWNJ-emitting engine
+ * and one that cannot emit ZWNJ is reading a three-point handicap on this data.
+ *
+ * **Punctuation folds the same way, for the same reason.** The gold's Persian
+ * side glues marks to words — `کردم،`, `میکند.` — so a correct `کردم` was
+ * scored wrong against a reference that carries a comma we deliberately emit as
+ * its own span. The effect is specific to the collected data, which is the
+ * evidence that it is an artifact and not a way of flattering every number:
+ * folding moves the author-written sets by +0.54 and +0.00 and the real gold by
+ * +3.32. Punctuation localization is still measured, separately, in
+ * `scripts/_report.ts`.
  */
 export function wordAccuracy(
   reference: string,
@@ -54,9 +75,34 @@ export function wordAccuracy(
   return { correct: ref.length - errors, total: ref.length };
 }
 
-/** Split into comparable words, treating ZWNJ as a separator. */
-function splitWords(text: string): string[] {
-  return text.replace(new RegExp(ZWNJ, "gu"), " ").split(/\s+/).filter(Boolean);
+/**
+ * Marks folded to a separator before splitting.
+ *
+ * Latin and Persian sentence punctuation, brackets, quotes and dashes. The
+ * ASCII `"` and `-` are here because the gold carries 26 and 25 of them
+ * respectively, glued to Persian words exactly as the commas are; leaving
+ * either out loses 0.17 points to the same artifact the rest of the class
+ * fixes. Digits are *not* here — a wrong digit is a wrong word.
+ */
+const FOLDED_MARKS = /[.,!?;:()[\]{}"'\-\u060C\u061B\u061F\u00AB\u00BB\u2014\u2013\u2026]/gu;
+
+/**
+ * Split into comparable words, treating ZWNJ and punctuation as separators.
+ *
+ * Marks fold to a space rather than to nothing, so a glued `نه،میخام` splits
+ * into the two words it represents instead of fusing into one that matches
+ * neither.
+ *
+ * Exported so that anything defining a rule *about* the headline metric — the
+ * CER threshold that quarantined `data/gold/gold-misaligned.jsonl`, say — can
+ * state it in the metric's own terms rather than re-deriving the fold.
+ */
+export function splitWords(text: string): string[] {
+  return text
+    .replace(new RegExp(ZWNJ, "gu"), " ")
+    .replace(FOLDED_MARKS, " ")
+    .split(/\s+/)
+    .filter(Boolean);
 }
 
 /** Levenshtein distance normalized by reference length. */

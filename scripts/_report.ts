@@ -11,6 +11,7 @@ import { createHash } from "node:crypto";
 import { existsSync, readFileSync } from "node:fs";
 import { buildTransliterator, loadFixtures, type Fixture } from "./_load.ts";
 import { normalize } from "../src/normalize.ts";
+import { PUNCTUATION_FOLDS } from "../src/unicode.ts";
 import { characterErrorRate, wordAccuracy } from "../src/metrics.ts";
 import type { TransliterationResult } from "../src/types.ts";
 
@@ -53,6 +54,8 @@ export interface Report {
     zwnjTotal: number;
     copyPreserved: number;
     copyTotal: number;
+    punctLocalized: number;
+    punctTotal: number;
   };
   engine: string;
   modelHash: string | null;
@@ -62,12 +65,16 @@ export interface Report {
 export function buildFixtureReport(options: {
   useModel?: boolean;
   useFrequency?: boolean;
+  useBigram?: boolean;
+  useHybrid?: boolean;
   file?: string;
   onlyId?: string | undefined;
 }): Report {
   const transliterator = buildTransliterator({
     model: options.useModel !== false,
     frequency: options.useFrequency !== false,
+    bigram: options.useBigram === true,
+    hybrid: options.useHybrid === true,
   });
   let fixtures = loadFixtures(options.file);
   if (options.onlyId) fixtures = fixtures.filter((f) => f.id === options.onlyId);
@@ -77,6 +84,7 @@ export function buildFixtureReport(options: {
   const totals = {
     count: 0, top1: 0, top3: 0, cer: 0, wordsCorrect: 0, wordsTotal: 0,
     zwnjCorrect: 0, zwnjTotal: 0, copyPreserved: 0, copyTotal: 0,
+    punctLocalized: 0, punctTotal: 0,
   };
 
   for (const fixture of fixtures) {
@@ -90,6 +98,19 @@ export function buildFixtureReport(options: {
       if (span.action === "copy") {
         totals.copyTotal++;
         if (span.output === span.input) totals.copyPreserved++;
+      }
+      // Punctuation localization, measured here because `wordAccuracy` no
+      // longer can: it folds marks to separators on both sides, so a `?` left
+      // un-localized in a Persian run is now invisible to the headline number.
+      // Scored against the *engine's own* output rather than the reference,
+      // because the gold's punctuation is un-localized ASCII throughout and
+      // scoring against it would penalize doing the right thing.
+      for (const ch of span.output) {
+        if (!LOCALIZABLE.has(ch)) continue;
+        totals.punctTotal++;
+        if (span.action === "copy" ? ch === LOCALIZABLE.get(ch) : ch !== LOCALIZABLE.get(ch)) {
+          totals.punctLocalized++;
+        }
       }
     }
 
@@ -136,7 +157,8 @@ export function buildFixtureReport(options: {
 
   return {
     cases, byCategory, totals,
-    engine: transliterator.hasModel ? "model" : "rules",
+    engine: `${options.useHybrid ? "hybrid" : transliterator.hasModel ? "model" : "rules"}` +
+      `${transliterator.hasContext ? " + context" : ""}`,
     modelHash: hashFile("data/fixtures/weights.json"),
     datasetHash: hashFile(options.file ?? "data/fixtures/fixtures.jsonl") ?? "",
   };
@@ -147,6 +169,19 @@ function hashFile(relative: string): string | null {
   if (!existsSync(path)) return null;
   return createHash("sha256").update(readFileSync(path)).digest("hex").slice(0, 12);
 }
+
+/**
+ * ASCII marks and their Persian forms, in both directions.
+ *
+ * Maps each member of a localizable pair to the *ASCII* member, so
+ * `ch === LOCALIZABLE.get(ch)` asks "is this still the Latin form?".
+ */
+const LOCALIZABLE = new Map<string, string>(
+  PUNCTUATION_FOLDS.flatMap(([latin, persian]) => [
+    [latin, latin] as const,
+    [persian, latin] as const,
+  ]),
+);
 
 function zwnjPositions(text: string): string {
   const out: number[] = [];
@@ -176,6 +211,7 @@ export function formatReport(report: Report, options: { verbose?: boolean } = {}
   lines.push("");
   lines.push(`copy-span preservation  ${pct(t.copyPreserved, t.copyTotal)}  (${t.copyPreserved}/${t.copyTotal})`);
   lines.push(`ZWNJ placement          ${pct(t.zwnjCorrect, t.zwnjTotal)}  (${t.zwnjCorrect}/${t.zwnjTotal})`);
+  lines.push(`punctuation localized   ${pct(t.punctLocalized, t.punctTotal)}  (${t.punctLocalized}/${t.punctTotal})`);
 
   if (options.verbose) {
     lines.push("", "--- failures ---");

@@ -1,0 +1,71 @@
+{"id":"gold-0056","input":"afrade malool janbazan hame afrad bal","expected":"نه می خوام ریختت رو ببینم","alternatives":[],"cer":0.96}
+{"id":"gold-0068","input":"agar tavanmandihayeman baraye tahagho","expected":"من حرف مفت زیاد میزنم","alternatives":[],"cer":1}
+{"id":"gold-0112","input":"ama baiad faratar az in brim","expected":"فکر کنم حوصلش سر رفته","alternatives":[],"cer":1.048}
+{"id":"gold-0151","input":"aslan dust ndaram asbabe mozahematetun beshim","expected":". تو میدونی من دارم","alternatives":[],"cer":1.588}
+{"id":"gold-0278","input":"bahoosh o salem o varzeshkar w","expected":"ایا ما هم همین جوریم؟","alternatives":[],"cer":0.95}
+{"id":"gold-0293","input":"bar dige babat negahdari tashakor mik","expected":"من با این یارو همکارم","alternatives":[],"cer":0.952}
+{"id":"gold-0313","input":"barkhi az barnamehaye marouf donya barnamehaye doustyabi ast","expected":"زنی نزدیک شدواجناس او را بررسی کرد","alternatives":[],"cer":1.059}
+{"id":"gold-0317","input":"basat aroosi ro khoda joor mikone","expected":".قبول می کنم؟ نمی تونم","alternatives":[],"cer":1}
+{"id":"gold-0332","input":"bayad chizi tu khunesh bashe","expected":"من همه جا دنبالت گشتم","alternatives":[],"cer":0.905}
+{"id":"gold-0361","input":"be manzoore javabgooyiye so'alate far","expected":"نه،نه، هنری دومیش هست","alternatives":[],"cer":1}
+{"id":"gold-0389","input":"bedoon inke ghablan dore rasmi modiri","expected":"تو از کجا می دونی نگفتن؟","alternatives":[],"cer":0.957}
+{"id":"gold-0458","input":"chera ma fekr mikonim har kari amrika","expected":"اون سویت شرت من نیست ؟","alternatives":[],"cer":1.25}
+{"id":"gold-0499","input":"chon be ma migoyad ke anha negaranand","expected":"که هیچ وقت این رو نگین","alternatives":[],"cer":1.045}
+{"id":"gold-0530","input":"dar arjantin barname hast","expected":"بله، معلومه که میتونم","alternatives":[],"cer":0.95}
+{"id":"gold-0531","input":"dar charchube ahdafe zist mohitie jahani","expected":"متاسفم، به من نگاه کن","alternatives":[],"cer":1.25}
+{"id":"gold-0539","input":"dar haghighat, sayyare'i paydar pishn","expected":"اون از شکلات خوشش میاد","alternatives":[],"cer":1.045}
+{"id":"gold-0540","input":"dar halike khanevade biazar shoma dar","expected":"ایا ما هم همین جوریم؟","alternatives":[],"cer":1.15}
+{"id":"gold-0547","input":"dar marakeze eidz, dar campe panahand","expected":"پس اون فقط یه مرد خوبه","alternatives":[],"cer":0.909}
+{"id":"gold-0570","input":"dashtim nahar mikhordim","expected":"طفلک مادربزرگم","alternatives":[],"cer":1}
+{"id":"gold-0593","input":"do metr zaboon dashte bashe","expected":"یه جای استراحت اونجاست","alternatives":[],"cer":0.909}
+{"id":"gold-0622","input":"dr mrkz edz dr kmp panahandegan hmche","expected":"حالا این سگا رو چیکارشون کنیم؟","alternatives":[],"cer":0.931}
+{"id":"gold-0645","input":"ertebatemun ro beham zadim","expected":"کی داره از اینجا میره؟","alternatives":[],"cer":0.905}
+{"id":"gold-0647","input":"esmam to daftare telephone hast","expected":"پس سعی کن بیخیالش بشی","alternatives":[],"cer":0.952}
+{"id":"gold-0675","input":"fekr konam hosele ash sar rafte","expected":"چه بلایی سر بچت اومده؟","alternatives":[],"cer":0.952}
+{"id":"gold-0678","input":"fekr mikonam bedunam chetori","expected":"من باید باهات حرف بزنم","alternatives":[],"cer":0.909}
+{"id":"gold-0683","input":"fibz, boshghabet ro bardar","expected":"بسکتبال چطور پیش میره؟","alternatives":[],"cer":0.905}
+{"id":"gold-0687","input":"forooshande goft: man honarmandam","expected":"غذا و نوشیدنی رو میزه","alternatives":[],"cer":0.905}
+{"id":"gold-0721","input":"gostareye daghdaghehayeman ziad shodeh ast","expected":"و کنار آبشار زندگی کنه","alternatives":[],"cer":1.091}
+{"id":"gold-0751","input":"hamash migoftam khob az in daghayegh","expected":"این زنگ اجاق گاز هست؟","alternatives":[],"cer":0.95}
+{"id":"gold-0766","input":"hamle mooshali sepah be terorist haye","expected":"خب چی شد که بوسیدیش ؟","alternatives":[],"cer":1.053}
+{"id":"gold-0807","input":"hme ina mitonn forsathaye bishtr ya k","expected":"واز جاده به دور افتاده است.","alternatives":[],"cer":1.154}
+{"id":"gold-0815","input":"in ast eghtesad mosharekati jadid","expected":"سلام ، چندلر اینجاست؟","alternatives":[],"cer":1.167}
+{"id":"gold-0816","input":"in ast eqtesade mosharekatie jadid","expected":"ان مرد نگونبخت میرفت","alternatives":[],"cer":1}
+{"id":"gold-0819","input":"in bakhshi kharegholade az kar ast","expected":"چطور از آن استفاده کند؟","alternatives":[],"cer":1}
+{"id":"gold-0839","input":"in gheir ghable bavar ast","expected":"خدای من! اینو نگاه کن","alternatives":[],"cer":0.95}
+{"id":"gold-0853","input":"in kochik tarin raghamesh hast","expected":"و بعد اونارو بتکونیم ؟","alternatives":[],"cer":1.05}
+{"id":"gold-0902","input":"jazabtarin khordad ro tajrobe kardam","expected":"با جولی قطع رابطه کرد","alternatives":[],"cer":0.905}
+{"id":"gold-0929","input":"ke bar tavanaii haft mantaghe bana sh","expected":"ایا اسبی در ان جا بود؟","alternatives":[],"cer":1}
+{"id":"gold-0949","input":"keyli ham chize mohemmi nist","expected":"حالا دو برابرش کنید","alternatives":[],"cer":1}
+{"id":"gold-1004","input":"khodpasandi va qoror balahaye besiar miavarad","expected":"خوب ، خانمها و آقایان","alternatives":[],"cer":1.368}
+{"id":"gold-1040","input":"ma be tafakori radikali niazmandim","expected":"بدون هیچ چیزی درون آن؟","alternatives":[],"cer":1.095}
+{"id":"gold-1098","input":"man be kivi alerji daram","expected":"تو فروشگاه جا گذاشتید؟","alternatives":[],"cer":0.905}
+{"id":"gold-1110","input":"man didham ke in barnameha chetor tag","expected":"باشه ! خیلی خب , باشه","alternatives":[],"cer":1.353}
+{"id":"gold-1128","input":"man hame ja donbalet gashtam","expected":"باید چیزی تو خونش باشه","alternatives":[],"cer":0.909}
+{"id":"gold-1137","input":"man k roshanfekr tar az baqieh hastam","expected":"تو نمی خوای بازی کنی ؟","alternatives":[],"cer":1.05}
+{"id":"gold-1144","input":"man konjkav budm, banabarin dar in mo","expected":"خب ، این یکی یکم گرونه","alternatives":[],"cer":1.3}
+{"id":"gold-1147","input":"man mashinaye abi mishmordam oon mash","expected":".بریم کلبش ، اسکی کنیم","alternatives":[],"cer":1.211}
+{"id":"gold-1162","input":"man nemikhaham alan javabemo bedin","expected":"از دست من خیلی ناراحته","alternatives":[],"cer":0.955}
+{"id":"gold-1196","input":"mardi dar namayeshgahi goldan miforukht","expected":"! یه ماشین واقعی بگیر","alternatives":[],"cer":1.158}
+{"id":"gold-1219","input":"mibaram migardonamesh, jasho tamiz mikonam","expected":"جویی جونم رو نجات بده","alternatives":[],"cer":1.095}
+{"id":"gold-1220","input":"mibaram migardunamesh, jasho tamiz mikonam","expected":"هی ریچل ، برو عطر بیار","alternatives":[],"cer":1.15}
+{"id":"gold-1253","input":"mikoshamet motad . mikoshamet mofangi","expected":"اونها همدیگه رو دارن.","alternatives":[],"cer":1}
+{"id":"gold-1291","input":"mosalaman vaghti hamdige ro darim","expected":"با تهیه کننده صحبت کنم ؟","alternatives":[],"cer":0.955}
+{"id":"gold-1355","input":"nemito ne srsho bndaze payiib","expected":".من داشتم جیغ می زدم","alternatives":[],"cer":0.947}
+{"id":"gold-1390","input":"on az shokolat khoshesh miad","expected":"، بعضی وقتها ، نیمه شب","alternatives":[],"cer":1}
+{"id":"gold-1482","input":"post instagerami sosha makani ke bad","expected":"من نمیفهمم تو چی میگی","alternatives":[],"cer":1}
+{"id":"gold-1508","input":"rooykardi bar asase ahdafo mohlathaye","expected":"مسواک می زدم بهم حمله کرد","alternatives":[],"cer":1.04}
+{"id":"gold-1564","input":"sharge gushi shoma tamam mishavad","expected":"میشه زیپ منو بدی بالا؟","alternatives":[],"cer":0.952}
+{"id":"gold-1596","input":"surly when we have each other","expected":".اون یکی از قدیمی هاست","alternatives":[],"cer":1}
+{"id":"gold-1599","input":"ta goftan jokhaye zanandeh ta payam d","expected":"من میدونم که حق با منه","alternatives":[],"cer":0.955}
+{"id":"gold-1600","input":"ta hala barayash tofang nakharide am","expected":"همه از غذا خوششون اومد","alternatives":[],"cer":0.909}
+{"id":"gold-1714","input":"va dar zamineh sanat mizbani etelaat","expected":"یه نفری میخای حرف بزنی","alternatives":[],"cer":1}
+{"id":"gold-1734","input":"va ma mikhahim royahaye bozoorg dashte bashim","expected":"چی باعث شد این همه سال","alternatives":[],"cer":1.182}
+{"id":"gold-1761","input":"vaghean o haghighatan intore","expected":": اساس هر رابطه سالمی","alternatives":[],"cer":0.947}
+{"id":"gold-1800","input":"vali niazmande tafakore radikal o mot","expected":"اما در مورد تو چی؟","alternatives":[],"cer":1.294}
+{"id":"gold-1831","input":"ya mitavanad miyan farzandan bashad,","expected":"اونا تو جدایی بودن","alternatives":[],"cer":1.111}
+{"id":"gold-1860","input":"ye nafari mikhay harf bezani","expected":". این، این میشله هست؟","alternatives":[],"cer":1}
+{"id":"gold-1864","input":"ye shohar daram vaght azash kari milh","expected":"پنجشنبه شب ، 5 تا بلیط","alternatives":[],"cer":1.15}
+{"id":"gold-1865","input":"ye sourakh ruzi ham toush gozashte ke","expected":"پرسیدند : چه می کنی ؟","alternatives":[],"cer":1.412}
+{"id":"gold-1885","input":"yek rishsefide modern be haman andaze","expected":"من با فیبی برنامه دارم","alternatives":[],"cer":0.955}
+{"id":"gold-1897","input":"zare zare,ghatre ghatre, misuzam ama","expected":"ولی اون کافی نبود","alternatives":[],"cer":1.294}

@@ -20,10 +20,44 @@ Finglish input
       |
       v
 [5] Sentence-level context pass                resolve remaining word ambiguity
-      |
+      |    lexicon tie-break, plus a Viterbi over 30k word bigrams when the
+      |    `bigram` artifact is supplied — opt-in, see below
       v
 Best output + alternatives + confidence + source spans
 ```
+
+Steps [1] and [5], the rule baseline and the per-word memo live in
+`src/pipeline.ts`, which knows nothing about the model. `src/index.ts` extends
+it and fills in one method; `src/rules-engine.ts` extends it and fills in
+nothing, which is the `tiny-finglish/rules` entry point. The split is what makes
+that entry 6.7 KiB Brotli against 9.1 for the full one — `index.ts` builds a
+`Transducer` in its constructor, so the neural runtime is an unconditional
+import there and cannot be tree-shaken away.
+
+## What step [5] is worth, measured
+
+A language model at [5] is a **reranker**: it reorders candidates [3] produced
+and can never introduce one it did not. `scripts/oracle.ts` measures the ceiling
+that puts on it — 79.7% oracle recall against 70.1% top-1, so **+9.6 points for
+a perfect reranker**, with 20.3% of reference words never proposed at any beam
+width.
+
+That number is why the work went into generation before context, against the
+prior art's advice. The closest published analogue puts context at ~21 WER
+points, but it measured a system whose generator was a pair 6-gram FST; its
+recall is far higher than a beam over a grapheme table, so its ranking headroom
+is far larger. **A ranking-limited system's number does not transfer to a
+recall-limited one**, and checking which kind you have is a cheap measurement
+that changes the order of the work.
+
+The 30,000-pair bigram realizes +1.4 of the +9.6 for the model and +0.9 for the
+rules — and is **not shipped by default**, because 73.6 KiB for +0.9 is 82 KiB
+per point against 8.9 for the frequency table. It is opt-in: `--bigram`, or
+`{ bigram }` on the constructor. `scripts/oracle.ts --misses` accounts for the rest: 48% of
+never-proposed words are a register mismatch between a formal input and a
+colloquial reference, 31% are rows whose two sides do not correspond word for
+word, 13% differ only in a long vowel, 8% carry an ع Finglish does not write,
+and under 1% differ only by a homophone letter class.
 
 ## Why the model generates and the rules constrain
 

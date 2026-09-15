@@ -20,6 +20,7 @@
         <button role="tab" data-tab="try" class="active">Try it</button>
         <button role="tab" data-tab="fixtures">Fixture suite</button>
         <button role="tab" data-tab="scaling">Scaling curve</button>
+        <button role="tab" data-tab="compare">Compare</button>
       </nav>
 
       <!-- ------------------------------------------------------ try it -->
@@ -42,6 +43,7 @@
         <div class="controls">
           <label><input type="checkbox" id="use-model" checked /> learned model</label>
           <label><input type="checkbox" id="use-lexicon" checked /> lexicon + frequency</label>
+          <label><input type="checkbox" id="use-bigram" /> sentence context (+73.6 KiB)</label>
           <label><input type="checkbox" id="use-snap" /> lexicon snap (tier 4)</label>
           <label>beam <input type="number" id="beam" value="8" min="1" max="32" /></label>
         </div>
@@ -69,11 +71,12 @@
         <div class="controls">
           <label><input type="checkbox" id="fx-model" checked /> learned model</label>
           <label><input type="checkbox" id="fx-lexicon" checked /> lexicon + frequency</label>
+          <label><input type="checkbox" id="fx-bigram" /> sentence context (--bigram)</label>
           <label>
             set
             <select id="fx-set">
               <option value="fixtures">fixtures (dev, 175)</option>
-              <option value="gold">gold — real human Finglish (1,906)</option>
+              <option value="gold">gold — real human Finglish (1,835)</option>
               <option value="authored">gold — author-written (71)</option>
             </select>
           </label>
@@ -93,6 +96,63 @@
           spelling.
         </p>
         <div id="curve"></div>
+      </section>
+
+      <!-- ---------------------------------------------------- compare -->
+      <section id="tab-compare" class="tab-panel" hidden>
+        <p class="hint">
+          <strong>No npm package converts Finglish to Persian.</strong> Every
+          package whose name says <code>finglish</code> or <code>pinglish</code>
+          goes the other way &mdash; Persian to Latin, for URL slugs. Worldwide
+          there are a handful of real implementations and exactly one other is
+          JavaScript. So this is less &ldquo;us versus the competition&rdquo;
+          than a survey of what exists and why almost none of it runs in a
+          browser.
+        </p>
+        <div id="cmp-headline"></div>
+
+        <h2>Type once, see every engine</h2>
+        <label for="cmp-input">Finglish</label>
+        <textarea id="cmp-input" rows="2" spellcheck="false"
+          autocapitalize="off" autocorrect="off">salam, man emrooz miram Muscat</textarea>
+        <div class="examples" id="cmp-examples"></div>
+        <div id="cmp-live"></div>
+
+        <h2>The landscape</h2>
+        <p class="hint">
+          Data payload is what each implementation must load before it can rank
+          a candidate. Gzip &minus;9 throughout, applied to every subject's
+          uncompressed bytes, so the column is like-for-like.
+        </p>
+        <div id="cmp-landscape"></div>
+
+        <h2>Accuracy</h2>
+        <p class="hint">
+          Live subjects are run <em>in this tab</em>, right now, scored with the
+          same <code>wordAccuracy</code> as
+          <code>scripts/run-fixtures.ts</code>. Subjects that cannot run in a
+          browser are read from <code>data/results/comparison.json</code> and
+          marked <span class="tag offline">offline</span>.
+        </p>
+        <div class="controls">
+          <label>
+            set
+            <select id="cmp-set">
+              <option value="gold">gold — real human Finglish (1,835)</option>
+              <option value="fixtures">fixtures (dev, 175)</option>
+              <option value="authored">gold — author-written (71)</option>
+            </select>
+          </label>
+          <button id="cmp-run">Run in this tab</button>
+          <button id="cmp-load-vendor">Load NeveshtYar (3.6 MiB)</button>
+        </div>
+        <div id="cmp-accuracy"></div>
+
+        <h2>Size</h2>
+        <div id="cmp-size"></div>
+
+        <h2>Not benchmarked, and why</h2>
+        <div id="cmp-context"></div>
       </section>
 
       <footer>

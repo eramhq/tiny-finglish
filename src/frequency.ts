@@ -42,6 +42,18 @@ export function decodeFrequencyTable(bytes: Uint8Array): FrequencyTable {
  * types; Persian morphology generates far more, so absence usually means
  * "inflected form we did not count", not "not a word". Penalizing absence
  * would systematically punish correct inflections.
+ *
+ * **Backing off to the stem's frequency was tried here and is not kept.** The
+ * arithmetic looks convincing — 93.6% of gold reference words are in the table
+ * and a further 2.2% strip to a stem that is — but scoring `کتابش` at a
+ * discounted `کتاب` loses accuracy monotonically in the discount, on fixtures
+ * (71.5% -> 70.2% at every value from 0.2 to 1.0) and on gold (62.3% ->
+ * 62.1%). The reason is that a Persian suffix list matches far more than
+ * suffixes: `م`, `ت`, `ش` and `ی` end ordinary words too, so the back-off
+ * hands a real score to whichever wrong candidate happens to end in a common
+ * letter. Making it safe needs the stem's *flags*, which the shipped artifact
+ * does not carry. Expanding the lexicon instead fails worse — see
+ * `scripts/build-lexicon.ts`.
  */
 export function frequencyScore(table: FrequencyTable | undefined, word: string): number {
   if (!table) return 0;

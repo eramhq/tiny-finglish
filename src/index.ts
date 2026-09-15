@@ -7,25 +7,25 @@
  *   [2] transduce            the learned core, or the rule baseline without weights
  *   [3] beam decode          top-k Persian candidates and confidence
  *   [4] lexicon snap         OPTIONAL, disabled by default (see M2)
- *   [5] sentence pass        resolve remaining ambiguity across spans
+ *   [5] sentence pass        lexicon tie-break, plus a Viterbi over word bigrams
  *
  * Works with no setup at all — the rule baseline needs no weights — and gets
- * better when a model and a lexicon are supplied.
+ * better when a model, a lexicon, frequencies and bigrams are supplied.
+ *
+ * Steps [1] and [5] and the rule baseline live in `pipeline.ts`, which this
+ * module extends. That split is what makes `tiny-finglish/rules` a real 5.2 KiB
+ * entry point rather than a documented intention: the `Transducer` built below
+ * is an unconditional import here, and no bundler can remove it for a consumer
+ * who never passes `model`.
  */
 
-import { RuleBaseline } from "./baseline.ts";
 import { beamDecode, scoreHypotheses, snapToLexicon, type Hypothesis } from "./decode.ts";
-import { frequencyScore, type FrequencyTable } from "./frequency.ts";
+import { frequencyScore } from "./frequency.ts";
 import { normalize } from "./normalize.ts";
+import { Pipeline, round4, ZWNJ, type PipelineOptions } from "./pipeline.ts";
 import { decodeArtifact, type WeightArtifact } from "./quant.ts";
 import { Transducer } from "./runtime.ts";
-import { tokenize, type Token } from "./tokenize.ts";
-import type {
-  Candidate,
-  Span,
-  TransliterateOptions,
-  TransliterationResult,
-} from "./types.ts";
+import type { Candidate, TransliterateOptions, TransliterationResult } from "./types.ts";
 
 export type {
   Candidate,
@@ -39,29 +39,30 @@ export { normalize, foldForMatch, isNormalized } from "./normalize.ts";
 export { tokenize } from "./tokenize.ts";
 export { decodeFrontCoded, encodeFrontCoded } from "./frontcode.ts";
 export { decodeFrequencyTable, type FrequencyTable } from "./frequency.ts";
+export { decodeBigramTable, type BigramTable } from "./bigram.ts";
+export { RuleTransliterator } from "./rules-engine.ts";
+export type { PipelineOptions } from "./pipeline.ts";
 export type { WeightArtifact } from "./quant.ts";
 
-export interface TransliteratorOptions {
+export interface TransliteratorOptions extends PipelineOptions {
   /** Exported weights. Without them the rule baseline is used. */
   model?: WeightArtifact;
   /**
-   * Attested Persian words. Used to rank rule-baseline candidates, and — only
-   * when `useLexiconSnap` is on — to rerank model output.
+   * Run the rule baseline *and* the model on every word and arbitrate, instead
+   * of letting the model decide alone. Requires `model`; ignored without it.
+   *
+   * Off by default. It does what it claims — the model's ZWNJ placement with
+   * the rules' accuracy on real input — but the gold set it would be judged on
+   * contains no ZWNJ at all, so the headline metric charges it three points for
+   * placing one correctly. See `convertHybrid` and `src/metrics.ts`.
    */
-  lexicon?: ReadonlySet<string>;
-  /**
-   * Word frequencies, from `decodeFrequencyTable`. Used to rerank candidates:
-   * the model says which spellings are plausible, this says which are likely.
-   */
-  frequency?: FrequencyTable;
+  hybrid?: boolean;
   /**
    * Tier [4]. Off by default: the plan's position going into M2 is that the
    * model absorbs the vocabulary and the lexicon stays a training and
    * evaluation artifact. Turn it on only if the scaling curve says otherwise.
    */
   useLexiconSnap?: boolean;
-  /** Words cached on the incremental typing path. */
-  cacheSize?: number;
 }
 
 /**
@@ -76,40 +77,18 @@ export interface TransliteratorOptions {
  */
 const FREQUENCY_RERANK = 2.0;
 
-const DEFAULT_OPTIONS: Required<Pick<TransliterateOptions,
-  "alternatives" | "beamWidth" | "candidatesPerSpan" | "persianPunctuation" | "backend">> = {
-  alternatives: 3,
-  beamWidth: 8,
-  candidatesPerSpan: 3,
-  persianPunctuation: true,
-  backend: "auto",
-};
-
-export class Transliterator {
-  private readonly baseline: RuleBaseline;
+export class Transliterator extends Pipeline {
   private readonly transducer: Transducer | null;
   private readonly labels: readonly string[];
   private readonly inputIndex: ReadonlyMap<string, number>;
   private readonly unkId: number;
-  private readonly lexicon: ReadonlySet<string> | undefined;
-  private readonly frequency: FrequencyTable | undefined;
+  private readonly hybrid: boolean;
   private readonly useLexiconSnap: boolean;
-  /**
-   * Word-level memo. This is what keeps the typing path inside a 16 ms frame:
-   * a keystroke re-converts only the word being edited, never the sentence.
-   */
-  private readonly cache = new Map<string, Candidate[]>();
-  private readonly cacheSize: number;
 
   constructor(options: TransliteratorOptions = {}) {
-    this.lexicon = options.lexicon;
-    this.frequency = options.frequency;
+    super(options);
+    this.hybrid = options.hybrid ?? false;
     this.useLexiconSnap = options.useLexiconSnap ?? false;
-    this.cacheSize = options.cacheSize ?? 2048;
-    this.baseline = new RuleBaseline({
-      ...(options.lexicon ? { lexicon: options.lexicon } : {}),
-      ...(options.frequency ? { frequency: options.frequency } : {}),
-    });
 
     if (options.model) {
       const weights = decodeArtifact(options.model);
@@ -125,83 +104,13 @@ export class Transliterator {
     }
   }
 
-  /** True when a learned model is driving conversion rather than the rules. */
-  get hasModel(): boolean {
+  override get hasModel(): boolean {
     return this.transducer !== null;
   }
 
-  transliterate(input: string, options: TransliterateOptions = {}): TransliterationResult {
-    const opts = { ...DEFAULT_OPTIONS, ...options };
-    const tokens = tokenize(input, {
-      protect: options.protect ?? [],
-      forceConvert: options.forceConvert ?? [],
-    });
-
-    const spans: Span[] = [];
-    for (const token of tokens) {
-      spans.push(this.spanFor(token, opts));
-    }
-
-    this.sentencePass(spans);
-
-    const text = spans.map((s) => s.output).join("");
-    const converted = spans.filter((s) => s.action === "convert");
-    const confidence = converted.length
-      ? Math.exp(converted.reduce((sum, s) => sum + Math.log(Math.max(s.confidence, 1e-9)), 0) / converted.length)
-      : 1;
-
-    return {
-      text,
-      alternatives: this.alternatives(spans, opts.alternatives),
-      confidence: round4(confidence),
-      spans,
-    };
-  }
-
-  // -- per-token ----------------------------------------------------------
-
-  private spanFor(token: Token, opts: typeof DEFAULT_OPTIONS & TransliterateOptions): Span {
-    const base = { input: token.text, start: token.start, end: token.end };
-
-    if (token.kind === "protected") {
-      return { ...base, output: token.text, action: "copy", confidence: 1, copyReason: token.reason! };
-    }
-    if (token.kind === "space") {
-      return { ...base, output: token.text, action: "space", confidence: 1 };
-    }
-    if (token.kind === "punct") {
-      const output = opts.persianPunctuation
-        ? normalize(token.text, { punctuation: true, digits: "preserve" })
-        : token.text;
-      return { ...base, output, action: "punct", confidence: 1 };
-    }
-
-    const candidates = this.convert(token.text, opts);
-    const best = candidates[0];
-    return {
-      ...base,
-      output: best?.output ?? token.text,
-      action: "convert",
-      confidence: round4(best?.probability ?? 0),
-      candidates: candidates.slice(0, opts.candidatesPerSpan ?? 3),
-    };
-  }
-
-  private convert(word: string, opts: TransliterateOptions): Candidate[] {
-    const key = word.toLowerCase();
-    const cached = this.cache.get(key);
-    if (cached) return cached;
-
-    const candidates = this.transducer ? this.convertWithModel(key, opts) : this.convertWithRules(key, opts);
-
-    if (this.cache.size >= this.cacheSize) {
-      // Cheap FIFO eviction. A true LRU costs more bookkeeping than it saves at
-      // this hit rate, since the working set while typing is a few dozen words.
-      const oldest = this.cache.keys().next().value;
-      if (oldest !== undefined) this.cache.delete(oldest);
-    }
-    this.cache.set(key, candidates);
-    return candidates;
+  protected override convertWord(word: string, opts: TransliterateOptions): Candidate[] {
+    if (!this.transducer) return this.convertWithRules(word, opts);
+    return this.hybrid ? this.convertHybrid(word, opts) : this.convertWithModel(word, opts);
   }
 
   private convertWithModel(word: string, opts: TransliterateOptions): Candidate[] {
@@ -233,86 +142,45 @@ export class Transliterator {
     }));
   }
 
-  private convertWithRules(word: string, opts: TransliterateOptions): Candidate[] {
-    const results = this.baseline.transliterate(word, {
-      results: Math.max(opts.candidatesPerSpan ?? 3, 3),
-    });
-    if (results.length === 0) {
-      return [{ output: word, probability: 0, reason: "no rule matched; copied" }];
-    }
-    const max = Math.max(...results.map((r) => r.score));
-    const weights = results.map((r) => Math.exp(r.score - max));
-    const total = weights.reduce((a, b) => a + b, 0);
-    return results.map((r, i) => ({
-      output: normalize(r.output),
-      probability: round4(weights[i]! / total),
-      reason: r.reason,
+  /**
+   * Both engines, arbitrated — the hybrid path.
+   *
+   * The two are good at different things, measured per category on the
+   * fixtures: the model wins ZWNJ (70.4% against 33.3%), adversarial input
+   * (90.0% against 50.0%) and mixed English (90.6% against 78.1%), while
+   * rules + frequency win ambiguity (70.6% against 64.7%), running sentences
+   * (87.5% against 81.3%) and, on real human Finglish, the whole thing by 10.6
+   * points. Running both costs nothing worth measuring — each is well under a
+   * millisecond and both sit behind the same per-word memo.
+   *
+   * The one arbitration rule that is not a guess: **prefer the model when it
+   * emits a ZWNJ and the rules do not.** That is not a close call between two
+   * opinions, it is a capability gap — the rule tables in `src/rules.ts` can
+   * only produce U+200C from a literal space or hyphen in the Latin, so on the
+   * ~23% of Persian word types that contain one they are structurally unable to
+   * be right. Everything else goes to the engine that wins on real input.
+   *
+   * Note that the headline word-accuracy metric folds ZWNJ to a space, so this
+   * barely moves it by construction. It is measured on ZWNJ placement, which
+   * `scripts/_report.ts` reports separately and which exists for this.
+   */
+  private convertHybrid(word: string, opts: TransliterateOptions): Candidate[] {
+    const rules = this.convertWithRules(word, opts);
+    const model = this.convertWithModel(word, opts);
+    const modelFirst =
+      (model[0]?.output.includes(ZWNJ) ?? false) && !(rules[0]?.output.includes(ZWNJ) ?? false);
+    const [winner, loser] = modelFirst ? [model, rules] : [rules, model];
+
+    // The loser's candidates are kept behind the winner's rather than dropped:
+    // the two generators disagree about what is even *possible*, and that
+    // disagreement is most of the value of running both.
+    const seen = new Set(winner.map((c) => c.output));
+    const extra = loser.filter((c) => !seen.has(c.output));
+    return [...winner, ...extra].map((c) => ({
+      ...c,
+      reason: modelFirst && winner === model ? `${c.reason} (zwnj)` : c.reason,
     }));
   }
-
-  /**
-   * Step [5] — the sentence-level pass.
-   *
-   * Currently promotes an attested alternative over an unattested best guess
-   * when the two are close, which is the part of sentence context that works
-   * without a language model. The measured literature is unambiguous that this
-   * is where the remaining accuracy lives: on the closest comparable task,
-   * adding context moved word error from 33.8% to 12.2%, while swapping the
-   * model architecture moved it by under one point. A real n-gram or
-   * class-based LM belongs here, and this is the seam it plugs into.
-   */
-  private sentencePass(spans: Span[]): void {
-    if (!this.lexicon) return;
-    for (const span of spans) {
-      if (span.action !== "convert" || !span.candidates || span.candidates.length < 2) continue;
-      const best = span.candidates[0]!;
-      if (this.lexicon.has(best.output)) continue;
-      const attested = span.candidates.find((c) => this.lexicon!.has(c.output));
-      // Only override a genuinely uncertain call. A confident model answer that
-      // is simply not in a 100k-stem lexicon is usually an inflected form, not
-      // a mistake, and overriding it would be worse than leaving it.
-      if (attested && best.probability - attested.probability < 0.25) {
-        span.output = attested.output;
-        span.confidence = round4(attested.probability);
-        span.candidates = [attested, ...span.candidates.filter((c) => c !== attested)];
-      }
-    }
-  }
-
-  /**
-   * Whole-text alternatives, produced by varying the least-confident spans one
-   * at a time rather than enumerating a cross product — the same reason the
-   * baseline uses a beam.
-   */
-  private alternatives(spans: readonly Span[], limit: number): string[] {
-    if (limit <= 0) return [];
-    const varied = spans
-      .map((span, index) => ({ span, index }))
-      .filter(({ span }) => span.action === "convert" && (span.candidates?.length ?? 0) > 1)
-      .sort((a, b) => a.span.confidence - b.span.confidence)
-      .slice(0, limit);
-
-    const base = spans.map((s) => s.output);
-    const out: string[] = [];
-    const seen = new Set([base.join("")]);
-    for (const { span, index } of varied) {
-      for (const candidate of span.candidates!.slice(1)) {
-        const copy = [...base];
-        copy[index] = candidate.output;
-        const text = copy.join("");
-        if (!seen.has(text)) {
-          seen.add(text);
-          out.push(text);
-        }
-        if (out.length >= limit) return out;
-      }
-    }
-    return out;
-  }
-}
-
-function round4(value: number): number {
-  return Math.round(value * 10000) / 10000;
 }
 
 let defaultInstance: Transliterator | null = null;
@@ -336,3 +204,6 @@ export function configure(options: TransliteratorOptions): Transliterator {
   defaultInstance = new Transliterator(options);
   return defaultInstance;
 }
+
+void ZWNJ;
+void round4;

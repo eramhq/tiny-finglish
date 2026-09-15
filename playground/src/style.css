@@ -113,10 +113,38 @@ table.grid tbody tr:hover td { background: color-mix(in srgb, var(--convert) 7%,
 .notes p { font-size: 0.85rem; color: var(--muted); margin: 0.5rem 0; }
 .notes p strong { color: var(--fg); }
 .notes p.bad, .notes p.bad strong { color: var(--bad, #dc2626); }
-select, button#fx-run {
+select, button#fx-run, button#cmp-run, button#cmp-load-vendor {
   font: inherit; font-size: 0.85rem; padding: 0.2rem 0.5rem;
   border: 1px solid var(--line); border-radius: 4px;
   background: var(--card); color: var(--fg); cursor: pointer;
 }
 :root { --bad: #dc2626; }
 @media (prefers-color-scheme: dark) { :root { --bad: #f87171; } }
+
+/* -------------------------------------------------------------- compare */
+button#cmp-load-vendor { border-style: dashed; }
+button:disabled { opacity: 0.6; cursor: default; }
+
+.tag.ours { color: var(--convert); }
+.tag.third-party { color: var(--punct); }
+.tag.baseline { color: var(--muted); }
+.tag.live { color: var(--copy); }
+.tag.offline { color: var(--muted); }
+
+.cmp-row {
+  border: 1px solid var(--line); border-radius: 8px; background: var(--card);
+  padding: 0.6rem 0.75rem; margin-bottom: 0.5rem;
+}
+/* The one we ship gets the accent border; the rest are neutral. */
+.cmp-row.ours { border-left: 3px solid var(--convert); }
+.cmp-row.third-party { border-left: 3px solid var(--punct); }
+.cmp-row.baseline { border-left: 3px solid var(--line); }
+.cmp-row-head { display: flex; align-items: baseline; gap: 0.6rem; flex-wrap: wrap; }
+.cmp-label { font-size: 0.9rem; }
+.cmp-out { font-size: 1.05rem; margin: 0.35rem 0 0.15rem; min-height: 1.4em; }
+.cmp-note { margin: 0.6rem 0; }
+.cmp-note strong { font-size: 0.85rem; }
+.cmp-note p { margin: 0.15rem 0 0; }
+
+/* A subject's one-line description, under its name in a table cell. */
+table.grid td .reason { text-align: left; font-weight: 400; margin-top: 0.1rem; }

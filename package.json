@@ -13,13 +13,28 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
+    "./rules": {
+      "types": "./dist/rules-engine.d.ts",
+      "import": "./dist/rules-engine.js"
+    },
     "./normalize": {
       "types": "./dist/normalize.d.ts",
       "import": "./dist/normalize.js"
+    },
+    "./metrics": {
+      "types": "./dist/metrics.d.ts",
+      "import": "./dist/metrics.js"
     }
   },
-  "files": ["dist", "README.md", "LICENSE", "NOTICE"],
-  "engines": { "node": ">=20" },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "NOTICE"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
@@ -28,13 +43,16 @@
     "fixtures": "node --experimental-strip-types scripts/run-fixtures.ts",
     "bench": "node --experimental-strip-types scripts/bench.ts",
     "size": "node --experimental-strip-types scripts/size.ts",
+    "compare": "node --experimental-strip-types scripts/compare.ts",
     "parity": "node --experimental-strip-types scripts/parity.ts",
     "playground": "vite playground",
-    "playground:build": "vite build playground"
+    "playground:build": "vite build playground",
+    "oracle": "node --experimental-strip-types scripts/oracle.ts"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",
     "esbuild": "^0.24.2",
+    "farsi-smart-assistant": "github:FarsioIR/NeveshtYar#v4.9.2",
     "typescript": "^5.7.2",
     "vite": "^6.0.7",
     "vitest": "^2.1.8"

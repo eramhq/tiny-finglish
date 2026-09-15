@@ -28,12 +28,31 @@ that because the memo absorbs repeated prefixes.
 
 | component | raw | gzip | Brotli |
 |---|---:|---:|---:|
-| runtime + rules + tokenizer (JS) | 22.4 KiB | 9.0 KiB | **8.0 KiB** |
-| model weights, int6, 102,348 params | 120.5 KiB | 82.0 KiB | **75.8 KiB** |
-| **shipped total** | | | **83.8 KiB** |
+| runtime + rules + tokenizer (JS) | 26.1 KiB | 10.3 KiB | **9.1 KiB** |
+| model weights, int6, 102,348 params | 120.5 KiB | 82.1 KiB | **76.0 KiB** |
+| word frequency, 25k words | 119.9 KiB | — | **54.2 KiB** |
+| **shipped total** | | | **139.3 KiB** |
+| word bigrams, 30k pairs (optional, not shipped by default) | | | 73.6 KiB |
 | lexicon, 100,761 stems (optional, not shipped by default) | | | 98.3 KiB |
 
-Soft cap is ~250 KiB Brotli; the current build uses 34% of it.
+Soft cap is ~250 KiB Brotli; the current build uses 56% of it.
+
+The data rows are already Brotli on disk and are reported as-is rather than
+double-compressed. None is bundled: all are separate fetches, so a consumer who
+wants the rules alone pays 6.7 KiB via `tiny-finglish/rules`.
+
+### Accuracy per byte, which is what decides what ships
+
+| artifact | Brotli | gold gain, rules | KiB per point |
+|---|---:|---:|---:|
+| word frequency | 54.2 KiB | +6.1 | **8.9** |
+| word bigrams | 73.6 KiB | +0.9 | **81.8** |
+| model weights | 76.0 KiB | −11.1 | negative |
+
+Frequency ships. The bigram is built, committed and measured but opt-in, at nine
+times the cost per point. The model ships because it wins ZWNJ, adversarial
+input and mixed English — categories the headline average hides — and not
+because it wins the average, which it does not.
 
 ### Quantization actually matters at scale
 
@@ -51,12 +70,16 @@ size). The int6 payload is *one ASCII character per weight*, which is larger
 than bit-packing before compression and smaller after it.
 
 This is what decides the shipped configuration: 500k busts the 250 KiB cap at
-both quantization levels, while 100k at int6 sits at 34% of it. Reported on every build, never an automatic
+both quantization levels, while 100k at int6 leaves room for the frequency and
+bigram tables and still lands at 85% of it. Reported on every build, never an automatic
 failure — the dominant risk to adoption is a model too small to spell common
 words correctly, not a download one JPEG larger.
 
-The JS runtime at 8.0 KiB Brotli confirms the expectation that weights dominate
-the payload and hand-written inference code is a rounding error.
+The JS runtime at 8.9 KiB Brotli confirms the expectation that weights dominate
+the payload and hand-written inference code is a rounding error. What the
+original expectation missed is that *data* dominates the weights: frequency and
+bigrams together are 127.8 KiB against the model's 76.0 KiB, and they buy far
+more accuracy per byte.
 
 ## Training device
 

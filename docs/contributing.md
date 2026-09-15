@@ -18,12 +18,23 @@ the English word list, not hyperparameters. When a gold case fails, put a
 *different* case exercising the same phenomenon into `data/fixtures/` and leave
 the gold case alone.
 
+Every tuned constant in the codebase follows this and says so in its own
+docstring: `UNIT_COST` and the beam width in `src/baseline.ts`,
+`FREQUENCY_RERANK` and `BIGRAM_WEIGHT` in `src/index.ts`, the bigram pair count
+in `build_bigram.py`. Gold is run once at the end of a change, as a report.
+
+The corollary is that the fixture set has to be able to *see* what you are
+tuning. `BIGRAM_WEIGHT` was flat across two orders of magnitude on the fixtures
+until thirteen sentence cases were added, because a sentence model cannot be
+tuned on a file of single words. If a sweep is flat, suspect the surface before
+the constant.
+
 ## Adding a fixture
 
 `data/fixtures/fixtures.jsonl`, one JSON object per line:
 
 ```json
-{"id": "ambiguous-032", "category": "ambiguous", "input": "sabr",
+{"id": "ambiguous-099", "category": "ambiguous", "input": "sabr",
  "expected": "صبر", "alternatives": [], "notes": "ص not س — Arabic loan."}
 ```
 
@@ -62,18 +73,46 @@ the two implementations comparable.
 ## Running the budgets
 
 ```bash
-node scripts/bench.ts    # fails the build over 16 ms / 100 ms
-node scripts/size.ts     # reports; never fails
+node scripts/bench.ts          # fails the build over 16 ms / 100 ms
+node scripts/size.ts           # reports; never fails
+node scripts/size.ts --tiers   # per-entry-point bytes, for the README table
 ```
+
+Before adding a data artifact, work out its cost per point and compare it to
+what is already there. Frequency is 8.9 KiB per point of gold word accuracy;
+the bigram is 81.8, which is why it is opt-in; the model weights are negative on
+real input. `bigramGain` and `lexiconGain` in `data/results/comparison.json`
+exist so that this ratio is published rather than implied.
 
 Latency is the hard gate and size is the soft one — deliberately. A keystroke
 that misses a frame is paid on every character; a download one JPEG larger is
 paid once.
 
+## Deciding what to work on next
+
+```bash
+node scripts/oracle.ts           # is this system ranking-limited or recall-limited?
+node scripts/oracle.ts --misses  # ...and what is actually in the bucket
+```
+
+Run these before proposing an accuracy change, because they have twice now
+contradicted what the roadmap assumed. The first says how much a better
+*reranker* could ever be worth (+9.6 points) against how much is never
+generated at all (20.3%). The second says what the never-generated words are,
+and the answer — mostly register mismatch and rows that are not aligned word
+for word — is why a bigger model and a bigger language model are both the wrong
+next move.
+
 ## Things that look like bugs and are not
 
-* **`salam` → `سلم`.** Both are attested Persian words. The lexicon has no
-  frequency ranking, so nothing separates them. See `docs/open-items.md`.
+* **`salam` → `سلم`.** Both are attested Persian words, and `سلم` wins on the
+  letter prior. Frequency fixes most cases of this class; this particular one
+  survives it. See `docs/open-items.md`.
+* **The model scores lower than the rules on gold while placing ZWNJ better.**
+  Both are true. The gold's Persian side contains no ZWNJ at all, and the
+  headline metric folds ZWNJ to a space, so a correct `می‌کنم` scores as two
+  words against a reference that spells `میکنم` solid. Measured cost: 3.0
+  points. `src/metrics.ts` documents it.
 * **Short-vowel quality varies in generated Finglish.** `ketab` and `kotab` are
   both reachable from کتاب. There is no redistributable Persian pronunciation
   dictionary; the generator samples. The syllable *structure* is engineered and

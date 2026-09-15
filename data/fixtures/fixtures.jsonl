@@ -173,3 +173,22 @@
 {"id": "adversarial-009", "category": "adversarial", "input": "man\n\nto", "expected": "من\n\nتو", "alternatives": [], "notes": "Blank lines preserved."}
 {"id": "adversarial-010", "category": "adversarial", "input": "سلام", "expected": "سلام", "alternatives": [], "notes": "Already Persian — non-Latin script passes through untouched.", "expectAction": "copy"}
 {"id": "adversarial-011", "category": "adversarial", "input": "salam سلام salam", "expected": "سلام سلام سلام", "alternatives": [], "notes": "Mixed script in one line."}
+{"id": "ambiguous-032", "category": "ambiguous", "input": "ghadeshoon", "expected": "قدشون", "alternatives": [], "notes": "gh must not split into گ+ه. The base form قد is frequent enough to be rescued; this inflection is not, which is where the missing segmentation prior showed."}
+{"id": "ambiguous-033", "category": "ambiguous", "input": "ghalamesh", "expected": "قلمش", "alternatives": [], "notes": "Same phenomenon as ghadeshoon on a different stem — قلم is in the fixtures, قلمش is in neither the lexicon nor the frequency table."}
+{"id": "ambiguous-034", "category": "ambiguous", "input": "saabeghash", "expected": "سابقش", "alternatives": [], "notes": "gh medial, inflected. Guards the case that motivated the per-unit cost in src/baseline.ts."}
+{"id": "ordinary-068", "category": "ordinary", "input": "gahvaare", "expected": "گهواره", "alternatives": [], "notes": "REGRESSION GUARD. A legitimate گ+ه — the per-unit cost must not turn every گه into ق."}
+{"id": "ordinary-069", "category": "ordinary", "input": "naagahaan", "expected": "ناگهان", "alternatives": [], "notes": "REGRESSION GUARD. g + ah across a morpheme boundary, not a gh digraph."}
+{"id": "ordinary-070", "category": "ordinary", "input": "daneshgaahi", "expected": "دانشگاهی", "alternatives": [], "notes": "REGRESSION GUARD. Word-final گاه plus the ی suffix; three units where a longest-match bias would prefer fewer."}
+{"id": "sentence-008", "category": "sentence", "input": "be nazare man", "expected": "به نظر من", "alternatives": [], "notes": "The case step [5] exists for: نزار beats نظر on the letter prior and on frequency, and only the neighbour settles it."}
+{"id": "sentence-009", "category": "sentence", "input": "zarfe ghazaa", "expected": "ظرف غذا", "alternatives": [], "notes": "Two homophone classes in one phrase — ظ against ز, غ against ق."}
+{"id": "sentence-010", "category": "sentence", "input": "tarafe raast", "expected": "طرف راست", "alternatives": [], "notes": "ط against ت, decided in context."}
+{"id": "sentence-011", "category": "sentence", "input": "zehne man", "expected": "ذهن من", "alternatives": [], "notes": "ذ against ز."}
+{"id": "sentence-012", "category": "sentence", "input": "sohbat kardam", "expected": "صحبت کردم", "alternatives": [], "notes": "ص against س and ح against ه in one word."}
+{"id": "sentence-013", "category": "sentence", "input": "mamnoon az shomaa", "expected": "ممنون از شما", "alternatives": [], "notes": "REGRESSION GUARD. Ordinary running text must not move."}
+{"id": "sentence-014", "category": "sentence", "input": "man be madrese raftam", "expected": "من به مدرسه رفتم", "alternatives": [], "notes": "REGRESSION GUARD. Four spans, three bigrams, all common."}
+{"id": "sentence-015", "category": "sentence", "input": "ketaab ro bede be man", "expected": "کتاب رو بده به من", "alternatives": [], "notes": "REGRESSION GUARD. Colloquial رو as the object marker; five spans."}
+{"id": "sentence-016", "category": "sentence", "input": "yek fenjaan chaay", "expected": "یک فنجان چای", "alternatives": [], "notes": "REGRESSION GUARD."}
+{"id": "sentence-017", "category": "sentence", "input": "dar raa baaz kon", "expected": "در را باز کن", "alternatives": [], "notes": "REGRESSION GUARD. Formal را, and در is a homograph the context pass must not break."}
+{"id": "sentence-018", "category": "sentence", "input": "ghabl az in", "expected": "قبل از این", "alternatives": [], "notes": "REGRESSION GUARD. ق against غ, already settled by frequency."}
+{"id": "sentence-019", "category": "sentence", "input": "saate chand", "expected": "ساعت چند", "alternatives": [], "notes": "KNOWN MISS. ساعت needs an ع the Finglish does not write, so the beam never proposes it; no reranker can fix this one. See scripts/oracle.ts --misses."}
+{"id": "sentence-020", "category": "sentence", "input": "toole raah", "expected": "طول راه", "alternatives": [], "notes": "KNOWN MISS. طول loses to توله, which is both attested and more frequent; the bigram table does not carry طول راه."}

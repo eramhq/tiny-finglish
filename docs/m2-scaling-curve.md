@@ -37,13 +37,18 @@ supports it: every time the model grows, the lexicon has less left to contribute
 
 Not accuracy — the size cap.
 
-| model | quant | weights Brotli | + runtime | vs 250 KiB cap |
-|---|---|---:|---:|---|
-| 30k | int8 | 31.6 KiB | 39.6 KiB | ok (16%) |
-| **100k** | **int6** | **75.8 KiB** | **83.8 KiB** | **ok (34%)** |
-| 100k | int8 | 106.5 KiB | 114.5 KiB | ok (46%) |
-| 500k | int6 | 368.3 KiB | 376.3 KiB | over by 126 KiB |
-| 500k | int8 | 538.6 KiB | 546.6 KiB | over by 297 KiB |
+| model | quant | weights Brotli | + runtime | + frequency | vs 250 KiB cap |
+|---|---|---:|---:|---:|---|
+| 30k | int8 | 31.6 KiB | 40.7 KiB | 94.9 KiB | ok (38%) |
+| **100k** | **int6** | **76.0 KiB** | **85.1 KiB** | **139.3 KiB** | **ok (56%)** |
+| 100k | int8 | 106.5 KiB | 115.6 KiB | 169.8 KiB | ok (68%) |
+| 500k | int6 | 368.3 KiB | 377.4 KiB | 431.6 KiB | over by 182 KiB |
+| 500k | int8 | 538.6 KiB | 547.7 KiB | 601.9 KiB | over by 352 KiB |
+
+The frequency column was added after this curve was measured. It does not change
+which model is selected, and it is worth +6.1 points on real input where the
+whole step from 30k to 500k parameters is worth −1.4. The 73.6 KiB bigram is not
+counted: it is opt-in, at nine times frequency's cost per point.
 
 500k is the most accurate model trained and it exceeds the cap at both
 quantization levels. **100k at int6 is the shipped configuration** — inside the

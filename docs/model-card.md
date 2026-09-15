@@ -11,7 +11,9 @@ Persian grapheme set that includes an empty label and multi-character labels.
 | Task | monotonic transliteration, Latin → Perso-Arabic |
 | Architecture | embedding → 5-wide neighbourhood → bidirectional affine scans → per-position softmax |
 | Sizes trained | 27,660 / 102,348 / 541,516 / ~2M parameters |
-| **Shipped** | **102,348 parameters, int6, 83.8 KiB Brotli with runtime** |
+| **Shipped** | **102,348 parameters, int6, 85.1 KiB Brotli with runtime** |
+| Shipped data | 54.2 KiB word frequency, fetched separately — 139.3 KiB all in |
+| Optional data | 73.6 KiB word bigrams, 98.3 KiB lexicon; measured, not shipped |
 | Quantization | per-row symmetric int8 or int6 |
 | Runtime | hand-written JavaScript, CPU, no WASM/WebGPU/ONNX |
 | License | MIT (weights and code) |
@@ -63,15 +65,43 @@ stops discriminating):
 | set | n | word acc | sentence |
 |---|---:|---:|---:|
 | synthetic held-out words | 23,933 | 80.9% | — |
-| hand-authored fixtures | 174 | 74.8% | 71.3% |
-| **real human Finglish** | **1,906** | **44.6%** | 2.8% |
+| hand-authored fixtures | 193 | 78.9% | 74.1% |
+| **real human Finglish** | **1,835** | **51.2%** | 3.9% |
 
 Copy-span preservation is 100% on every set that contains one.
 
-**44.6% is the number to quote.** The others are measured against data this
-project generated or wrote.
+**51.2% is the number to quote for this model.** The others are measured
+against data this project generated or wrote.
 
-Two negative results are worth more than the headline:
+That last row read 46.8% over 1,906 rows before this round of work, and **the
+weights did not change**. It moved for two reasons, both scoring corrections:
+
+| | points |
+|---|---:|
+| punctuation folded on both sides in `src/metrics.ts` | +3.2 |
+| 71 content-mismatched gold rows quarantined | +1.2 |
+
+Neither is an improvement. The evidence that they are corrections rather than
+uniform inflation is that the author-written sets barely moved under the same
+change (+0.54 on the fixtures, +0.00 on `authored.jsonl`) while the collected
+one moved +3.2: the sets this project wrote were written with clean
+tokenization and the collected one was not. The README has the full table.
+
+A further **+1.4** is available from the 30k-pair word bigram in
+`sentencePass()`, which is built, committed and measured but **not shipped by
+default**: 73.6 KiB for +1.4 points is 53 KiB per point on this configuration
+and 82 on the rule baseline, against 8.9 for the frequency table. Enable it with
+`node scripts/run-fixtures.ts --bigram`; `bigramGain` in
+`data/results/comparison.json` publishes what it buys for every configuration.
+
+**But the rule baseline beats it on real input**, 62.3% to 51.2%, using no
+model at all. The shipped default is still the model because it wins on ZWNJ,
+adversarial input and mixed English — see the README — but anyone choosing on
+real-world accuracy alone should choose the rules. `data/results/comparison.json`
+has both against every other implementation that exists.
+
+Three negative results are worth more than the headline. All three predate the
+frequency table and are quoted at the numbers measured at the time:
 
 1. **Scaling did not transfer.** 27k → 100k parameters moved the synthetic
    number +3.3 points and the real number not at all.
@@ -87,23 +117,62 @@ Two negative results are worth more than the headline:
    made the model robust.
 
 All three point the same way: the synthetic corpus is not the binding
-constraint. The missing sentence-context model is.
+constraint.
+
+What is binding was then measured directly rather than inferred, with
+`scripts/oracle.ts`. Over the 1,057 gold sentences whose spans align one-to-one
+with the reference, at `candidatesPerSpan: 8`:
+
+| engine | top-1 | oracle best-of-8 | recoverable by reranking | never proposed |
+|---|---:|---:|---:|---:|
+| rules + frequency | 68.8% | 79.1% | **+10.3 pts** | **20.9%** |
+| model + frequency | 60.9% | 74.8% | +13.9 pts | 25.2% |
+
+A sentence-context model is a reranker, so +9.6 points is its ceiling with a
+perfect one. The bigger bucket is candidates that are never generated, which no
+reranker can reach. The prior art's 21-point context gain was measured on top
+of a pair 6-gram FST — a ranking-limited system — and does not transfer to a
+recall-limited one.
+
+Both were then built. Candidate generation first: a per-unit segmentation prior
+in `RuleBaseline.walk()` and a wider beam, worth +1.0 to the rules and nothing
+to the model, at **zero bytes**, and moving never-proposed from 20.9% to 20.3%.
+Then a 30,000-pair word bigram decoded by Viterbi in `sentencePass()`, worth
+**+1.4 to the model and +0.9 to the rules** for 73.6 KiB — which is why the
+first ships and the second is opt-in.
+
+`scripts/oracle.ts --misses` explains why neither went further, and it is the
+most useful number in this card. Of the reference words never proposed, 48%
+differ in *register* — the annotator typed formal Finglish over a colloquial
+Persian original — 31% sit in rows whose two sides do not correspond word for
+word, 13% differ only in a long vowel and 8% carry an ع that Finglish does not
+write. **Under 1% differ only by a homophone letter class.** Almost none of the
+remaining bucket is reachable by generating more candidates or ranking them
+better, because the information needed is not in the input.
 
 ## Limitations
 
 1. **Short vowels are guessed in training data.** Persian is an abjad, and no
    redistributable Persian pronunciation dictionary exists. The consonant and
    long-vowel skeleton is faithful; short-vowel quality is sampled.
-2. **No frequency ranking.** Lexicon membership cannot separate `سلام` from
-   `سلم` — both are real words.
-3. **No language model.** Sentence-level context is where the remaining accuracy
-   lives: on the closest measured analogue, context is worth ~21 WER points
-   while architecture choice is worth under one.
-4. **Register.** The lexicon is a spell-checker stem list, not chat Persian.
-   Finglish users write `میرم`, not `می‌روم`.
-5. **ZWNJ.** 33% placement accuracy on fixtures. Human writers manage ~83%.
-6. **Evaluation is author-written.** Not collected from native speakers typing
-   naturally.
+2. **The language model is a bigram, it is opt-in, and it is nearly spent.**
+   30,000 pairs, 73.6 KiB, +1.4 points — 53 KiB per point, against 8.9 for the
+   frequency table, which is why it is not in the default download. A perfect
+   reranker would be worth +9.6 and a trigram would cost several times the
+   bytes for a fraction of that remainder. The prior art's "context is worth
+   ~21 WER points" was measured on a system whose candidate generator was a
+   pair 6-gram FST; it does not transfer here.
+3. **Register is the binding constraint, and it is in the data.** The lexicon
+   is a spell-checker stem list, not chat Persian — Finglish users write `میرم`,
+   not `می‌روم` — and the gold set compounds it: its annotator typed *formal*
+   Finglish over *colloquial* Persian originals in at least 5.4% of rows, which
+   no transliterator can recover because the information is not in the input.
+   48% of never-proposed words are this.
+4. **ZWNJ.** 41% placement accuracy on fixtures with the model, 0% without it —
+   rule tables structurally cannot emit U+200C. Human writers manage ~83%.
+5. **Evaluation is one annotator.** Real typing, but a single writer's habits,
+   in read-aloud register, for a text-to-speech project. `data/gold/README.md`
+   has the panel protocol that would fix it.
 
 ## Ethical and practical notes
 

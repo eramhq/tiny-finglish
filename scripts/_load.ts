@@ -2,6 +2,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import { brotliDecompressSync } from "node:zlib";
 import { decodeFrontCoded } from "../src/frontcode.ts";
+import { decodeBigramTable, type BigramTable } from "../src/bigram.ts";
 import { decodeFrequencyTable, type FrequencyTable } from "../src/frequency.ts";
 import { Transliterator } from "../src/index.ts";
 import type { WeightArtifact } from "../src/quant.ts";
@@ -20,6 +21,12 @@ export function loadFrequency(): FrequencyTable | undefined {
   return decodeFrequencyTable(brotliDecompressSync(readFileSync(path)));
 }
 
+export function loadBigram(): BigramTable | undefined {
+  const path = new URL("data/lexicon/fa-bigram.bin", root);
+  if (!existsSync(path)) return undefined;
+  return decodeBigramTable(brotliDecompressSync(readFileSync(path)));
+}
+
 export function loadModel(): WeightArtifact | undefined {
   const path = new URL("data/fixtures/weights.json", root);
   if (!existsSync(path)) return undefined;
@@ -27,15 +34,23 @@ export function loadModel(): WeightArtifact | undefined {
 }
 
 export function buildTransliterator(
-  options: { model?: boolean; frequency?: boolean } = {},
+  options: { model?: boolean; frequency?: boolean; bigram?: boolean; hybrid?: boolean } = {},
 ): Transliterator {
   const lexicon = loadLexicon();
   const model = options.model === false ? undefined : loadModel();
   const frequency = options.frequency === false ? undefined : loadFrequency();
+  // Opt-in, unlike frequency. The bigram is the worst accuracy-per-byte
+  // artifact in the project — 73.6 KiB for +0.9 points on gold, against 54.2
+  // KiB for +6.1 from the frequency table — so it is not in the shipped
+  // default and not in the headline. `--bigram` turns it on; `scripts/size.ts`
+  // and `scripts/compare.ts` report what it buys.
+  const bigram = options.bigram === true ? loadBigram() : undefined;
   return new Transliterator({
     ...(model ? { model } : {}),
     ...(lexicon ? { lexicon } : {}),
     ...(frequency ? { frequency } : {}),
+    ...(bigram ? { bigram } : {}),
+    ...(options.hybrid ? { hybrid: true } : {}),
   });
 }
 

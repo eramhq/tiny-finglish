@@ -223,10 +223,52 @@ the test set.
 ### M5 — Open-source release — **not started**
 
 npm publish, integration examples, honest documentation of limitations.
+`exports` subpaths are in place: `.`, `./rules`, `./normalize`, `./metrics`,
+with the measured tier table in the README.
 
 ### M6 — Optional expansion
 
 Unchanged from `PLAN.md`.
+
+### M7 — Accuracy, measured rather than assumed — **done**
+
+Not in `PLAN.md`, because it only became formulable once there was a real gold
+set to measure against. Four things, in the order the evidence demanded rather
+than the order the plan predicted:
+
+1. **Fixed the metric before anything else.** `wordAccuracy` now folds
+   punctuation to a separator the way it already folded ZWNJ — the gold's
+   Persian side glues marks to words and we emit them as their own spans — and
+   71 rows whose two sides are different sentences moved to
+   `data/gold/gold-misaligned.jsonl`. Worth 4.9 points of *apparent* accuracy
+   and zero of real accuracy, which is why it came first.
+2. **Measured where the missing accuracy is**, with `scripts/oracle.ts`,
+   instead of inheriting the prior art's answer. It is candidate *generation*,
+   not ranking: a perfect reranker is worth +9.6 points, not the +21 the Urdu
+   result suggested, because that result sat on a pair 6-gram FST and this sits
+   on a beam. **This inverted the roadmap's stated priority.**
+3. **Attacked generation first.** A per-unit segmentation prior in
+   `RuleBaseline.walk()` — the score had no term for how many units a
+   segmentation used, so `g`+`h` beat `gh` by 0.24 nats on every word — plus a
+   wider beam. +1.0 on gold, zero bytes. Expanding the Lilak affixes was tried
+   and **rejected on measurement**: 1.5M surface forms, +132 KiB, +0.1 points,
+   and a cold-start time three times over the gate.
+4. **Then the language model, which did not earn its bytes.** 30,000 word
+   bigrams, 73.6 KiB, decoded by Viterbi in `sentencePass()`. +1.4 for the
+   model, +0.9 for the rules, +2.6 for the rules without frequency. Real, and
+   82 KiB per point against 8.9 for the frequency table — the worst
+   accuracy-per-byte artifact in the repository. It is built, committed, tested
+   and documented, and it is **opt-in**: `--bigram`, or `{ bigram }` on the
+   constructor. The shipped download does not pay for it and the headline does
+   not claim it.
+
+Result on real human Finglish: **56.4% → 62.3% shipped**, 63.2% with context
+enabled. Of the shipped gain, 4.9 points is the measurement correction and 1.0
+is the converter, at zero bytes. That is within a point of
+`elektito/finglish` at 3% of its download size, and it is not close to the
+85–92% band. `scripts/oracle.ts --misses` says why, and the answer is not a
+bigger model or a bigger language model: four fifths of what the decoder never
+proposes carries information the Finglish input does not contain.
 
 ## Verification
 

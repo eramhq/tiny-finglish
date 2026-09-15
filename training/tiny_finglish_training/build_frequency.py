@@ -71,14 +71,33 @@ def encode_front_coded(words: list[str]) -> tuple[bytes, list[str]]:
     return bytes(out), alphabet
 
 
+def load_gold_keys(*golds: Path) -> set[str]:
+    """Match keys for every gold sentence, for the leakage guard.
+
+    Factored out because `build_bigram.py` must use exactly this guard and not
+    a second implementation of it. A bigram model memorizes sentence-local
+    structure far more readily than a unigram count does, so a divergence here
+    would be a leak that shows up as a good score.
+
+    Missing files are skipped: a checkout without the quarantine file should
+    still build, and excluding fewer sentences can only make the guard
+    stricter-looking than it is, never the reverse — which is why the manifest
+    records which files were actually read.
+    """
+    keys: set[str] = set()
+    for gold in golds:
+        if not gold.exists():
+            continue
+        for line in gold.read_text(encoding="utf-8").splitlines():
+            if line:
+                keys.add(fold_for_match(json.loads(line)["expected"]))
+    return keys
+
+
 def build(source: Path, out: Path, gold: Path, top: int) -> dict:
     import pyarrow.parquet as pq
 
-    gold_keys = {
-        fold_for_match(json.loads(line)["expected"])
-        for line in gold.read_text(encoding="utf-8").splitlines()
-        if line
-    }
+    gold_keys = load_gold_keys(gold)
 
     table = pq.read_table(source, columns=["Grapheme"])
     counts: collections.Counter[str] = collections.Counter()

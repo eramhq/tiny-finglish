@@ -57,8 +57,9 @@ pronunciation dictionary. `data/lexicon/fa-frequency.bin`.
 
 Worth **+13.0 points** to the rule baseline and **+3.9** to the model on the
 fixtures — the best accuracy-per-byte in the project by a wide margin. It also
-revealed that the rule baseline beats the learned model on real input (56.4% vs
-46.8%); see the README.
+revealed that the rule baseline beats the learned model on real input (62.3% vs
+51.2% with the corrected metric, 56.4% vs 46.8% as first published); see the
+README.
 
 A larger web corpus (MADLAD-400 fa, CC-BY-4.0) would extend coverage past
 25,000 types. Register matters more than size here, and HomoRich's
@@ -116,6 +117,17 @@ Three conclusions that shaped this implementation:
    Pair-6-gram, transformer, LSTM and ByT5 land within 0.8 CER of each other on
    Urdu single words (20.0 / 20.0 / 20.4 / 19.6). The language model is nearly
    everything; the architecture is nearly irrelevant.
+
+   **The first half of that does not transfer, and this repository measured
+   it.** The 21 points sit on top of a pair 6-gram FST, whose candidate recall
+   is far higher than a beam over a grapheme table. `scripts/oracle.ts` puts a
+   *perfect* reranker on this system at **+9.6 points**, because 20.3% of gold
+   reference words are never in the candidate list at any beam width. The
+   30k-pair bigram realizes +1.4 of that for the model and +0.9 for the rules —
+   at 82 KiB per point against 8.9 for the frequency table, which is why it is
+   built and measured but opt-in rather than shipped. The second half of the conclusion — architecture is nearly irrelevant
+   — held exactly: three separate model-side changes here moved real accuracy
+   by −0.3, 0.0 and −6.9.
 2. **Large pretrained models lose here.** mT5-large and ByT5-large both score
    worse than an FST + LM noisy channel.
 3. **A precomputed cache plus a sentence LM ties the full offline system**
@@ -130,9 +142,11 @@ in six — so it should not be over-engineered.
 ## 4a. Real Finglish data — **found, and it changed the numbers**
 
 **[mmahdibarghi/finglish-dataset](https://github.com/mmahdibarghi/finglish-dataset)
-— MIT, 2,769 unique pairs, 1,906 kept after alignment filtering.** The Persian
-side is Mozilla Common Voice Persian (**CC0**); the Finglish side was typed by a
-human annotator for a TTS project. This is now `data/gold/gold.jsonl`.
+— MIT, 2,769 unique pairs, 1,906 kept after alignment filtering, 1,835 after a
+later content-mismatch quarantine.** The Persian side is Mozilla Common Voice
+Persian (**CC0**); the Finglish side was typed by a human annotator for a TTS
+project. This is now `data/gold/gold.jsonl`, with the quarantined 71 rows
+beside it in `gold-misaligned.jsonl`.
 
 It is genuinely real typing: 17 of 18 colloquial markers probed are present
 (`midouni`, `misheh`, `vaseh`, `nemidoonam`, `bashe`).
@@ -202,16 +216,26 @@ value should rise if coverage improves past today's 23.9% of the lexicon.
 Turning it on requires a new measurement, not an assumption.
 
 **Leakage guard, which is not optional.** HomoRich and the gold set both draw on
-Common Voice: **97.3% of gold sentences (1,855 of 1,906) appear in HomoRich**.
+Common Voice: **97.3% of gold sentences (1,855 of 1,906, measured before the
+content-mismatch quarantine) appear in HomoRich**.
 `build_pronunciation.py` excludes every matching row — 17,215 of them, ~3% of
 the source — before building. Without that, training on this dictionary and
 reporting a gold score would be testing on the training data.
 
-## 4b. Informal Persian data — **still the binding problem**
+## 4b. Informal Persian data — **still the binding problem, and now quantified**
 
 Finglish is chat Persian: `میرم`, `میخوام`, `چطوری`, `نمیدونم`. Formal corpora
 contain almost none of it, and a domain-mismatched language model measured a
 **5 WER point** penalty against an in-domain one.
+
+`node scripts/oracle.ts --misses` now puts a number on it from this repository's
+own data. Of the gold reference words the decoder never proposes, **48% are a
+register mismatch** — the annotator typed formal Finglish over a colloquial
+Persian original, `khaane` against `خونه` — against 13% long-vowel differences,
+8% ع, and under 1% homophone letter classes. It is the largest single bucket in
+the whole error budget, it is larger than everything candidate generation and
+reranking can reach put together, and no amount of either fixes it: the
+information needed to choose `خونه` over `خانه` is not in the input.
 
 The two best-targeted resources both need an email:
 
