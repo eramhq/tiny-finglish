@@ -18,6 +18,7 @@
     "ei",
     "ey",
     "gh",
+    "iy",
     "kh",
     "oo",
     "ou",
@@ -407,6 +408,10 @@
           0.17,
           0.06
         ],
+        "pos": [
+          "medial",
+          "final"
+        ],
         "role": "vowel",
         "w": 80
       },
@@ -440,6 +445,10 @@
           0.02,
           0.02
         ],
+        "pos": [
+          "medial",
+          "final"
+        ],
         "role": "vowel",
         "w": 90
       },
@@ -467,8 +476,24 @@
           "ay",
           "ai"
         ],
+        "pos": [
+          "medial",
+          "final"
+        ],
         "role": "diphthong",
         "w": 20
+      },
+      {
+        "fa": "ای",
+        "latin": [
+          "ey",
+          "ei"
+        ],
+        "pos": [
+          "initial"
+        ],
+        "role": "diphthong",
+        "w": 10
       },
       {
         "fa": "و",
@@ -476,8 +501,23 @@
           "ow",
           "au"
         ],
+        "pos": [
+          "medial",
+          "final"
+        ],
         "role": "diphthong",
         "w": 10
+      },
+      {
+        "fa": "او",
+        "latin": [
+          "ow"
+        ],
+        "pos": [
+          "initial"
+        ],
+        "role": "diphthong",
+        "w": 5
       },
       {
         "fa": "ه",
@@ -562,6 +602,28 @@
         ],
         "role": "zwnj",
         "w": 40
+      }
+    ],
+    "variants": [
+      {
+        "fa": "ی",
+        "latin": [
+          "iy"
+        ],
+        "pos": [
+          "medial",
+          "final"
+        ],
+        "role": "variant",
+        "w": 90
+      },
+      {
+        "fa": "خو",
+        "latin": [
+          "kh"
+        ],
+        "role": "variant",
+        "w": 6
       }
     ]
   },
@@ -914,6 +976,10 @@
         0.17,
         0.06
       ],
+      "pos": [
+        "medial",
+        "final"
+      ],
       "role": "vowel",
       "w": 80
     },
@@ -947,6 +1013,10 @@
         0.02,
         0.02
       ],
+      "pos": [
+        "medial",
+        "final"
+      ],
       "role": "vowel",
       "w": 90
     },
@@ -974,8 +1044,24 @@
         "ay",
         "ai"
       ],
+      "pos": [
+        "medial",
+        "final"
+      ],
       "role": "diphthong",
       "w": 20
+    },
+    {
+      "fa": "ای",
+      "latin": [
+        "ey",
+        "ei"
+      ],
+      "pos": [
+        "initial"
+      ],
+      "role": "diphthong",
+      "w": 10
     },
     {
       "fa": "و",
@@ -983,8 +1069,23 @@
         "ow",
         "au"
       ],
+      "pos": [
+        "medial",
+        "final"
+      ],
       "role": "diphthong",
       "w": 10
+    },
+    {
+      "fa": "او",
+      "latin": [
+        "ow"
+      ],
+      "pos": [
+        "initial"
+      ],
+      "role": "diphthong",
+      "w": 5
     },
     {
       "fa": "ه",
@@ -1065,6 +1166,26 @@
       ],
       "role": "zwnj",
       "w": 40
+    },
+    {
+      "fa": "ی",
+      "latin": [
+        "iy"
+      ],
+      "pos": [
+        "medial",
+        "final"
+      ],
+      "role": "variant",
+      "w": 90
+    },
+    {
+      "fa": "خو",
+      "latin": [
+        "kh"
+      ],
+      "role": "variant",
+      "w": 6
     }
   ]
 }

@@ -16,7 +16,7 @@
  * drift.
  */
 
-import { RuleBaseline } from "./baseline.ts";
+import { RuleBaseline, type ScoringParams } from "./baseline.ts";
 import { bigramScore, type BigramTable } from "./bigram.ts";
 import { type FrequencyTable } from "./frequency.ts";
 import { normalize } from "./normalize.ts";
@@ -47,6 +47,11 @@ export interface PipelineOptions {
   bigram?: BigramTable;
   /** Words cached on the incremental typing path. */
   cacheSize?: number;
+  /**
+   * Override the rule baseline's candidate scoring. For ablations and tuning
+   * sweeps; the defaults in `SCORING` are what ships.
+   */
+  scoring?: Partial<ScoringParams>;
 }
 
 /** U+200C. Meaningful inside a Persian word; inert anywhere else. */
@@ -71,6 +76,20 @@ const BIGRAM_WEIGHT = 6.0;
  * shape of every `Span` for callers who never asked for a language model.
  */
 const CONTEXT_CANDIDATES = 8;
+
+/**
+ * Plural and comparative suffixes typed as their own word: `mahaarat haaye`,
+ * `zood tar`. Joined to the word before, solid, because that is how the Persian
+ * side of both real evaluation sets writes them (مهارتهای, زودتر) and because a
+ * detached ها is two word errors against it, not one.
+ *
+ * This is an orthographic convention, and it is reported as one: on dev it
+ * moves strict word accuracy +6.3 and the orthographic tier, which already
+ * folds the join, only +1.5. The standard written form is ZWNJ-joined
+ * (کتاب‌ها); the rule engine's no-ZWNJ convention is kept here for the same
+ * reason as in `SkeletonIndex`.
+ */
+const DETACHED_SUFFIX = /^(h[aā]{1,2}(ye|yi|ei|yam|yat|yash|yeshaan|yetaan|yemaan|yeman|yeshan)?|tar|tarin)$/;
 
 const DEFAULT_OPTIONS: Required<Pick<TransliterateOptions,
   "alternatives" | "beamWidth" | "candidatesPerSpan" | "persianPunctuation" | "backend">> = {
@@ -101,6 +120,7 @@ export abstract class Pipeline {
     this.baseline = new RuleBaseline({
       ...(options.lexicon ? { lexicon: options.lexicon } : {}),
       ...(options.frequency ? { frequency: options.frequency } : {}),
+      ...(options.scoring ? { scoring: options.scoring } : {}),
     });
   }
 
@@ -136,7 +156,9 @@ export abstract class Pipeline {
       spans.push(this.spanFor(token, opts));
     }
 
+    const attach = this.detachedEzafe(spans);
     this.sentencePass(spans);
+    for (const index of attach) this.appendYe(spans[index]!);
     // Trim to the reported width only after the sentence pass, which needs a
     // wider list than a caller asked to see.
     for (const span of spans) {
@@ -156,6 +178,61 @@ export abstract class Pipeline {
       spans,
     };
   }
+  // -- detached ezafe ------------------------------------------------------
+
+  /**
+   * Resolve affixes typed as their own word: the detached plural and
+   * comparative (see `DETACHED_SUFFIX`), and the ezafe — `sal e do hezar`, `ha ye
+   * mokhtalef`, `bara ye zamin`.
+   *
+   * Many typists write the ezafe vowel as a separate token, and converted as a
+   * word it becomes a spurious و or یه in the middle of a phrase. Persian does
+   * not write the ezafe after a consonant at all, and writes it as ی joined to
+   * a word ending in ا or و — `های`, `برای`, `روی`. So, when the token follows a
+   * converted word across one space:
+   *
+   *   * `e` or `ie` is dropped, with the space before it;
+   *   * `ye` after a word whose Latin ends in a vowel is dropped the same way,
+   *     and its word gets a ی if its Persian ends in ا or و (not after ی: `zendegi ye`
+   *     is زندگی, not زندگیی). After a consonant,
+   *     or with no word before it, `ye` is the colloquial یه ("one") and is left
+   *     alone: `ye maadar`, `shohar jaan ye daste gol`.
+   *
+   * Measured on the dev set, where it was found; the fixtures carry separate
+   * cases. Returns the spans that need their ی appended after the sentence
+   * pass, which may still change their output.
+   */
+  private detachedEzafe(spans: Span[]): number[] {
+    const attach: number[] = [];
+    for (let i = 2; i < spans.length; i++) {
+      const span = spans[i]!;
+      const gap = spans[i - 1]!;
+      const previous = spans[i - 2]!;
+      if (span.action !== "convert" || gap.action !== "space" || previous.action !== "convert") continue;
+      if (gap.input !== " ") continue;
+      const token = span.input.toLowerCase();
+      if (DETACHED_SUFFIX.test(token)) {
+        gap.output = "";
+        continue;
+      }
+      const vowelFinal = /[aeiou]$/.test(previous.input.toLowerCase());
+      if (token === "e" || token === "ie" || (token === "ye" && vowelFinal)) {
+        gap.output = "";
+        span.output = "";
+        span.confidence = 1;
+        span.candidates = [{ output: "", probability: 1, reason: "detached ezafe, unwritten" }];
+        if (token === "ye") attach.push(i - 2);
+      }
+    }
+    return attach;
+  }
+
+  private appendYe(span: Span): void {
+    if (!/[او]$/u.test(span.output)) return;
+    span.output += "ی";
+    span.candidates = span.candidates?.map((c) => ({ ...c, output: /[او]$/u.test(c.output) ? `${c.output}ی` : c.output }));
+  }
+
   // -- per-token ----------------------------------------------------------
 
   private spanFor(token: Token, opts: typeof DEFAULT_OPTIONS & TransliterateOptions): Span {

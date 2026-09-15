@@ -3,6 +3,7 @@
  *
  *     node scripts/oracle.ts              # both measurements, gold
  *     node scripts/oracle.ts --fixtures   # ...on the fixtures instead
+ *     node scripts/oracle.ts --dev        # ...on the dev set, the one to tune against
  *     node scripts/oracle.ts --verbose    # list the split-digraph misses
  *     node scripts/oracle.ts --misses     # what the never-proposed words are
  *
@@ -46,7 +47,9 @@ import { buildTransliterator, loadFixtures, type Fixture } from "./_load.ts";
 import type { Span } from "../src/types.ts";
 
 const argv = process.argv.slice(2);
-const FILE = argv.includes("--fixtures") ? "data/fixtures/fixtures.jsonl" : "data/gold/gold.jsonl";
+const FILE = argv.includes("--fixtures")
+  ? "data/fixtures/fixtures.jsonl"
+  : argv.includes("--dev") ? "data/dev/dev.jsonl" : "data/gold/gold.jsonl";
 const VERBOSE = argv.includes("--verbose");
 const MISSES = argv.includes("--misses");
 

@@ -19,7 +19,9 @@
  * are why the learned transducer exists.
  */
 
+import { Channel, SkeletonIndex } from "./dictionary.ts";
 import { frequencyScore, type FrequencyTable } from "./frequency.ts";
+import { compose, decompose } from "./morph.ts";
 import { foldForMatch } from "./normalize.ts";
 import {
   buildReverseTable,
@@ -112,15 +114,96 @@ const FREQUENCY_BONUS = 5.0;
  */
 const UNIT_COST = 1.2;
 
+/**
+ * How candidates are generated and ranked.
+ *
+ *   * `walk` — the beam alone, ranked by its own P(fa | latin) plus the
+ *     frequency and lexicon bonuses. What shipped before the dictionary.
+ *   * `channel` — the beam's candidates *plus* every frequency-table word with
+ *     the input's consonant skeleton, all ranked by the noisy channel in
+ *     `dictionary.ts`: log P(latin | fa) + `frequency` x table score, with words
+ *     outside the table backing off to the beam's own relative score.
+ */
+export interface ScoringParams {
+  mode: "walk" | "channel";
+  /** Weight on the frequency table's log-quantized score, channel mode. */
+  frequency: number;
+  /** Constant added to a candidate absent from the frequency table, channel mode. */
+  outOfTable: number;
+  /** Weight on the beam's score relative to its best, for out-of-table candidates. */
+  walk: number;
+  /** Prior probability of an unwritten short vowel, per Latin vowel. */
+  insertion: number;
+  /** Log cost of a doubled Latin consonant Persian does not write. */
+  gemination: number;
+  /** Skeleton-bucket words scored per input word, most frequent first. */
+  bucket: number;
+  /** Beam candidates carried into channel scoring, best first. */
+  beamCarry: number;
+  /** Log cost per stripped affix for a composed candidate; `-Infinity` disables morphology. */
+  affix: number;
+  /** Skeleton-bucket stems scored per decomposition. */
+  stemBucket: number;
+}
+
+/**
+ * Channel-mode constants. **Tuned on `data/dev/dev.jsonl` and
+ * `data/fixtures/` together — never on gold** — with `scripts/sweep.ts`,
+ * choosing from flat regions rather than maxima. On the dev set as first built
+ * (167 rows; the adjudicated 137 came later and moved nothing below):
+ *
+ *     mode                 walk 48.8   channel 52.2 strict    fixtures 74.9 / 79.6
+ *     insertion            0.1 49.3    0.25 52.3    0.5 52.3   1 50.7   2 49.6   4 48.0
+ *     outOfTable, walk     flat over -4..-2 and 0.5..1; walk 1 is +1.0 on fixtures
+ *     frequency            flat 4..8 once the channel carries the letter evidence
+ *     bucket, beamCarry    flat over 16..256 and 24..48; 8 carried loses 0.1
+ *
+ * `insertion` is the one that matters, and it runs the opposite way to the
+ * intuition that motivated it: charging an unwritten short vowel *more* than a
+ * written ا is what the data wants, because real typists write `a` for ا far
+ * more often than they write it for nothing.
+ *
+ * `affix` is `-Infinity`: morphology (`morph.ts`) is built, tested and off.
+ * After fixing how composed candidates are scored it measured 63.2 / 63.2 /
+ * 63.2 / 63.1 / 62.8 strict at off / -4 / -3 / -2 / -1 — nothing to buy at any
+ * cost, and a way to lose at the cheap end.
+ */
+export const SCORING: ScoringParams = {
+  mode: "channel",
+  frequency: 5.0,
+  outOfTable: -2.0,
+  walk: 1.0,
+  insertion: 0.5,
+  gemination: Math.log(0.3),
+  bucket: 32,
+  beamCarry: 24,
+  affix: -Infinity,
+  stemBucket: 8,
+};
+
 export class RuleBaseline {
   private readonly table: ReverseTable;
   private readonly lexicon: ReadonlySet<string> | undefined;
   private readonly frequency: FrequencyTable | undefined;
+  private readonly scoring: ScoringParams;
+  private readonly channel: Channel | undefined;
+  private readonly index: SkeletonIndex | undefined;
 
-  constructor(options: { lexicon?: ReadonlySet<string>; frequency?: FrequencyTable } = {}) {
+  constructor(options: {
+    lexicon?: ReadonlySet<string>;
+    frequency?: FrequencyTable;
+    scoring?: Partial<ScoringParams>;
+  } = {}) {
     this.table = buildReverseTable();
     this.lexicon = options.lexicon;
     this.frequency = options.frequency;
+    this.scoring = { ...SCORING, ...options.scoring };
+    // The dictionary is built from the frequency table, so without one there is
+    // nothing to index and channel mode degrades to the beam.
+    if (this.scoring.mode === "channel" && options.frequency) {
+      this.channel = new Channel(this.scoring);
+      this.index = new SkeletonIndex(options.frequency);
+    }
   }
 
   transliterate(word: string, options: BaselineOptions = {}): BaselineCandidate[] {
@@ -130,6 +213,9 @@ export class RuleBaseline {
     if (!lower) return [];
 
     const frequency = options.frequency ?? this.frequency;
+    if (this.channel && this.index && frequency === this.frequency) {
+      return this.rankByChannel(lower, opts);
+    }
     const segmentations = segment(lower, opts.maxSegmentations);
     const pool = new Map<string, BaselineCandidate>();
 
@@ -152,6 +238,84 @@ export class RuleBaseline {
     }
 
     return [...pool.values()].sort((a, b) => b.score - a.score).slice(0, opts.results);
+  }
+
+  /**
+   * Channel mode: beam candidates and skeleton-bucket words, one scale.
+   *
+   * The beam is still run — it is the only source of out-of-table spellings,
+   * which is every inflection the 25k table did not count — but it is asked for
+   * its raw walk score only, without the frequency bonus, because the channel
+   * score below adds frequency once.
+   */
+  private rankByChannel(lower: string, opts: typeof DEFAULTS & BaselineOptions): BaselineCandidate[] {
+    const p = this.scoring;
+    const channel = this.channel!;
+    const index = this.index!;
+
+    const walked = new Map<string, number>();
+    for (const units of segment(lower, opts.maxSegmentations)) {
+      for (const candidate of this.walk(units, opts.beamWidth)) {
+        if ((walked.get(candidate.output) ?? -Infinity) < candidate.score) walked.set(candidate.output, candidate.score);
+      }
+    }
+    const beam = [...walked].sort((a, b) => b[1] - a[1]).slice(0, p.beamCarry);
+    const walkBest = beam[0]?.[1] ?? 0;
+
+    const scored = new Map<string, BaselineCandidate>();
+    const keep = (candidate: BaselineCandidate) => {
+      const existing = scored.get(candidate.output);
+      if (!existing || candidate.score > existing.score) scored.set(candidate.output, candidate);
+    };
+    const consider = (output: string, walkScore: number | undefined, source: string) => {
+      if (scored.has(output)) return;
+      const inTable = index.frequency.get(output) ?? 0;
+      const fit = channel.score(lower, output);
+      let score: number;
+      let reason: string;
+      if (fit === -Infinity) {
+        // No alignment: a pass-through the table cannot explain. Kept, last.
+        score = -1e6 + (walkScore ?? -1e6);
+        reason = `rules(${source}) unaligned`;
+      } else if (inTable > 0) {
+        score = fit + p.frequency * inTable;
+        reason = `channel ${fit.toFixed(2)} + freq ${(inTable * 100).toFixed(0)} (${source})`;
+      } else {
+        score = fit + p.outOfTable + p.walk * ((walkScore ?? walkBest) - walkBest);
+        reason = `channel ${fit.toFixed(2)}, not in table (${source})`;
+      }
+      keep({ output, score, reason });
+    };
+
+    for (const [output, walkScore] of beam) consider(output, walkScore, "beam");
+    for (const word of index.lookup(lower, p.bucket)) consider(word, walked.get(word), "dictionary");
+
+    // Morphology: an inflected form scored as its stem's table entry, plus a
+    // fixed cost per affix. Only table stems are composed — an out-of-table
+    // stem plus affixes is just a worse beam candidate.
+    if (p.affix > -Infinity) {
+      for (const parts of decompose(lower)) {
+        const cost = p.affix * (parts.suffixes.length + (parts.prefix ? 1 : 0));
+        for (const stem of index.lookup(parts.stem, p.stemBucket)) {
+          // The channel scores the whole input against the whole composed
+          // word, so affix letters are charged like any others; only the
+          // frequency is borrowed from the stem. Scoring the stem alone left
+          // the affix letters free, and `begam` became be+گام over بگم.
+          const output = compose(parts.prefix, stem, parts.suffixes);
+          if (scored.has(output) && index.frequency.has(output)) continue;
+          const fit = channel.score(lower, output);
+          if (fit === -Infinity) continue;
+          const affixes = [parts.prefix?.latin, ...parts.suffixes.map((x) => x.latin)].filter(Boolean).join("+");
+          keep({
+            output,
+            score: fit + p.frequency * index.frequency.get(stem)! + cost,
+            reason: `morph ${stem}+${affixes}, channel ${fit.toFixed(2)}`,
+          });
+        }
+      }
+    }
+
+    return [...scored.values()].sort((a, b) => b.score - a.score).slice(0, opts.results);
   }
 
   /** Beam over the units of one segmentation. */

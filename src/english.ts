@@ -15,26 +15,38 @@
  * Common English words that are NOT plausible Finglish. Membership is a strong
  * copy signal. Kept short on purpose; every entry was checked against the
  * Finglish reading.
+ *
+ * **Loanwords that convert correctly are not here.** Measured on the dev set,
+ * a Finglish typist writing `hotel`, `asia` or `and` means هتل, آسیا, اند — the
+ * reference writes them in Persian — and protecting them was a word error
+ * every time. Removed: every entry whose forced conversion is the right Persian
+ * spelling of a common loanword or place name (hotel, doctor, address, battery,
+ * filter, server, asia, america, canada, japan, tokyo, london, paris, berlin),
+ * and `and`, which is the Finglish اند. Kept: brand names, even where they
+ * would convert correctly (گوگل), because preserving a brand the user typed
+ * matters more than the average; and loanwords the rules would misspell
+ * (`download` would become دونلد, `email` امیل), because a protected English
+ * word beats a wrong Persian one.
  */
 export const ENGLISH_WORDS: ReadonlySet<string> = new Set(
-  `the and for are but not you all any can had her was one our out day get has him his how its may new now old see two who boy did she use way she
+  `the for are but not you all any can had her was one our out day get has him his how its may new now old see two who boy did she use way she
    about after again below could every first found great house large learn never other place right small sound still such their there these thing think three under water where which world would write years young
    because before between both during through while against always another around behind during either enough however maybe might must myself nothing perhaps really should something sometimes though together whether without
    please thanks thank sorry hello goodbye yes okay
-   email inbox password username login logout signup signin account settings profile search filter upload download delete update install uninstall
-   file folder server client browser network database query cache token session cookie
+   email inbox password username login logout signup signin account settings profile search upload download delete update install uninstall
+   file folder client browser network database query cache token session cookie
    google apple microsoft amazon netflix spotify youtube twitter facebook instagram telegram whatsapp linkedin github gitlab discord reddit tiktok
    iphone android windows linux macos ubuntu chrome firefox safari edge
    react vue angular svelte node deno typescript javascript python rust golang swift kotlin java
    startup meeting deadline project manager engineer designer developer product feature release version build deploy
    monday tuesday wednesday thursday friday saturday sunday
    january february march april june july august september october november december
-   hotel airport flight ticket booking restaurant coffee pizza burger
-   london paris berlin madrid rome tokyo sydney toronto dubai doha muscat kuwait riyadh istanbul moscow beijing
-   england france germany spain italy japan canada australia america europe asia africa
-   university college school student teacher professor library hospital doctor patient
-   money price discount payment invoice receipt shipping delivery address
-   music video photo camera screen keyboard mouse phone laptop tablet battery charger`
+   airport flight ticket booking restaurant coffee pizza burger
+   madrid rome sydney toronto dubai doha muscat kuwait riyadh istanbul moscow beijing
+   england france germany spain italy australia europe africa
+   university college school student teacher professor library hospital patient
+   money price discount payment invoice receipt shipping delivery
+   music video photo camera screen keyboard mouse phone laptop tablet charger`
     .split(/\s+/)
     .filter(Boolean),
 );
@@ -48,7 +60,7 @@ export const ENGLISH_WORDS: ReadonlySet<string> = new Set(
  * `sad` is صد, `dust` is دوست, `name` is نامه, `chap` is چپ.
  */
 export const FINGLISH_HOMOGRAPHS: ReadonlySet<string> = new Set(
-  `man to in az ba be bar bad bood bud sad sar shod shab shom chap chera chi che chand
+  `man to in az ba be bar bad bood bud sad sar shod shab shom chap chera chi che chand and
    dar dard dast dust doost darad daram dare del dige digar
    goft gol gom gah haft hal ham hame har hast hich
    in un on az ke ki key kar kam kard konam koja
@@ -84,7 +96,11 @@ export function englishness(token: string): number {
 
   let score = 0;
   for (const suffix of ENGLISH_SUFFIXES) {
-    if (token.length > suffix.length + 1 && token.endsWith(suffix)) {
+    // `ize`/`ise` need a real stem in front: `chize` چیزه, `kise` کیسه and
+    // `reise` رئیسه are everyday Finglish, while the English words are long —
+    // `realize`, `promise`, `advise`.
+    const minLength = suffix === "ize" || suffix === "ise" ? 6 : suffix.length + 2;
+    if (token.length >= minLength && token.endsWith(suffix)) {
       score += 0.45;
       break;
     }

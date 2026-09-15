@@ -22,7 +22,7 @@ export const ALL_POSITIONS: readonly Position[] = ["initial", "medial", "final"]
  * each both a consonant and a vowel, and picking the wrong table turns امروز
  * into `emrvz` instead of `emrooz`.
  */
-export type Role = "consonant" | "vowel" | "carrier" | "diphthong" | "silent" | "zwnj";
+export type Role = "consonant" | "vowel" | "carrier" | "diphthong" | "silent" | "zwnj" | "variant";
 
 export interface Grapheme {
   /** Persian output. May be empty (deletion) or multi-character. */
@@ -116,15 +116,20 @@ export const VOWELS: readonly Grapheme[] = [
   // Short vowels elsewhere are simply unwritten in the abjad. This is the
   // empty label, and it is the most frequent label in the whole set.
   { fa: "", latin: ["a", "e", "o"], pos: ["medial", "final"], role: "carrier", w: 150 },
-  // Long uː / oː.
-  { fa: "و", latin: ["oo", "u", "ou", "o"], latinWeights: [0.55, 0.22, 0.17, 0.06], role: "vowel", w: 80 },
+  // Long uː / oː. A Persian word never *starts* with vowel و or ی: word-initial
+  // و and ی are consonants, and a word-initial long vowel rides on alef — او,
+  // ای. Without the position restriction `ozr` decoded to وزر and `ide` to ید,
+  // because the bare vowel letter outweighs the alef-carried form.
+  { fa: "و", latin: ["oo", "u", "ou", "o"], latinWeights: [0.55, 0.22, 0.17, 0.06], pos: ["medial", "final"], role: "vowel", w: 80 },
   { fa: "او", latin: ["oo", "u", "ou"], latinWeights: [0.6, 0.23, 0.17], pos: ["initial"], role: "vowel", w: 25 },
   // Long iː.
-  { fa: "ی", latin: ["i", "ee", "y"], latinWeights: [0.96, 0.02, 0.02], role: "vowel", w: 90 },
+  { fa: "ی", latin: ["i", "ee", "y"], latinWeights: [0.96, 0.02, 0.02], pos: ["medial", "final"], role: "vowel", w: 90 },
   { fa: "ای", latin: ["i", "ee"], latinWeights: [0.98, 0.02], pos: ["initial"], role: "vowel", w: 25 },
-  // Diphthongs.
-  { fa: "ی", latin: ["ey", "ei", "ay", "ai"], role: "diphthong", w: 20 },
-  { fa: "و", latin: ["ow", "au"], role: "diphthong", w: 10 },
+  // Diphthongs, with the same alef carrier word-initially: `eyval` ایول.
+  { fa: "ی", latin: ["ey", "ei", "ay", "ai"], pos: ["medial", "final"], role: "diphthong", w: 20 },
+  { fa: "ای", latin: ["ey", "ei"], pos: ["initial"], role: "diphthong", w: 10 },
+  { fa: "و", latin: ["ow", "au"], pos: ["medial", "final"], role: "diphthong", w: 10 },
+  { fa: "او", latin: ["ow"], pos: ["initial"], role: "diphthong", w: 5 },
   // Final silent he: `khune` خونه, `name` نامه. Extremely common, and only
   // silent after a consonant — دانشگاه `daneshgah` keeps a real /h/.
   { fa: "ه", latin: ["e", "eh", "a", "ah"], latinWeights: [0.62, 0.28, 0.06, 0.04], pos: ["final"], role: "silent", w: 90 },
@@ -160,11 +165,37 @@ export const ZWNJ_RULES: readonly Grapheme[] = [
   { fa: "‌", latin: ["", " ", "-"], role: "zwnj", w: 40 },
 ];
 
+/**
+ * Decoder-only correspondences: spellings real typing produces *across* a
+ * grapheme boundary, which the rule baseline must be able to read but the
+ * corpus generator must never write.
+ *
+ * The generator draws spellings by `(fa, role)` and never asks for the
+ * `variant` role, so nothing here reaches the training corpus. Each one fixes a
+ * whole class of word the per-letter table cannot reach:
+ *
+ *   * `iy` for one ی. Typists write a glide between /i/ and a following vowel —
+ *     `biyaam`, `baghiye`, `ziyaad` — and letter-by-letter that is ی + ی: بییام,
+ *     بقییه. As one unit it is one ی, and the unit cost makes it the preferred
+ *     reading over two, which is right: a genuine ییـ is typed `yi` or `ee`
+ *     (`paayiz`, `ta'yin`), not `iy`.
+ *   * `kh` for خو. The silent و of خوا and خوی (`khaahar` خواهر, `mikhaham`
+ *     میخواهم, `khish` خویش) has no Latin letter, so the empty spelling in
+ *     `SILENT` can never be decoded. Attaching it to `kh` makes it reachable at
+ *     the silent و's own prior, w=6 against خ's 70 — a candidate that frequency
+ *     can promote, not a default.
+ */
+export const VARIANTS: readonly Grapheme[] = [
+  { fa: "ی", latin: ["iy"], pos: ["medial", "final"], role: "variant", w: 90 },
+  { fa: "خو", latin: ["kh"], role: "variant", w: 6 },
+];
+
 export const GRAPHEMES: readonly Grapheme[] = [
   ...CONSONANTS,
   ...VOWELS,
   ...SILENT,
   ...ZWNJ_RULES,
+  ...VARIANTS,
 ];
 
 /**
