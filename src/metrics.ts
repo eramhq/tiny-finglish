@@ -53,9 +53,10 @@ const ZWNJ = "‌";
 export function wordAccuracy(
   reference: string,
   hypothesis: string,
+  split: (text: string) => string[] = splitWords,
 ): { correct: number; total: number } {
-  const ref = splitWords(reference);
-  const hyp = splitWords(hypothesis);
+  const ref = split(reference);
+  const hyp = split(hypothesis);
   if (ref.length === 0) return { correct: 0, total: hyp.length };
 
   let previous = Array.from({ length: hyp.length + 1 }, (_, i) => i);
@@ -103,6 +104,132 @@ export function splitWords(text: string): string[] {
     .replace(FOLDED_MARKS, " ")
     .split(/\s+/)
     .filter(Boolean);
+}
+
+/** Verbal prefixes Persian writes solid, with a space, or with a ZWNJ. */
+const JOINING_PREFIXES: ReadonlySet<string> = new Set(["می", "نمی"]);
+
+/** Plural, ezafe, personal-ending and comparative suffixes with the same freedom. */
+const JOINING_SUFFIXES: ReadonlySet<string> = new Set(
+  ["ها", "های", "ای", "ام", "ایم", "اید", "اند", "تر", "ترین"],
+);
+
+/** آ and hamza-alef to bare alef; every digit family to ASCII. */
+function foldOrthography(word: string): string {
+  return word.replace(/[آأإ]/gu, "ا").replace(/[۰-۹٠-٩]/gu, (d) => {
+    const code = d.charCodeAt(0);
+    return String(code >= 0x06f0 ? code - 0x06f0 : code - 0x0660);
+  });
+}
+
+/**
+ * The *orthographic* tier's split: `splitWords`, then fold the spelling
+ * conventions Persian writers genuinely disagree on.
+ *
+ * The strict metric stays the headline. This one exists to say how much of the
+ * gap between the two is orthography rather than wrong words, and it is
+ * deliberately narrow: آ/ا (`آن`/`ان` is a convention, not a different word to a
+ * reader), digits of any script, and the verbal prefixes and suffixes that are
+ * written solid, spaced or ZWNJ-joined interchangeably — `میکنم`, `می کنم` and
+ * `می‌کنم` are one word three ways, and so are `کتابها` and `کتاب ها`.
+ *
+ * Joining runs on both sides, so it never *creates* a match between different
+ * words; it only stops a spacing choice from costing two errors. What it does
+ * not fold is anything that changes which word was written: ع, long vowels,
+ * homophone consonants, register. Those are the judged tier's business
+ * (`scripts/judge.ts`), and a model should not get a deterministic metric that
+ * waves them through.
+ */
+export function lenientSplitWords(text: string): string[] {
+  const out: string[] = [];
+  let prefix = "";
+  for (const raw of splitWords(text)) {
+    const word = foldOrthography(raw);
+    if (JOINING_PREFIXES.has(word)) {
+      prefix += word;
+      continue;
+    }
+    if (!prefix && JOINING_SUFFIXES.has(word) && out.length > 0) {
+      out[out.length - 1] += word;
+      continue;
+    }
+    out.push(prefix + word);
+    prefix = "";
+  }
+  if (prefix) out.push(prefix);
+  return out;
+}
+
+/** One contiguous run of non-matching words in the minimum word alignment. */
+export interface MismatchSpan {
+  /** Reference words `[refStart, refEnd)`. */
+  refStart: number;
+  refEnd: number;
+  /** Hypothesis words `[hypStart, hypEnd)`. */
+  hypStart: number;
+  hypEnd: number;
+  /** Edit operations inside the run; the spans' costs sum to the distance. */
+  cost: number;
+}
+
+/**
+ * The word alignment `wordAccuracy` scores, as the runs of words it charged.
+ *
+ * `scripts/judge.ts` sends each run to LLM judges, which decide whether it is an
+ * acceptable variant; the judged tier then refunds that run's cost. Backtrace
+ * prefers a match, then a substitution, then a deletion, so a run is as short
+ * as the distance allows and the refund can never exceed what was charged.
+ */
+export function wordMismatches(ref: readonly string[], hyp: readonly string[]): MismatchSpan[] {
+  const rows = ref.length + 1;
+  const cols = hyp.length + 1;
+  const d: number[][] = Array.from({ length: rows }, (_, i) =>
+    Array.from({ length: cols }, (_, j) => (i === 0 ? j : j === 0 ? i : 0)),
+  );
+  for (let i = 1; i < rows; i++) {
+    for (let j = 1; j < cols; j++) {
+      d[i]![j] = Math.min(
+        d[i - 1]![j]! + 1,
+        d[i]![j - 1]! + 1,
+        d[i - 1]![j - 1]! + (ref[i - 1] === hyp[j - 1] ? 0 : 1),
+      );
+    }
+  }
+
+  // Backtrace into one op per step: 0 match, 1 substitute, 2 delete, 3 insert.
+  const ops: Array<{ op: number; i: number; j: number }> = [];
+  let i = ref.length;
+  let j = hyp.length;
+  while (i > 0 || j > 0) {
+    const here = d[i]![j]!;
+    if (i > 0 && j > 0 && ref[i - 1] === hyp[j - 1] && here === d[i - 1]![j - 1]) {
+      ops.push({ op: 0, i: --i, j: --j });
+    } else if (i > 0 && j > 0 && here === d[i - 1]![j - 1]! + 1) {
+      ops.push({ op: 1, i: --i, j: --j });
+    } else if (i > 0 && here === d[i - 1]![j]! + 1) {
+      ops.push({ op: 2, i: --i, j });
+    } else {
+      ops.push({ op: 3, i, j: --j });
+    }
+  }
+  ops.reverse();
+
+  const spans: MismatchSpan[] = [];
+  let current: MismatchSpan | undefined;
+  for (const { op, i: at, j: to } of ops) {
+    if (op === 0) {
+      current = undefined;
+      continue;
+    }
+    if (!current) {
+      current = { refStart: at, refEnd: at, hypStart: to, hypEnd: to, cost: 0 };
+      spans.push(current);
+    }
+    if (op !== 3) current.refEnd = at + 1;
+    if (op !== 2) current.hypEnd = to + 1;
+    current.cost++;
+  }
+  return spans;
 }
 
 /** Levenshtein distance normalized by reference length. */

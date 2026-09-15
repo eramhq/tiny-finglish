@@ -12,7 +12,8 @@ import { existsSync, readFileSync } from "node:fs";
 import { buildTransliterator, loadFixtures, type Fixture } from "./_load.ts";
 import { normalize } from "../src/normalize.ts";
 import { PUNCTUATION_FOLDS } from "../src/unicode.ts";
-import { characterErrorRate, wordAccuracy } from "../src/metrics.ts";
+import { characterErrorRate, lenientSplitWords, wordAccuracy } from "../src/metrics.ts";
+import { loadJudgments, mismatchTriples } from "./_judgments.ts";
 import type { TransliterationResult } from "../src/types.ts";
 
 export { characterErrorRate, wordAccuracy };
@@ -29,6 +30,36 @@ export interface CaseResult {
   /** Converted words matching the reference, and how many were compared. */
   wordsCorrect: number;
   wordsTotal: number;
+  tiers: Tiers;
+}
+
+/**
+ * Word accuracy at three strictnesses. Only `strict` is the headline; the other
+ * two say how much of the remaining gap is orthography, and how much an LLM
+ * judge pair accepts as a legitimate rendering. See `src/metrics.ts` and
+ * `scripts/judge.ts`.
+ */
+export interface Tiers {
+  strict: number;
+  orthographic: number;
+  /** Strict plus the refunded cost of runs both judges accepted. */
+  judged: number;
+  /** Charged runs with no verdict yet. Reported, never guessed. */
+  unjudged: number;
+  /** Against `faithful` — the reference edited to what was typed — when the row has one. */
+  faithfulStrict: number;
+  faithfulOrthographic: number;
+  faithfulTotal: number;
+  total: number;
+}
+
+function emptyTiers(): Tiers {
+  return { strict: 0, orthographic: 0, judged: 0, unjudged: 0,
+    faithfulStrict: 0, faithfulOrthographic: 0, faithfulTotal: 0, total: 0 };
+}
+
+function addTiers(into: Tiers, from: Tiers): void {
+  for (const key of Object.keys(into) as Array<keyof Tiers>) into[key] += from[key];
 }
 
 export interface Bucket {
@@ -56,6 +87,9 @@ export interface Report {
     copyTotal: number;
     punctLocalized: number;
     punctTotal: number;
+    tiers: Tiers;
+    /** Rows carrying a `faithful` reference. */
+    faithfulRows: number;
   };
   engine: string;
   modelHash: string | null;
@@ -84,8 +118,9 @@ export function buildFixtureReport(options: {
   const totals = {
     count: 0, top1: 0, top3: 0, cer: 0, wordsCorrect: 0, wordsTotal: 0,
     zwnjCorrect: 0, zwnjTotal: 0, copyPreserved: 0, copyTotal: 0,
-    punctLocalized: 0, punctTotal: 0,
+    punctLocalized: 0, punctTotal: 0, tiers: emptyTiers(), faithfulRows: 0,
   };
+  const judgments = loadJudgments();
 
   for (const fixture of fixtures) {
     const result = transliterator.transliterate(fixture.input);
@@ -115,7 +150,7 @@ export function buildFixtureReport(options: {
     }
 
     if (fixture.expected === null) {
-      cases.push({ fixture, result, top1: true, top3: true, cer: 0, actionOk: true, wordsCorrect: 0, wordsTotal: 0 });
+      cases.push({ fixture, result, top1: true, top3: true, cer: 0, actionOk: true, wordsCorrect: 0, wordsTotal: 0, tiers: emptyTiers() });
       continue;
     }
 
@@ -136,6 +171,9 @@ export function buildFixtureReport(options: {
     }
 
     const words = wordAccuracy(expected, got);
+    const tiers = scoreTiers(fixture, expected, got, words, judgments);
+    addTiers(totals.tiers, tiers);
+    if (fixture.faithful !== undefined) totals.faithfulRows++;
 
     const bucket = byCategory.get(category) ?? { count: 0, top1: 0, top3: 0, cer: 0, wordsCorrect: 0, wordsTotal: 0 };
     bucket.count++;
@@ -152,7 +190,7 @@ export function buildFixtureReport(options: {
     totals.cer += cer;
     totals.wordsCorrect += words.correct;
     totals.wordsTotal += words.total;
-    cases.push({ fixture, result, top1, top3, cer, actionOk, wordsCorrect: words.correct, wordsTotal: words.total });
+    cases.push({ fixture, result, top1, top3, cer, actionOk, wordsCorrect: words.correct, wordsTotal: words.total, tiers });
   }
 
   return {
@@ -162,6 +200,40 @@ export function buildFixtureReport(options: {
     modelHash: hashFile("data/fixtures/weights.json"),
     datasetHash: hashFile(options.file ?? "data/fixtures/fixtures.jsonl") ?? "",
   };
+}
+
+function scoreTiers(
+  fixture: Fixture,
+  expected: string,
+  got: string,
+  strict: { correct: number; total: number },
+  judgments: ReturnType<typeof loadJudgments>,
+): Tiers {
+  const tiers = emptyTiers();
+  tiers.total = strict.total;
+  tiers.strict = strict.correct;
+  tiers.orthographic = wordAccuracy(expected, got, lenientSplitWords).correct;
+
+  // Refund what both judges accepted. Errors are capped at the reference
+  // length exactly as `wordAccuracy` caps them, so refunds are taken off the
+  // uncapped distance first.
+  let distance = 0;
+  let refunded = 0;
+  for (const triple of mismatchTriples(fixture.id, fixture.input, expected, got)) {
+    distance += triple.cost;
+    const judgment = judgments.get(triple.key);
+    if (!judgment) tiers.unjudged++;
+    else if (judgment.accepted) refunded += triple.cost;
+  }
+  tiers.judged = strict.total - Math.min(distance - refunded, strict.total);
+
+  if (fixture.faithful !== undefined) {
+    const faithful = normalize(fixture.faithful);
+    tiers.faithfulTotal = wordAccuracy(faithful, got).total;
+    tiers.faithfulStrict = wordAccuracy(faithful, got).correct;
+    tiers.faithfulOrthographic = wordAccuracy(faithful, got, lenientSplitWords).correct;
+  }
+  return tiers;
 }
 
 function hashFile(relative: string): string | null {
@@ -212,6 +284,13 @@ export function formatReport(report: Report, options: { verbose?: boolean } = {}
   lines.push(`copy-span preservation  ${pct(t.copyPreserved, t.copyTotal)}  (${t.copyPreserved}/${t.copyTotal})`);
   lines.push(`ZWNJ placement          ${pct(t.zwnjCorrect, t.zwnjTotal)}  (${t.zwnjCorrect}/${t.zwnjTotal})`);
   lines.push(`punctuation localized   ${pct(t.punctLocalized, t.punctTotal)}  (${t.punctLocalized}/${t.punctTotal})`);
+  const w = t.tiers;
+  lines.push("");
+  lines.push(`word accuracy tiers     vs expected${t.faithfulRows ? "    vs faithful" : ""}`);
+  const faithfulCol = (n: number) => (t.faithfulRows ? `    ${pct(n, w.faithfulTotal).padStart(11)}` : "");
+  lines.push(`  strict (headline)     ${pct(w.strict, w.total).padStart(11)}${faithfulCol(w.faithfulStrict)}`);
+  lines.push(`  orthographic          ${pct(w.orthographic, w.total).padStart(11)}${faithfulCol(w.faithfulOrthographic)}`);
+  lines.push(`  judged-acceptable     ${pct(w.judged, w.total).padStart(11)}    unjudged runs: ${w.unjudged}`);
 
   if (options.verbose) {
     lines.push("", "--- failures ---");

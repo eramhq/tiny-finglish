@@ -6,9 +6,7 @@
 {"id":"gold-0006","input":"-mota'asefam. in kaaro kardam","expected":"متاسفم. این کارو کردم-","alternatives":[]}
 {"id":"gold-0007","input":"-shomaa khaanom mohamadi hastin?","expected":"شما خانوم محمدی هستین؟-","alternatives":[]}
 {"id":"gold-0008","input":"100 gozaaresh khabari dar 80 keshvare donya","expected":"100 گزارش خبری در 80 کشور دنیا!","alternatives":[]}
-{"id":"gold-0009","input":"4 you have to call","expected":"چهارم، توزیع مجدد ثروت","alternatives":[]}
 {"id":"gold-0010","input":"5 daghighe pish azat porsidam","expected":"پنج دقیقه پیش ازت پرسیدم","alternatives":[]}
-{"id":"gold-0011","input":"a lot more of space is being used version for this","expected":"و برای شانس تلاش و مبارزه فراخوان میدهند تا دنیایی بهتر بسازند","alternatives":[]}
 {"id":"gold-0012","input":"aaghaa ham ghabool kard!","expected":"آقاهم قبول کرد!","alternatives":[]}
 {"id":"gold-0013","input":"aaghaa in avale sobhi che doaayi ro pishnahaad midi behemoon?","expected":"اقا این اول صبحی چه دعایی رو پیشنهاد میدی بهمون؟","alternatives":[]}
 {"id":"gold-0014","input":"aaghaaye hoseyni raaje be khoonatoon mota'asefam","expected":"اقای حسینی راجع به خونه تون متاسفم","alternatives":[]}
@@ -53,7 +51,6 @@
 {"id":"gold-0053","input":"aazmaayeshe shishe zede goloole dar saale 1930 milaadi 1309 khorshidi","expected":"آزمایش شیشه ضدگلوله در سال ۱۹۳۰ میلادی ۱۳۰۹ خورشیدی","alternatives":[]}
 {"id":"gold-0054","input":"abaasi ehsaas mikonad taghir shode","expected":"عباسی احساس می کند تحقیر شده","alternatives":[]}
 {"id":"gold-0055","input":"adab va ehteraam mitavaanand baaese taghviyate amalkarde saazmaan beshavand","expected":"ادب و احترام میتوانند باعث تقویت عملکرد سازمان بشوند","alternatives":[]}
-{"id":"gold-0057","input":"ag tebqe qanoon pish brim","expected":"تا توجهش به من جلب بشه","alternatives":[]}
 {"id":"gold-0058","input":"agar alaan shoharjaan injaa bood migoft man va in hame khoshbakhti mahaale","expected":"اگه الان شوهرجان اینجا بود میگفت: من و این همه خوشبختی محاله","alternatives":[]}
 {"id":"gold-0059","input":"agar baa hamin ravand edaame dahim mesle emrooz, mitavaanim barkhi az ahdaafe toseeye paaydaar raa mohaghagh konim","expected":"اگر با همین روند ادامه دهیم مثل امروز، میتوانیم برخی از اهداف توسعه پایدار را محقق کنیم","alternatives":[]}
 {"id":"gold-0060","input":"agar be in bohraan haa negaah konid mifahmid ke fori hastand","expected":"اگر به این بحرانها نگاه کنید، میفهمید که فوری هستند","alternatives":[]}
@@ -63,7 +60,6 @@
 {"id":"gold-0064","input":"agar gharar bood ghrize aadi shavad, chera zan bara ye shoharash aadi nemishavad","expected":"اگه قرار بود غریزه عادی بشه چرا زن برای شوهرش عادی نمیشه؟","alternatives":[]}
 {"id":"gold-0065","input":"agar idehaaye aali daashte baasham, in ide raa enekaas dahid","expected":"اگر ایدهای عالی داشته باشم، این ایده را انعکاس دهید","alternatives":[]}
 {"id":"gold-0066","input":"agar khoshat nemiaayad dars bekhaani va biaayi sar kelaas khaab beshin khaaneat","expected":"اگه خوشت نمیاد درس بخونی و بیای سرکلاس خب بشین تو خونهت","alternatives":[]}
-{"id":"gold-0067","input":"agar tavaanmadieman baraye tahaghogh","expected":"!قوزک پای من خپل نیست","alternatives":[]}
 {"id":"gold-0069","input":"agar tebgh e ghanoon pish beravim","expected":"اگه طبق قانون پیش بریم","alternatives":[]}
 {"id":"gold-0070","input":"agar vared nahei zard shavim, vared namotmaen khatarnaki shode eem","expected":"اگر وارد ناحیه زرد شویم، وارد ناحیه نامطمئن خطرناکی شدهایم","alternatives":[]}
 {"id":"gold-0071","input":"agarche dir yaa zood bishtar kaarkonaan bi adab movafaghiateshaan raa kharaab mikonand","expected":"اگرچه دیر یا زود، بیشتر کارکنان بیادب موفقیتشان را خراب میکنند","alternatives":[]}
@@ -75,7 +71,6 @@
 {"id":"gold-0077","input":"age khoshet nemiyaad dars bekhooni va biyaay sar kelaas khob beshin too khoonat","expected":"اگه خوشت نمیاد درس بخونی و بیای سرکلاس خب بشین تو خونهت","alternatives":[]}
 {"id":"gold-0078","input":"age mishe nashnide begirid","expected":"اگه میشه نشنیده بگیرید","alternatives":[]}
 {"id":"gold-0079","input":"age mishe piyaade berim too raah behetoon migam manam ghabool kardam","expected":"اگه میشه پیاده بریم تو راه بهتون میگم منم قبول کردم","alternatives":[]}
-{"id":"gold-0080","input":"age qati beshn chi mishan ?","expected":"ورود و خروج از آن غیرممکن است","alternatives":[]}
 {"id":"gold-0081","input":"age tou ghoutbe jounoub bemirir shab aval ghabret miofteh hadaghal shesh mah baad","expected":"اگه تو قطب جنوب بمیری، شب اول قبرت میفته حداقل شش ماه بعد","alternatives":[]}
 {"id":"gold-0082","input":"ageh gharar boud kharizeh aadi besheh chera zan barayeh shooharash aadi nemishavad","expected":"اگه قرار بود غریزه عادی بشه چرا زن برای شوهرش عادی نمیشه؟","alternatives":[]}
 {"id":"gold-0083","input":"agh in aval e sobhi che doaei re pishnahad midehi behemaan","expected":"اقا این اول صبحی چه دعایی رو پیشنهاد میدی بهمون؟","alternatives":[]}
@@ -87,7 +82,6 @@
 {"id":"gold-0089","input":"akhe ba in gerooni e sigar man ta filter e sigar ra nakesham fekram aroom nemishavad","expected":"اخه با این گرونی سیگار من تا فیلتر سیگار رو هم نکشم که فکرم اروم نمیشه","alternatives":[]}
 {"id":"gold-0090","input":"akhe barah jalebeh oun chiz hayei ke azashoun mishnavim ba oun chiz hayei ke khodemoun mibinim","expected":"اخه برام جالبه اون چیزای که ازشون می شنویم با اون چیزای که خودمون می بینیم.","alternatives":[]}
 {"id":"gold-0091","input":"aknon niaz darim yek ghasdam be aghab bargardim","expected":"اکنون، نیاز داریم یک قدم به عقب برگردیم","alternatives":[]}
-{"id":"gold-0092","input":"aknon, fekr mikonam vaght an ast ke y","expected":"یا مهارتهای مناسب کار یا در پیدا کردن شغل","alternatives":[]}
 {"id":"gold-0093","input":"aknoon dar hamin raastaa va baa daanesh be aanche dar piraamoone man migzarad","expected":"اکنون در همین راستا و با دانش به آنچه در پیرامون من میگذرد","alternatives":[]}
 {"id":"gold-0094","input":"aknoon saahebe bozorgtarin jamiyate kheyriyeye shahremaan ast","expected":"اکنون صاحب بزرگترین جمعیت خیریه شهرمان است","alternatives":[]}
 {"id":"gold-0095","input":"aknoon shavaahed kaafi hast ke neshaan dahad ertebaate roshani beyne amalkarde aatefi va amalkarde maali vojood daarad","expected":"اکنون شواهد کافی هست که نشان دهد ارتباط روشنی بین عملکرد عاطفی و عملکرد مالی وجود دارد","alternatives":[]}
@@ -105,10 +99,8 @@
 {"id":"gold-0107","input":"albate khob limonad na","expected":".البته خوب لیموناد نه","alternatives":[]}
 {"id":"gold-0108","input":"albate man chand baari shode ke didam too hayaateshoon kafsh mardoone hast","expected":"البته من چند باری شده که دیدم تو حیاطشون کفش مردونه هست.","alternatives":[]}
 {"id":"gold-0109","input":"albate man omidvaar boodam","expected":"البته من امیدوار بودم","alternatives":[]}
-{"id":"gold-0110","input":"albate nazare javoon tara mohem tare","expected":"این زیستگاه طبیعی من نبود","alternatives":[]}
 {"id":"gold-0111","input":"ama aya dar hes e ndorosti az amniat khaab rafteim? aya rahati ba click bar rooye yek jabe aaghaz mishavad?","expected":"اما آیا ما در حس نادرستی از امنیت به خواب رفتهایم؟ آن به راحتی با کلیک برروی یک جعبه آغاز میشود","alternatives":[]}
 {"id":"gold-0113","input":"ama be hich vajh na motavajeh mishod va na dastbardar bood","expected":"اما به هیچ وجه نه متوجه میشد و نه دست بردار بود","alternatives":[]}
-{"id":"gold-0114","input":"ama gala ba iman hastm","expected":"یه دقیقه صبر کن ، فیبی","alternatives":[]}
 {"id":"gold-0115","input":"ama in ham mesl baghei medad haei ast ke dide am","expected":"اما این هم مثل بقیه مدادهایی است که دیده ام","alternatives":[]}
 {"id":"gold-0116","input":"ama in shoma ra dr amniyat gharar nakhahad dad","expected":"اما این شما را در امنیت قرار نخواهد داد","alternatives":[]}
 {"id":"gold-0117","input":"ama lazem ast ester ha ra bebakhshim","expected":"اما لازم است هیپسترها را ببخشیم","alternatives":[]}
@@ -125,16 +117,13 @@
 {"id":"gold-0128","input":"amal aavardane sarie hooshe ehsaasi kaare sakhtist","expected":"عمل آوردن سریع هوش احساسی کار سختی است","alternatives":[]}
 {"id":"gold-0129","input":"amalkard e behtary khahid dasht va garm va shayesteh dide misahvid","expected":"عملکرد بهتری خواهید داشت، و گرم و شایسته دیده میشوید","alternatives":[]}
 {"id":"gold-0130","input":"amin khahesh mikonam be","expected":"امین ، خواهش میکنم به","alternatives":[]}
-{"id":"gold-0131","input":"amma in ham mesle baghiyeye medad hai","expected":"زیبا خانوم می گه خوابه کجان بقیه؟","alternatives":[]}
 {"id":"gold-0132","input":"amma ma kheyli badjense boodim","expected":"اما ما خیلی بدجنس بودیم","alternatives":[]}
 {"id":"gold-0133","input":"amrikaei vaghti ba adam harf mizane ke vaghean kari dashte bashe","expected":"امریکایی وقتی با ادم حرف میزنه که واقعا کاری داشته باشه","alternatives":[]}
-{"id":"gold-0134","input":"an mard negonbakht miraft","expected":"اون به من گفت خداحافظ","alternatives":[]}
 {"id":"gold-0135","input":"anjaam bedid moredi nadaare","expected":"انجام بدید موردی نداره","alternatives":[]}
 {"id":"gold-0136","input":"anjam dadan karhaie ke faratar az vazifat bood","expected":"انجام دادن کارایی که فراتر از وظیفه ت بود","alternatives":[]}
 {"id":"gold-0137","input":"anjoiman meli jahan gardan hagh ozviat ali ro batel mikoune","expected":"انجمن ملی جهانگردان حق عضویت علی را باطل می کند","alternatives":[]}
 {"id":"gold-0138","input":"ann haa baayad ertebaate roshani beyne amalkarde aatefi va amalkarde maaliye khod eraae dahand","expected":"آنها باید ارتباط روشنی بین عملکرد عاطفی و عملکرد مالی خود ارائه دهند","alternatives":[]}
 {"id":"gold-0139","input":"ann haa makhsoosan darbaaye aayandeshaan negaraan hastand","expected":"آنها مخصوصا درمورد آیندهشان نگران هستند","alternatives":[]}
-{"id":"gold-0140","input":"are adam sadei bood","expected":"پول بلیط در جیبم ماند","alternatives":[]}
 {"id":"gold-0141","input":"are az haraji kharidamesh","expected":".آره. از حراجی خریدمش","alternatives":[]}
 {"id":"gold-0142","input":"are mituni, kheili ziad","expected":"آره میتونی ، خیلی زیاد","alternatives":[]}
 {"id":"gold-0143","input":"are rast migeh, vaseh hamineh in douta rou hamash rouye in badbakhta azmayesh mikonan","expected":"آره. راست میگه. واسه همینه این دکترا همش روی این بدبختا آزمایش می کنن.","alternatives":[]}
@@ -142,7 +131,6 @@
 {"id":"gold-0145","input":"arousi saat e sheh shorou mishavad","expected":"عروسی ساعت 6 شروع میشه","alternatives":[]}
 {"id":"gold-0146","input":"arzeshe sahaame sherkat be taazegi be nesf reside bood","expected":"ارزش سهام شرکت به تازگی به نصف رسیده بود","alternatives":[]}
 {"id":"gold-0147","input":"asabaani tar mishavad. aare. raast mige baayad khafash konim","expected":"عصبانی تر می شود آره. راست میگه باید خفش کنم.","alternatives":[]}
-{"id":"gold-0148","input":"asase har rabete salemi:","expected":"من فردا با کشتیم میرم","alternatives":[]}
 {"id":"gold-0149","input":"asiaban goft tou ke chenin mostajabodave hasti doa kon gandomat ard shavad","expected":"اسیابان گفت: تو که چنین مستجاب الدعوه هستی دعا کن گندمت ارد بشود","alternatives":[]}
 {"id":"gold-0150","input":"aslan daastaane jaalebi nist","expected":"اصلا داستان جالبی نیست","alternatives":[]}
 {"id":"gold-0152","input":"aslan hame tashrif biarin khouneye ma","expected":"اصلن همه تشریف بیارین خونه ما.","alternatives":[]}
@@ -155,9 +143,6 @@
 {"id":"gold-0159","input":"avalan mersi az deghate hamegi, saaniyan manzoor az 4 baraabar nesbate tolid va kaarkonaan ast","expected":"اولا مرسی از دقت همگی، ثانیا منظور از ۴ برابر نسبت تولید و کارکنان هست","alternatives":[]}
 {"id":"gold-0160","input":"avalan mrc az deght e hamegi, saniaan manzoor az chahar nesbat e tolid va karkonan ast","expected":"اولا مرسی از دقت همگی، ثانیا منظور از ۴ برابر نسبت تولید و کارکنان هست","alternatives":[]}
 {"id":"gold-0161","input":"avalin baari ke farghe dokhtar va pesaro fahmidam bache boodam baa dokhtare hamsaaye davaam shod","expected":"اولین باری که فرق دختر وپسرو فهمیدم بچه بودم با دختر همسایه دعوام شد","alternatives":[]}
-{"id":"gold-0162","input":"avayel lora hioz motevajeh shod ke man kami dar in mohit sardargom shodam","expected":"وفتی که روی بازسازی و تکامل سیستم بررسی نظیر به نظیر کار میکردیم","alternatives":[]}
-{"id":"gold-0163","input":"avl in y hedye hst","expected":"من به کیوی آلرژی دارم","alternatives":[]}
-{"id":"gold-0164","input":"aya ma ham hamin jurim","expected":"تمام زیرش پر چسب هستش","alternatives":[]}
 {"id":"gold-0165","input":"aya man yek ahmagh hastam?","expected":"آیا من یه احمق هستم؟","alternatives":[]}
 {"id":"gold-0166","input":"aya vaghean hamlshode ast?","expected":"آیا واقعا حمل شده است؟»","alternatives":[]}
 {"id":"gold-0167","input":"az aan lahze dar mohite kaaram, ehsaas mikonam kaamelan tanhaa, baakhte va bedoon poshtibaan hastam","expected":"از آن لحظه در محیط کارم، احساس میکنم کاملا تنها، باخته و بدون پشتیبان هستم","alternatives":[]}
@@ -167,7 +152,6 @@
 {"id":"gold-0171","input":"az apartemaan khabari nashod?","expected":"از آپارتمان خبری نشد ؟","alternatives":[]}
 {"id":"gold-0172","input":"az aparteman khabari nashod?","expected":"از آپارتمان خبری نشد ؟","alternatives":[]}
 {"id":"gold-0173","input":"az bank vam begiran pol ro be khodrosaz naghdi bedan va aghsat ro be bank pardakht konan","expected":"از بانک وام بگیرن پول رو به خودروساز نقدی بدن و اقساط رو به بانک پرداخت کنن","alternatives":[]}
-{"id":"gold-0174","input":"az bank vam begiran pool ro b khodros","expected":"و آنها را توانمند ساخت تا دارای صدا شوند","alternatives":[]}
 {"id":"gold-0175","input":"az bank vam begiran poul ro be khodrosaz naghdi bedan va aghsat ro be bank pardakht kounan","expected":"از بانک وام بگیرن پول رو به خودروساز نقدی بدن و اقساط رو به بانک پرداخت کنن","alternatives":[]}
 {"id":"gold-0176","input":"az bimaariye naaderi ranj mibord","expected":"از بیماری نادری رنج می برد.","alternatives":[]}
 {"id":"gold-0177","input":"az chaale man estefaade koni","expected":"از چاله من استفاده کنی","alternatives":[]}
@@ -175,7 +159,6 @@
 {"id":"gold-0179","input":"az code takhfif estefadeh kon","expected":"از کد تخفیف استفاده کن","alternatives":[]}
 {"id":"gold-0180","input":"az damaaghet daare khoon miyaad","expected":"از دماغت داره خون میاد","alternatives":[]}
 {"id":"gold-0181","input":"az damaghet dare khoon miad","expected":"از دماغت داره خون میاد","alternatives":[]}
-{"id":"gold-0182","input":"az dast man kheili narahate","expected":"براش عطسه سرو می کردم","alternatives":[]}
 {"id":"gold-0183","input":"az ghahve lazat bebarim","expected":"از قهوه تون لذت ببرید","alternatives":[]}
 {"id":"gold-0184","input":"az ham joda shodan kheili sakhteh","expected":"از هم جداشدن خیلی سخته","alternatives":[]}
 {"id":"gold-0185","input":"az hame mohemtar movafagh be kashf raaz va moamaaye ghadimi khodam shodam","expected":"از همه مهمتر موفق به کشف راز و معمای قدیمی خود شدم","alternatives":[]}
@@ -189,7 +172,6 @@
 {"id":"gold-0193","input":"az mehmoondaari kenaar bekesham","expected":"از مهمونداری کنار بکشم","alternatives":[]}
 {"id":"gold-0194","input":"az ou porsidam, chegouneh be inja residi?","expected":"از او پرسیدم چگونه به اینجا رسیدی؟","alternatives":[]}
 {"id":"gold-0195","input":"az roo poshte boomam biyaa paain","expected":"از رو پشت بومم بیا پایین","alternatives":[]}
-{"id":"gold-0196","input":"az saye khodash tarsid","expected":"اون خیلی اعتماد می کرد","alternatives":[]}
 {"id":"gold-0197","input":"az seda ye khod estefade konid va bavar konid ke mohem ast","expected":"از صدای خود استفاده کنید و باور داشته باشید که مهم است","alternatives":[]}
 {"id":"gold-0198","input":"az ye taraf ham narahat boodam ke bayad khanevade ro raha mikardam","expected":"از یه طرف هم ناراحت بودم که باید خانواده رو رها میکردم","alternatives":[]}
 {"id":"gold-0199","input":"azadeh aslan boro touyeh haman otagh behesh bedeh","expected":"ازاده اصلا برو توی همون اتاق بهش بده.","alternatives":[]}
@@ -198,22 +180,17 @@
 {"id":"gold-0202","input":"azatoun delkhoram moones khanoum","expected":"ازتون دلخورم مونس خانم!","alternatives":[]}
 {"id":"gold-0203","input":"azizam behtaere har bioftim","expected":"عزیزم بهتره راه بیفتیم","alternatives":[]}
 {"id":"gold-0204","input":"azizam negaraan nabaash","expected":"عزیزم نگران نباش","alternatives":[]}
-{"id":"gold-0205","input":"ba ayfon baham harf bezan","expected":"بهش جواب منفی دادی نه؟","alternatives":[]}
 {"id":"gold-0206","input":"ba cheshmaye koochik o baragh","expected":"با چشمای کوچیک و براق","alternatives":[]}
 {"id":"gold-0207","input":"ba dastash yek moosh e zende ra migirad","expected":"با دستش یه موش زنده رو میگیره.","alternatives":[]}
 {"id":"gold-0208","input":"ba ehteram mored raftar gharar gereftan","expected":"با احترام مورد رفتار قرار گرفتن","alternatives":[]}
-{"id":"gold-0209","input":"ba ersal mohtava v mohtavaye mortabet ba tasavir","expected":"اون اقاهه بهم اجازه داده اینو با خودم ببرم","alternatives":[]}
-{"id":"gold-0210","input":"ba ersal mohtava va mohtvaye mortabet shode ba tasvir","expected":"و زنگ خطر را برای آیندهشان به صدا میآورند","alternatives":[]}
 {"id":"gold-0211","input":"ba ersl mohtava v mohtavay mortbt shod b tsavir","expected":"با ارسال محتوا و محتوای مرتبط شده با تصاویر","alternatives":[]}
 {"id":"gold-0212","input":"ba faryud chand bar begam? chera be kharj kasi nemireh?doost darin hamishe dast zoor rou saretoon bashe?","expected":"بافریاد چندبار بگم؟ چرا به خرج کسی نمیره؟ دوست دارین همیشه دست زور رو سرتون باشه؟","alternatives":[]}
 {"id":"gold-0213","input":"ba ghodrat va maharatam be dastash avardam","expected":"با قدرت و مهارتم به دستش اوردم","alternatives":[]}
 {"id":"gold-0214","input":"ba gholdori e azar az taraf e digaran roubrou hastand","expected":"با قلدری و آزار از طرف دیگران روبه رو هستند","alternatives":[]}
 {"id":"gold-0215","input":"ba in agahi ke daram eshtebaham roo tekrar nemikonam","expected":"با این آگاهی که دارم،اشتباهم رو تکرار نمیکنم","alternatives":[]}
 {"id":"gold-0216","input":"ba in barnaame goroohi be dast miayad ke tasmim migirand moshkel haml va naghl raa hal konand baraaye maloolaan jame'e shaan","expected":"با این برنامه گروهی به دست میآید که تصمیم میگیرند مشکل حمل و نقل را حل کنند برای معلولان جامعهشان","alternatives":[]}
-{"id":"gold-0217","input":"ba in tasmim kaghaz o galam be dast g","expected":"و چیزی که ما فهمیدیم واقعا غافلگیرکننده بود","alternatives":[]}
 {"id":"gold-0218","input":"ba majid bara ye shekaf rafte boudam afrigha","expected":"با مجید برا شکار رفته بودم افریقا","alternatives":[]}
 {"id":"gold-0219","input":"ba on tarkib awli az algorithm va kherad mardomi, tavanestim yek halghe baz khord fori ra ijad konim","expected":"با آن ترکیب عالی از الگوریتم و خرد مردمی، توانستیم یک حلقه بازخورد فوری را ایجاد کنیم.","alternatives":[]}
-{"id":"gold-0220","input":"ba oon farar mikard","expected":"کارت عالی بود دوست من","alternatives":[]}
 {"id":"gold-0221","input":"ba tabassomi goft :sababesh madaram bood, goftam chegoone?","expected":"با تبسمی گفت :سببش مادرم بود، گفتم چگونه؟","alternatives":[]}
 {"id":"gold-0222","input":"ba tamaskhor labod mikhay ba jaroo o khakandaz partam koni biroon? are? vay tarsidam","expected":"با تمسخر لابد میخوای با جارو خاک انداز پرتم کنی بیرون؟ آره؟ وای ترسیدم.","alternatives":[]}
 {"id":"gold-0223","input":"ba ye  tarikh kheyli ghamnak","expected":"با یه تاریخ خیلی غمناک","alternatives":[]}
@@ -267,20 +244,16 @@
 {"id":"gold-0271","input":"badesh bordamesh be panaahgaah","expected":".بعدش بردمش به پناهگاه","alternatives":[]}
 {"id":"gold-0272","input":"badesh jaam bood postchim","expected":"بعدش جان بود ، پستچیم","alternatives":[]}
 {"id":"gold-0273","input":"baeed midonam be zamin nazdik shode bashim","expected":"بعید می دونم به زمین نزدیک شده باشیم","alternatives":[]}
-{"id":"gold-0274","input":"baghiye daran chikar mikonan","expected":"باشه,خوبه. میدونی چیه؟","alternatives":[]}
 {"id":"gold-0275","input":"bah bah shivaa joon ro nemikoni","expected":"به به شیوا جون رو نمی کنی.","alternatives":[]}
 {"id":"gold-0276","input":"baham sharab e sib khordim","expected":".با هم شراب سیب خوردیم","alternatives":[]}
-{"id":"gold-0277","input":"bahhosho salem o varzeshkare","expected":"میخام ولی بعد از ظهرها","alternatives":[]}
 {"id":"gold-0279","input":"bai beshin roya joon, karrim dashti? begou javan ha anjam midahand","expected":"بیا بشین رویا جون کاریم داشتی بگو جوونا انجام میدن.","alternatives":[]}
 {"id":"gold-0280","input":"baid midoonam be zamin nazdik shode baashim","expected":"بعید می دونم به زمین نزدیک شده باشیم","alternatives":[]}
-{"id":"gold-0281","input":"baladi mi khad ameneh jan","expected":"چیزی رو مستثنی میکنی؟","alternatives":[]}
 {"id":"gold-0282","input":"bale aaghaa man boodam ke jasad raa peydaa kardam","expected":"بله اقا من بودم که جسد را پیدا کردم","alternatives":[]}
 {"id":"gold-0283","input":"bale ettefaghan ye fekr khoob baray aramshodan ovza daram","expected":"بله اتفاقا یه فکر خوب برای آرام شدن اوضاع دارم.","alternatives":[]}
 {"id":"gold-0284","input":"bale maa migooim man shoroot barnaame haa raa motaale'e kardeam","expected":"بله، ما میگویم، من شروط برنامهها را مطالعه کردهام","alternatives":[]}
 {"id":"gold-0285","input":"bale man hatman khoobi shomaa raa faraamoosh nemikonam taa dir nashode az posht baam faraar konid agar jelotaan raa gereftand begooid doost farmoosh hastim","expected":"بله حتما من خوبی شما رو فراموش نمی کنم. تا دیر نشده از پشت بوم فرار کنید. اگه جلوتونو گرفتن بگید دوست فرموش هستیم.","alternatives":[]}
 {"id":"gold-0286","input":"bale, maloome ke mitoonam","expected":"بله، معلومه که میتونم","alternatives":[]}
 {"id":"gold-0287","input":"baleh motmaen bashid hastam","expected":"بله ، مطمئن باشید هستم","alternatives":[]}
-{"id":"gold-0288","input":"balke etefaghi","expected":"امیدوارم که اتفاقی","alternatives":[]}
 {"id":"gold-0289","input":"balke vageaan tarsnaak ast","expected":"بلکه واقعا ترسناک است","alternatives":[]}
 {"id":"gold-0290","input":"banaabarin agar kaarfarmaa jedan mosamam be taghir baashad","expected":"بنابراین اگر کارفرما جدا مصمم به تغییر باشد","alternatives":[]}
 {"id":"gold-0291","input":"banabarin dar sanat fanavar be rahehalhay sari niaz darim","expected":"بنابراین در صنعت فناور به راهحلهای سریع نیاز داریم","alternatives":[]}
@@ -307,18 +280,14 @@
 {"id":"gold-0314","input":"barnaame daari gharaar nemidi","expected":"برنامه داری قرار نمیدی","alternatives":[]}
 {"id":"gold-0315","input":"barname dari gharar nemidi","expected":"برنامه داری قرار نمیدی","alternatives":[]}
 {"id":"gold-0316","input":"bartariye mano lams kard","expected":".برتری منو لمس کرد","alternatives":[]}
-{"id":"gold-0318","input":"basate aroosi ro khoda joor mikone","expected":"بهم دوای میوه کال دادش","alternatives":[]}
 {"id":"gold-0319","input":"base dige dige harf nazan","expected":"بسه دیگه دیگه حرف نزن","alternatives":[]}
-{"id":"gold-0320","input":"bash khodamo khonk knm","expected":"می دونی چیه؟ یادم اومد","alternatives":[]}
 {"id":"gold-0321","input":"basham vali, asheghetam, mard","expected":"باشم ولی ،عاشقتم ،مرد","alternatives":[]}
-{"id":"gold-0322","input":"bashe nemikhad javab bedi","expected":"شبیه عطسه بود یا بهتر؟","alternatives":[]}
 {"id":"gold-0323","input":"bashe, daram miayam biroon","expected":"باشه ، دارم میام بیرون","alternatives":[]}
 {"id":"gold-0324","input":"bastebandi konid ta beram","expected":"بسته بندی کنید تا برم","alternatives":[]}
 {"id":"gold-0325","input":"bastegi daare chetor be aan negaah koni","expected":"بستگی داره چطور به ان نگاه کنی","alternatives":[]}
 {"id":"gold-0326","input":"bayad asheghe harf zadan bashi","expected":"باید عاشق حرف زدن باشی","alternatives":[]}
 {"id":"gold-0327","input":"bayad ayanei motohavel va mokhareb ra pishbini konim agar tafakor e kharej az janbe dashte bashim","expected":"باید آیندهای متحول و مخرب را پیشبینی کنیم اگر تفکر خارج از جعبه داشته باشیم","alternatives":[]}
 {"id":"gold-0328","input":"bayad be un zang bezanam","expected":"باید به اون زنگ بزنم؟","alternatives":[]}
-{"id":"gold-0329","input":"bayad be yeki zang bezanim","expected":"تا لاس وگاس باهاش بریم","alternatives":[]}
 {"id":"gold-0330","input":"bayad begam in rahat nist","expected":"باید بگم این راحت نیست","alternatives":[]}
 {"id":"gold-0331","input":"bayad beravam ben ra bardaram","expected":".باید برم بن رو بردارم","alternatives":[]}
 {"id":"gold-0333","input":"bayad inghadr boland bashad?","expected":"باید اینقدر بلند باشه؟","alternatives":[]}
@@ -328,7 +297,6 @@
 {"id":"gold-0337","input":"bazi vaght haa khodam injaayam","expected":"بعضی وقتها خودم اونجام","alternatives":[]}
 {"id":"gold-0338","input":"bazi vaghtaa khodam oonjaam","expected":"بعضی وقتها خودم اونجام","alternatives":[]}
 {"id":"gold-0339","input":"bazi vaghtaa ye khaabe kheyli ghashang mibini","expected":"بعضی وقتا یه خواب خیلی قشنگ میبینی","alternatives":[]}
-{"id":"gold-0340","input":"bazi vaghtha nime shab","expected":"قبلا نتونستم پیدات کنم","alternatives":[]}
 {"id":"gold-0341","input":"bazihaa baayad dah baraabar kaar konand taa jaayegaahe moshaabehi bedast aavarand","expected":"بعضیها باید ده برابر کار کنند تا جایگاه مشابهی بدست بیاورند","alternatives":[]}
 {"id":"gold-0342","input":"be aan del koochak va saaf va zolaalash hasoodiam shod","expected":"به اون دل کوچیک و صاف و سادش حسودیم شد","alternatives":[]}
 {"id":"gold-0343","input":"be aanhaa ehsaase arzesh, ghadrdaani va morede tavajoh boodan bedehid","expected":"به آنها احساس ارزش، قدردانی و مورد توجه بودن بدهید","alternatives":[]}
@@ -348,7 +316,6 @@
 {"id":"gold-0357","input":"be koori cheshm doshmanaan kharidam khoobesham kharidam","expected":"به کوری چشم بعضی ها خریدم، خوبشم خریدم!","alternatives":[]}
 {"id":"gold-0358","input":"be man begid agar chizi khastid vase ye agha sfandiar","expected":"به من بگین اگه چیزی خواستین واسه اقا اسفندیار.","alternatives":[]}
 {"id":"gold-0359","input":"be man ke kheili khosh gozasht","expected":"به من که خیلی خوش گذشت","alternatives":[]}
-{"id":"gold-0360","input":"be manzoor javabgooii be soalat farza","expected":"نه،اجازه بدین براتون درستش کنم","alternatives":[]}
 {"id":"gold-0362","input":"be nazaram in mojasame rou az rouye maragheb haye younan bastan sakhtan","expected":"به نظرم این مجسمه ر از روی مراقبای امتحان در ایران باستان ساختن","alternatives":[]}
 {"id":"gold-0363","input":"be nazaram jaaleb aamad gozaashtam","expected":"به نظرم جالب اومد گذاشتم","alternatives":[]}
 {"id":"gold-0364","input":"be onvaane mashoogheye man","expected":"به عنوان معشوقه من.","alternatives":[]}
@@ -364,18 +331,14 @@
 {"id":"gold-0374","input":"be vaght khoob pish nayoomade","expected":"یه وقت خوب پیش نیومده","alternatives":[]}
 {"id":"gold-0375","input":"be vasileye in dast khat haa","expected":"به وسیله این دست خط ها","alternatives":[]}
 {"id":"gold-0376","input":"be yek chiz khas goush bedam?","expected":"به یه چیز خاص گوش بدن؟","alternatives":[]}
-{"id":"gold-0377","input":"bebein , khodet ke midoni","expected":". نزدیک و صمیمی و","alternatives":[]}
-{"id":"gold-0378","input":"bebin , khodet ke midooni","expected":"فیبی ، یه دقیقه صبر کن","alternatives":[]}
 {"id":"gold-0379","input":"bebin emshab che kaarei?","expected":"ببین امشب چه کاره ای؟","alternatives":[]}
 {"id":"gold-0380","input":"bebin emshab chekare ei","expected":"ببین امشب چه کاره ای؟","alternatives":[]}
 {"id":"gold-0381","input":"bebin khodet ke midouni","expected":"ببین ، خودت که میدونی","alternatives":[]}
 {"id":"gold-0382","input":"bebin to eshtebah nemikoni","expected":"ببین تو اشتباه نمیکنی","alternatives":[]}
-{"id":"gold-0383","input":"bebin tou eshtebah nemikoni","expected":"خب میدونی چیه در حقیقت","alternatives":[]}
 {"id":"gold-0384","input":"bebin, kheyli azat mamnoonam","expected":"ببین ، خیلی ازت ممنونم","alternatives":[]}
 {"id":"gold-0385","input":"bebin, man ziad vagth nadaram","expected":"ببین من زیاد وقت ندارم","alternatives":[]}
 {"id":"gold-0386","input":"bede bebinam , bede bebinam","expected":"بده ببینم , بده ببینم","alternatives":[]}
 {"id":"gold-0387","input":"bedin tartib agar saazmaan haa baa maa hamkaari konand","expected":"بدین ترتیب اگر سازمانها با ما همکاری کنند","alternatives":[]}
-{"id":"gold-0388","input":"bedoon hich chizi daroon aan?","expected":"اون تمام شب تو رو داشت","alternatives":[]}
 {"id":"gold-0390","input":"bedoone in ke baaz soaali karde baasham baa asabaaniyat shoroo kard","expected":"بدون انکه باز سوالی کرده باشم با عصبانیت شروع کرد","alternatives":[]}
 {"id":"gold-0391","input":"bedoun inke dore rasmi modiriat dide bashad","expected":"بدون اینکه قبلا دورهٔ رسمی مدیریتی دیده باشد","alternatives":[]}
 {"id":"gold-0392","input":"befarmaayid ghazaatoono meyl konid","expected":"بفرمایید غذاتون میل کنید","alternatives":[]}
@@ -384,7 +347,6 @@
 {"id":"gold-0395","input":"beham alaghe mand shode bodim ham dige ro kheili dost dashtim kholase term akhar daneshgah az rah resid","expected":"به هم علاقه مند شده بودیم همدیگه رو خیلی دوس داشتیم خلاصه ترم اخر دانشگاه از راه رسید","alternatives":[]}
 {"id":"gold-0396","input":"behem ghol bede ke movaazebami","expected":"بهم قول بده که مواظبی","alternatives":[]}
 {"id":"gold-0397","input":"behem nagofte bodan inghadr","expected":"بهم نگفته بودن اینقدر","alternatives":[]}
-{"id":"gold-0398","input":"behem nagofte boodan inghadr","expected":"!بده به من! بزار برم","alternatives":[]}
 {"id":"gold-0399","input":"behesh begoo hich kas nemitavaanad","expected":"بهش بگو هیچکس نمی تونه","alternatives":[]}
 {"id":"gold-0400","input":"behesh begou man  hasasiat daram","expected":"بهش بگو من حساسیت دارم","alternatives":[]}
 {"id":"gold-0401","input":"behesh migooyad ke doostash daarad","expected":"بهش میگه که دوستش داره","alternatives":[]}
@@ -398,12 +360,10 @@
 {"id":"gold-0409","input":"belakhareh ye rouz sobh cheshmam ro baz mikonam va az bidar shodanam lezat mibaram","expected":"بالاخره یه روز صبح چشامو باز میکنم و از بیدار شدنم لذت میبرم","alternatives":[]}
 {"id":"gold-0410","input":"belit baraa baaziye jet daarim","expected":"بلیط برا بازی جت داریم","alternatives":[]}
 {"id":"gold-0411","input":"bemoonam ke yek sag oonjaast","expected":"بمونم که یک سگ اونجاست","alternatives":[]}
-{"id":"gold-0412","input":"beranko gofte ghahraman asiya shim si","expected":"وای،اینجوری خونه تون هدایت می کنین؟","alternatives":[]}
 {"id":"gold-0413","input":"berin kenar baba piri darad meayad","expected":"برین کنار بابا پیری داره میاد","alternatives":[]}
 {"id":"gold-0414","input":"beshin amee khoadam dar ra baz mikonam","expected":"بشین امنه.خودم در رو باز می کنم.","alternatives":[]}
 {"id":"gold-0415","input":"beshin maadar. beshin beram baraat chaayi biyaaram","expected":"بشین مادر. بشین برم برات چایی بیارم.","alternatives":[]}
 {"id":"gold-0416","input":"besiari az ma be shekl ghable tavajouhi negaran hastim","expected":"بسیاری از ما به شکل قابل توجیهی نگران هستیم.","alternatives":[]}
-{"id":"gold-0417","input":"besyari az anha niz be shah bad va bi","expected":"و آنها را توانمند ساخت تا دارای صدا شوند","alternatives":[]}
 {"id":"gold-0418","input":"beyne do nime sari shaam khordim man aslan nafahmidam chi mikhoram","expected":"بین دو نیمه سریع شام خوردیم من که اصلا نفهمیدیم چی میخورم","alternatives":[]}
 {"id":"gold-0419","input":"bezaar injoori baraat begam","expected":"بزار اینجوری برات بگم","alternatives":[]}
 {"id":"gold-0420","input":"bi adabi krkhneh ra kam asar mikonad","expected":"بیادبی کارکنان و عملکردشان را کم اثر میکند","alternatives":[]}
@@ -422,7 +382,6 @@
 {"id":"gold-0433","input":"biyaayid be eshtebaahe bi adabi paayaan dahim va gostaresh daadane nezaakat raa aaghaaz konim","expected":"بیایید به اشتباه بیادبی پایان دهیم و گسترش دادن نزاکت را آغاز کنیم","alternatives":[]}
 {"id":"gold-0434","input":"bodo elyaas, ye khorde shokolaat ham bede","expected":"بدو الیاس، یه خورده شکلات بهم بده","alternatives":[]}
 {"id":"gold-0435","input":"boodi azat zoor giri kard?","expected":"بودی ازت زورگیری کرد ؟","alternatives":[]}
-{"id":"gold-0436","input":"borj haye moraghebati dar parking vojod dasht","expected":"حتما میگی کجا می خوام زندگی کنم،ها؟","alternatives":[]}
 {"id":"gold-0437","input":"boro baabaa toam! zeshte! zeshte!","expected":"برو بابا توام! زشته! زشته!","alternatives":[]}
 {"id":"gold-0438","input":"bro vase gharar daavatash kon","expected":"برو واسه قرار دعوتش کن","alternatives":[]}
 {"id":"gold-0439","input":"chahardah emteyaz darim va ba team aval jadval faghat dou emtiaz faseleh darim","expected":"چهارده امتیاز داریم و با تیم سوم جدول فقط دو امتیاز فاصله داریم","alternatives":[]}
@@ -430,9 +389,7 @@
 {"id":"gold-0441","input":"chand rooz ast resideand aazar khaanom","expected":"چند روزه رسیدن اذر خانم؟","alternatives":[]}
 {"id":"gold-0442","input":"chand vaghte ino midooni?","expected":"چند وقته اینو میدونی؟","alternatives":[]}
 {"id":"gold-0443","input":"chandelor ham aslan nemifahme","expected":"چندلر هم اصلا نمی فهمه","alternatives":[]}
-{"id":"gold-0444","input":"chandler kheily ba mohabbat bood","expected":"ایا اسبی در ان جا بود؟","alternatives":[]}
 {"id":"gold-0445","input":"chat va digar ertebaataat dar servisdoostyaabi","expected":"چت و دیگر ارتباطات در سرویس دوستیابی","alternatives":[]}
-{"id":"gold-0446","input":"che balaee sar bechat omade","expected":"!این خونه خارق العادست","alternatives":[]}
 {"id":"gold-0447","input":"che kasi shahaamate ghadam gozaashtan dar in makaan ro daare","expected":"چه کسی شهامت قدم گذاشتن در این مکان رو داره","alternatives":[]}
 {"id":"gold-0448","input":"che midoonam. donbaale ghodsi raftan baazaar","expected":"چه میدونم. دنبال قدسی رفتن بازار.","alternatives":[]}
 {"id":"gold-0449","input":"che tor be nazar miresad vaghti","expected":"چطور به نظر میرسه وقتی","alternatives":[]}
@@ -441,10 +398,8 @@
 {"id":"gold-0452","input":"cheghadr ham jer zani mikard","expected":"چقدم جر زنی می کرد","alternatives":[]}
 {"id":"gold-0453","input":"cheghadr laazeme baraaye .","expected":". . چقدر لازمه برای","alternatives":[]}
 {"id":"gold-0454","input":"chenaanche ghasam yaad kard ke man digar harfi nadaaram","expected":"چنانچه قسم یاد کرد که من دیگر حرفی ندارم","alternatives":[]}
-{"id":"gold-0455","input":"chera charand migi? halet khosh nist ha","expected":"من نمی خوام الان جوابمو بدین.","alternatives":[]}
 {"id":"gold-0456","input":"chera cheshm haam bargh nemizanand?","expected":"چرا چشمام برق نمی زنه؟","alternatives":[]}
 {"id":"gold-0457","input":"chera inghadr toulesh dadid?","expected":"چرا اینقدر طولش دادی ؟","alternatives":[]}
-{"id":"gold-0459","input":"chera ma fekr mikonim har kari ke  am","expected":"پرسید :ماجرای کارهای خودمان را می نویسید؟","alternatives":[]}
 {"id":"gold-0460","input":"chera man ra aavardid inja?","expected":"چرا من رو آوردی اینجا؟","alternatives":[]}
 {"id":"gold-0461","input":"chera nemitouni beri pishesh","expected":"چرا نمیتونی بری پیشش؟","alternatives":[]}
 {"id":"gold-0462","input":"chera, che etefaghi mi oftad?","expected":"چرا، چه اتفاقی میفته؟","alternatives":[]}
@@ -466,7 +421,6 @@
 {"id":"gold-0478","input":"chi baes shod in hame sul","expected":"چی باعث شد این همه سال","alternatives":[]}
 {"id":"gold-0479","input":"chi daari mikhari injaa?","expected":"چی داری می خری اینجا؟","alternatives":[]}
 {"id":"gold-0480","input":"chi dari mikhary inja","expected":"چی داری می خری اینجا؟","alternatives":[]}
-{"id":"gold-0481","input":"chi inghadr boye bad mide ?","expected":"نه مسئله بی حرمتی نیست","alternatives":[]}
 {"id":"gold-0482","input":"chi mian az khatere ye raftanesh ke tou shahr harf bezanid?","expected":"کی میاد از خاطره رفتنش به پارک شهر حرف بزنه ؟","alternatives":[]}
 {"id":"gold-0483","input":"chi refigh, na man faghat slide misazam","expected":"» «چی؟ رفیق، نه، من فقط اسلاید میسازم","alternatives":[]}
 {"id":"gold-0484","input":"chi tou khalkoubi karde ie?","expected":"چی، تو خالکوبی کردی؟","alternatives":[]}
@@ -508,7 +462,6 @@
 {"id":"gold-0521","input":"daari be chi negaah mikoni?","expected":"داری به چی نگاه میکنی؟","alternatives":[]}
 {"id":"gold-0522","input":"daastaanash mofasal va jaaleb ast","expected":"داستانش مفصل و جالبه","alternatives":[]}
 {"id":"gold-0523","input":"dafeye dige haalam bad beshe maloom nist che balaayi saram biyaad","expected":"دفعه دیگه حالم بد بشه معلوم نیست چه بلایی سرم بیاد.","alternatives":[]}
-{"id":"gold-0524","input":"daghighan che vaght va dar kodam tari","expected":"هیچ وقت به اونجا نمی رسیم","alternatives":[]}
 {"id":"gold-0525","input":"daghighan haminjoori goftan?","expected":"دقیقا همینجوری گفتن ؟","alternatives":[]}
 {"id":"gold-0526","input":"daghighan mesle zanam marin","expected":"دقیقا مثل زن عمو مارین","alternatives":[]}
 {"id":"gold-0527","input":"daghighan, chetori donbaaleshi?","expected":"دقیقا ، چطوری دنبالشی؟","alternatives":[]}
@@ -521,7 +474,6 @@
 {"id":"gold-0536","input":"dar haali ke khoon az badanash khaarej mishod, be doktor goft: aayaa man be behesht miravam?","expected":"در حالی که خون از بدنش خارج می شد، به دکتر گفت:ایا من به بهشت می رم؟","alternatives":[]}
 {"id":"gold-0537","input":"dar haali ke yek mosaahebeye khoob mitavaanad zendegiye kasi raa baraaye abad behbood bakhshad","expected":"در حالیکه یک مصاحبه خوب میتواند زندگی کسی را برای ابد بهبود بخشد","alternatives":[]}
 {"id":"gold-0538","input":"dar haghighat khatar movajehe ba zamin dagh gol khane ha ra ham dar pish darim","expected":"در حقیقت، حتی خطر مواجهه با زمین داغ گلخانهای را هم در پیش داریم","alternatives":[]}
-{"id":"gold-0541","input":"dar har resane-i dar haale haazer shenakhte shode ya dar aayande ijad shode","expected":"وقت آنست که این را تغییر دهید اگر متعهد به درونگیری و گوناگونی هستید","alternatives":[]}
 {"id":"gold-0542","input":"dar kaar, dar khaane, dar internet, dar madaares va dare javaamee khodemaan","expected":"درکار، در خانه، در اینترنت، در مدارس و در جوامع خودمان","alternatives":[]}
 {"id":"gold-0543","input":"dar kamaale ja'ajobe hame, ghol daad ke ozr khaahi konad va depaartemaane a raa monhal saazad","expected":"در کمال تعجب همه، قول داد که عذرخواهی کند و دپارتمان A را منحل سازد","alternatives":[]}
 {"id":"gold-0544","input":"dar khaane, aanlayn, dar madrese dar gorooh haayeshaan","expected":"در خانه، آنلاین، در مدرسه در گروهایشان","alternatives":[]}
@@ -535,16 +487,12 @@
 {"id":"gold-0553","input":"dar sanat fanavar yek tasob omde be javan geraei darim","expected":"در صنعت فناور یک تعصب عمده به جوانگرایی داریم","alternatives":[]}
 {"id":"gold-0554","input":"dar vaaghe in esteraatezhi raa gostaresh daadeand taa sen raa ham be mizaane ahamiyate jensiyat va nezhaad dar nazar begirand?","expected":"در واقع این استراتژی را گسترش دادهاند تا سن را هم به میزان اهمیت جنسیت و نژاد در نظر بگیرند؟","alternatives":[]}
 {"id":"gold-0555","input":"dar vaziyati hastim ke mitavaanim be tahavolaat teye 12 saale aayande va pas az aan fekr konim","expected":"در وضعیتی هستیم که میتواتیم به تحولات طی ۱۲ سال آینده و پس از آن فکر کنیم","alternatives":[]}
-{"id":"gold-0556","input":"dar vietnam, barnameist ke karafarina","expected":"یک بعد مدرن به آن بیفزاییم","alternatives":[]}
 {"id":"gold-0557","input":"dar zendegiye roozmare dar mahale kaar, raah haayi hast ke javaanaan raa poshtibaani konim?","expected":"در زندگی روزمره در محل کار، راههایی هست که جوانان را پشتیبانی کنیم؟","alternatives":[]}
-{"id":"gold-0558","input":"daram miram too telvision","expected":"هنوز روز دوم شروع نشده","alternatives":[]}
 {"id":"gold-0559","input":"daran donbal in migardan","expected":"دارن دنبال این می گردن","alternatives":[]}
-{"id":"gold-0560","input":"daran donbale in migardan","expected":"اون که اصلا اینجا نیست","alternatives":[]}
 {"id":"gold-0561","input":"darbaareye bacham persiyoosaast","expected":"\"درباره بچم \"\"پرسیوسا\"\"ست \"","alternatives":[]}
 {"id":"gold-0562","input":"darbaareye ye modiri be esme","expected":"درباره یه مدیری به اسم","alternatives":[]}
 {"id":"gold-0563","input":"dargire mohamad boodam. bacheam ye kam tab karde","expected":"درگیر محمد بودم. بچه ام یه کم تب کرده","alternatives":[]}
 {"id":"gold-0564","input":"dari kheili sakhtesh mikoni","expected":"!داری خیلی سختش می کنی","alternatives":[]}
-{"id":"gold-0565","input":"darm miram to televizion","expected":"آهان ، این وضعیت حادیه","alternatives":[]}
 {"id":"gold-0566","input":"dars ha ra yekam radif kardam","expected":"درسا رو یکم ردیف کردم","alternatives":[]}
 {"id":"gold-0567","input":"daryaa khaanom range rootoon baaz shode bezanam be takhte. khaste nabaashin","expected":"دریا خانم رنگ رو تون باز شده بزنم به تخته. خسته نباشین.","alternatives":[]}
 {"id":"gold-0568","input":"dashtam tagheeri bozorg ro dar donya shekl midadam","expected":"داشتم تغییری بزرگ را در دنیا شکل میدادم","alternatives":[]}
@@ -580,17 +528,13 @@
 {"id":"gold-0600","input":"door az joon aaghaa farhaad shohar mesle zaalooe joone zano mimake","expected":"دور از جون اقا فرهاد شوهر مثل زالوئه جون زنو می مکه.","alternatives":[]}
 {"id":"gold-0601","input":"doost daashti baashe imaan","expected":"دوست داشتی باشه ایمان","alternatives":[]}
 {"id":"gold-0602","input":"dor otaagh donbaalash mikonim","expected":"دور اتاق دنبالش می کنی","alternatives":[]}
-{"id":"gold-0603","input":"dor otagh donbalesh mikoni","expected":"اون نشسته روی پای ریچل","alternatives":[]}
 {"id":"gold-0604","input":"doraane koodakiye khod raa be khaater daarid, ehtemaalan shomaa asbaab baaziye morede alaaghei ke hamdame hamishegiye shomaa bood daashtid","expected":"دوران کودکی خود را بخاطر دارید، احتمالا شما اسباب بازی مورد علاقهای که همدم همیشگی شما بود داشتید","alternatives":[]}
 {"id":"gold-0605","input":"dore maa injoori nabood baavaret mishe alaan daraamad aazaade az manam bishare","expected":"دوره ما اینجوری نبود باورت می شه الان درامد ازاده از منم بیشتره","alternatives":[]}
 {"id":"gold-0606","input":"dorost ast? vali vaghti be ghodrat dar mohite kaare emroozi miresim, 30 saalegi, 50 saalegi jadid ast","expected":"\"\"\" درست است؟ ولی وقتی به قدرت در محیط کار امروزی میرسیم، ۳۰ سالگی، ۵۰ سالگی جدید است\"","alternatives":[]}
 {"id":"gold-0607","input":"dorost baad az in fel va enfeal, team mizan e eshtebahi az darou ra be bimar dad","expected":"درست بعد از این فعل و انفعال، تیم میزان اشتباهی از دارو را به بیمار داد","alternatives":[]}
 {"id":"gold-0608","input":"dorost mesl avalin gharaaremoon","expected":"درست مثل اولین قرارمون","alternatives":[]}
-{"id":"gold-0609","input":"dorost mesle avalin ghararemoon","expected":"اینجوری شهر هم زیباتر میشه","alternatives":[]}
 {"id":"gold-0610","input":"dorost mikonam, khordan dare","expected":"درست می کنه، خوردن داره","alternatives":[]}
 {"id":"gold-0611","input":"dorost nist, dorost nist!","expected":"!درست نیست ، درست نیست","alternatives":[]}
-{"id":"gold-0612","input":"doroste man tamame shabo hastam","expected":"خوب، حالا نوبت تو هست","alternatives":[]}
-{"id":"gold-0613","input":"dost dari ba ki bekhabi","expected":"کفش های اون حصیری بودن","alternatives":[]}
 {"id":"gold-0614","input":"dost nistim, khob bashe","expected":"دوست نیستیم ، خوب باشه","alternatives":[]}
 {"id":"gold-0615","input":"dovom che kasi aanjaa bood? shaahedi hozoor daasht? in dar edaame besyar zaroori khaahad bood","expected":"دوم، چه کسی آنجا بود؟ آیا شاهدی حضور داشت؟ این در ادامه بسیار ضروری خواهد شد","alternatives":[]}
 {"id":"gold-0616","input":"dovom taghire sari be samte sisteme ghazaayiye paaydaar ast","expected":"دوم تغییر سریع به سمت سیستم غذایی پایدار است","alternatives":[]}
@@ -620,7 +564,6 @@
 {"id":"gold-0641","input":"enghadr ke az nejabat va sherafatesh harf zad","expected":"انقدر که از نجابت و شرافتش حرفه","alternatives":[]}
 {"id":"gold-0642","input":"ensan bana be tahghighat khod ra dast bala migirad dar tavanaei be khater avardan daghayegh mohem ehsasi pas az gouzashte modat zamani","expected":"انسان، بنابه تحقیقات، خود را دست بالا میگیرد در توانایی به خاطر آوردن دقایق مهم احساسی پس از گذشت مدت زمانی","alternatives":[]}
 {"id":"gold-0643","input":"ertebate mon ra beham zadim","expected":"ارتباطمون رو بهم زدیم","alternatives":[]}
-{"id":"gold-0644","input":"ertebatemoon ro be ham zadim","expected":"اون تمیزشون نکرده بود","alternatives":[]}
 {"id":"gold-0646","input":"eshghe khaalesaaneye pedar be farzand be revaayate tasvir","expected":"عشق خالصانه پدر به فرزند به روایت تصویر","alternatives":[]}
 {"id":"gold-0648","input":"esme hamotaghitoon chieye?","expected":".اسم هم اتاقیتون چیه","alternatives":[]}
 {"id":"gold-0649","input":"etefaaghe badi oftaad","expected":"اتفاق بدی افتاد","alternatives":[]}
@@ -654,7 +597,6 @@
 {"id":"gold-0679","input":"fekr mikounam intour bashe","expected":"فکر می کنم اینطور باشه","alternatives":[]}
 {"id":"gold-0680","input":"fekr nemikardam ke dokhtar haa","expected":"فکر نمی کردم که دخترها","alternatives":[]}
 {"id":"gold-0681","input":"felan ke sir shodi lotf kon biya biroon aakhe maa kaar daarim","expected":"فعلا که سیر شدی لطف کن بیا بیرون آخه ما کار داریم.","alternatives":[]}
-{"id":"gold-0682","input":"ferk konam majborim bokhorim","expected":"این است اقتصاد مشارکتی جدید","alternatives":[]}
 {"id":"gold-0684","input":"filmaaye doorbin makhfi haa shoono didin?","expected":"فیلمای دوربین مخفی هاشونو دیدین؟","alternatives":[]}
 {"id":"gold-0685","input":"fkr mikonm to ali hsi","expected":"فکر میکنم تو عالی هستی","alternatives":[]}
 {"id":"gold-0686","input":"footbaal dasti vojood daashte","expected":"فوتبالدستی وجود داشته","alternatives":[]}
@@ -664,10 +606,8 @@
 {"id":"gold-0691","input":"garm va shaayeste, doostaane va baahoosh","expected":"گرم و شایسته، دوستانه و باهوش","alternatives":[]}
 {"id":"gold-0692","input":"ghaaedi shanbe miravad madrese yaa mimaanad khaane baazi perspolis raa mibinad?","expected":"قائدی شنبه میره مدرسه یا میمونه خونه بازی پرسپولیس رو میبینه؟","alternatives":[]}
 {"id":"gold-0693","input":"ghabl az in ke parvaaz konim","expected":"قبل از اینکه پرواز کنی","alternatives":[]}
-{"id":"gold-0694","input":"ghabl az inke parvaz koni","expected":"خوب می دونی ، شاید آره","alternatives":[]}
 {"id":"gold-0695","input":"ghablan darbarash harf nazadim?","expected":"قبلا دربارش حرف نزدیم؟","alternatives":[]}
 {"id":"gold-0696","input":"ghablan jolo vitrin namayeshgahi mashin vaymistadam va hasrat mikhordim","expected":"قبلا جلو ویترین نمایشگاه های ماشین وایمیستادیم و حسرت میخوردیم","alternatives":[]}
-{"id":"gold-0697","input":"ghablan natoonestam peydat konam","expected":"مسلما وقتی همدیگه رو داریم","alternatives":[]}
 {"id":"gold-0698","input":"ghablesh ba mohsen dar rabet e ba ezdevaj harf zade boudim va barname rizi karde boodim","expected":"قبلش با محسن در رابطه با ازدواج حرف زده بودیم و برنامه ریزی کرده بودیم","alternatives":[]}
 {"id":"gold-0699","input":"ghablesh baa mohsen dar raabete baa ezdevaaj harf zade boodim va barnaame rizi karde boodim","expected":"قبلش با محسن در رابطه با ازدواج حرف زده بودیم و برنامه ریزی کرده بودیم","alternatives":[]}
 {"id":"gold-0700","input":"ghadimaa delam mikhaast mard boodam va ezdevaaj mikardam","expected":"قدیما دلم میخاست مرد بودم و ازدواج میکردم","alternatives":[]}
@@ -690,7 +630,6 @@
 {"id":"gold-0717","input":"gonjeshki ba ajale va tamam e tavan be ataash nazdik mishod va barmigasht","expected":"گنجشکی با عجله و تمام توان به آتش نزدیک می شد و برمی گشت!","alternatives":[]}
 {"id":"gold-0718","input":"gonjeshki baa ajale va tamaame tavaan be aatash nazdik mishod va bar migasht","expected":"گنجشکی با عجله و تمام توان به اتش نزدیک می شد و برمی گشت!","alternatives":[]}
 {"id":"gold-0719","input":"gooyi har rooz khabare digari az soo estefaade az ghodrat be gooshemaan miresad","expected":"گویی هر روز خبر دیگری از سوءاستفاده از قدرت به گوشمان میرسد","alternatives":[]}
-{"id":"gold-0720","input":"goozak paye man khepel nist!","expected":"بعضیا شون بیشتر بلدن،لو نمی دن","alternatives":[]}
 {"id":"gold-0722","input":"haal be 1986 miravim","expected":"حال به 1986 میرویم","alternatives":[]}
 {"id":"gold-0723","input":"haal mesaali kaamelan motafaavet raa dar nazar migirim","expected":"حال مثالی کاملا متفاوت را در نظر میگیریم","alternatives":[]}
 {"id":"gold-0724","input":"haalaa adam ta'aadol ghodrat paaydaar shode ast ziraa maa baa jamaavari etelaa'aat shakhsi va estefade az aanhaa dar sathi ke ghaabel tasavor nist movaafeghat kardeim","expected":"حالا، عدم تعادل قدرت پایدار شده است، زیرا ما با جمعآوری اطلاعات شخصی و استفاده از آنها در سطحی که قابل تصور نیست موافقت کردهایم","alternatives":[]}
@@ -711,7 +650,6 @@
 {"id":"gold-0739","input":"haalemoon khoobe, mage na?","expected":"حالمون خوبه ، مگه نه؟","alternatives":[]}
 {"id":"gold-0740","input":"haapooye baa namakie hamash delesh mikhaad naazesh koni","expected":"هاپوی بانمکیه همش دلش میخواد نازش کنی.","alternatives":[]}
 {"id":"gold-0741","input":"hadeaghal baraaye man injoorie","expected":"حداقل برای من اینجوریه","alternatives":[]}
-{"id":"gold-0742","input":"hala doo barabaresh konid","expected":"دلم واسه زهرا تنگ شدم","alternatives":[]}
 {"id":"gold-0743","input":"hala doo dalil vojood dare","expected":"حالا دو دلیل وجود داره","alternatives":[]}
 {"id":"gold-0744","input":"hala khobeh farsh nandakhtim tou ashpaz khaneh","expected":"حالا خوبه فرش ننداختیم تو آشپزخونه","alternatives":[]}
 {"id":"gold-0745","input":"hala mikhaham dastani darbureye eshgh begouyam","expected":"حالا میخواهم داستانی درباره عشق بگویم","alternatives":[]}
@@ -720,7 +658,6 @@
 {"id":"gold-0748","input":"haleh hooleh engilisi mouzakhraf","expected":"حله حوله انگلیسی مزخرف","alternatives":[]}
 {"id":"gold-0749","input":"ham dige ro dark mikardim","expected":"همدیگه رو درک می کردیم","alternatives":[]}
 {"id":"gold-0750","input":"ham khaane maa bozorg ast ham dokhtar bozorg daaram","expected":"هم خونه ما بزرگه هم دختر بزرگم دارم","alternatives":[]}
-{"id":"gold-0752","input":"hame be ham ba shak va tardid negah m","expected":"اما این هم مثل بقیه مدادهایی است که دیده ام","alternatives":[]}
 {"id":"gold-0753","input":"hame gamaan mikardand ke masale hal shode ast","expected":"همه گمان میکردند که مسئله حلشده است","alternatives":[]}
 {"id":"gold-0754","input":"hame midoonan ki bardaasht","expected":"همه می دونن کی برداشت.","alternatives":[]}
 {"id":"gold-0755","input":"hame rooz ro kaar mikardam","expected":"همه روز رو کار می کردم","alternatives":[]}
@@ -729,7 +666,6 @@
 {"id":"gold-0758","input":"hameh az ghaza khosheshan amad","expected":"همه از غذا خوششون اومد","alternatives":[]}
 {"id":"gold-0759","input":"hameh az tars touye shekam ham milouland va be sorat jarou o khakendaz barayash miavarand","expected":"همه از ترس توی شکم هم می لولند و به سرعت جاروخاک انداز برایش می آورند","alternatives":[]}
 {"id":"gold-0760","input":"hameh rahat beshim","expected":"همه راحت بشیم","alternatives":[]}
-{"id":"gold-0761","input":"hameroz ro kar mikonam","expected":"شارژ گوشی شما تمام میشود","alternatives":[]}
 {"id":"gold-0762","input":"hamid be man goft ke","expected":". حمید به من گفت که","alternatives":[]}
 {"id":"gold-0763","input":"hamin alaan az oobre eshteraaki piyaade shodam","expected":"همین الان از اوبر اشتراکی پیاده شدم","alternatives":[]}
 {"id":"gold-0764","input":"hamishe mire sofre khoone","expected":"همیشه میره سفره خونه.","alternatives":[]}
@@ -741,10 +677,7 @@
 {"id":"gold-0771","input":"hanouz ham bavar nadaram ke to nisti va man hastam","expected":"هنوزم باور ندارم که تو نیستی و من هستم","alternatives":[]}
 {"id":"gold-0772","input":"hanouz kasi be dast nagerfte ast","expected":"هنوز کسی به دست نگرفته","alternatives":[]}
 {"id":"gold-0773","input":"hanoz rouz dovom nashode","expected":"هنوز روز دوم شروع نشده","alternatives":[]}
-{"id":"gold-0774","input":"hanozam ono dost dari","expected":"الان تا حدودی می دونه","alternatives":[]}
 {"id":"gold-0775","input":"har 7 daghighe yek nojavaan dokhtar yaa pesar dar jaaei az donyaa be dalil khoshoonat be ghatl miresad","expected":"هر ۷ دقیقه یک نوجوان دختر یا پسر در جایی از دنیا به دلیل خشونت به قتل میرسد","alternatives":[]}
-{"id":"gold-0776","input":"har kari bekhaii mikonam","expected":"من وزنم رو بالا بردم؟","alternatives":[]}
-{"id":"gold-0777","input":"har loghati kar rah bendaze","expected":"علت ترقی روز افزونش هم همینه","alternatives":[]}
 {"id":"gold-0778","input":"har rouz yeki douta medad kesh miraftam ta inke ta payan term az tamami doustanam medad bardashdeh boudam","expected":"هر روز یک دو مداد کش می رفتتم تااین که تا پایان ترم از تمامی دوستانم مداد برداشته بودم","alternatives":[]}
 {"id":"gold-0779","input":"har vaght residi bala, amanam bekesh bala","expected":"هر وقت رسیدی اون بالامنم بکش بالا","alternatives":[]}
 {"id":"gold-0780","input":"har yek az ma mitavanim komak konim","expected":"هر یک از ما میتوانیم کمک کنیم؟","alternatives":[]}
@@ -773,17 +706,14 @@
 {"id":"gold-0803","input":"hichi dige 8 aabaan bordam kaado ro daadam behesh","expected":"هیچی دیگه ۸ آبان بردم کادو رو دادم بهش","alternatives":[]}
 {"id":"gold-0804","input":"hichi nagoft","expected":"هیچچی نگفتم","alternatives":[]}
 {"id":"gold-0805","input":"hichi nagoftam","expected":"هیچچی نگفتم","alternatives":[]}
-{"id":"gold-0806","input":"hichki ham nist baghalesh konam","expected":"عزیزم ، منم دوستت دارم","alternatives":[]}
 {"id":"gold-0808","input":"hodoode saa'at dah kojaa boodi?","expected":"حدود ساعت ده کجا بودی؟","alternatives":[]}
 {"id":"gold-0809","input":"hosele moasherat ba dostanetan ra nadarid?","expected":"حوصله معاشرت بادوستانتان را ندارید؟","alternatives":[]}
 {"id":"gold-0810","input":"hoseleye anjaame kaarhaaye zaroori raa ham nadaarid?","expected":"حوصله انجام کارهای ضروری راهم ندارید؟","alternatives":[]}
 {"id":"gold-0811","input":"iman ghavi dashte bashid va va bedanid har che rokh midahad khast khodavan ast","expected":"ایمان قوی داشته باشید و بدانید هر چه رخ میدهد خواست خداوند است","alternatives":[]}
-{"id":"gold-0812","input":"in adade sarsam avari ast","expected":"اگه قاطی بشن چی میشه؟","alternatives":[]}
 {"id":"gold-0813","input":"in aks raa kheyli doost daaram be 2 dalil","expected":"این عکس رو خیلی دوست دارم به دو دلیل","alternatives":[]}
 {"id":"gold-0814","input":"in alan aslan mohem nist","expected":"این الان اصلا مهم نیست","alternatives":[]}
 {"id":"gold-0817","input":"in avalin gharar ma hast","expected":"این اولین قرار ما هست","alternatives":[]}
 {"id":"gold-0818","input":"in az pooste raaso ast?","expected":"این از پوست راسو است ؟","alternatives":[]}
-{"id":"gold-0820","input":"in bar yeki entekhab kone","expected":"بار دیگه بابت نگهداری تشکر میکنم","alternatives":[]}
 {"id":"gold-0821","input":"in baraat pool saaz nemishe","expected":"این برات پول ساز نمیشه","alternatives":[]}
 {"id":"gold-0822","input":"in bayad kheili sakht basheh","expected":"این باید خیلی سخت باشه","alternatives":[]}
 {"id":"gold-0823","input":"in be haghi ra nemidehad","expected":"این به تو حقی رو نمیده","alternatives":[]}
@@ -794,7 +724,6 @@
 {"id":"gold-0828","input":"in chand rooze baayad be tarz vahshatnaaki naghsh yek aadam shaad va khoshhaal raa baazi konam","expected":"این چند روزه باید به طرز وحشتناکی نقش یه آدم شاد و خوشحال رو بازی کنم","alternatives":[]}
 {"id":"gold-0829","input":"in chand rooze baayad be tarze vahshatnaaki naghshe ye aadame shaad va khoshhaal ro baazi konam","expected":"این چند روزه باید به طرز وحشتناکی نقش یه آدم شاد و خوشحال رو بازی کنم","alternatives":[]}
 {"id":"gold-0830","input":"in chizi ast ke emaal feshaar minaamim","expected":"این چیزی است که اعمال فشار مینامم","alternatives":[]}
-{"id":"gold-0831","input":"in chuzi nist ke goftam","expected":"دومتر زبون داشته باشه","alternatives":[]}
 {"id":"gold-0832","input":"in daastaane man bar migarde be chand saale pish","expected":"این داستان من برمیگرده به چند سال پیش","alternatives":[]}
 {"id":"gold-0833","input":"in dar nahaayat masooliyate maast","expected":"این در نهایت مسئولیت ماست","alternatives":[]}
 {"id":"gold-0834","input":"in dard sarmsaam aavari ast","expected":"این عدد سرسام آوری است","alternatives":[]}
@@ -827,8 +756,6 @@
 {"id":"gold-0863","input":"in tajrobe raa daashtim","expected":"این تجربه را داشتیم","alternatives":[]}
 {"id":"gold-0864","input":"in tanhaa raahi ast ke mishavad","expected":"این تنها راهیه که میشه","alternatives":[]}
 {"id":"gold-0865","input":"in tedad zanani ast ke ghabl az hejdah salegi ezdevaj kardeand","expected":"این تعداد زنانی است که قبل از ۱۸ سالگی ازدواج کردهاند","alternatives":[]}
-{"id":"gold-0866","input":"in too namayeshname nist","expected":"مدام احساس خستگی میکنید؟","alternatives":[]}
-{"id":"gold-0867","input":"in vaghean dardnak bood","expected":"این کوچکترین رقمش هست","alternatives":[]}
 {"id":"gold-0868","input":"in vaghean haghighat dare","expected":"این واقعا حقیقت داره","alternatives":[]}
 {"id":"gold-0869","input":"in vaghean haghighat dareh","expected":"این واقعا حقیقت داره","alternatives":[]}
 {"id":"gold-0870","input":"in voroose siyaasi, pas az nofooz, be aaraami doshmane khod raa az daroon naabood mikard","expected":"این ویروس سیاسی، پس از نفوذ، بهآرامی دشمن خود را از درون نابود میکرد","alternatives":[]}
@@ -846,7 +773,6 @@
 {"id":"gold-0882","input":"injaa ye mohit kaariye va","expected":"اینجا یه محیط کاریه و","alternatives":[]}
 {"id":"gold-0883","input":"injaa, in ro negaah kon","expected":"اینجا، این رو نگاه کن","alternatives":[]}
 {"id":"gold-0884","input":"injaa, intori baghal kon","expected":"اینجا، اینطوری بغل کن","alternatives":[]}
-{"id":"gold-0885","input":"injuri shahr ham zibatar mishe","expected":"(خنده) مردهای ترسناکی هستند","alternatives":[]}
 {"id":"gold-0886","input":"intori bishtar haal mide","expected":"اینطوری بیشتر حال میده","alternatives":[]}
 {"id":"gold-0887","input":"intouri ham digar ra seda mizanim","expected":"اینطوری همدیگه رو صدا بزنیم","alternatives":[]}
 {"id":"gold-0888","input":"iraan be tore motavaset saali 15 taa daaroye ghati sarataan kashf mikone","expected":"ایران به طور متوسط سالی ۱۵ تا داروی قطعی سرطان کشف میکنه","alternatives":[]}
@@ -876,13 +802,10 @@
 {"id":"gold-0913","input":"kaashima khoob entegham baakht saaypa too jaam hazfi raa gereft","expected":"کاشیما خوب انتقام باخت به سایپا تو جام حذفی رو گرفت","alternatives":[]}
 {"id":"gold-0914","input":"kaashki par nemikeshidi baalet o shekaste boodam","expected":"کاشکی پر نمی کشیدی بالت و شکسته بودم","alternatives":[]}
 {"id":"gold-0915","input":"kaaylaa ghaabeliyate etesaal be shabakeye jahaani va daaraaye teknolozhiye tashkhise sedaa bood","expected":"کایلا قابلیت اتصال به شبکه جهانی و دارای تکنولوژی تشخیص صدا بود","alternatives":[]}
-{"id":"gold-0916","input":"kafshhaye oon hasiri boodan","expected":"منم اینطور فکر می کنم","alternatives":[]}
 {"id":"gold-0917","input":"kam kam aadat kardam be fazaa va vaghti be khodam aamadam didam yek maah az daaneshgaah gozashte","expected":"کم کم عادت کردم به فضا و وقتی به خودم اومدم دیدم یکماه از دانشگاه گذشته","alternatives":[]}
 {"id":"gold-0918","input":"kar ro bedoon tou anjam bedam?","expected":"کارو بدون تو انجام بدم","alternatives":[]}
-{"id":"gold-0919","input":"karet ali bod doste man","expected":"آره ، رقاص لختی دزدیدش","alternatives":[]}
 {"id":"gold-0920","input":"kari ke goftam ra kardi?","expected":"کاری که گفتم رو کردی؟","alternatives":[]}
 {"id":"gold-0921","input":"kari ke kardi, fekr kon","expected":"!کاری که کردی ، فکر کن","alternatives":[]}
-{"id":"gold-0922","input":"karkonan bishtar az har chizi az rahbaraneshan che chizi mikhahand?","expected":"زیرا سیستم زمین را از نقاط حساس فراتر میبریم","alternatives":[]}
 {"id":"gold-0923","input":"kasaayi ke taa hamin chand saal pish hadeaghal mahi yeki do baar mididameshoon","expected":"کسایی که تا همین چند سال پیش حداقل ماهی یکی دوبار میدیدمشون","alternatives":[]}
 {"id":"gold-0924","input":"kash beshe","expected":"کاش بشه","alternatives":[]}
 {"id":"gold-0925","input":"kash mishod yekishan ra pish e khodam negah daram","expected":"کاش می شد یکیشون پیش خودم نگه دارم","alternatives":[]}
@@ -894,10 +817,8 @@
 {"id":"gold-0932","input":"ke be nazar mirese dard daare","expected":"که بنظر میرسه درد داره","alternatives":[]}
 {"id":"gold-0933","input":"ke be tazif va kholgh napaydari haye zheopolitic monjar mishavad","expected":"که به تعضیف و خلق ناپایداریهای ژئوپلیتک منجر میشود","alternatives":[]}
 {"id":"gold-0934","input":"ke behtar az to ghaayem konad","expected":"که بهتر از تو قایم کنم","alternatives":[]}
-{"id":"gold-0935","input":"ke dar saye ye abshar ba shokoh behesht penhan shode","expected":"چون نگرانند که مهارتهای لازم برای امرارمعاش را به دست نیاورند","alternatives":[]}
 {"id":"gold-0936","input":"ke dar saye ye abshar, ba shokouh behesht penhan shode","expected":"که در سایه ی ابشار با شکوه بهشت پنهان شده","alternatives":[]}
 {"id":"gold-0937","input":"ke hamin kar ro ham kard","expected":"که همین کار رو هم کرد","alternatives":[]}
-{"id":"gold-0938","input":"ke hich vaqt in ro nagin","expected":"ببین ، خودت که میدونی","alternatives":[]}
 {"id":"gold-0939","input":"ke in ravand haaye hamgeraaye jahaani raa bedast midehad","expected":"که این روندهای همگرای جهانی را بدست میدهد","alternatives":[]}
 {"id":"gold-0940","input":"ke natavanand kar peyda konand","expected":"که نتوانند کار پیدا کنند","alternatives":[]}
 {"id":"gold-0941","input":"ke tooye filme vaaghei baashi","expected":"که توی فیلم واقعی باشی","alternatives":[]}
@@ -959,7 +880,6 @@
 {"id":"gold-0998","input":"khodaaye man! shomaahaa saalemin?","expected":"خدای من! شماها سالمین؟","alternatives":[]}
 {"id":"gold-0999","input":"khodahafezi kard inghadr hang bodam ke nafahmidam key bargashtam khobgah to fekr bodam","expected":"خداحافظی کرد اینقد هنگ بودم که نفهمیدم کی برگشتم خوابگاه همش تو فکر بودم","alternatives":[]}
 {"id":"gold-1000","input":"khodam raa yek maargaaret mide emroozi dar miyaane nasle javaan tasavor kardam","expected":"خودم را یک مارگارت مید امروزی در میان نسل جوان تصور کردم،","alternatives":[]}
-{"id":"gold-1001","input":"khodaye man! shoma ha salemin","expected":"من پیش دانشگاهی بودم","alternatives":[]}
 {"id":"gold-1002","input":"khodet hich nazari nadari?","expected":"خودت هیچ نظری نداری ؟","alternatives":[]}
 {"id":"gold-1003","input":"khodet ke midouni chi misheh","expected":"خودت که میدونی چی میشه","alternatives":[]}
 {"id":"gold-1005","input":"kholaase baa maashin oomad donbaale man va maamaan va raftim markaze kharid","expected":"خلاصه با ماشین اومد دنبال من و مامان و رفتیم مرکز خرید.","alternatives":[]}
@@ -998,7 +918,6 @@
 {"id":"gold-1038","input":"ma bayad gol mizadim","expected":"ما باید گل میزدیم","alternatives":[]}
 {"id":"gold-1039","input":"ma be tafakor e radikal niazmandim","expected":"ما به تفکری رادیکال نیازمندیم","alternatives":[]}
 {"id":"gold-1041","input":"ma control zendegiyeman ra az dast dade im","expected":"ما کنترل زندگیمان را از دست دادهایم","alternatives":[]}
-{"id":"gold-1042","input":"ma controle zendegieman ra az dast dade im","expected":"ولی این فرصت، این سهم جوانی، اعطا نشده است","alternatives":[]}
 {"id":"gold-1043","input":"ma kheyli bozorg boodim","expected":"ما خیلی بزرگ بودیم","alternatives":[]}
 {"id":"gold-1044","input":"ma mard hayeh awli naboudim","expected":".ما مردهای عالی نبودیم","alternatives":[]}
 {"id":"gold-1045","input":"ma shady e to ra nadozdideim","expected":"ما شادی تو رو ندزدیدیم","alternatives":[]}
@@ -1023,7 +942,6 @@
 {"id":"gold-1064","input":"mage in ke ye harfi bezani","expected":"مگه اینکه یه حرفی بزنی","alternatives":[]}
 {"id":"gold-1065","input":"mage maa gharibeim ke na khabari na etelaai na chizi","expected":"مگه ما غریبه ایم که نه خبری نه اطلاعی نه چیزی.","alternatives":[]}
 {"id":"gold-1066","input":"mageh mishe na radio gofte bash na rouznameh ha","expected":"مگه می شه نه رادیو گفته باشه نه روزنامه ها","alternatives":[]}
-{"id":"gold-1067","input":"mahale!, bezar man beram","expected":"دوست داری با کی بخوابی","alternatives":[]}
 {"id":"gold-1068","input":"mahram tarin fard zendegiam mahsaa ast","expected":"محرم ترین فرد زندگیم مهسا ست","alternatives":[]}
 {"id":"gold-1069","input":"majbooram nakon biyaam oonjaa","expected":"!مجبورم نکن بیام اونجا","alternatives":[]}
 {"id":"gold-1070","input":"makhsoosan vaghti chand nemooneye barjeste bebinim ke dar mokaaleme ghaaleb hastand","expected":"مخصوصا وقتی چند نمونهی برجسته ببینیم که در مکالمه غالب هستند","alternatives":[]}
@@ -1032,17 +950,14 @@
 {"id":"gold-1073","input":"mamnon,behtarin doost","expected":"ممنون، بهترین دوست","alternatives":[]}
 {"id":"gold-1074","input":"mamnoon komak nemikhaam","expected":"ممنون، کمک نمی خوام","alternatives":[]}
 {"id":"gold-1075","input":"mamnoon nemikhaad az belit estefaade mikonam","expected":"ممنون،نمی خواد،از بلیط استفاده می کنم","alternatives":[]}
-{"id":"gold-1076","input":"mamnoon, behtarin doost","expected":".اونا آخر درست حسابین","alternatives":[]}
 {"id":"gold-1077","input":"mamooli yaa bedoone kaafein?","expected":"معمولی یا بدون کافئین؟","alternatives":[]}
 {"id":"gold-1078","input":"man alan roye tishert ha","expected":"من الان روی تی شرت ها","alternatives":[]}
 {"id":"gold-1079","input":"man aroom aroom bayad beram","expected":"من آروم آروم باید برم","alternatives":[]}
 {"id":"gold-1080","input":"man asef ra peyda kardam","expected":"من عاصف رو پیدا کردم","alternatives":[]}
-{"id":"gold-1081","input":"man az biganegan hargez nanalam","expected":"مانند پرخاشگری و خشونت","alternatives":[]}
 {"id":"gold-1082","input":"man az gi pi es am estefaade kardam va raaho peydaa kardam","expected":"من از جی پی س ام استفاده کردم و راهو پیدا کردم","alternatives":[]}
 {"id":"gold-1083","input":"man az khande taghriban mordam","expected":"من از خنده تقریبا مردم","alternatives":[]}
 {"id":"gold-1084","input":"man az to soal mikonam va","expected":"من از تو سوال می کنم و","alternatives":[]}
 {"id":"gold-1085","input":"man ba dam pezeshk harf zadam","expected":"من با دامپزشک حرف زدم","alternatives":[]}
-{"id":"gold-1086","input":"man ba in yaroo hamkaram","expected":"او چطور این کار را کرد؟","alternatives":[]}
 {"id":"gold-1087","input":"man ba oon biroon nemiram","expected":"من با اون بیرون نمی رم","alternatives":[]}
 {"id":"gold-1088","input":"man ba saeed khob  bodam","expected":"من با سعید خوب بودم","alternatives":[]}
 {"id":"gold-1089","input":"man baa dani gharaar daaram","expected":"من با دنی قرار دارم","alternatives":[]}
@@ -1078,18 +993,15 @@
 {"id":"gold-1121","input":"man ghol midam oon hayoolaa ro zende begiram va biyaaram","expected":"من قول میدم اون هیولا رو زنده بگیرم و بیارم","alternatives":[]}
 {"id":"gold-1122","input":"man goftam khoon sard baash","expected":"من گفتم خونسرد باش","alternatives":[]}
 {"id":"gold-1123","input":"man goftam moraghebeshan bashi","expected":"من گفتم مراقبشون باشی","alternatives":[]}
-{"id":"gold-1124","input":"man goftam moraghebeshoon bashi","expected":"فکر کنم مجبوریم بخوریم","alternatives":[]}
 {"id":"gold-1125","input":"man haal va hosele nadaaram paa beshavam taa baazaar raah bioftam va biayam","expected":"من حال و حوصله ندارم پاشم تا بازار راه بیفتم و بیام.","alternatives":[]}
 {"id":"gold-1126","input":"man hamchenin be onvan yek rish sefid modern daryaftam","expected":"من همچنین به عنوان یک ریشسفید مدرن دریافتم","alternatives":[]}
 {"id":"gold-1127","input":"man hamchenin be onvan yek rishsefid modern daryaftam ke naghsham in bood ke dar manzar aam karamoozi konam va dar khafa morabbigari","expected":"من همچنین به عنوان یک ریشسفید مدرن دریافتم که نقشم این بود که در منظر عام کارآموزی کنم و در خفا مربیگری","alternatives":[]}
 {"id":"gold-1129","input":"man hamisheh touye filma mididam ke adam ha migouftan chizi baraye az dast dadan nadaran","expected":"من همیشه تو فیلما میدیدم که آدما میگفتن چیزی برای از دست دادن ندارم","alternatives":[]}
-{"id":"gold-1130","input":"man harf moft ziyad mizanam","expected":"بلدی می خواد امنه جان.","alternatives":[]}
 {"id":"gold-1131","input":"man in model ta'aamole miyaan nasli raa baa loraa va time derakhshaane oloome daadehaayemaan tajrobe kardam","expected":"من این مدل تعامل میاننسلی را با لورا و تیم درخشان علوم دادههایمان تجربه کردم.","alternatives":[]}
 {"id":"gold-1132","input":"man ino az too yeki az ketaabaaye ketaabkhoone kandan","expected":"من اینو از تو یکی از کتابای کتابخونه کندم","alternatives":[]}
 {"id":"gold-1133","input":"man intori fekr nemikonam","expected":"من اینطوری فکر نمیکنم","alternatives":[]}
 {"id":"gold-1134","input":"man javaabe shomaa ro nemidam asaabet kharaabe","expected":"من جواب شما رو نمی دم اعصابت خرابه.","alternatives":[]}
 {"id":"gold-1135","input":"man joee hastam bazigaram","expected":"!من جویی هستم! بازیگرم","alternatives":[]}
-{"id":"gold-1136","input":"man k roshanfekr tar az baghie hastam","expected":"خیر نبینی چه جوری برداشتی که من ندیدم؟","alternatives":[]}
 {"id":"gold-1138","input":"man kaashef sarzamin haaye door oftaade hastam","expected":"من کاشف سرزمینای دور افتاده هستم","alternatives":[]}
 {"id":"gold-1139","input":"man ke hamash chand kiloo ezaafe kardam. cheraa sholooghesh mikoni?","expected":"من که همش چند کیلو اضافه کردم. چرا شلوغش می کنی؟","alternatives":[]}
 {"id":"gold-1140","input":"man ke khoone nistam hich vaght","expected":"من که خونه نیستم هیچ وقت.","alternatives":[]}
@@ -1099,7 +1011,6 @@
 {"id":"gold-1145","input":"man konkoor ro daadam bade konkoor kheyli khoshhaal boodam chon emtehaan ro aali daadam","expected":"من کنکور رو دادم بعده کنکور خیلی خشحال بودم چون امتحان رو عالی دادم","alternatives":[]}
 {"id":"gold-1146","input":"man maashinaaye aabi mishmordam, oonam maashinaaye ghermez","expected":"من ماشینای ابی میشمردم، اونم ماشینای قرمز","alternatives":[]}
 {"id":"gold-1148","input":"man masool e livan ha hastam","expected":"من مسئول لیوان ها هستم","alternatives":[]}
-{"id":"gold-1149","input":"man midonam hagh ba mane","expected":"پشت نقاب ناشناس، چنین کنیم","alternatives":[]}
 {"id":"gold-1150","input":"man midounestam ke belakhareh","expected":"من میدونستم که بالاخره","alternatives":[]}
 {"id":"gold-1151","input":"man mikhaaham baa to beraghsam","expected":"من میخوام با تو برقصم","alternatives":[]}
 {"id":"gold-1152","input":"man mikhaaham beravam aabshaar behesht","expected":"من می خوام برم آبشار بهشت","alternatives":[]}
@@ -1111,23 +1022,18 @@
 {"id":"gold-1158","input":"man motaghedam ke in mohit haa shabakeye kherade miyaan nasli raa migoshaayad banaabarin hameye maa mitavaanim az ham beyaamoozim","expected":"من معتقدم که این محیطها شبکه خرد میان نسلی را میگشایند بنابراین همه ما میتوانیم از هم بیاموزیم","alternatives":[]}
 {"id":"gold-1159","input":"man movaghatan nayaamadeam injaa","expected":"من موقتا نیومدم اینجا","alternatives":[]}
 {"id":"gold-1160","input":"man naft raa migiram","expected":"من نقش رو میگیرم.","alternatives":[]}
-{"id":"gold-1161","input":"man nahar sa'at 11 khordam","expected":"باید از هم جداشون کنیم","alternatives":[]}
 {"id":"gold-1163","input":"man nemitavaanam zibaayi khod raa penhaan konam, behtar ast aan raa az khod door konam","expected":"من نمیتوانم زیبایی خود را پنهان کنم، بهتر است ان را از خود دور کنم","alternatives":[]}
 {"id":"gold-1164","input":"man o mamaan too oon sarmaa do taa bastaniyam zadim","expected":"من و مامان تو اون سرما دوتا بستنیم زدیم","alternatives":[]}
-{"id":"gold-1165","input":"man orze in karo nadaram","expected":"با دوستم رفتار نمی کنه","alternatives":[]}
 {"id":"gold-1166","input":"man orzehy in kar ro nadaram","expected":"من عرضه این کارو ندارم","alternatives":[]}
 {"id":"gold-1167","input":"man oun ro motaghaed kardam","expected":"من اون رو متعاقد کردم","alternatives":[]}
 {"id":"gold-1168","input":"man peyghaamesh ro paak kardam","expected":"من پیغامش رو پاک کردم","alternatives":[]}
-{"id":"gold-1169","input":"man pishdaneshgahi boodam","expected":".قایم موشک بازها هستین","alternatives":[]}
 {"id":"gold-1170","input":"man reise tamaame moosh haaye aalam hastam. tanhaa kasi ke toonest hitler ro shekast bede","expected":"من رئیس تمام موش های عالم هستم. تنها کسی که تونست هیتلر رو شکست بده.","alternatives":[]}
 {"id":"gold-1171","input":"man sharaayete khodamo daaram. baayad baa man hamaahang konid","expected":"من شرایط خودمو دارم. باید با من هماهنگ کنید.","alternatives":[]}
-{"id":"gold-1172","input":"man shomaharo davat kardam shad bashi","expected":"ما به تفکری رادیکال نیازمندیم","alternatives":[]}
 {"id":"gold-1173","input":"man va maman har rooz mirim biroon va khosh migzaroonim","expected":"من و مامان هر روز میریم بیرون میگردیم و خوش میگذرونیم","alternatives":[]}
 {"id":"gold-1174","input":"man vaaghean mazerat mikhaaham","expected":"من واقعا معذرت می خوام","alternatives":[]}
 {"id":"gold-1175","input":"man vaaghean mazerat mikhaam","expected":"من واقعا معذرت می خوام","alternatives":[]}
 {"id":"gold-1176","input":"man vaghean mikhaham begiramash","expected":"من واقعا میخوام بگیرمش","alternatives":[]}
 {"id":"gold-1177","input":"man vase un naghsh aaliam","expected":"من واسه اون نقش عالیم","alternatives":[]}
-{"id":"gold-1178","input":"man vaznam ro bala bordam?","expected":"پول رو نگرفتی ، درسته؟","alternatives":[]}
 {"id":"gold-1179","input":"man ye jor haie asheghet shodam","expected":"من یه جورایی عاشقت شدم","alternatives":[]}
 {"id":"gold-1180","input":"man ye kam vasat migiram","expected":"من یه کم واست می گیرم-","alternatives":[]}
 {"id":"gold-1181","input":"man yek daanesh pazhoohe haafeze hastam","expected":"من یک دانشپژوه حافظه هستم","alternatives":[]}
@@ -1135,9 +1041,7 @@
 {"id":"gold-1183","input":"man yek meghdaar khashmgin shodam","expected":"من یک مقدار خشمگین شدم","alternatives":[]}
 {"id":"gold-1184","input":"man zire eyvoonetoon ghaayem shodam chon doosetoon daarami","expected":"من زیر ایوونتون قایم شدم چون دوستون دارمی","alternatives":[]}
 {"id":"gold-1185","input":"manam az khoda khaaste ghabool kardam va forsate khoobiyam baraaye separi kardane taaym taa baazi bood","expected":"منم از خدا خواسته قبول کردم و فرصت خوبیم برای سپری کردن تایم تا بازی بود","alternatives":[]}
-{"id":"gold-1186","input":"manam goftam kheyli khob basheh","expected":"می خوام بذارم یه چیزی ببینی","alternatives":[]}
 {"id":"gold-1187","input":"manam goftam mamnoon","expected":"منم گفتم ممنون","alternatives":[]}
-{"id":"gold-1188","input":"manam intor fekr minkonam","expected":"قول میدم که خرابش نکنم","alternatives":[]}
 {"id":"gold-1189","input":"manam khoshhaalam ke bargashti","expected":"منم خوشحالم که برگشتی","alternatives":[]}
 {"id":"gold-1190","input":"manam movaafegham.to cheraa in ghadr bi masooliyati? cheraa be fekre aasaayaeshe khaahar maadarat nisti?","expected":"منم موافقم. تو چرا اینقد بی مسئولیتی؟ چرا به فکر آسایش خواهر مادرت نیستی؟","alternatives":[]}
 {"id":"gold-1191","input":"manam too aayandeat hastam?","expected":"منم تو آینده ات هستم؟","alternatives":[]}
@@ -1149,7 +1053,6 @@
 {"id":"gold-1198","input":"mardom khashmnaak hastand","expected":"مردم خشمناک هستند","alternatives":[]}
 {"id":"gold-1199","input":"mardom khashmnak hastand","expected":"مردم خشمناک هستند","alternatives":[]}
 {"id":"gold-1200","input":"mardom tajrobiyaate maa raa be onvaane bedehi talaghi mikonand va na sarmaaye","expected":"مردم تجربیات ما را به عنوان بدهی تلقی میکنند و نه سرمایه","alternatives":[]}
-{"id":"gold-1201","input":"marge ye dust dokhtar dare","expected":"ما در انقلاب صنعتی چهارمیم","alternatives":[]}
 {"id":"gold-1202","input":"masale ye chize dige hast","expected":"مسئله یه چیز دیگه هست","alternatives":[]}
 {"id":"gold-1203","input":"masoolin zhaapon be dalil gol nazadan az mardom iraan ozrkhaahi kardand","expected":"مسئولین ژاپن به دلیل گل نزدن از مردم ایران عذرخواهی کردن","alternatives":[]}
 {"id":"gold-1204","input":"matne khodkoshi vojood daashte","expected":".متن خودکشی وجود داشته","alternatives":[]}
@@ -1157,9 +1060,7 @@
 {"id":"gold-1206","input":"mayk khoobe faamilesh chiye?","expected":"مایک خوبه فامیلش چیه ؟","alternatives":[]}
 {"id":"gold-1207","input":"mazdak mirzaye gozareshgare baziy perspolise kashima shod","expected":"مزدک میرزایی گزارشگر بازی حساس پرسپولیس-کاشیما شد","alternatives":[]}
 {"id":"gold-1208","input":"mersi ke havaaye mano daashti","expected":"مرسی که هوای منو داشتی","alternatives":[]}
-{"id":"gold-1209","input":"mesl in nist ke rooz bad modiriat az","expected":"رییس پیشین FBI در اتومبیل خود مینشست","alternatives":[]}
 {"id":"gold-1210","input":"mesl marg va rouz ghiyamat","expected":"مثل مرگ و روز قیامت","alternatives":[]}
-{"id":"gold-1211","input":"mesle marg va rooze ghiyamat","expected":"پس تو اینجا کار میکنی","alternatives":[]}
 {"id":"gold-1212","input":"mesle oon film, zang bezanam be ye ghaatel biyaad mano bokoshe","expected":"مثل اون فیلم،زنگ بزنم به یه قاتل بیاد منو بکشه","alternatives":[]}
 {"id":"gold-1213","input":"mesle oon mard haa hastam","expected":"مثل اون مردها هستم.","alternatives":[]}
 {"id":"gold-1214","input":"mesle soosmaare ghaatel va gheyre","expected":"مثل سوسمار قاتل و غیره","alternatives":[]}
@@ -1170,7 +1071,6 @@
 {"id":"gold-1221","input":"midaanam yek rooz dobaare mitavaanam to raa bebinam","expected":"میدونم یه روز دوباره می تونم تو رو ببینم","alternatives":[]}
 {"id":"gold-1222","input":"midaani mardom migooyand","expected":"میدونی مردم میگن","alternatives":[]}
 {"id":"gold-1223","input":"midaani? aslan mohem nist","expected":"میدونی، اصلا مهم نیست","alternatives":[]}
-{"id":"gold-1224","input":"midoni chie? ydm okd","expected":"زن قیمت گلدانها را پرسید","alternatives":[]}
 {"id":"gold-1225","input":"midoonestam khoshhaal mishi","expected":".می دونستم خوشحال میشی","alternatives":[]}
 {"id":"gold-1226","input":"midooni amnzouram chie?","expected":"میدونی منظورم چیه ؟","alternatives":[]}
 {"id":"gold-1227","input":"midooni che kaar mikonim?","expected":"میدونی چه کار میکنیم؟","alternatives":[]}
@@ -1179,7 +1079,6 @@
 {"id":"gold-1230","input":"midounam yek rouz doubareh mitavanam tou ra bebinam","expected":"میدونم یه روز دوباره می تونم تو رو ببینم","alternatives":[]}
 {"id":"gold-1231","input":"mifahmi ke manzooram chi ast?","expected":"می فهمی که منظورم چیه؟","alternatives":[]}
 {"id":"gold-1232","input":"mifahmi ke manzouram chieh?","expected":"می فهمی که منظورم چیه؟","alternatives":[]}
-{"id":"gold-1233","input":"migam javad gamoonam chizish shide","expected":"البته نظر جوون ترا مهم تره","alternatives":[]}
 {"id":"gold-1234","input":"migam javad gamoonam chizish shodeh","expected":"میگم جواد،گمونم چیزیش شده","alternatives":[]}
 {"id":"gold-1235","input":"migoft age talaahaamo gom nemikardam","expected":"میگفت اگه طلاهامو گم نمیکردم","alternatives":[]}
 {"id":"gold-1236","input":"migooyam ghasd nadaram behesh zehniat bedam","expected":"میگویم قصد ندارم بهش ذهنیت بدهم","alternatives":[]}
@@ -1192,13 +1091,9 @@
 {"id":"gold-1243","input":"mikhaastand donyaa raa taghir dahand","expected":"میخواستند دنیا را تغییر دهند","alternatives":[]}
 {"id":"gold-1244","input":"mikhahad faza ra avaz konad","expected":"می خواهد فضا را عوض کند","alternatives":[]}
 {"id":"gold-1245","input":"mikhaham maharathaie mesle sakht o saz va bargh ro biamoozam","expected":"میخواهند مهارتهایی مثل ساخت و ساز و برق را بیاموزند","alternatives":[]}
-{"id":"gold-1246","input":"mikham emshab ekhrajet konam","expected":"با آیفون باهام حرف بزن","alternatives":[]}
-{"id":"gold-1247","input":"mikham vali baad az zohr ha","expected":"خدا خیرت بده مادر دستت درد نکنه.","alternatives":[]}
 {"id":"gold-1248","input":"mikhan ghahve khaane bokonandesh","expected":"میخان قهوه خونه بکننش","alternatives":[]}
 {"id":"gold-1249","input":"mikhan ghahve khaneh bokounandash","expected":"میخان قهوه خونه بکننش","alternatives":[]}
 {"id":"gold-1250","input":"mikhasti tou kar mod beri","expected":".میخاستی تو کار مد بری","alternatives":[]}
-{"id":"gold-1251","input":"mikhay berim livan rangi?","expected":"هر لغتی کار راه بندازه","alternatives":[]}
-{"id":"gold-1252","input":"mikhay yho bri soraqesh?","expected":"ببین ، خودت که میدونی","alternatives":[]}
 {"id":"gold-1254","input":"milion ha nafar az mardom hamin alan ehsas moshabeh man ra darand","expected":"میلیونها نفر از مردم همین الان احساس مشابه من را دارند","alternatives":[]}
 {"id":"gold-1255","input":"miliyoon haa nafar az faghr khaarej shodeand, vali baa fadaa kardane fazaaye amaliyaatiye amn bar rooye zamin","expected":"میلیونها نفر از فقر خارج شدهاند، ولی با فدا کردن فضای عملیاتی امن بر روی زمین","alternatives":[]}
 {"id":"gold-1256","input":"million ha nafar az mardom hamin alan ehsas moshabehe man ra darand","expected":"میلیونها نفر از مردم همین الان احساس مشابه من را دارند","alternatives":[]}
@@ -1211,7 +1106,6 @@
 {"id":"gold-1263","input":"mishe komakesh konin bere khaneh ash","expected":"میشه کمکش کنیم بره خونه اش؟","alternatives":[]}
 {"id":"gold-1264","input":"mishe koumakash konim bere khane ash","expected":"میشه کمکش کنیم بره خونه اش؟","alternatives":[]}
 {"id":"gold-1265","input":"mishe vaase manam bekhari?","expected":"میشه واسه منم بخری ؟","alternatives":[]}
-{"id":"gold-1266","input":"mishe zipe mano bedi bala?","expected":"چیکار دارین می کنین ؟","alternatives":[]}
 {"id":"gold-1267","input":"misheh hasan hamrah ma biad?","expected":"میشه حسن همراهمون بیاد؟","alternatives":[]}
 {"id":"gold-1268","input":"mishnavam che migooei, mitavani","expected":"میشونم چی میگی. میتونی","alternatives":[]}
 {"id":"gold-1269","input":"mitarsam ke shoke beshin","expected":"می ترسیدم که شوکه بشین","alternatives":[]}
@@ -1226,29 +1120,18 @@
 {"id":"gold-1278","input":"mitoonam komak konam az roo eyvoonetoon rad beshin","expected":"می تونم کمک کنم از رو ایوونتون رد بشین","alternatives":[]}
 {"id":"gold-1279","input":"mitoonam roo moblet bekhaabam?","expected":"میتونم رو مبلت بخوابم؟","alternatives":[]}
 {"id":"gold-1280","input":"mitooni raagbi baazi koni?","expected":"می تونی راگبی بازی کنی","alternatives":[]}
-{"id":"gold-1281","input":"mitoonim koochek taresh konim?","expected":"من ناهار ساعت 11 خوردم","alternatives":[]}
-{"id":"gold-1282","input":"mituni bahash tanha bashi","expected":"مارج یه دوست دختر داره","alternatives":[]}
-{"id":"gold-1283","input":"mn ba phoebe brnme drm","expected":"میگم جواد،گمونم چیزیش شده","alternatives":[]}
-{"id":"gold-1284","input":"mn goftm mraghbshon bashi","expected":"امشب ولی فعلا هیچی نگو","alternatives":[]}
 {"id":"gold-1285","input":"moarefi mikonam:","expected":"معرفی میکنم:","alternatives":[]}
 {"id":"gold-1286","input":"moghei ke dashtam dandaan haayam raa mesvaak mizadam","expected":"موقعی که داشتم دندونامو مسواک می زدم","alternatives":[]}
 {"id":"gold-1287","input":"momken ast marze moshtarak daashte baashim","expected":"ممکن است مرز مشترک داشته باشیم.","alternatives":[]}
 {"id":"gold-1288","input":"momkene hichchi nayad","expected":"ممکنه هیچی گیرمون نیاد","alternatives":[]}
 {"id":"gold-1289","input":"moragheb e mehmanan e na khnde va baran bashid","expected":"مراقب میهمانان ناخوانده و فراری از باران باشیم","alternatives":[]}
-{"id":"gold-1290","input":"mosalaman vaghti hamdigaro darim","expected":"ارتباطمون رو بهم زدیم","alternatives":[]}
 {"id":"gold-1292","input":"mota'asefaane baazaar ketaab koodak por ast az in mafaahim aazaarande","expected":"متاسفانه بازار کتاب کودک پر است از این دست مفاهیم ازارنده","alternatives":[]}
 {"id":"gold-1293","input":"motasefam aghaye mohammadi","expected":"متاسفم آقای محمدی","alternatives":[]}
-{"id":"gold-1294","input":"moteasefam be man negah kon","expected":"پاهای خیلی خوشگلی داری","alternatives":[]}
-{"id":"gold-1295","input":"mote’asefam, be man negah kon","expected":"در چارچوب اهداف زیست محیطی جهانی","alternatives":[]}
-{"id":"gold-1296","input":"motma'enm ke rqas nistm","expected":"سعید من یه سوال دارم.","alternatives":[]}
-{"id":"gold-1297","input":"motmaenam ke raghas nistam","expected":"تا حالا اینقدرشو ساختم","alternatives":[]}
 {"id":"gold-1298","input":"motmaenan ekhrajet mikonam","expected":"!مطمئنا اخراجت می کنم","alternatives":[]}
 {"id":"gold-1299","input":"motmaeni ke doctor nemikhay","expected":"مطمئنی که دکتر نمیخای؟","alternatives":[]}
-{"id":"gold-1300","input":"motor haye jostojoo dar javad dadan b","expected":"افراد معلول، جانبازان، همه افراد بالای ۳۵ سال","alternatives":[]}
 {"id":"gold-1301","input":"mousri ast va ba boudan atrafe un ma niz mobtala mishavim","expected":"مسری است، و با بودن اطراف آن ما نیز مبتلا میشویم","alternatives":[]}
 {"id":"gold-1302","input":"n un chiz ghashngi hs","expected":"نه، اون چیز قشنگی هست","alternatives":[]}
 {"id":"gold-1303","input":"na aaghaa moshkel ast ke aadam aanjaa daakhel shavad digar asb jaaye khod raa daarad","expected":"نه اقا، مشکل است که ادم انجا داخل شود دیگر اسب جای خود را دارد","alternatives":[]}
-{"id":"gold-1304","input":"na agha,hich chiz faghat yek risman p","expected":"حالا، نقطهای که آنجا میبینید ۱۹۸۰ است","alternatives":[]}
 {"id":"gold-1305","input":"na az tarsnaak boodane divhaa","expected":"نه از ترسناک بودن دیوها","alternatives":[]}
 {"id":"gold-1306","input":"na be khaatere in ke beri mikhaast tahvile hamaan rooz doritoye orgaanik daashte baashad","expected":"نه بخاطر این که بری میخواست تحویل همان روز دوریتوی اورگانیک داشته باشد","alternatives":[]}
 {"id":"gold-1307","input":"na bebin in tavalod mane","expected":"نه ببین این تولد منه.","alternatives":[]}
@@ -1257,7 +1140,6 @@
 {"id":"gold-1310","input":"na hanooz ham short mipooshan","expected":"نه ، هنوزم شرت می پوشن","alternatives":[]}
 {"id":"gold-1311","input":"na maadaram too otaaghesh ast","expected":"نه مادرم توی اتاقشه","alternatives":[]}
 {"id":"gold-1312","input":"na man inaa ro azat shenidam","expected":"نه من این رو ازت شنیدم","alternatives":[]}
-{"id":"gold-1313","input":"na man mikham rikhtet ro bebinam","expected":"بازم می کوبمت به زمین","alternatives":[]}
 {"id":"gold-1314","input":"na masale bi hormati nist","expected":"نه مسئله بی حرمتی نیست","alternatives":[]}
 {"id":"gold-1315","input":"na mikhaham rikhtet ro bebinam","expected":"نه می خوام ریختت رو ببینم","alternatives":[]}
 {"id":"gold-1316","input":"na rouznameh ha gouftan na radio","expected":"نه روزنامه ها گفتن نه رادیو.","alternatives":[]}
@@ -1280,7 +1162,6 @@
 {"id":"gold-1333","input":"nasl azimi az javaanaan dar shorof be ers bordan donyaa maa hastand","expected":"نسل عظیمی از جوانان در شرف به ارث بردن دنیای ما هستند","alternatives":[]}
 {"id":"gold-1334","input":"nasle azimi az javaanaan dar shorofe be ers bordane donyaaye maa hastand","expected":"نسل عظیمی از جوانان در شرف به ارث بردن دنیای ما هستند","alternatives":[]}
 {"id":"gold-1335","input":"natije migirim ke nabaayad oon badbakht ro zaa be raah konim. berim bekhaabim behtare","expected":"نتیجه می گیریم که نباید اون بدبخت رو زابه راه کنیم. بریم بخوابیم بهتره.","alternatives":[]}
-{"id":"gold-1336","input":"nazdik va samimi va","expected":"از خودم در نمیآورم","alternatives":[]}
 {"id":"gold-1337","input":"nazi doust dareh shaba bekhabeh","expected":"نازی دوست داره شبا بخوابه","alternatives":[]}
 {"id":"gold-1338","input":"nemidaanam afsorde shodam yaa baghaayaaye janin too delam maande ke in tori mishavam","expected":"نمیدونم افسرده شدم یا بقایای جنین تو دلم مونده که اینجوری میشم","alternatives":[]}
 {"id":"gold-1339","input":"nemidaanam ghadim che esraari daashtand bache hamishe kachal baashad","expected":"نمیدونم قدیم چه اصراری داشتن بچه همیشه کچل باشه","alternatives":[]}
@@ -1320,23 +1201,16 @@
 {"id":"gold-1374","input":"oghat e khoshi dastte bashid","expected":"اوقات خوشی داشته باشی","alternatives":[]}
 {"id":"gold-1375","input":"oh az oon dar vared nasho","expected":"اوه از اون در وارد نشو","alternatives":[]}
 {"id":"gold-1376","input":"oh az oun dar vared nasho","expected":"اوه از اون در وارد نشو","alternatives":[]}
-{"id":"gold-1377","input":"oh doroste besyar khob","expected":"می خواستم برم حاضر شم","alternatives":[]}
 {"id":"gold-1378","input":"oh in aslan khoob nist","expected":"اوه این اصلا خوب نیست","alternatives":[]}
 {"id":"gold-1379","input":"oh khodaye man chi shode?","expected":"اوه ، خدای من. چی شده؟","alternatives":[]}
 {"id":"gold-1380","input":"oh man ham az ou mikham","expected":"اوه منم از اون میخوام","alternatives":[]}
 {"id":"gold-1381","input":"oh na na hame chiz khoobe","expected":"اوه نه نه همه چیز خوبه","alternatives":[]}
 {"id":"gold-1382","input":"oh! negaah kon! - chi man?","expected":"اوه! نگاه کن! -چی من؟","alternatives":[]}
-{"id":"gold-1383","input":"oh, bacheha unjayid","expected":"دلیل اول استرس است","alternatives":[]}
 {"id":"gold-1384","input":"oh, khob pas alaan na","expected":".اوه ، خوب پس الان نه","alternatives":[]}
 {"id":"gold-1385","input":"oje ghodrat badaniyemaan shaayad 20 saalegist, oje ghodrate maali va daraamade maa shaayad 50 saalegi baashad","expected":"اوج قدرت بدنیمان شاید ۲۰ سالگی است، اوج قدرت مالی و درآمد ما شاید ۵۰ سالگی باشد","alternatives":[]}
-{"id":"gold-1386","input":"omad jelo goft khaste nabashid","expected":"خوب میشه نفری 28 هزار تومن","alternatives":[]}
 {"id":"gold-1387","input":"omadin hasan ra nejat dehid","expected":"اومدین حسن رو نجات بدین؟","alternatives":[]}
 {"id":"gold-1388","input":"omran jan va berry ra bebinand ke dar cafe ye holz food ghahve bezanand","expected":"عمرا جان و بری را ببینید که در کافه هولز فود قهوه بزنند","alternatives":[]}
 {"id":"gold-1389","input":"omrist baa babraan gashtim va baa gorgaan khordim va baa shiraan nare keshidim","expected":"عمریست با ببران گشتیم و با گرگان خوردیم و با شیران نعره کشیدیم","alternatives":[]}
-{"id":"gold-1391","input":"on dare print migire","expected":"من با مانیکا صحبت کردم","alternatives":[]}
-{"id":"gold-1392","input":"on neshatse rooye paye reychel","expected":".مطمئنم که رقاصم نیستم","alternatives":[]}
-{"id":"gold-1393","input":"ona akhar dorost hesabian","expected":"از عرفان خوشتون نمیاد؟","alternatives":[]}
-{"id":"gold-1394","input":"ona to jodaee bodn","expected":"من هیجان زده هستم","alternatives":[]}
 {"id":"gold-1395","input":"oo alaan vaaghean naaraahat ast","expected":"اون الان واقعا ناراحته","alternatives":[]}
 {"id":"gold-1396","input":"oo baa man be goor miravad","expected":"!اون با من به گور میره","alternatives":[]}
 {"id":"gold-1397","input":"oo dar vaaghe kheyli shirine","expected":"او در واقع خیلی شیرینه","alternatives":[]}
@@ -1356,7 +1230,6 @@
 {"id":"gold-1411","input":"oon mesle baghiye mardom nist","expected":"اون مثل بقیه مردم نیست","alternatives":[]}
 {"id":"gold-1412","input":"oon mivehat ro bardar","expected":"اون میوه هات رو بردار","alternatives":[]}
 {"id":"gold-1413","input":"oon moghe tanhaa raahe aavardanash az etyopi bood","expected":"اون موقع تنها راه اوردنش از اتیوپی بود","alternatives":[]}
-{"id":"gold-1414","input":"oon nesheste rooye paye rachel","expected":"ساخت محکم ، خیلی جادار","alternatives":[]}
 {"id":"gold-1415","input":"oon shanzdah saal pish bood","expected":"اون شانزده سال پیش بود","alternatives":[]}
 {"id":"gold-1416","input":"oon tamam sharayet ro dare","expected":"اون تمام شرایط رو داره","alternatives":[]}
 {"id":"gold-1417","input":"oon ye doost dokhtar daare","expected":"اون یه دوست دختر داره","alternatives":[]}
@@ -1378,9 +1251,7 @@
 {"id":"gold-1433","input":"oun kheili bad masaj midahad","expected":"اون خیلی بد ماساژ میده","alternatives":[]}
 {"id":"gold-1434","input":"oun shab to ro dasht","expected":"اون تمام شب تو رو داشت","alternatives":[]}
 {"id":"gold-1435","input":"oun yek motakhaseh nabeghe hast","expected":"اون یک متخصص نابغه هست","alternatives":[]}
-{"id":"gold-1436","input":"oun yeki az ghadimi hast","expected":"تو نمی خوای بازی کنی ؟","alternatives":[]}
 {"id":"gold-1437","input":"ouna behem tohmat drough gouei zadand","expected":"اونا بهم تهمت دروغگویی زدن","alternatives":[]}
-{"id":"gold-1438","input":"ouna hamdige ro daran","expected":"اول: دزدی حرفه ای","alternatives":[]}
 {"id":"gold-1439","input":"ounam che ghahramani mardtikeh ghasd jounemoun ro dare","expected":"اونم چه قهرمانی مرتیکه قصد جونمون داره","alternatives":[]}
 {"id":"gold-1440","input":"ozr khahi pazirofteh mishe","expected":"عذر خواهی پذیرفته میشه","alternatives":[]}
 {"id":"gold-1441","input":"ozr mikhaaham, baayad beravam","expected":"عذر میخواهم،باید برم","alternatives":[]}
@@ -1391,7 +1262,6 @@
 {"id":"gold-1446","input":"paahaaye khoshhaal","expected":"پاهای خوشحال","alternatives":[]}
 {"id":"gold-1447","input":"paasokh midam: har aanche az man bar miaamad!","expected":"پاسخ میدم:هر انچه از من بر می امد!","alternatives":[]}
 {"id":"gold-1448","input":"pahlooye khaale richel mizaaram","expected":"پهلوی خاله ریچل میزارم","alternatives":[]}
-{"id":"gold-1449","input":"panj shanbe shab, 5ta belit","expected":".با هم شراب سیب خوردیم","alternatives":[]}
 {"id":"gold-1450","input":"par haaye to az bas zibaast mardom baraaye neshaani dar miyaan ghoraan migzaarand yaa baa aan baad bezan dorost mikonand","expected":"پرهای تو از بس زیباست مردم برای نشانی در میان قران میگذارند یا با ان باد بزن درست میکنند.","alternatives":[]}
 {"id":"gold-1451","input":"par ziba doshman man ast","expected":"پر زیبا دشمن من است","alternatives":[]}
 {"id":"gold-1452","input":"parvaane jaan bro baaz kon dar raa khoda kheyret bedehad","expected":"پروانه جان برو باز کن درو خدا خیرت بده.","alternatives":[]}
@@ -1402,16 +1272,12 @@
 {"id":"gold-1457","input":"pas chera aan harf ra zad?","expected":"پس چرا اون حرف رو زد؟-","alternatives":[]}
 {"id":"gold-1458","input":"pas faghat aghab beistid va goosh dahid","expected":"پس فقط عقب بایستید و گوش دهید","alternatives":[]}
 {"id":"gold-1459","input":"pas in basaate aash va nazri chiye?","expected":"پس این بساط اش و نذری چیه؟","alternatives":[]}
-{"id":"gold-1460","input":"pas in haman jahane motedavele fe'li","expected":"میگم بهتره یه خورده بخوابی","alternatives":[]}
 {"id":"gold-1461","input":"pas kaareshaan chist?","expected":"پس کارشان چیست؟","alternatives":[]}
 {"id":"gold-1462","input":"pas kaareshaan chist? baghie kaar haa raa rahaa karde va baa modiriat kaar mikonand jami va saazande taa taghiraat jahat behbood maali sherkat ijaad shavad","expected":"پس کارشان چیست؟ بقیه کارها را رها کرده و با مدیریت کار میکنند، جمعی و سازنده، تا تغییرات جهت بهبود عملکرد مالی شرکت ایجاد شود","alternatives":[]}
-{"id":"gold-1463","input":"pas midoni ke kei hasti","expected":"شیرین بیان درست میکنیم","alternatives":[]}
 {"id":"gold-1464","input":"pas mishe befarmaaid dalile in eghteshaashaat va sar o sedaa haa chiye?","expected":"پس میشه بفرمائید دلیل این اغتشاشات و سر و صداها چیه؟","alternatives":[]}
 {"id":"gold-1465","input":"pas motaaleaati raa tanzim kardim jaayi ke 5 sherkat konande shaahed amal gostaakhaane yek aazmaayeshgar nesbat be kasi ke baraaye tahghigh dir reside bood mishodand","expected":"پس مطالعاتی را تنظیم کردیم جایی که پنج شرکت کننده شاهد عمل گستاخانهی یک آزمایشگر نسبت به کسی که برای تحقیق دیر رسیده بود میشدند","alternatives":[]}
-{"id":"gold-1466","input":"pas on faqat y mard khube","expected":"دوم اینکه نوع شواهد مهم است","alternatives":[]}
 {"id":"gold-1467","input":"pas oon faghat ye marde khoobe","expected":"پس اون فقط یه مرد خوبه","alternatives":[]}
 {"id":"gold-1468","input":"pas say kon bikhialash beshavi","expected":"پس سعی کن بیخیالش بشی","alternatives":[]}
-{"id":"gold-1469","input":"pas saye kon bikhialesh beshi","expected":"چون اون نقش خیلی خوبه","alternatives":[]}
 {"id":"gold-1470","input":"pedaram in marde ghavi, varzeshkaar va por enerzhi","expected":"پدرم این مرد قوی، ورزشکار و پرانرژی","alternatives":[]}
 {"id":"gold-1471","input":"pesar toti dishab too baazi rom toop jam kon boode","expected":"پسر توتی دیشب تو بازی رم توپ جمع کن بوده","alternatives":[]}
 {"id":"gold-1472","input":"pesarak baa shojaa'at khod raa aamaadeye marg karde bood, chon fekr mikard ke gharaar ast tamaame khoonash raa be khaaharash bedahad","expected":"پسرک با شجاعت خود را اماده مرگ کرده بود،چون فکر می کرد که قرار است تمام خونش را به خواهرش بدهد!","alternatives":[]}
@@ -1422,7 +1288,6 @@
 {"id":"gold-1477","input":"pish khedmati ke lokht shood","expected":".پیش خدمتی که لخت شد","alternatives":[]}
 {"id":"gold-1478","input":"poor az energyie mosbat boud","expected":"پر از انرژی مثبت بود","alternatives":[]}
 {"id":"gold-1479","input":"pooreye loobiyaa khord behem","expected":"پوره ی لوبیا خورد بهم","alternatives":[]}
-{"id":"gold-1480","input":"posht neghabe nashenas, chenin konim","expected":"احتمالا تو فکر می کنی","alternatives":[]}
 {"id":"gold-1481","input":"posht sahney barnamehay tond televisiony","expected":"پشتصحنهی برنامههای لایو تلویزیونی","alternatives":[]}
 {"id":"gold-1483","input":"poste instaageraamiye jaalebe amirmahdi zhoole darbaareye rizeshe gheymate dolaar","expected":"پست اینستاگرامی جالب امیرمهدی ژوله درباره ریزش قیمت دلار","alternatives":[]}
 {"id":"gold-1484","input":"pul ro nagerefti, doroste?","expected":"پول رو نگرفتی ، درسته؟","alternatives":[]}
@@ -1442,7 +1307,6 @@
 {"id":"gold-1498","input":"raftim biron va tu khiyaboun jashn bood","expected":"رفتیم بیرون و تو خیابون جشن بود!","alternatives":[]}
 {"id":"gold-1499","input":"raftim birron va too khiyaaboon jashn bood","expected":"رفتیم بیرون و تو خیابون جشن بود!","alternatives":[]}
 {"id":"gold-1500","input":"rais bande khoshhaal mishavad agar shomaa biaaid","expected":"رئیس بنده خوشحال میشه اگه شما بیاین","alternatives":[]}
-{"id":"gold-1501","input":"raje b chi hrf mizni?","expected":"این تو نمایشنامه نیست-","alternatives":[]}
 {"id":"gold-1502","input":"ravaayate zanaani ke mikhaahand sedaayeshaan shenide shavad","expected":"روایت زنانی که میخواهند صدایشان شنیده شود","alternatives":[]}
 {"id":"gold-1503","input":"refigh in doost dokhtar man ast","expected":"رفیق این دوست دختر منه","alternatives":[]}
 {"id":"gold-1504","input":"reghaabat baraaye be dast aavardane kaar haaye mojood besyaar tangaatang ast","expected":"رقابت برای به دست آوردن کارهای موجود بسیار تنگاتنگ است","alternatives":[]}
@@ -1502,19 +1366,15 @@
 {"id":"gold-1559","input":"shab bidari o bikhabi aziatet nakouneh","expected":"شب بیداری و بی خوابی اذیتت نکنه","alternatives":[]}
 {"id":"gold-1560","input":"shabih nist vagheaan yek sag ast","expected":"شبیه نیس، واقعا یه سگه","alternatives":[]}
 {"id":"gold-1561","input":"shakhsan, be che kasi mitavaanid moraajee konid taa yek raabeteye morabigariye do jaanebe raa khalgh konad?","expected":"شخصا، به چه کسی می توانید مراجعه کنید تا یک رابطه مربیگری دوجانبه را خلق کند؟","alternatives":[]}
-{"id":"gold-1562","input":"shalvaret ro ke darnayavordi","expected":"ولی فشار زیادی روم بود","alternatives":[]}
 {"id":"gold-1563","input":"shanbe hastam, vaaghean migam","expected":"شنبه هستم ، واقعا میگم","alternatives":[]}
 {"id":"gold-1565","input":"sharike jensi mage oon nist ke baa ham pool mizaarin az saaghi jens migirin?","expected":"شریک جنسی مگه اون نیست که باهم پول میذارین از ساقی جنس میگیرین؟","alternatives":[]}
-{"id":"gold-1566","input":"sharj goshi shoma tamam mishavad","expected":"من میرم بهشون سلام کنم","alternatives":[]}
 {"id":"gold-1567","input":"sharmande hame vaghteshoon pore","expected":"شرمنده همه وقتشون پره","alternatives":[]}
 {"id":"gold-1568","input":"shast saalegi chehel saalegiye jadid ast, az lahaaze badani","expected":"شصت سالگی چهل سالگی جدید است، از لحاظ بدنی","alternatives":[]}
 {"id":"gold-1569","input":"shavahed dast nakhourdeh va hamzaman arzesh tala darad","expected":"شواهد دستنخورده و همزمان ارزش طلا دارد","alternatives":[]}
 {"id":"gold-1570","input":"shayad kesel konandeh fi nazar biad","expected":"شاید کسل کننده به نظر بیاد","alternatives":[]}
 {"id":"gold-1571","input":"shayad keylihatoon ham shekast ra tajrobe kardeid va amdeidinja ke aram shavid","expected":"شاید خیلیاتونم شکستشو تجربه کردین واومدین اینجا که یه جورایی اروم بشین","alternatives":[]}
 {"id":"gold-1572","input":"shayad moshkel az ma nabashad","expected":"شاید مشکل از ما نباشه","alternatives":[]}
-{"id":"gold-1573","input":"shayad vaghtesh reside ke amedanetar","expected":"باهاش خودمو رو خنک کنم","alternatives":[]}
 {"id":"gold-1574","input":"shenler ham aslan nemifahme","expected":"چندلر هم اصلا نمی فهمه","alternatives":[]}
-{"id":"gold-1575","input":"sherkarhay dostyabi siasathaye khod r","expected":"میکشمت معتاد. میکشمت مفنگی. بی غیرت.","alternatives":[]}
 {"id":"gold-1576","input":"shilaa joon mikhaay ye chaay be maa bedi?","expected":"شیلا جون می خوای یه چای به ما بدی؟","alternatives":[]}
 {"id":"gold-1577","input":"shohar daarad jozaam ke nadaarad","expected":"شوهر داره جذام که نداره.","alternatives":[]}
 {"id":"gold-1578","input":"shohar jaan daasht behesh migoft haani khoshgele va koli naazesho mikeshid","expected":"شوهرجان داشت بهش میگفت هانی خوشگله و کلی نازشو میکشید:","alternatives":[]}
@@ -1535,8 +1395,6 @@
 {"id":"gold-1593","input":"soraagh maadaraan shahrestani ham raftam","expected":"سراغ مادران شهرستانی هم رفتم","alternatives":[]}
 {"id":"gold-1594","input":"soraaghe maadaraane shahrestaani ham raftam","expected":"سراغ مادران شهرستانی هم رفتم","alternatives":[]}
 {"id":"gold-1595","input":"spani, porteghl, marakesh","expected":"اسپانیا، پرتغال، مراکش","alternatives":[]}
-{"id":"gold-1597","input":"ta betuni rahat sor bokhori","expected":"ذره ذره٬قطره قطره٬ میسوزم اما میمونم","alternatives":[]}
-{"id":"gold-1598","input":"ta dast az man bar darand va dar kooh","expected":"من به یک شریک جوان و باهوش متصل شده بودم.","alternatives":[]}
 {"id":"gold-1601","input":"ta hala tourisr az azarbaijan nadide boodam","expected":"تا حالا توریست از آذربایجان ندیده بودم","alternatives":[]}
 {"id":"gold-1602","input":"ta residim khaneh hodoude yek saat be bazi baghi mondeh boud","expected":"تا رسیدیم خونه حدود یک ساعت به بازی باقی مونده بود","alternatives":[]}
 {"id":"gold-1603","input":"taa aan kaar raa bepazirand taa forsat haaye jadidi bedast aavarand","expected":"تا آن کار را بپذیرند تا فرصتهای جدیدی بدست آورند","alternatives":[]}
@@ -1578,7 +1436,6 @@
 {"id":"gold-1639","input":"terump gofteh ben salman bishtar az man az jenayat nefrat darad","expected":"ترامپ گفته بن سلمان بیشتر از من از جنایت نفرت دارد","alternatives":[]}
 {"id":"gold-1640","input":"to ashpaz khane miz naboud","expected":"تو آشپزخونه میز نبود؟","alternatives":[]}
 {"id":"gold-1641","input":"to aslan man ra nemishenasi","expected":"!تو اصلا منو نمی شناسی","alternatives":[]}
-{"id":"gold-1642","input":"to az koja miduni nagoftan","expected":"یا نده ! هر جور راحتی","alternatives":[]}
 {"id":"gold-1643","input":"to az kojaa midooni nagoftan?","expected":"تو از کجا می دونی نگفتن؟","alternatives":[]}
 {"id":"gold-1644","input":"to baa in haa zediat daari","expected":"تو با اینها ضدیت داری","alternatives":[]}
 {"id":"gold-1645","input":"to baa in haal zediat daari","expected":"تو با اینها ضدیت داری","alternatives":[]}
@@ -1595,8 +1452,6 @@
 {"id":"gold-1656","input":"to man ro mamnoo mikoni?","expected":"تو من رو ممنوع میکنی ؟","alternatives":[]}
 {"id":"gold-1657","input":"to manzure man ro mifahmi","expected":"تو منظور من رو میفهمی","alternatives":[]}
 {"id":"gold-1658","input":"to midaani man daaram","expected":". تو میدونی من دارم","alternatives":[]}
-{"id":"gold-1659","input":"to midoni in yani chi ?","expected":"من همه جوره هواتو دارم","alternatives":[]}
-{"id":"gold-1660","input":"to miduni in yani chi","expected":"!زود باشین! عجله کنید","alternatives":[]}
 {"id":"gold-1661","input":"to mostahagh mardi hasti","expected":"تو مستحق مردی هستی","alternatives":[]}
 {"id":"gold-1662","input":"to panj sal inja boudi","expected":"تو پنج سال اینجا بودی","alternatives":[]}
 {"id":"gold-1663","input":"to payaamo paak kardi dige","expected":"تو پیامو پاک کردی دیگه","alternatives":[]}
@@ -1609,7 +1464,6 @@
 {"id":"gold-1670","input":"too in ayaam baashgaah ham raftam va gharaare ye etefaaghaaye khoobi baraaye varzesham biyofte taabestoon","expected":"تو این ایام باشگاه هم رفتم و قراره یه اتفاقای خوبی برای ورزشم بیفته تابستون","alternatives":[]}
 {"id":"gold-1671","input":"too kelaasemoon fazaaye kheyli khoobi bood taghriban hame baa ham raahat boodim","expected":"تو کلاسمون فضای خیلی خوبی بود تقریبا همه با هم راحت بودیم","alternatives":[]}
 {"id":"gold-1672","input":"too madrese ye kam mizadam","expected":"تو مدرسه یه کم می زدم","alternatives":[]}
-{"id":"gold-1673","input":"toop? delet toop mikhad?","expected":"پس میدونی که کی هستش","alternatives":[]}
 {"id":"gold-1674","input":"tooye gerdehamaayi haa mibinan","expected":"توی گردهمآیی ها میبینن","alternatives":[]}
 {"id":"gold-1675","input":"tooye yek otaagh band nemishavam","expected":"توی یه اتاق بند نمیشن","alternatives":[]}
 {"id":"gold-1676","input":"tou bayad biyay ta betoonim","expected":"تو باید بیای تا بتونیم","alternatives":[]}
@@ -1625,22 +1479,17 @@
 {"id":"gold-1686","input":"touye kelassemoun fazaye kheili khoubi boud taghriban hame baham rahat boudim","expected":"تو کلاسمون فضای خیلی خوبی بود تقریبا همه با هم راحت بودیم","alternatives":[]}
 {"id":"gold-1687","input":"toye computer modelhaye cake am didam va baad az hodood yek rob be natije residim","expected":"توی کامپیوتر مدلهای کیکم دیدیم و بعد از حدود یک ربع به نتیجه رسیدیم","alternatives":[]}
 {"id":"gold-1688","input":"trump gofte ast bensalman bishtar az man az jenaayat nefrat daarad","expected":"ترامپ گفته بن سلمان بیشتر از من از جنایت نفرت دارد","alternatives":[]}
-{"id":"gold-1689","input":"tu forushgaj ja gozashtid?","expected":"در آرژانتین، برنامه ای هست","alternatives":[]}
 {"id":"gold-1690","input":"umadin hasan ro nejat bedin?","expected":"اومدین حسن رو نجات بدین؟","alternatives":[]}
-{"id":"gold-1691","input":"un agha he bhm ejaze dd ino ba khodm bbrm","expected":"او گفت آنجا به نظر مانند یک زندان امنیتی کوچک بود","alternatives":[]}
 {"id":"gold-1692","input":"un qeyr ghabl bvr","expected":"اون غیر قابل باور بود","alternatives":[]}
 {"id":"gold-1693","input":"uo bd az zor zdn ha  v aragh rikhtn hay ziyd balakhare movafgh shod","expected":"او بعد از زور زدن ها و عرق ریختن های زیاد بالاخره موفق شد","alternatives":[]}
-{"id":"gold-1694","input":"v zang khatar ra  braye ayandeshan be seda mi'avarad","expected":"تصور کنید که در دنیای امروز یک جوان هستید","alternatives":[]}
 {"id":"gold-1695","input":"va aan raa tamaashaa mikardi?","expected":"و اونو تماشا می کردی ؟","alternatives":[]}
 {"id":"gold-1696","input":"va agar har kodaam az in noghaate tamaas raa be khoobi modiriyat mikard, baaes mishod kaarkonaan ehsaase arzesh konand","expected":"و اگر هر کدام از این نقاط تماس را به خوبی مدیریت میکرد، باعث میشد کارکنان احساس ارزش کنند","alternatives":[]}
 {"id":"gold-1697","input":"va age heliyome baadkonakaa ghable residan be aabshaar khaali beshe","expected":"و اگه هلیوم بادکنکا قبل رسیدن به ابشار خالی بشه","alternatives":[]}
 {"id":"gold-1698","input":"va amaa","expected":"و اما","alternatives":[]}
 {"id":"gold-1699","input":"va az doosham estefaade koni!","expected":"!و از دوشم استفاده کنی","alternatives":[]}
 {"id":"gold-1700","input":"va az jaade be door oftaade ast","expected":"واز جاده به دور افتاده است.","alternatives":[]}
-{"id":"gold-1701","input":"va az komak khastan az ham timi hayeshan dast mikeshand","expected":"بنابراین، اولین باری است که فرصتی قوی در اختیار داریم","alternatives":[]}
 {"id":"gold-1702","input":"va az nazre saazmaani, chegoone mitavaanid sharaayeti khalgh konid","expected":"و از نظر سازمانی، چگونه میتوانید شرایطی خلق کنید","alternatives":[]}
 {"id":"gold-1703","input":"va badtar az aan, hengaami ke maa zavaabet va sharaayet raa mikhaanim, maa pey mibarim","expected":"و بدتر از آن، هنگامیکه ما ضوابط و شرایط را میخوانیم، ما پی میبریم","alternatives":[]}
-{"id":"gold-1704","input":"va be javayezi manand, behtarin makan","expected":"ال:کادوی تولدت چی میخواد بگیره برات؟","alternatives":[]}
 {"id":"gold-1705","input":"va be maghaamaat aamrikaai tosie mikonim ke ebteda baa nezaamiaan khod dar khalij faars sohbat konand va sepas be ezhaar nazar bepardaazand","expected":"وبه مقامات آمریکایی توصیه می کنیم که ابتدا با نظامیان خود در خلیج فارس صحبت کنند و سپس به اظهار نظر بپردازند","alternatives":[]}
 {"id":"gold-1706","input":"va be manzoore fahme aan az tamaame zavaayaa va be manzoore anjaame kaamel va doroste yek kaar","expected":"و به منظور فهم آن از تمامی زوایا و به منظورانجام کامل و درست یک کار","alternatives":[]}
 {"id":"gold-1707","input":"va be soaalaati paasokh dahand ke chegoone aksolamal neshaan daadeand","expected":"و به سوالاتی پاسخ دهند که چگونه عکسالعمل نشان دادهاند","alternatives":[]}
@@ -1662,23 +1511,18 @@
 {"id":"gold-1724","input":"va in mesal digari baray rahbaran ast","expected":"و این مثال دیگری برای رهبران است","alternatives":[]}
 {"id":"gold-1725","input":"va injaa mibinid","expected":"و اینجا میبینید","alternatives":[]}
 {"id":"gold-1726","input":"va ino hamishe yaadet baashe","expected":"و اینو همیشه یادت باشه","alternatives":[]}
-{"id":"gold-1727","input":"va javabi ke yaftim sade bood : ehter","expected":"بجای آن کامپیوتر یا گوشی همراه تان را بیاورید","alternatives":[]}
 {"id":"gold-1728","input":"va kasi ke entekhaab mikonid baashid yani hame chiz","expected":"و کسی که انتخاب میکنید باشید یعنی همه چیز","alternatives":[]}
 {"id":"gold-1729","input":"va kheili ha madar shoudand vaghti khoudeshan hanouz bache boudand","expected":"و خیلیها مادر شدند وقتی خودشان هنوز بچه بودند","alternatives":[]}
 {"id":"gold-1730","input":"va kheily ha madar shdand vaghti hanouz khdeshan bache boodand","expected":"و خیلیها مادر شدند وقتی خودشان هنوز بچه بودند","alternatives":[]}
-{"id":"gold-1731","input":"va kheyli ha madar shodand vaghti khodeshan hanooz bache boodand","expected":"درست به همان اندازه که از نابغههای دیجیتالی جوانشان حمایت میکنند؟","alternatives":[]}
 {"id":"gold-1732","input":"va khoda mrgam bedahad chetor mage shod moones joon?","expected":"وا خدا مرگم بده چطور شده مگه مونس جون؟","alternatives":[]}
 {"id":"gold-1733","input":"va khtare donbal kardan yek hadaf tarjihi","expected":"و خطر دنبال کردن یک هدف ترجیحی","alternatives":[]}
 {"id":"gold-1735","input":"va maa baraaye naahaar raftim","expected":"و ما برای ناهار رفتیم","alternatives":[]}
 {"id":"gold-1736","input":"va maa do emtiyaaz aghabim","expected":".و ما دو امتیاز عقبیم","alternatives":[]}
 {"id":"gold-1737","input":"va maa, shahrvandaan? maa mitavaanim az sedaayemaan estefaade konim","expected":"و ما، شهروندان؟ ما میتوانیم از صدایمان استفاده کنیم","alternatives":[]}
 {"id":"gold-1738","input":"va migi in vaasat ajibe","expected":"و میگی این واست عجیبه؟","alternatives":[]}
-{"id":"gold-1739","input":"va migi in vasat ajibe ?","expected":"آرزوها و امیدهای بسیار جالبی دارند","alternatives":[]}
 {"id":"gold-1740","input":"va migooyam jang raa bord, be jaaye in ke poolash raa dar yek nobat begirad 20 baraabare mablaghe avaliye raa pas gereft","expected":"و میگویم جنگ را برد، بجایی این که پولش را در یک نوبت بگیرد ۲۰ برابر مبلغ اولیه را پس گرفت","alternatives":[]}
 {"id":"gold-1741","input":"va moshtaagham tamaame emshab raa baraaye bayaane joziyaate aan dar khedmate shomaa baasham","expected":"و مشتاقم تمام امشب را برای بیان جزئیات آن در خدمت شما باشم","alternatives":[]}
 {"id":"gold-1742","input":"va pit ham divooneye mane","expected":".و پیت هم دیوونه منه","alternatives":[]}
-{"id":"gold-1743","input":"va sadeghane begooyam in ghaziye man","expected":"از اساتید و سلاطین تقلید صدای سگ","alternatives":[]}
-{"id":"gold-1744","input":"va shadish baad az amali kardan in pishnahad chand barabar shod","expected":"امروز کلی گریه کردم چون نمیخام بابام و مامانم پیربشن","alternatives":[]}
 {"id":"gold-1745","input":"va shomaa aanjaa neshastid dar haali ke tooye dahaanetaan pore chips ast","expected":"و شما آنجا نشستید در حالی که توی دهانتان پر چیپس است","alternatives":[]}
 {"id":"gold-1746","input":"va shomaa baavar nemikonam ke","expected":"و شما ، باور نمیکنم که","alternatives":[]}
 {"id":"gold-1747","input":"va tol in ballon bishtar az bist o do metr","expected":"و طول این بالن بیشتر از طول بیست و دو متر","alternatives":[]}
@@ -1713,7 +1557,6 @@
 {"id":"gold-1777","input":"vaghti polis haa paarti deleshaan mikhaahad va shoma az paarti bizaarid","expected":"وقتی پلیسا پارتی دلشون می خواد و شما از پارتی بیزارید","alternatives":[]}
 {"id":"gold-1778","input":"vaghti polisaa paarti deleshoon mikhaad va shomaa az paarti bizaarid","expected":"وقتی پلیسا پارتی دلشون می خواد و شما از پارتی بیزارید","alternatives":[]}
 {"id":"gold-1779","input":"vaghti tamaam shod barashgardaan","expected":"وقتی تموم شد برش گردون","alternatives":[]}
-{"id":"gold-1780","input":"vaghti tamoom shod baresh gardoon","expected":"اگه طبق قانون پیش بریم","alternatives":[]}
 {"id":"gold-1781","input":"vahid aan eynaak mal e kiee?","expected":"وحید اون عینک مال کیه؟","alternatives":[]}
 {"id":"gold-1782","input":"vahid oon eynak maale kiye?","expected":"وحید اون عینک مال کیه؟","alternatives":[]}
 {"id":"gold-1783","input":"vakman man raa ham pas bede","expected":"!واکمن من رو هم پس بده","alternatives":[]}
@@ -1742,9 +1585,7 @@
 {"id":"gold-1807","input":"vali taraf kheyli zerange","expected":"ولی طرف خیلی زرنگه","alternatives":[]}
 {"id":"gold-1808","input":"vali too matab doktor sakhtete?","expected":"ولی تو مطب دکتر سختته؟","alternatives":[]}
 {"id":"gold-1809","input":"vali yek raahnamaaye kheradmand va daanaa mitavaanad be shomaa soaale dorost raa pishnahaad konad","expected":"ولی یک راهنمای خردمند و دانا میتواند به شما سوال درست را پیشنهاد کند","alternatives":[]}
-{"id":"gold-1810","input":"various studies show more than that in recent months the researchers are finding that a lot more people","expected":"و برای اکثر این مردم بسیاری هرگز قادر به سخن گفتن از آن با کارفرمای خود نخواهند بود","alternatives":[]}
 {"id":"gold-1811","input":"vase halouvin mikhaham maghnae sabz ba chador sar konam ba batoom beram biroun","expected":"واسه هالوین میخوام مقنعه سبز و چادر سر کنم با باتوم برم بیرون","alternatives":[]}
-{"id":"gold-1812","input":"vase hamin baraye yek hafte","expected":"بیاین یه کم حرف بزنیم","alternatives":[]}
 {"id":"gold-1813","input":"vase haminam ekhrajam kon","expected":"واسه همینم اخراجم کردن","alternatives":[]}
 {"id":"gold-1814","input":"vase pardakht poul bashgah","expected":"واسه پرداخت پول باشگاه","alternatives":[]}
 {"id":"gold-1815","input":"vaseh har doumoun roshan misheh","expected":"واسه هردومون راحت باشه","alternatives":[]}
@@ -1761,8 +1602,6 @@
 {"id":"gold-1826","input":"viraayesh cheghadr tasir daasht?","expected":"ویرایش چقدر تاثیر داشت؟","alternatives":[]}
 {"id":"gold-1827","input":"vojood nadaare ke peydaa koni","expected":"وجود نداره که پیدا کنی","alternatives":[]}
 {"id":"gold-1828","input":"walkman e man ra ham pas bede","expected":"!واکمن من رو هم پس بده","alternatives":[]}
-{"id":"gold-1829","input":"ya maharat haye monaseb kar ya dar pe","expected":"بسیاری اوقات میبینیم مردم پیامهای فیسبوکی میآورند","alternatives":[]}
-{"id":"gold-1830","input":"ya maharat haye monasebe kar ya dar p","expected":"و در زمینه صنعت میزبانی اطلاعات انباشته دارم","alternatives":[]}
 {"id":"gold-1832","input":"yaa maashin chizish shode ke polis mifahmad az jaaye barkhord moghaser ki ast","expected":"یا ماشین چیزیش شده که پلیس می فهمه از جای برخورد مقصر کیه","alternatives":[]}
 {"id":"gold-1833","input":"yaa shaayad jomle nesbatan jadid ast","expected":"یا شاید جمله نسبتا جدید است.","alternatives":[]}
 {"id":"gold-1834","input":"yaa ye ehaanate baavar nakardani","expected":"یا یه اهانت باورنکردنی","alternatives":[]}
@@ -1783,22 +1622,18 @@
 {"id":"gold-1849","input":"ye baste vaghti baste bashe","expected":"یه بسته وقتی بسته باشه","alternatives":[]}
 {"id":"gold-1850","input":"ye chek panjah hezar dolary baraye","expected":"یه چک 50000 دلاری برای","alternatives":[]}
 {"id":"gold-1851","input":"ye chizaayi ro yaadam rafte","expected":"یه چیزایی رو یادم رفته","alternatives":[]}
-{"id":"gold-1852","input":"ye chizhayi enteqal mide","expected":"قبل از اینکه شروع کنی","alternatives":[]}
 {"id":"gold-1853","input":"ye dokhtar joloush ro gereft","expected":"!یه دختر جلوش رو گرفت","alternatives":[]}
 {"id":"gold-1854","input":"ye doosti daarim ke khaanoomesh haamele shod va chon kasi ro too in shahr nadaashtan maamaanam raft bimaarestaan va moond pishesh","expected":"یه دوستی داریم که خانومش حامله شد و چون کسی رو تو این شهر نداشتن مامانم رفت بیمارستان و موند پیشش","alternatives":[]}
 {"id":"gold-1855","input":"ye khorde azash khosham oomad","expected":"یه خورده ازش خوشم اومد","alternatives":[]}
 {"id":"gold-1856","input":"ye madarshoar daram baram loobiya khoord karde o ba gojehfarangi rande shodeh pokhte va dadeh behem ta moghe e dorostkardanesh rahat basham","expected":"یه مادرشوهردارم: برام لوبیا خرد کرده و با گوجه فرنگی رنده شده پخته و داده بهم تا موقع درست کردنش راحت باشم","alternatives":[]}
-{"id":"gold-1857","input":"ye min pish sohbat krdi","expected":"هر کی ماشینای بیشتری می شمرد","alternatives":[]}
 {"id":"gold-1858","input":"ye modat ba khahar mohsen telephoni ashana shode boodam va ou ham az rabeteh va alaghe ye ma khbar dasht","expected":"یه مدت با خواهر محسن هم تلفنی اشنا شده بودم و اونم از رابطه و علاقه ما خبر داشت","alternatives":[]}
 {"id":"gold-1859","input":"ye moosh too kaabinet didam","expected":"یه موش تو کابینت دیدم","alternatives":[]}
 {"id":"gold-1861","input":"ye shahre makhroobe shode","expected":".یه شهر مخروبه شده","alternatives":[]}
 {"id":"gold-1862","input":"ye shoar darim behesh migim yeki az akhlaghay khoob man ro begoo migeh age begam porroo mishi","expected":"یه شوهر داریم بهش میگم یکی از اخلاقای خوب من رو بگو،میگه اگه بگم پررو میشی","alternatives":[]}
 {"id":"gold-1863","input":"ye shohar daarim vaghti behesh goftam televiziyoon baraat mohemtare baghalam kardo goft","expected":"یه شوهرداریم وقتی بهش گفتم تلویزیون برات مهمتره بغلم کردو گفت","alternatives":[]}
-{"id":"gold-1866","input":"ye tekke az nan to mokhay?","expected":"این غیر قابل باور هست","alternatives":[]}
 {"id":"gold-1867","input":"ye zan too in gorbe hast?","expected":"یه زن تو اون گربه هست؟","alternatives":[]}
 {"id":"gold-1868","input":"yek baar in ro gofteam na?","expected":"یه بار اینو گفتم، نه؟","alternatives":[]}
 {"id":"gold-1869","input":"yek barnaameye mortabet baa salaamati etelaa'aate shomaa raa be sherkate bime miforooshad","expected":"یک برنامه مرتبط با سلامتی اطلاعات شما را به شرکت بیمه درمان میفروشد","alternatives":[]}
-{"id":"gold-1870","input":"yek boad modern be aan biyafzayim","expected":"این بخشی خارقالعاده از کار است","alternatives":[]}
 {"id":"gold-1871","input":"yek cake panir digar amadeh","expected":"یک کیک پنیر دیگه اومده","alternatives":[]}
 {"id":"gold-1872","input":"yek doone majaani mifreste","expected":"یک دونه مجانی می فرسته","alternatives":[]}
 {"id":"gold-1873","input":"yek jariyaane kherade miyaan nasli raa beparvaraanad?","expected":"یک جریان خرد میان نسلی را بپروراند؟","alternatives":[]}
@@ -1812,7 +1647,6 @@
 {"id":"gold-1881","input":"yek meghdaar paarche miavaram","expected":"یه مقدار پارچه میارم","alternatives":[]}
 {"id":"gold-1882","input":"yek nazar halaal tar az shir maadar ast","expected":"یه نظر حلال تر از شیر مادره.","alternatives":[]}
 {"id":"gold-1883","input":"yek parande nadidan?","expected":"یه پرنده ندیدن؟","alternatives":[]}
-{"id":"gold-1884","input":"yek rish sefid modern be haman andaze","expected":"دلیل دیگری که کارکنان مودبتر نیستند این است","alternatives":[]}
 {"id":"gold-1886","input":"yek tikeh choub tabdil kardi","expected":"یک تیکه چوب تبدیل کردی","alternatives":[]}
 {"id":"gold-1887","input":"yek zan too aan gorbe ast?","expected":"یه زن تو اون گربه هست؟","alternatives":[]}
 {"id":"gold-1888","input":"yeki daare mige raft baalaa, yeki mige mikeshe paain, yeki mige inaa baazishoone","expected":"یکی داره میگه رفت بالا، یکی میگه میکشه پایین، یکی میگه اینا بازیشونه","alternatives":[]}

@@ -54,7 +54,13 @@ def fetch(name: str) -> str:
         return response.read().decode("utf-8")
 
 
-def build(out: Path, max_word_delta: int = 1, min_words: int = 2, max_words: int = 30) -> dict:
+def collect_pairs() -> tuple[dict[str, str], int]:
+    """Every unique (lowercased Finglish -> normalized Persian) pair, and the raw row count.
+
+    Shared with `build_dev.py`, which takes the rows `drop_reason` rejects. One
+    implementation, so the two sets are disjoint by construction rather than by
+    two loops happening to agree.
+    """
     pairs: dict[str, str] = {}
     raw_rows = 0
     for name, ci, cj, header in SOURCES:
@@ -70,21 +76,33 @@ def build(out: Path, max_word_delta: int = 1, min_words: int = 2, max_words: int
             persian = normalize(parts[cj].strip())
             if finglish and persian:
                 pairs.setdefault(finglish.lower(), persian)
+    return pairs, raw_rows
+
+
+def drop_reason(finglish: str, persian: str, max_word_delta: int = 1, min_words: int = 2,
+                max_words: int = 30) -> str | None:
+    """Why the gold build rejects a pair, or None when it keeps it."""
+    lw, pw = finglish.split(), persian.split()
+    if not (min_words <= len(lw) <= max_words):
+        return "length"
+    if not LATIN_OK.match(finglish) or not PERSIAN_OK.search(persian):
+        return "charset"
+    # The alignment filter. Persian and Finglish word counts should track
+    # closely; a large gap means the two sides are not the same sentence,
+    # which is the dominant defect in the source.
+    if abs(len(lw) - len(pw)) > max_word_delta:
+        return "misaligned"
+    return None
+
+
+def build(out: Path, max_word_delta: int = 1, min_words: int = 2, max_words: int = 30) -> dict:
+    pairs, raw_rows = collect_pairs()
 
     kept, dropped = [], {"misaligned": 0, "length": 0, "charset": 0}
     for finglish, persian in sorted(pairs.items()):
-        lw, pw = finglish.split(), persian.split()
-        if not (min_words <= len(lw) <= max_words):
-            dropped["length"] += 1
-            continue
-        if not LATIN_OK.match(finglish) or not PERSIAN_OK.search(persian):
-            dropped["charset"] += 1
-            continue
-        # The alignment filter. Persian and Finglish word counts should track
-        # closely; a large gap means the two sides are not the same sentence,
-        # which is the dominant defect in the source.
-        if abs(len(lw) - len(pw)) > max_word_delta:
-            dropped["misaligned"] += 1
+        reason = drop_reason(finglish, persian, max_word_delta, min_words, max_words)
+        if reason:
+            dropped[reason] += 1
             continue
         kept.append({
             "id": f"gold-{len(kept) + 1:04d}",

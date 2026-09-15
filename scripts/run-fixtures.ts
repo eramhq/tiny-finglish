@@ -9,6 +9,7 @@
  *   node scripts/run-fixtures.ts --hybrid        # both engines, arbitrated per word
  *   node scripts/run-fixtures.ts --gold          # untouched gold: real human Finglish
  *   node scripts/run-fixtures.ts --gold --gold-set authored   # the old 71 authored pairs
+ *   node scripts/run-fixtures.ts --dev           # real human Finglish disjoint from gold — the tuning surface
  *   node scripts/run-fixtures.ts --id ordinary-001
  */
 import { buildFixtureReport, formatReport } from "./_report.ts";
@@ -25,9 +26,11 @@ const report = buildFixtureReport({
   useFrequency: !flag("no-frequency"),
   useBigram: flag("bigram"),
   useHybrid: flag("hybrid"),
-  file: flag("gold")
-    ? (value("gold-set") === "authored" ? "data/gold/authored.jsonl" : "data/gold/gold.jsonl")
-    : "data/fixtures/fixtures.jsonl",
+  file: flag("dev")
+    ? "data/dev/dev.jsonl"
+    : flag("gold")
+      ? (value("gold-set") === "authored" ? "data/gold/authored.jsonl" : "data/gold/gold.jsonl")
+      : "data/fixtures/fixtures.jsonl",
   onlyId: value("id"),
 });
 

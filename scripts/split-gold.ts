@@ -29,6 +29,16 @@
  * Idempotent: it reads both files back, recombines them, and re-runs the rule,
  * so running it twice is the same as running it once, and a later engine change
  * that rescues a row will return it to the set.
+ *
+ * **A second rule, from an LLM alignment audit.** The CER rule is engine-bound,
+ * and it misses misaligned rows whose sides happen to share letters. So every
+ * row was also shown — input and reference only, never an engine's output — to
+ * two model families (a Claude subagent and Codex GPT-5.6 luna), each labelling
+ * it aligned, partial or misaligned. `data/gold/audit.jsonl` records both
+ * verdicts per row, keyed to the row's content hash so a changed row loses its
+ * verdict rather than inheriting one. A row moves only when **both** families
+ * say misaligned, or when they disagree and adjudication on reading the row
+ * says so; the file records which. Every quarantined row carries a `reason`.
  */
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { createHash } from "node:crypto";
@@ -40,6 +50,21 @@ const root = new URL("..", import.meta.url);
 const GOLD = "data/gold/gold.jsonl";
 const MISALIGNED = "data/gold/gold-misaligned.jsonl";
 const PROVENANCE = "data/provenance/gold.json";
+const AUDIT = "data/gold/audit.jsonl";
+
+interface AuditRow {
+  id: string;
+  rowSha: string;
+  verdicts: Record<string, string>;
+  /** Final call. `misaligned` only on both families, or on adjudication. */
+  final: "aligned" | "partial" | "misaligned";
+  by: "both" | "adjudicated";
+}
+
+/** Same identity as `row_sha` in `training/tiny_finglish_training/build_dev.py`. */
+function rowSha(row: Fixture): string {
+  return createHash("sha256").update(`${row.input}\t${row.expected}`).digest("hex").slice(0, 16);
+}
 
 /**
  * Above this, the reference and a competent transliteration of the input share
@@ -73,24 +98,49 @@ function foldedCer(reference: string, hypothesis: string): number {
   return characterErrorRate(splitWords(reference).join(" "), splitWords(hypothesis).join(" "));
 }
 
-const all = [...readRows(GOLD), ...readRows(MISALIGNED)].sort((a, b) => a.id.localeCompare(b.id));
+type Quarantined = Fixture & { reason: "cer" | "audit"; cer: number };
+
+// Strip the fields this script adds, so a rescued row returns to gold clean.
+const all = [...readRows(GOLD), ...readRows(MISALIGNED)]
+  .map(({ cer: _cer, reason: _reason, ...row }: Fixture & { cer?: number; reason?: string }) => row as Fixture)
+  .sort((a, b) => a.id.localeCompare(b.id));
 const transliterator = buildTransliterator({ model: false });
 
+const audit = new Map<string, AuditRow>();
+if (existsSync(new URL(AUDIT, root))) {
+  for (const row of readRows(AUDIT) as unknown as AuditRow[]) audit.set(row.id, row);
+}
+
 const kept: Fixture[] = [];
-const misaligned: Array<Fixture & { cer: number }> = [];
+const misaligned: Quarantined[] = [];
+let staleAudits = 0;
 for (const row of all) {
   if (row.expected === null) {
     kept.push(row);
     continue;
   }
-  const cer = foldedCer(normalize(row.expected), normalize(transliterator.transliterate(row.input).text));
-  if (cer > CER_THRESHOLD) misaligned.push({ ...row, cer: Math.round(cer * 1000) / 1000 });
+  const cer = Math.round(
+    foldedCer(normalize(row.expected), normalize(transliterator.transliterate(row.input).text)) * 1000,
+  ) / 1000;
+  const verdict = audit.get(row.id);
+  if (verdict && verdict.rowSha !== rowSha(row)) staleAudits++;
+  if (cer > CER_THRESHOLD) misaligned.push({ ...row, reason: "cer", cer });
+  else if (verdict?.rowSha === rowSha(row) && verdict.final === "misaligned") misaligned.push({ ...row, reason: "audit", cer });
   else kept.push(row);
 }
+const byReason = (reason: string) => misaligned.filter((r) => r.reason === reason).length;
+const auditMoved = misaligned.filter((r) => r.reason === "audit");
+const adjudicated = auditMoved.filter((r) => audit.get(r.id)!.by === "adjudicated").length;
 
 console.log(`gold rows       ${all.length}`);
 console.log(`kept            ${kept.length}`);
-console.log(`misaligned      ${misaligned.length}  (CER > ${CER_THRESHOLD} under ${ENGINE})`);
+console.log(`misaligned      ${misaligned.length}`);
+console.log(`  cer           ${byReason("cer")}  (CER > ${CER_THRESHOLD} under ${ENGINE})`);
+console.log(`  audit         ${byReason("audit")}  (${auditMoved.length - adjudicated} both judges, ${adjudicated} adjudicated; ${audit.size} audited, ${staleAudits} stale)`);
+if (staleAudits) {
+  console.error(`${staleAudits} audit rows no longer match their gold row; re-run the audit for them`);
+  process.exit(1);
+}
 for (const row of misaligned.slice(0, 5)) {
   console.log(`  ${row.id}  ${JSON.stringify(row.input)} -> ${JSON.stringify(row.expected)}`);
 }
@@ -122,7 +172,8 @@ writeFileSync(
       contentMismatch: {
         file: MISALIGNED,
         rows: misaligned.length,
-        rule: `characterErrorRate > ${CER_THRESHOLD}`,
+        byReason: { cer: byReason("cer"), audit: byReason("audit") },
+        rule: `characterErrorRate > ${CER_THRESHOLD}; otherwise the alignment audit's final verdict is misaligned`,
         measuredAgainst: ENGINE,
         fold:
           "ZWNJ and punctuation folded to spaces first — splitWords() from src/metrics.ts, " +
@@ -133,6 +184,19 @@ writeFileSync(
           "are moved rather than deleted: they are evidence about the source dataset.",
         sha256: sha(MISALIGNED),
       },
+      ...(audit.size
+        ? {
+          alignmentAudit: {
+            ...(provenance["alignmentAudit"] as Record<string, unknown> | undefined),
+            file: AUDIT,
+            rowsAudited: audit.size,
+            quarantined: auditMoved.length,
+            quarantinedByBothJudges: auditMoved.length - adjudicated,
+            quarantinedByAdjudication: adjudicated,
+            sha256: sha(AUDIT),
+          },
+        }
+        : {}),
       sha256: sha(GOLD),
     },
     null,

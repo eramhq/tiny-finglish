@@ -7,7 +7,13 @@
  * folds it applies — and the ones it deliberately does not — are pinned.
  */
 import { describe, expect, it } from "vitest";
-import { characterErrorRate, splitWords, wordAccuracy } from "../src/metrics.ts";
+import {
+  characterErrorRate,
+  lenientSplitWords,
+  splitWords,
+  wordAccuracy,
+  wordMismatches,
+} from "../src/metrics.ts";
 
 const ZWNJ = "‌";
 
@@ -63,6 +69,62 @@ describe("wordAccuracy", () => {
 
   it("folds ZWNJ on both sides", () => {
     expect(wordAccuracy(`می${ZWNJ}کنی`, "می کنی")).toEqual({ correct: 2, total: 2 });
+  });
+});
+
+describe("lenientSplitWords", () => {
+  it("joins verbal prefixes however they were separated", () => {
+    expect(lenientSplitWords(`می${ZWNJ}کنم`)).toEqual(["میکنم"]);
+    expect(lenientSplitWords("نمی دانم")).toEqual(["نمیدانم"]);
+    expect(lenientSplitWords("میکنم")).toEqual(["میکنم"]);
+  });
+
+  it("joins plural and personal suffixes onto the word before", () => {
+    expect(lenientSplitWords("کتاب ها را")).toEqual(["کتابها", "را"]);
+    expect(lenientSplitWords("رفته اند")).toEqual(["رفتهاند"]);
+    expect(lenientSplitWords("بزرگ ترین")).toEqual(["بزرگترین"]);
+  });
+
+  it("folds آ and digit scripts, and nothing that changes the word", () => {
+    expect(lenientSplitWords("آن ۲۵")).toEqual(["ان", "25"]);
+    // ع, long vowels and homophone letters are real spelling errors.
+    expect(lenientSplitWords("عالی سد")).toEqual(["عالی", "سد"]);
+  });
+
+  it("scores spacing variants as the same words", () => {
+    expect(wordAccuracy("میکنم کتابها", `می${ZWNJ}کنم کتاب ها`, lenientSplitWords))
+      .toEqual({ correct: 2, total: 2 });
+    expect(wordAccuracy("میکنم کتابها", `می${ZWNJ}کنم کتاب ها`)).toEqual({ correct: 0, total: 2 });
+  });
+
+  it("never leaves a prefix or suffix dangling at a boundary", () => {
+    expect(lenientSplitWords("ها می")).toEqual(["ها", "می"]);
+  });
+});
+
+describe("wordMismatches", () => {
+  const costOf = (r: string, h: string) =>
+    wordMismatches(r.split(" "), h.split(" ")).reduce((sum, s) => sum + s.cost, 0);
+
+  it("returns the runs the distance charged, and their costs sum to it", () => {
+    const spans = wordMismatches("الف ب ج د".split(" "), "الف خ ج ذ ر".split(" "));
+    expect(spans).toEqual([
+      { refStart: 1, refEnd: 2, hypStart: 1, hypEnd: 2, cost: 1 },
+      { refStart: 3, refEnd: 4, hypStart: 3, hypEnd: 5, cost: 2 },
+    ]);
+    for (const [r, h] of [["الف ب ج", "الف خ ب ج"], ["الف", "ب ج د"], ["الف ب", "الف ب"]] as const) {
+      const { correct, total } = wordAccuracy(r, h);
+      expect(Math.min(costOf(r, h), total)).toBe(total - correct);
+    }
+  });
+
+  it("represents a pure deletion or insertion as an empty side", () => {
+    expect(wordMismatches(["الف", "ب"], ["الف"])).toEqual([
+      { refStart: 1, refEnd: 2, hypStart: 1, hypEnd: 1, cost: 1 },
+    ]);
+    expect(wordMismatches(["الف"], ["خ", "الف"])).toEqual([
+      { refStart: 0, refEnd: 0, hypStart: 0, hypEnd: 1, cost: 1 },
+    ]);
   });
 });
 

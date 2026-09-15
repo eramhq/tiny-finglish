@@ -72,7 +72,7 @@ from pathlib import Path
 
 import brotli
 
-from .build_frequency import encode_front_coded, load_gold_keys
+from .build_frequency import EVALUATION_FILES, encode_front_coded, load_gold_keys
 from .normalize import fold_for_match, normalize
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -222,9 +222,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--source", type=Path, default=DEFAULT_SOURCE)
     parser.add_argument("--out", type=Path, default=DEFAULT_OUT)
-    parser.add_argument("--gold", type=Path, nargs="+",
-                        default=[ROOT / "data" / "gold" / "gold.jsonl",
-                                 ROOT / "data" / "gold" / "gold-misaligned.jsonl"])
+    parser.add_argument("--gold", type=Path, nargs="+", default=EVALUATION_FILES)
     parser.add_argument("--vocab", type=int, default=25000)
     parser.add_argument("--min-count", type=int, default=3)
     parser.add_argument("--max-pairs", type=int, default=30000)

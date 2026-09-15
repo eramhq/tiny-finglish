@@ -62,6 +62,8 @@ export interface Fixture {
   alternatives: string[];
   notes?: string;
   expectAction?: string;
+  /** Dev set only: the reference minimally edited to what was actually typed. */
+  faithful?: string;
 }
 
 export function loadFixtures(file = "data/fixtures/fixtures.jsonl"): Fixture[] {
