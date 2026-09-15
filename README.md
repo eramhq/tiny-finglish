@@ -269,11 +269,35 @@ as an identifier; `email` is preserved as English rather than converted to
 Everything runs in the page. No text leaves the browser, there is no telemetry,
 and the package makes no network request — the weights are a local import.
 
+## Demo
+
+```bash
+npm install
+npm run playground            # http://localhost:5173
+```
+
+Three panels, all running in the tab with no server:
+
+* **Try it** — one input, with every span, every candidate the decoder
+  considered, its probability and the reason it was chosen. Preset examples
+  cover the etymological homophones, ZWNJ, protected spans and vowel length.
+  The lexicon-snap tier (§4) is a toggle, so you can see what it would do.
+* **Fixture suite** — all 175 committed fixtures, or the 71 untouched gold
+  cases, run in-browser in ~130 ms. Per-category accuracy, copy-span
+  preservation, and **every failure expanded in full** with expected vs. got
+  and the candidate distribution that produced it. Toggling the model off runs
+  the rule baseline instead, so the two are directly comparable.
+* **Scaling curve** — the M2 result the shipped configuration was selected
+  from, and the same model measured against all three evaluation sets.
+
+It is built to show what the model gets wrong. The failure list is the point of
+the page, not an appendix to it.
+
 ## Development
 
 ```bash
 npm install
-npm test                      # 59 JS tests
+npm test                      # 65 JS tests
 npm run typecheck
 node scripts/run-fixtures.ts  # fixture report with per-candidate reasons
 node scripts/run-fixtures.ts --verbose --rules   # rule baseline, every failure

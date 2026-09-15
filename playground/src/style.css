@@ -53,3 +53,70 @@ ol { padding-left: 1.25rem; }
 .reason { color: var(--muted); font-size: 0.78rem; }
 code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.85em; }
 footer { margin-top: 2.5rem; border-top: 1px solid var(--line); padding-top: 1rem; }
+
+/* ---------------------------------------------------------------- tabs */
+.badge {
+  display: inline-block; margin-left: 0.5rem; padding: 0.1rem 0.45rem;
+  border: 1px solid var(--line); border-radius: 999px;
+  font-size: 0.72rem; color: var(--muted); vertical-align: middle;
+}
+.tabs { display: flex; gap: 0.25rem; margin: 1.5rem 0 1.25rem; border-bottom: 1px solid var(--line); }
+.tabs button {
+  appearance: none; background: none; border: 0; border-bottom: 2px solid transparent;
+  padding: 0.5rem 0.75rem; margin-bottom: -1px; cursor: pointer;
+  color: var(--muted); font: inherit; font-size: 0.9rem;
+}
+.tabs button:hover { color: var(--fg); }
+.tabs button.active { color: var(--fg); border-bottom-color: var(--convert); }
+.tab-panel h2:first-of-type { margin-top: 1.5rem; }
+
+/* ------------------------------------------------------------ examples */
+.examples { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 1rem; }
+.chip {
+  appearance: none; cursor: pointer; font: inherit; font-size: 0.78rem;
+  padding: 0.22rem 0.6rem; border-radius: 999px;
+  border: 1px solid var(--line); background: var(--card); color: var(--muted);
+}
+.chip:hover { color: var(--fg); border-color: var(--convert); }
+
+/* --------------------------------------------------------------- table */
+table.grid { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin: 0.75rem 0; }
+table.grid th {
+  text-align: right; font-weight: 500; color: var(--muted);
+  font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em;
+  padding: 0.35rem 0.5rem; border-bottom: 1px solid var(--line);
+}
+table.grid th:first-child, table.grid td:first-child { text-align: left; }
+table.grid td {
+  text-align: right; padding: 0.35rem 0.5rem;
+  border-bottom: 1px solid var(--line); font-variant-numeric: tabular-nums;
+}
+table.grid tr.total td { font-weight: 600; color: var(--fg); }
+table.grid tbody tr:hover td { background: color-mix(in srgb, var(--convert) 7%, transparent); }
+
+/* ------------------------------------------------------------ failures */
+.fail {
+  border: 1px solid var(--line); border-left: 3px solid var(--bad, #dc2626);
+  border-radius: 6px; background: var(--card); padding: 0.5rem 0.7rem; margin-bottom: 0.4rem;
+}
+.fail summary { cursor: pointer; display: flex; gap: 0.6rem; align-items: baseline; flex-wrap: wrap; }
+.fail summary code { color: var(--muted); font-size: 0.78rem; }
+.fail-grid {
+  display: grid; grid-template-columns: 6.5rem 1fr; gap: 0.2rem 0.75rem;
+  align-items: baseline; margin: 0.5rem 0;
+}
+.mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.78rem; padding: 0.1rem 0; }
+.ok { color: var(--copy); }
+.bad { color: var(--bad, #dc2626); }
+.dst.ok { color: var(--copy); }
+.dst.bad { color: var(--bad, #dc2626); }
+.notes p { font-size: 0.85rem; color: var(--muted); margin: 0.5rem 0; }
+.notes p strong { color: var(--fg); }
+.notes p.bad, .notes p.bad strong { color: var(--bad, #dc2626); }
+select, button#fx-run {
+  font: inherit; font-size: 0.85rem; padding: 0.2rem 0.5rem;
+  border: 1px solid var(--line); border-radius: 4px;
+  background: var(--card); color: var(--fg); cursor: pointer;
+}
+:root { --bad: #dc2626; }
+@media (prefers-color-scheme: dark) { :root { --bad: #f87171; } }

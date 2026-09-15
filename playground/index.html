@@ -12,13 +12,23 @@
         <h1>tiny-finglish</h1>
         <p class="sub">
           Finglish &rarr; Persian, entirely in this tab. No server, no API key.
+          <span id="badge" class="badge"></span>
         </p>
       </header>
 
-      <section class="io">
+      <nav class="tabs" role="tablist">
+        <button role="tab" data-tab="try" class="active">Try it</button>
+        <button role="tab" data-tab="fixtures">Fixture suite</button>
+        <button role="tab" data-tab="scaling">Scaling curve</button>
+      </nav>
+
+      <!-- ------------------------------------------------------ try it -->
+      <section id="tab-try" class="tab-panel">
+        <div class="examples" id="examples"></div>
+
         <label for="input">Finglish</label>
-        <textarea id="input" rows="3" spellcheck="false"
-          placeholder="salam, man emrooz miram Muscat">salam, man emrooz miram Muscat</textarea>
+        <textarea id="input" rows="2" spellcheck="false"
+          autocapitalize="off" autocorrect="off">salam, man emrooz miram Muscat</textarea>
 
         <label for="output">Persian</label>
         <output id="output" dir="rtl" lang="fa"></output>
@@ -28,27 +38,58 @@
           <span id="timing"></span>
           <span id="engine"></span>
         </div>
-      </section>
 
-      <section class="controls">
-        <label><input type="checkbox" id="use-model" checked /> use learned model</label>
-        <label><input type="checkbox" id="use-lexicon" checked /> rank with lexicon</label>
-        <label><input type="checkbox" id="use-snap" /> lexicon snap (tier 4)</label>
-        <label>beam <input type="number" id="beam" value="8" min="1" max="32" /></label>
-      </section>
+        <div class="controls">
+          <label><input type="checkbox" id="use-model" checked /> learned model</label>
+          <label><input type="checkbox" id="use-lexicon" checked /> rank with lexicon</label>
+          <label><input type="checkbox" id="use-snap" /> lexicon snap (tier 4)</label>
+          <label>beam <input type="number" id="beam" value="8" min="1" max="32" /></label>
+        </div>
 
-      <section>
         <h2>Alternatives</h2>
         <ol id="alternatives" dir="rtl" lang="fa"></ol>
-      </section>
 
-      <section>
         <h2>Spans</h2>
         <p class="hint">
-          Every span shows what happened to it and why. Converted spans list
-          each candidate the decoder considered with its probability.
+          Every span shows what happened to it and why. Converted spans list each
+          candidate the decoder considered with its probability.
         </p>
         <div id="spans"></div>
+      </section>
+
+      <!-- --------------------------------------------------- fixtures -->
+      <section id="tab-fixtures" class="tab-panel" hidden>
+        <p class="hint">
+          All 175 committed fixtures, run in this tab against the current engine
+          settings. Failures are listed in full &mdash; this page is for seeing
+          what the model gets wrong, not for looking good.
+        </p>
+        <div class="controls">
+          <label><input type="checkbox" id="fx-model" checked /> learned model</label>
+          <label><input type="checkbox" id="fx-lexicon" checked /> rank with lexicon</label>
+          <label>
+            set
+            <select id="fx-set">
+              <option value="fixtures">fixtures (dev, 175)</option>
+              <option value="gold">gold (untouched, 71)</option>
+            </select>
+          </label>
+          <button id="fx-run">Run</button>
+        </div>
+        <div id="fx-summary"></div>
+        <h2>Failures</h2>
+        <div id="fx-failures"></div>
+      </section>
+
+      <!-- ---------------------------------------------------- scaling -->
+      <section id="tab-scaling" class="tab-panel" hidden>
+        <p class="hint">
+          M2: the same architecture at three sizes, evaluated on held-out
+          <em>words</em> &mdash; the split is by Persian word before Finglish
+          variants are generated, so no test word appears in training under any
+          spelling.
+        </p>
+        <div id="curve"></div>
       </section>
 
       <footer>

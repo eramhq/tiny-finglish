@@ -1,142 +1,174 @@
 /**
- * The playground. Its job is not to look impressive but to make every decision
- * the pipeline makes inspectable — `PLAN.md`'s M1 exit condition is that a
- * human can see every candidate and its reason.
+ * The playground. Three panels:
+ *
+ *   Try it        one input, every candidate and the reason it was chosen
+ *   Fixture suite all 175 committed fixtures run in-tab, failures shown in full
+ *   Scaling curve the M2 result the shipped configuration was selected from
+ *
+ * `PLAN.md`'s M1 exit condition is that a human can inspect every candidate and
+ * its reason. The fixture panel exists so the page also answers the harder
+ * question — not "can it do this one word" but "how often is it wrong, and on
+ * what".
  */
-import { Transliterator, decodeFrontCoded, type TransliterationResult } from "../../src/index.ts";
+import { Transliterator, decodeFrontCoded, normalize } from "../../src/index.ts";
+import type { Span } from "../../src/index.ts";
 import type { WeightArtifact } from "../../src/quant.ts";
+import fixturesRaw from "../../data/fixtures/fixtures.jsonl?raw";
+import goldRaw from "../../data/gold/gold.jsonl?raw";
+import curve from "../../data/results/m2-curve.json";
 
-/** Served front-coded but uncompressed — see the plugin in vite.config.ts. */
 const LEXICON_URL = "/lexicon.bin";
-
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
 
-const input = $<HTMLTextAreaElement>("input");
-const output = $<HTMLElement>("output");
-const confidenceEl = $<HTMLElement>("confidence");
-const timingEl = $<HTMLElement>("timing");
-const engineEl = $<HTMLElement>("engine");
-const alternativesEl = $<HTMLOListElement>("alternatives");
-const spansEl = $<HTMLElement>("spans");
-const useModel = $<HTMLInputElement>("use-model");
-const useLexicon = $<HTMLInputElement>("use-lexicon");
-const useSnap = $<HTMLInputElement>("use-snap");
-const beam = $<HTMLInputElement>("beam");
+interface Fixture {
+  id: string;
+  category?: string;
+  input: string;
+  expected: string | null;
+  alternatives: string[];
+  notes?: string;
+  expectAction?: string;
+}
+
+const parse = (raw: string): Fixture[] =>
+  raw.split("\n").filter(Boolean).map((l) => JSON.parse(l) as Fixture);
+const FIXTURES = parse(fixturesRaw);
+const GOLD = parse(goldRaw).map((f) => ({ ...f, category: "gold" }));
 
 let weights: WeightArtifact | undefined;
 let lexicon: Set<string> | undefined;
 let engine: Transliterator;
 
+// ---------------------------------------------------------------- loading
+
 async function loadAssets(): Promise<void> {
-  // Weights are optional: without them the rule baseline runs, which is the
-  // point of having a deterministic floor.
   try {
     const module = await import("../../data/fixtures/weights.json");
     weights = (module.default ?? module) as unknown as WeightArtifact;
   } catch {
     weights = undefined;
-    useModel.checked = false;
-    useModel.disabled = true;
+    for (const el of [$<HTMLInputElement>("use-model"), $<HTMLInputElement>("fx-model")]) {
+      el.checked = false;
+      el.disabled = true;
+    }
   }
-
   try {
     const response = await fetch(LEXICON_URL);
-    if (!response.ok) throw new Error(`lexicon ${response.status}`);
+    if (!response.ok) throw new Error(String(response.status));
     lexicon = new Set(decodeFrontCoded(new Uint8Array(await response.arrayBuffer())));
   } catch {
     lexicon = undefined;
-    useLexicon.checked = false;
-    useLexicon.disabled = true;
+    for (const el of [$<HTMLInputElement>("use-lexicon"), $<HTMLInputElement>("fx-lexicon")]) {
+      el.checked = false;
+      el.disabled = true;
+    }
   }
+
+  const params = weights
+    ? weights.tensors.reduce((sum, t) => sum + t.shape.reduce((a, b) => a * b, 1), 0)
+    : 0;
+  $("badge").textContent = weights
+    ? `${params.toLocaleString()} params · ${weights.quant} · ${lexicon ? `${lexicon.size.toLocaleString()} stems` : "no lexicon"}`
+    : "rule baseline only — no weights loaded";
 }
 
-function rebuild(): void {
-  engine = new Transliterator({
-    ...(useModel.checked && weights ? { model: weights } : {}),
-    ...(useLexicon.checked && lexicon ? { lexicon } : {}),
-    useLexiconSnap: useSnap.checked,
+function build(model: boolean, lex: boolean, snap = false): Transliterator {
+  return new Transliterator({
+    ...(model && weights ? { model: weights } : {}),
+    ...(lex && lexicon ? { lexicon } : {}),
+    useLexiconSnap: snap,
   });
-  render();
 }
 
-function render(): void {
+// ------------------------------------------------------------- try panel
+
+const EXAMPLES: Array<[string, string]> = [
+  ["the plan's example", "salam, man emrooz miram Muscat"],
+  ["etymological spelling", "sabr va sabz"],
+  ["ZWNJ", "mikonam ketabha bozorgtar"],
+  ["informal", "chetori? khoobi? nemidoonam"],
+  ["protected spans", "in link https://example.ir/a?b=1 va ali@example.com ro bebin"],
+  ["mixed English", "farda ba Google meeting daram"],
+  ["numbers + code", "man 25 salame, API_KEY ro bede"],
+  ["vowel length", "dar vs daar, bar vs baar"],
+  ["a sentence", "in ketab ro az daneshgah gereftam"],
+];
+
+function renderExamples(): void {
+  $("examples").replaceChildren(
+    ...EXAMPLES.map(([label, text]) => {
+      const button = document.createElement("button");
+      button.className = "chip";
+      button.textContent = label;
+      button.title = text;
+      button.addEventListener("click", () => {
+        $<HTMLTextAreaElement>("input").value = text;
+        renderTry();
+      });
+      return button;
+    }),
+  );
+}
+
+function rebuildTry(): void {
+  engine = build(
+    $<HTMLInputElement>("use-model").checked,
+    $<HTMLInputElement>("use-lexicon").checked,
+    $<HTMLInputElement>("use-snap").checked,
+  );
+  renderTry();
+}
+
+function renderTry(): void {
+  const input = $<HTMLTextAreaElement>("input").value;
   const started = performance.now();
-  const result = engine.transliterate(input.value, { beamWidth: Number(beam.value) || 8 });
+  const result = engine.transliterate(input, {
+    beamWidth: Number($<HTMLInputElement>("beam").value) || 8,
+  });
   const elapsed = performance.now() - started;
 
-  output.textContent = result.text;
-  confidenceEl.textContent = `confidence ${(result.confidence * 100).toFixed(1)}%`;
-  timingEl.textContent = `${elapsed.toFixed(2)} ms`;
-  engineEl.textContent = engine.hasModel ? "engine: model" : "engine: rules";
+  $("output").textContent = result.text;
+  $("confidence").textContent = `confidence ${(result.confidence * 100).toFixed(1)}%`;
+  $("timing").textContent = `${elapsed.toFixed(2)} ms`;
+  $("engine").textContent = engine.hasModel ? "engine: model" : "engine: rules";
 
-  alternativesEl.replaceChildren(
+  $("alternatives").replaceChildren(
     ...(result.alternatives.length
       ? result.alternatives.map((text) => {
           const li = document.createElement("li");
           li.textContent = text;
           return li;
         })
-      : [emptyNote("no alternatives — every span had a single candidate")]),
+      : [hint("no alternatives — every span had a single candidate")]),
   );
 
-  spansEl.replaceChildren(...result.spans.filter((s) => s.action !== "space").map(renderSpan));
+  $("spans").replaceChildren(
+    ...result.spans.filter((s) => s.action !== "space").map(renderSpan),
+  );
 }
 
-function emptyNote(text: string): HTMLElement {
-  const p = document.createElement("p");
-  p.className = "hint";
-  p.textContent = text;
-  return p;
-}
-
-function renderSpan(span: TransliterationResult["spans"][number]): HTMLElement {
-  const box = document.createElement("div");
-  box.className = "span";
-
-  const head = document.createElement("div");
-  head.className = "span-head";
-
-  const tag = document.createElement("span");
-  tag.className = `tag ${span.action}`;
-  tag.textContent = span.copyReason ? `${span.action}:${span.copyReason}` : span.action;
-
-  const src = document.createElement("span");
-  src.className = "src";
-  src.textContent = JSON.stringify(span.input);
-
-  const arrow = document.createElement("span");
-  arrow.className = "reason";
-  arrow.textContent = "→";
-
-  const dst = document.createElement("span");
-  dst.className = "dst";
-  dst.dir = "rtl";
-  dst.textContent = span.output;
-
-  head.append(tag, src, arrow, dst);
+function renderSpan(span: Span): HTMLElement {
+  const box = el("div", "span");
+  const head = el("div", "span-head");
+  head.append(
+    el("span", `tag ${span.action}`, span.copyReason ? `${span.action}:${span.copyReason}` : span.action),
+    el("span", "src", JSON.stringify(span.input)),
+    el("span", "reason", "→"),
+    rtl(el("span", "dst", span.output)),
+  );
   box.append(head);
 
-  if (span.candidates && span.candidates.length > 0) {
-    const list = document.createElement("ul");
-    list.className = "cands";
+  if (span.candidates?.length) {
+    const list = el("ul", "cands");
     for (const candidate of span.candidates) {
-      const row = document.createElement("li");
-      row.className = "cand";
-
-      const out = document.createElement("span");
-      out.className = "out";
-      out.dir = "rtl";
-      out.textContent = candidate.output;
-
-      const bar = document.createElement("span");
-      bar.className = "bar";
+      const row = el("li", "cand");
+      const bar = el("span", "bar");
       bar.style.width = `${Math.max(candidate.probability * 100, 1)}%`;
-
-      const reason = document.createElement("span");
-      reason.className = "reason";
-      reason.textContent = `${(candidate.probability * 100).toFixed(1)}% · ${candidate.reason}`;
-
-      row.append(out, bar, reason);
+      row.append(
+        rtl(el("span", "out", candidate.output)),
+        bar,
+        el("span", "reason", `${(candidate.probability * 100).toFixed(1)}% · ${candidate.reason}`),
+      );
       list.append(row);
     }
     box.append(list);
@@ -144,8 +176,220 @@ function renderSpan(span: TransliterationResult["spans"][number]): HTMLElement {
   return box;
 }
 
-input.addEventListener("input", render);
-for (const control of [useModel, useLexicon, useSnap]) control.addEventListener("change", rebuild);
-beam.addEventListener("change", render);
+// --------------------------------------------------------- fixture panel
 
-void loadAssets().then(rebuild);
+function runFixtures(): void {
+  const set = $<HTMLSelectElement>("fx-set").value === "gold" ? GOLD : FIXTURES;
+  const runner = build($<HTMLInputElement>("fx-model").checked, $<HTMLInputElement>("fx-lexicon").checked);
+
+  const buckets = new Map<string, { n: number; top1: number; top3: number }>();
+  const failures: Array<{ fixture: Fixture; got: string; alts: string[]; spans: Span[] }> = [];
+  let copyTotal = 0;
+  let copyOk = 0;
+  const started = performance.now();
+
+  for (const fixture of set) {
+    const result = runner.transliterate(fixture.input);
+    for (const span of result.spans) {
+      if (span.action !== "copy") continue;
+      copyTotal++;
+      if (span.output === span.input) copyOk++;
+    }
+    if (fixture.expected === null) continue;
+
+    const accepted = [normalize(fixture.expected), ...fixture.alternatives.map((a) => normalize(a))];
+    const got = normalize(result.text);
+    const top1 = accepted.includes(got);
+    const top3 = top1 || result.alternatives.some((a) => accepted.includes(normalize(a)));
+
+    const key = fixture.category ?? "gold";
+    const bucket = buckets.get(key) ?? { n: 0, top1: 0, top3: 0 };
+    bucket.n++;
+    bucket.top1 += top1 ? 1 : 0;
+    bucket.top3 += top3 ? 1 : 0;
+    buckets.set(key, bucket);
+
+    if (!top1) failures.push({ fixture, got: result.text, alts: result.alternatives, spans: result.spans });
+  }
+  const elapsed = performance.now() - started;
+
+  const total = [...buckets.values()].reduce(
+    (acc, b) => ({ n: acc.n + b.n, top1: acc.top1 + b.top1, top3: acc.top3 + b.top3 }),
+    { n: 0, top1: 0, top3: 0 },
+  );
+  const pct = (a: number, b: number) => (b ? `${((a / b) * 100).toFixed(1)}%` : "n/a");
+
+  const table = el("table", "grid");
+  table.innerHTML =
+    "<thead><tr><th>category</th><th>n</th><th>top-1</th><th>top-3</th></tr></thead>";
+  const body = document.createElement("tbody");
+  for (const [name, b] of [...buckets].sort((a, b) => b[1].n - a[1].n)) {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td>${name}</td><td>${b.n}</td><td>${pct(b.top1, b.n)}</td><td>${pct(b.top3, b.n)}</td>`;
+    body.append(tr);
+  }
+  const totalRow = document.createElement("tr");
+  totalRow.className = "total";
+  totalRow.innerHTML = `<td>all</td><td>${total.n}</td><td>${pct(total.top1, total.n)}</td><td>${pct(total.top3, total.n)}</td>`;
+  body.append(totalRow);
+  table.append(body);
+
+  const copyLine = el(
+    "p",
+    copyOk === copyTotal ? "ok" : "bad",
+    `copy-span preservation ${pct(copyOk, copyTotal)} (${copyOk}/${copyTotal}) · ${set.length} cases in ${elapsed.toFixed(0)} ms`,
+  );
+  $("fx-summary").replaceChildren(table, copyLine);
+
+  $("fx-failures").replaceChildren(
+    ...(failures.length
+      ? failures.map(renderFailure)
+      : [hint("no failures — check that a set is actually loaded")]),
+  );
+}
+
+function renderFailure(f: { fixture: Fixture; got: string; alts: string[]; spans: Span[] }): HTMLElement {
+  const box = el("details", "fail");
+  const summary = document.createElement("summary");
+  summary.append(
+    el("code", "", f.fixture.id),
+    el("span", "src", JSON.stringify(f.fixture.input)),
+  );
+  box.append(summary);
+
+  const grid = el("div", "fail-grid");
+  grid.append(
+    el("span", "reason", "expected"), rtl(el("span", "dst ok", f.fixture.expected ?? "")),
+    el("span", "reason", "got"), rtl(el("span", "dst bad", f.got)),
+  );
+  if (f.alts.length) {
+    grid.append(el("span", "reason", "alternatives"), rtl(el("span", "dst", f.alts.join("  ·  "))));
+  }
+  box.append(grid);
+
+  for (const span of f.spans) {
+    if (span.action !== "convert" || !span.candidates) continue;
+    const line = el("div", "reason mono");
+    line.append(`${JSON.stringify(span.input)} → `);
+    span.candidates.forEach((c, i) => {
+      if (i) line.append("   ");
+      // <bdi> isolates each Persian run from the surrounding Latin. Without it
+      // the bidi algorithm reorders "مرکی 100%" into "100 %مرکی" — the
+      // percentage visually detaches from its number. W3C's guidance is to fix
+      // this with markup rather than by injecting Unicode bidi controls into
+      // the text, which is why the library itself emits none.
+      const isolate = document.createElement("bdi");
+      isolate.textContent = c.output;
+      line.append(isolate, ` ${(c.probability * 100).toFixed(0)}% [${c.reason}] `);
+    });
+    box.append(line);
+  }
+  if (f.fixture.notes) box.append(el("p", "hint", f.fixture.notes));
+  return box;
+}
+
+// --------------------------------------------------------- scaling panel
+
+function renderCurve(): void {
+  const sizes = curve.sizes as Array<Record<string, number | string>>;
+  const table = el("table", "grid");
+  table.innerHTML =
+    "<thead><tr><th>size</th><th>params</th><th>word acc</th><th>int8</th><th>int6</th>" +
+    "<th>+ lexicon</th><th>lexicon gain</th></tr></thead>";
+  const body = document.createElement("tbody");
+  for (const row of sizes) {
+    const tr = document.createElement("tr");
+    if (row.name === curve.shipped.name) tr.className = "total";
+    tr.innerHTML =
+      `<td>${row.name}${row.name === curve.shipped.name ? " ★" : ""}</td>` +
+      `<td>${Number(row.params).toLocaleString()}</td>` +
+      `<td>${Number(row.test_word_accuracy).toFixed(4)}</td>` +
+      `<td>${Number(row.test_word_accuracy_int8).toFixed(4)}</td>` +
+      `<td>${Number(row.test_word_accuracy_int6).toFixed(4)}</td>` +
+      `<td>${Number(row.test_word_accuracy_lexicon).toFixed(4)}</td>` +
+      `<td>${Number(row.lexicon_gain) >= 0 ? "+" : ""}${Number(row.lexicon_gain).toFixed(4)}</td>`;
+    body.append(tr);
+  }
+  table.append(body);
+
+  const notes = el("div", "notes");
+  notes.innerHTML = `
+    <p><strong>★ shipped:</strong> ${curve.shipped.name} at ${curve.shipped.quant} —
+       ${curve.shipped.reason}.</p>
+    <p><strong>The lexicon gain shrinks monotonically</strong> (+5.1 → +4.2 → +3.1 points).
+       That is the milestone's actual question: the model absorbs more of the vocabulary
+       as it grows, so the lexicon does <em>not</em> ship at runtime. The snap tier is
+       built and defaults to off — toggle it on the “Try it” tab to see what it would do.</p>
+    <p><strong>Quantization is free</strong> at every size, so the choice is decided purely
+       on bytes. int6 is ~30% smaller than int8 after Brotli.</p>
+    <p class="bad"><strong>The caveat that outranks the table:</strong> these are synthetic
+       numbers — held-out words from a corpus this project generated. On the untouched gold
+       set, going from 27k to 100k parameters bought nothing
+       (${(curve.evaluation.gold.top1 * 100).toFixed(1)}% at 100k versus 49.3% at 27k, a
+       difference of one example out of ${curve.evaluation.gold.n}). The curve measures how
+       well each model inverts the generator; whether that transfers to real Finglish is not
+       established here.</p>`;
+
+  const compare = el("table", "grid");
+  compare.innerHTML =
+    "<thead><tr><th>evaluation set</th><th>n</th><th>top-1</th><th>top-3</th><th>CER</th></tr></thead>" +
+    `<tbody>
+      <tr><td>synthetic held-out words</td><td>26,925</td><td>85.4%</td><td>—</td><td>—</td></tr>
+      <tr><td>hand-authored fixtures</td><td>${curve.evaluation.fixtures.n}</td>
+          <td>${(curve.evaluation.fixtures.top1 * 100).toFixed(1)}%</td>
+          <td>${(curve.evaluation.fixtures.top3 * 100).toFixed(1)}%</td>
+          <td>${curve.evaluation.fixtures.cer.toFixed(3)}</td></tr>
+      <tr class="total"><td>untouched gold</td><td>${curve.evaluation.gold.n}</td>
+          <td>${(curve.evaluation.gold.top1 * 100).toFixed(1)}%</td>
+          <td>${(curve.evaluation.gold.top3 * 100).toFixed(1)}%</td>
+          <td>${curve.evaluation.gold.cer.toFixed(3)}</td></tr>
+    </tbody>`;
+
+  $("curve").replaceChildren(
+    table, notes,
+    el("h2", "", "Same model, three evaluation sets"),
+    compare,
+    el("p", "hint", "Each step down is a step closer to the real task. Quote the last one."),
+  );
+}
+
+// ------------------------------------------------------------------ util
+
+function el(tag: string, className = "", text = ""): HTMLElement {
+  const node = document.createElement(tag);
+  if (className) node.className = className;
+  if (text) node.textContent = text;
+  return node;
+}
+function rtl(node: HTMLElement): HTMLElement {
+  node.dir = "rtl";
+  node.lang = "fa";
+  return node;
+}
+function hint(text: string): HTMLElement {
+  return el("p", "hint", text);
+}
+
+// ------------------------------------------------------------------ wire
+
+for (const tab of document.querySelectorAll<HTMLButtonElement>("[role=tab]")) {
+  tab.addEventListener("click", () => {
+    for (const other of document.querySelectorAll("[role=tab]")) other.classList.remove("active");
+    tab.classList.add("active");
+    for (const panel of document.querySelectorAll<HTMLElement>(".tab-panel")) panel.hidden = true;
+    $(`tab-${tab.dataset.tab}`).hidden = false;
+    if (tab.dataset.tab === "fixtures" && !$("fx-summary").hasChildNodes()) runFixtures();
+  });
+}
+
+$("input").addEventListener("input", renderTry);
+for (const id of ["use-model", "use-lexicon", "use-snap"]) $(id).addEventListener("change", rebuildTry);
+$("beam").addEventListener("change", renderTry);
+$("fx-run").addEventListener("click", runFixtures);
+for (const id of ["fx-model", "fx-lexicon", "fx-set"]) $(id).addEventListener("change", runFixtures);
+
+void loadAssets().then(() => {
+  renderExamples();
+  renderCurve();
+  rebuildTry();
+});

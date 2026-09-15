@@ -1,0 +1,104 @@
+{
+  "$comment": "GENERATED from training/runs/m2/curve.json. Committed because runs/ is gitignored and the playground, README and model card all cite these numbers.",
+  "milestone": "M2",
+  "corpus": {
+    "words": 100761,
+    "variants_requested": 6,
+    "examples": {
+      "train": 479877,
+      "dev": 26716,
+      "test": 26925
+    },
+    "dropped_misaligned": 0,
+    "seed": 0,
+    "variant_rate": 0.3,
+    "max_length": 32,
+    "hash": "c7e7c9130373543c"
+  },
+  "sizes": [
+    {
+      "name": "30k",
+      "params": 27660,
+      "d_model": 32,
+      "d_hidden": 48,
+      "n_layers": 2,
+      "labels": 76,
+      "test_char_accuracy": 0.98,
+      "test_word_accuracy": 0.8206,
+      "test_word_accuracy_int8": 0.8204,
+      "test_word_accuracy_int6": 0.8215,
+      "test_word_accuracy_lexicon": 0.8719,
+      "lexicon_gain": 0.0513,
+      "in_lexicon_rate": 0.837
+    },
+    {
+      "name": "100k",
+      "params": 102348,
+      "d_model": 64,
+      "d_hidden": 96,
+      "n_layers": 2,
+      "labels": 76,
+      "test_char_accuracy": 0.9839,
+      "test_word_accuracy": 0.8535,
+      "test_word_accuracy_int8": 0.8533,
+      "test_word_accuracy_int6": 0.8527,
+      "test_word_accuracy_lexicon": 0.8955,
+      "lexicon_gain": 0.042,
+      "in_lexicon_rate": 0.871
+    },
+    {
+      "name": "500k",
+      "params": 541516,
+      "d_model": 128,
+      "d_hidden": 192,
+      "n_layers": 3,
+      "labels": 76,
+      "test_char_accuracy": 0.9867,
+      "test_word_accuracy": 0.8753,
+      "test_word_accuracy_int8": 0.8754,
+      "test_word_accuracy_int6": 0.8743,
+      "test_word_accuracy_lexicon": 0.9066,
+      "lexicon_gain": 0.0312,
+      "in_lexicon_rate": 0.8979
+    }
+  ],
+  "shipped": {
+    "name": "100k",
+    "quant": "int6",
+    "reason": "500k exceeds the 250 KiB soft cap at both quantization levels"
+  },
+  "bundleBytes": {
+    "30k": {
+      "int8": 32359
+    },
+    "100k": {
+      "int6": 77619,
+      "int8": 109056
+    },
+    "500k": {
+      "int6": 377139,
+      "int8": 551526
+    },
+    "runtimeJs": 8192
+  },
+  "evaluation": {
+    "fixtures": {
+      "n": 174,
+      "top1": 0.661,
+      "top3": 0.799,
+      "cer": 0.104
+    },
+    "gold": {
+      "n": 71,
+      "top1": 0.479,
+      "top3": 0.62,
+      "cer": 0.14
+    },
+    "ruleBaselineFixtures": {
+      "n": 174,
+      "top1": 0.563,
+      "top3": 0.816,
+      "cer": 0.155
+    }
+  }
+}
