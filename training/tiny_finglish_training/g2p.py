@@ -176,7 +176,13 @@ class FinglishGenerator:
         Where it does not, fall back to the old behaviour: emit the canonical
         form, and with probability `variant_rate` swap in a uniform alternative.
         """
-        entry = spellings_by_role().get((fa, role)) or spellings_by_role().get((fa, "consonant"))
+        # ع ء ئ ؤ live only in the `silent` table. Without that fallback a
+        # consonant-slot ع fell through to `return fa` and wrote the Persian
+        # letter itself into the Latin side — 21,008 of 425,590 training
+        # examples (`aabaعli`), every one an <unk> the model learned from.
+        entry = (spellings_by_role().get((fa, role))
+                 or spellings_by_role().get((fa, "consonant"))
+                 or spellings_by_role().get((fa, "silent")))
         if not entry:
             return fa
         options, weights = entry
@@ -210,7 +216,11 @@ class FinglishGenerator:
         if run.kind == "vowel":
             return [Chunk(run.text, self._spell_vowel(run))]
         if run.kind == "other":
-            return [Chunk(run.text, run.text)]
+            # ئ ء ؤ and hamza-above. Spelled from the silent table (usually
+            # nothing, sometimes `'` or `y`); a letter with no entry is typed as
+            # nothing. Writing `run.text` here put Persian into the Latin side.
+            spelled = self._spell(run.text, "silent")
+            return [Chunk(run.text, "" if spelled == run.text else spelled)]
         if run.kind == "zwnj":
             # ZWNJ is an ordinary output label. Users type it as nothing, a
             # space or a hyphen; all three must map back to U+200C.

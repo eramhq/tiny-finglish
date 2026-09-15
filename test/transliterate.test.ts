@@ -139,20 +139,20 @@ describe("fixture suite gates", () => {
 });
 
 /**
- * The hybrid path — both engines run, arbitrated per word.
+ * The hybrid path — both engines' candidates ranked in one score.
  *
- * Off by default, because the gold set it would be judged on contains no ZWNJ
- * at all and the headline metric therefore charges the model three points for
- * placing one correctly. What is pinned here is the arbitration itself, which
- * has exactly one rule and must keep it.
+ * Off by default, because neither real evaluation set writes ZWNJ and the
+ * headline metric therefore charges the model for placing one correctly. What
+ * is pinned here is the contract, not today's weights: the hybrid places ZWNJ
+ * where the model does, and it never invents a word neither engine proposed.
  */
 describe("hybrid arbitration", () => {
-  const ZWNJ = "‌";
+  const ZWNJ = "\u200C";
   const model = loadModel();
   const lexicon = loadLexicon();
   const frequency = loadFrequency();
 
-  it.skipIf(!model)("prefers the model where only it can emit a ZWNJ", () => {
+  it.skipIf(!model)("places a ZWNJ the rule tables cannot", () => {
     const shared = { ...(lexicon ? { lexicon } : {}), ...(frequency ? { frequency } : {}) };
     const rules = new Transliterator(shared);
     const hybrid = new Transliterator({ ...shared, model: model!, hybrid: true });
@@ -162,14 +162,18 @@ describe("hybrid arbitration", () => {
     expect(hybrid.transliterate("mikonam").text).toContain(ZWNJ);
   });
 
-  it.skipIf(!model)("otherwise keeps the rule baseline, which wins on real input", () => {
+  it.skipIf(!model)("only ever answers with a word one of the engines proposed", () => {
     const shared = { ...(lexicon ? { lexicon } : {}), ...(frequency ? { frequency } : {}) };
     const rules = new Transliterator(shared);
+    const alone = new Transliterator({ ...shared, model: model! });
     const hybrid = new Transliterator({ ...shared, model: model!, hybrid: true });
-    for (const word of ["salam", "ketab", "mardom", "shahr"]) {
-      const viaRules = rules.transliterate(word).text;
-      if (viaRules.includes(ZWNJ)) continue;
-      expect(hybrid.transliterate(word).text, word).toBe(viaRules);
+    const fold = (text: string) => text.replaceAll(ZWNJ, "");
+    for (const word of ["salam", "ketab", "mardom", "shahr", "nemidoonam", "saat"]) {
+      const proposed = new Set([
+        ...rules.transliterate(word, { candidatesPerSpan: 8 }).spans.flatMap((s) => s.candidates ?? []),
+        ...alone.transliterate(word, { candidatesPerSpan: 8 }).spans.flatMap((s) => s.candidates ?? []),
+      ].map((c) => fold(c.output)));
+      expect(proposed.has(fold(hybrid.transliterate(word).text)), word).toBe(true);
     }
   });
 

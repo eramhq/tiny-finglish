@@ -48,13 +48,13 @@ export interface TransliteratorOptions extends PipelineOptions {
   /** Exported weights. Without them the rule baseline is used. */
   model?: WeightArtifact;
   /**
-   * Run the rule baseline *and* the model on every word and arbitrate, instead
+   * Rank the rule baseline's candidates and the model's in one score, instead
    * of letting the model decide alone. Requires `model`; ignored without it.
    *
-   * Off by default. It does what it claims — the model's ZWNJ placement with
-   * the rules' accuracy on real input — but the gold set it would be judged on
-   * contains no ZWNJ at all, so the headline metric charges it three points for
-   * placing one correctly. See `convertHybrid` and `src/metrics.ts`.
+   * Off by default. It is the most accurate configuration on the dev set's
+   * orthographic tier and it places ZWNJ, but neither real evaluation set
+   * writes ZWNJ, so the strict headline charges it for placing one correctly.
+   * See `convertJoint` and `src/metrics.ts`.
    */
   hybrid?: boolean;
   /**
@@ -76,6 +76,19 @@ export interface TransliteratorOptions extends PipelineOptions {
  * Tuned on the fixtures only. The gold set is never used for tuning.
  */
 const FREQUENCY_RERANK = 2.0;
+
+/**
+ * Joint hybrid constants. Tuned on dev and the fixtures, never on gold; the
+ * sweep is in `convertJoint`'s docstring. `floor` is the model probability
+ * charged to a candidate outside its beam.
+ */
+const JOINT = {
+  model: 0.25,
+  floor: 1e-3,
+  beam: 8,
+  results: 8,
+  zwnj: true,
+};
 
 export class Transliterator extends Pipeline {
   private readonly transducer: Transducer | null;
@@ -110,7 +123,77 @@ export class Transliterator extends Pipeline {
 
   protected override convertWord(word: string, opts: TransliterateOptions): Candidate[] {
     if (!this.transducer) return this.convertWithRules(word, opts);
-    return this.hybrid ? this.convertHybrid(word, opts) : this.convertWithModel(word, opts);
+    return this.hybrid ? this.convertJoint(word, opts) : this.convertWithModel(word, opts);
+  }
+
+  /**
+   * Both engines in one ranking — the hybrid path.
+   *
+   * The rules generate candidates (beam and dictionary), and the model's own
+   * beam is added to the same pool. Every candidate is then scored as the rule
+   * engine's channel + frequency score plus `JOINT.model` x log P_model, with a
+   * floor for candidates the model's beam did not reach. Candidates are compared
+   * with ZWNJ removed, since the rules never emit one. When the model has a ZWNJ
+   * form of the winner, that form is emitted: ZWNJ is the model's strength and a
+   * capability the rule tables do not have.
+   *
+   * This replaces an arbitration that let the model win only when it emitted a
+   * ZWNJ and the rules did not. That rule could not use the model's evidence on
+   * any other word, which was the right call while the model was 11 points
+   * behind on real input. It is not the right call once the model is trained on
+   * LLM-typed Finglish (`build_distill.py`), because the model's vocabulary
+   * knowledge then adds to the rules' instead of losing to it. Measured on dev
+   * with those weights (strict / faithful / orthographic-faithful, fixtures):
+   *
+   *     rules alone                   58.2 / 69.3 / 72.8   83.3
+   *     joint, model 0.25, no ZWNJ    58.9 / 70.1 / 73.7   84.0
+   *     joint, model 0.25, ZWNJ       57.0 / 67.8 / 73.3   86.9   <- shipped
+   *     joint, model 1.0,  ZWNJ       56.4 / 67.2 / 73.0   85.9
+   *
+   * With ZWNJ the strict figure drops, because neither real evaluation set
+   * writes one and the metric splits a correct می‌کنم into two words. That is
+   * the documented handicap in `src/metrics.ts`, not an accuracy loss.
+   */
+  private convertJoint(word: string, opts: TransliterateOptions): Candidate[] {
+    const hypotheses = this.modelHypotheses(word, JOINT.beam);
+    const model = new Map<string, { logProb: number; form: string }>();
+    for (const h of hypotheses) {
+      const key = h.output.replaceAll(ZWNJ, "");
+      if (!model.has(key)) model.set(key, h);
+    }
+    const pool = this.baseline.transliterate(word, { results: JOINT.results, extra: [...model.keys()] });
+    if (pool.length === 0) return this.convertWithModel(word, opts);
+
+    const floor = Math.log(JOINT.floor);
+    const scored = pool.map((c) => {
+      const m = model.get(c.output);
+      return {
+        output: m && JOINT.zwnj ? m.form : c.output,
+        score: c.score + JOINT.model * (m ? m.logProb : floor),
+        reason: m ? `${c.reason} + model ${m.logProb.toFixed(2)}` : c.reason,
+      };
+    }).sort((a, b) => b.score - a.score);
+    const max = scored[0]!.score;
+    const weights = scored.map((c) => Math.exp(c.score - max));
+    const total = weights.reduce((a, b) => a + b, 0);
+    return scored.slice(0, Math.max(opts.candidatesPerSpan ?? 3, 3)).map((c, i) => ({
+      output: normalize(c.output),
+      probability: round4(weights[i]! / total),
+      reason: c.reason,
+    }));
+  }
+
+  /** The model's beam, log-softmax over the returned set, no frequency rerank. */
+  private modelHypotheses(word: string, width: number): Array<{ output: string; logProb: number; form: string }> {
+    const ids = new Int32Array(word.length);
+    for (let i = 0; i < word.length; i++) ids[i] = this.inputIndex.get(word[i]!) ?? this.unkId;
+    const logits = this.transducer!.forward(ids);
+    const hypotheses = beamDecode(logits, word.length, this.labels.length, this.labels, { width, results: width });
+    const { probabilities } = scoreHypotheses(hypotheses, word.length);
+    return hypotheses.map((h, i) => {
+      const form = normalize(h.output);
+      return { output: form, form, logProb: Math.log(Math.max(probabilities[i] ?? 0, 1e-9)) };
+    });
   }
 
   private convertWithModel(word: string, opts: TransliterateOptions): Candidate[] {
@@ -142,45 +225,6 @@ export class Transliterator extends Pipeline {
     }));
   }
 
-  /**
-   * Both engines, arbitrated — the hybrid path.
-   *
-   * The two are good at different things, measured per category on the
-   * fixtures: the model wins ZWNJ (70.4% against 33.3%), adversarial input
-   * (90.0% against 50.0%) and mixed English (90.6% against 78.1%), while
-   * rules + frequency win ambiguity (70.6% against 64.7%), running sentences
-   * (87.5% against 81.3%) and, on real human Finglish, the whole thing by 10.6
-   * points. Running both costs nothing worth measuring — each is well under a
-   * millisecond and both sit behind the same per-word memo.
-   *
-   * The one arbitration rule that is not a guess: **prefer the model when it
-   * emits a ZWNJ and the rules do not.** That is not a close call between two
-   * opinions, it is a capability gap — the rule tables in `src/rules.ts` can
-   * only produce U+200C from a literal space or hyphen in the Latin, so on the
-   * ~23% of Persian word types that contain one they are structurally unable to
-   * be right. Everything else goes to the engine that wins on real input.
-   *
-   * Note that the headline word-accuracy metric folds ZWNJ to a space, so this
-   * barely moves it by construction. It is measured on ZWNJ placement, which
-   * `scripts/_report.ts` reports separately and which exists for this.
-   */
-  private convertHybrid(word: string, opts: TransliterateOptions): Candidate[] {
-    const rules = this.convertWithRules(word, opts);
-    const model = this.convertWithModel(word, opts);
-    const modelFirst =
-      (model[0]?.output.includes(ZWNJ) ?? false) && !(rules[0]?.output.includes(ZWNJ) ?? false);
-    const [winner, loser] = modelFirst ? [model, rules] : [rules, model];
-
-    // The loser's candidates are kept behind the winner's rather than dropped:
-    // the two generators disagree about what is even *possible*, and that
-    // disagreement is most of the value of running both.
-    const seen = new Set(winner.map((c) => c.output));
-    const extra = loser.filter((c) => !seen.has(c.output));
-    return [...winner, ...extra].map((c) => ({
-      ...c,
-      reason: modelFirst && winner === model ? `${c.reason} (zwnj)` : c.reason,
-    }));
-  }
 }
 
 let defaultInstance: Transliterator | null = null;

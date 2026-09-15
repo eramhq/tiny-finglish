@@ -19,7 +19,8 @@
  * are why the learned transducer exists.
  */
 
-import { Channel, SkeletonIndex } from "./dictionary.ts";
+import { FITTED_CHANNEL } from "./channel-fitted.ts";
+import { Channel, SkeletonIndex, type FittedChannel } from "./dictionary.ts";
 import { frequencyScore, type FrequencyTable } from "./frequency.ts";
 import { compose, decompose } from "./morph.ts";
 import { foldForMatch } from "./normalize.ts";
@@ -48,6 +49,12 @@ export interface BaselineOptions {
   frequency?: FrequencyTable | undefined;
   /** Segmentations of the Latin string to explore. */
   maxSegmentations?: number;
+  /**
+   * Further outputs to score alongside the rule candidates, channel mode only —
+   * how the learned model's hypotheses enter the same ranking (`index.ts`).
+   * Compared with ZWNJ removed, since the rule engine never emits one.
+   */
+  extra?: readonly string[];
 }
 
 /**
@@ -144,6 +151,11 @@ export interface ScoringParams {
   affix: number;
   /** Skeleton-bucket stems scored per decomposition. */
   stemBucket: number;
+  /**
+   * Channel distributions re-estimated from data (`scripts/fit-channel.ts`),
+   * replacing the ones derived from `src/rules.ts`. Unset: the table's.
+   */
+  fitted?: FittedChannel | undefined;
 }
 
 /**
@@ -179,6 +191,7 @@ export const SCORING: ScoringParams = {
   beamCarry: 24,
   affix: -Infinity,
   stemBucket: 8,
+  fitted: FITTED_CHANNEL,
 };
 
 export class RuleBaseline {
@@ -201,7 +214,9 @@ export class RuleBaseline {
     // The dictionary is built from the frequency table, so without one there is
     // nothing to index and channel mode degrades to the beam.
     if (this.scoring.mode === "channel" && options.frequency) {
-      this.channel = new Channel(this.scoring);
+      this.channel = this.scoring.fitted
+        ? Channel.fromFitted(this.scoring.fitted, this.scoring)
+        : new Channel(this.scoring);
       this.index = new SkeletonIndex(options.frequency);
     }
   }
@@ -289,6 +304,10 @@ export class RuleBaseline {
 
     for (const [output, walkScore] of beam) consider(output, walkScore, "beam");
     for (const word of index.lookup(lower, p.bucket)) consider(word, walked.get(word), "dictionary");
+    // Outside candidates the beam never produced are scored as its worst
+    // carried candidate on the walk term: no evidence for them, none against.
+    const walkWorst = beam[beam.length - 1]?.[1] ?? walkBest;
+    for (const output of opts.extra ?? []) consider(output, walked.get(output) ?? walkWorst, "model");
 
     // Morphology: an inflected form scored as its stem's table entry, plus a
     // fixed cost per affix. Only table stems are composed — an out-of-table

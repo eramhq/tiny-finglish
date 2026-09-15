@@ -116,3 +116,14 @@ def test_variation_produces_realistic_alternatives():
 ])
 def test_coda_legality(cluster, legal):
     assert _is_legal_coda(cluster) is legal
+
+
+@pytest.mark.parametrize("word", ["معلم", "سئوال", "مؤمن", "جزء", "بعد", "شعر"])
+def test_latin_side_never_carries_persian_letters(word):
+    """ع ء ئ ؤ exist only in the table's `silent` role. A consonant-slot lookup
+    that missed them once wrote the Persian letter into the Latin string —
+    `aabaعli` — for 5% of the training corpus."""
+    generator = FinglishGenerator(seed=3)
+    for _ in range(30):
+        latin, _labels = align_to_labels(generator.generate(word))
+        assert re.fullmatch(r"[a-zâ' -]*", latin), latin

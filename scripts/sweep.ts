@@ -4,6 +4,7 @@
  *
  *   node scripts/sweep.ts --grid frequency=3,5,8 outOfTable=-4,-2,0
  *   node scripts/sweep.ts --grid mode=walk,channel
+ *   node scripts/sweep.ts --engine model --weights training/runs/v5/weights.json   # a retrained model
  *
  * Every combination in the grid is scored on `data/dev/dev.jsonl` (strict word
  * accuracy against `expected` and against `faithful`, plus the orthographic
@@ -15,6 +16,7 @@
  * off a flat region rather than a maximum — the same discipline the existing
  * `UNIT_COST` sweep documents in `src/baseline.ts`.
  */
+import { readFileSync } from "node:fs";
 import { SCORING, type ScoringParams } from "../src/baseline.ts";
 import { lenientSplitWords, wordAccuracy } from "../src/metrics.ts";
 import { normalize } from "../src/normalize.ts";
@@ -24,7 +26,12 @@ import { loadFixtures, loadFrequency, loadLexicon, loadModel } from "./_load.ts"
 const argv = process.argv.slice(2);
 const gridAt = argv.indexOf("--grid");
 const specs = gridAt >= 0 ? argv.slice(gridAt + 1).filter((a) => a.includes("=")) : [];
-const useModel = argv.includes("--model");
+const engineAt = argv.indexOf("--engine");
+const engineName = engineAt >= 0 ? argv[engineAt + 1]! : argv.includes("--model") ? "hybrid" : "rules";
+const weightsAt = argv.indexOf("--weights");
+const fittedAt = argv.indexOf("--fitted");
+const fitted = fittedAt >= 0 ? JSON.parse(readFileSync(argv[fittedAt + 1]!, "utf8")) : undefined;
+const useModel = engineName !== "rules";
 
 const axes: Array<[keyof ScoringParams, Array<string | number>]> = specs.map((spec) => {
   const [key, values] = spec.split("=") as [keyof ScoringParams, string];
@@ -43,7 +50,11 @@ function* combinations(i = 0, acc: Partial<ScoringParams> = {}): Generator<Parti
 
 const frequency = loadFrequency();
 const lexicon = loadLexicon();
-const model = useModel ? loadModel() : undefined;
+const model = !useModel
+  ? undefined
+  : weightsAt >= 0
+    ? JSON.parse(readFileSync(argv[weightsAt + 1]!, "utf8"))
+    : loadModel();
 const dev = loadFixtures("data/dev/dev.jsonl");
 const fixtures = loadFixtures().filter((f) => f.expected !== null);
 
@@ -55,8 +66,8 @@ for (const scoring of combinations()) {
   const engine = new Transliterator({
     ...(frequency ? { frequency } : {}),
     ...(lexicon ? { lexicon } : {}),
-    ...(model ? { model, hybrid: true } : {}),
-    scoring,
+    ...(model ? { model, hybrid: engineName === "hybrid" } : {}),
+    scoring: fitted ? { ...scoring, fitted } : scoring,
   });
   let strict = 0, faithful = 0, ortho = 0, devTotal = 0, faithfulTotal = 0;
   for (const row of dev) {

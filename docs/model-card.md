@@ -11,8 +11,8 @@ Persian grapheme set that includes an empty label and multi-character labels.
 | Task | monotonic transliteration, Latin → Perso-Arabic |
 | Architecture | embedding → 5-wide neighbourhood → bidirectional affine scans → per-position softmax |
 | Sizes trained | 27,660 / 102,348 / 541,516 / ~2M parameters |
-| **Shipped** | **102,348 parameters, int6, 85.1 KiB Brotli with runtime** |
-| Shipped data | 54.2 KiB word frequency, fetched separately — 139.3 KiB all in |
+| **Shipped** | **110,018 parameters, int6, 96.6 KiB Brotli with runtime** (same 100k architecture; the label set grew) |
+| Shipped data | 54.1 KiB word frequency, fetched separately — 150.7 KiB all in |
 | Optional data | 73.6 KiB word bigrams, 98.3 KiB lexicon; measured, not shipped |
 | Quantization | per-row symmetric int8 or int6 |
 | Runtime | hand-written JavaScript, CPU, no WASM/WebGPU/ONNX |
@@ -30,6 +30,46 @@ can abstain rather than silently guess.
 Not a translator, not a chatbot, not a general LLM. Not intended for
 unsupervised bulk rewriting of documents — the plan lists "silent rewriting of
 long documents" as an explicit non-goal, and the accuracy figures below are why.
+
+## The shipped model, as of September 2026
+
+Same architecture and recipe as the 100k model below, retrained on a new mix.
+The rest of this card below this section is the record of how the previous
+model was chosen and measured, kept as it was measured.
+
+**Training data: half synthetic, half LLM-typed.**
+
+* The synthetic corpus below, regenerated after fixing a generator bug. The bug
+  wrote the Persian letters ع ئ ء ؤ into the Latin side of 21,008 of 425,590
+  examples: 428,721 train examples, corpus hash `fd659baf6593debb`.
+* 49,890 word-level examples from 3,000 HomoRich sentences (CC0), each typed in
+  Finglish by two calibrated LLM "typist" personas: Claude Opus 5 subagents and
+  Codex GPT-5.6 luna. They were aligned to character labels by the rule
+  engine's noisy channel and repeated to equal the synthetic count. Gold and
+  dev sentences were excluded before sampling. See `docs/llm-work.md` §6 and
+  `data/provenance/distill.json`.
+
+**Evaluation.** Parity with the PyTorch checkpoint holds at 1.8e-5 against a
+2e-3 tolerance.
+
+| set | previous model (102k) | **shipped (110k)** |
+|---|---:|---:|
+| dev set, strict (304 real rows, the tuning surface) | 43.7% | **55.6%** |
+| dev set, against `faithful` | 53.1% | **66.3%** |
+| hand-authored fixtures (205) | 80.4% | **88.9%** |
+| **real human Finglish, gold (1,669 audited rows)** | 55.0% | **69.2%** |
+| gold, orthographic tier | 59.1% | **73.9%** |
+
+The gold row for the previous model is on the same audited 1,669 rows, not the
+51.2% it was published at over 1,835. The audit's quarantine of 160 misaligned
+rows is a metric correction worth about 4 points by itself.
+
+**It still trails the rule engine on real input**, 69.2% to 73.5% strict on
+gold, down from an 11-point gap. It leads on the fixtures (88.9% against 83.3%)
+and on ZWNJ. Ranked jointly with the rules (`hybrid: true`), it gives the best
+orthographic-tier score in the project, 76.3% on gold. A learning curve on the
+LLM-typed data (+2 points per doubling) says the gap has not closed because the
+data stopped helping.
 
 ## Training data
 
