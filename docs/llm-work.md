@@ -124,47 +124,91 @@ human fell from 0.67 at best to **0.22** (`everyday`) and **0.32**
 
 ## 6. Distillation — LLM-typed Finglish as training data
 
-3,000 HomoRich sentences (CC0), with gold and dev excluded by the shared
-leakage guard, were each typed by both calibrated personas: 6,000 variants and
-52,486 word pairs (`data/distill/llm-finglish.jsonl.br`). Claude typed 5,400 of
-them and luna 600. The channel's forced alignment turned 95.1% of the pairs
-into per-character training labels (`scripts/align-pairs.ts`).
+10,049 HomoRich sentences (CC0), with gold and dev excluded by the shared
+leakage guard, each typed by both calibrated personas: 20,144 variants and
+176,671 word pairs (`data/distill/llm-finglish.jsonl.br`). Claude typed 5,400
+variants and luna 14,744. The channel's forced alignment turned 93.4% of the
+pairs into per-character training labels (`scripts/align-pairs.ts`), 164,990
+examples against 49,890 at 3,000 sentences.
 
-Before any arm was trained, reading the synthetic corpus found a generator bug.
-`g2p.py` wrote the Persian letters ع ئ ء ؤ into the *Latin* side of 21,008 of
-425,590 examples (`aabaعli`), and the model saw each as `<unk>`. It is fixed
-and has a regression test. Every arm below uses the fixed corpus.
+The first 3,000 came from seed 20260915; a second sample with seed 20260916
+drew 7,050 more from the same 413,734-sentence pool, with the 54 ids that
+collided dropped before anything was typed. Ten luna agents typed them in
+parallel in herdr panes, about 100 sentences a minute, and the whole scale-up
+did not move the weekly rate limit off 85% — the binding constraints were
+wall-clock and the machine's RAM, not the model quota.
 
-Same 102k architecture and recipe, int6. Dev scored strict / faithful, then
+Two things had to be fixed mid-run, both worth recording because both would
+have quietly degraded the corpus:
+
+**Apostrophes broke shell quoting.** Workers appended their output with the
+Finglish as shell arguments, and `sa'at` ends the quoting early. 2.2% of lines
+came out malformed — mostly one word merged into its neighbour. The merge
+validator already refuses such rows, so nothing bad entered the corpus, but the
+yield was the cost. Workers were also forbidden to read their own output file,
+so one could not repair itself and stopped to ask instead. Both rules were
+wrong: the prompt now requires a quoted heredoc and explicitly allows a worker
+to read and repair its own output. The 296 affected sentences had every line
+removed and were re-typed in shards 67-68, so none is counted twice.
+
+**luna missed rates the persona card states.** Its `everyday` persona wrote
+`aa` 39 times per 100 words where the card says ~15 and the human writes 18.4,
+and detached ~10 affixes where the human detaches 10.8 but Claude detaches 16.3.
+Since the new data is 70% of the corpus, that would have reshaped the habit mix.
+The worker prompt restated the rates; the calibrated card itself was not edited.
+Measured over all 7,049 new sentences, luna/everyday landed at `aa` 21.8 and
+14.1 detached, habit L1 **0.34** — closer to the human than claude/everyday's
+0.35. The scale-up did not dilute habit fidelity.
+
+Same 110k architecture and recipe, int6. Dev scored strict / faithful, then
 fixtures:
 
 | training data | dev strict | dev faithful | fixtures |
 |---|---:|---:|---:|
-| v4 as shipped before (old generator) | 43.7 | 53.1 | 80.4 |
-| synthetic only, generator fixed | 44.2 | 53.7 | 80.7 |
-| 25% LLM-typed | 54.6 | 65.1 | 87.6 |
-| **50% LLM-typed** (shipped) | **55.6** | **66.3** | **88.9** |
-| 100% LLM-typed | 52.7 | 63.1 | 84.6 |
+| 50% LLM, 3,000 sentences (previous ship) | 55.6 | 66.3 | 89.0 |
+| 25% LLM, 10,049 sentences | 55.0 | 65.4 | 85.7 |
+| **50% LLM, 10,049 sentences** (shipped) | **56.2** | **67.1** | **92.2** |
+| 100% LLM, 10,049 sentences | 56.0 | 66.4 | 90.3 |
 
-**+11.4 dev points from 3,000 LLM-typed sentences**, and the model's gold
-score moved from 56.1% to 69.2%. Synthetic and LLM data complement each other.
-Synthetic gives vocabulary coverage (100k stems), and LLM typing gives
-realistic spelling and real sentence vocabulary. Neither alone matches the mix.
+50% still wins on every tier, so the synthetic half is still contributing. On
+gold, scored once at the end, the model moved 69.2 → **70.3** strict and
+73.9 → **75.2** orthographic, and ZWNJ placement on fixtures went 41% → **56.3%**.
 
-**Learning curve**, pure LLM data, dev strict: a quarter of the pairs 48.6, a
-half 50.8, all 52.7. That is about +2 points per doubling, still rising. The
-plan's scale-up to ~20k sentences would plausibly put the model level with the
-rules. It was not run in this session: at about 100k subagent tokens per 150
-sentences, it is the single largest cost item left and deserves a decision
-rather than a default.
+**Learning curve**, pure LLM data, dev strict, by sentences typed:
+
+| sentences | 750 | 1,500 | 3,000 | 2,512 | 5,024 | 10,049 |
+|---|---:|---:|---:|---:|---:|---:|
+| dev strict | 48.6 | 50.8 | 52.7 | 52.2 | 51.5 | **56.0** |
+
+The first three points are the earlier claude-heavy corpus; the last three are
+nested subsets of the merged one. **The curve has not flattened**: 3,000 →
+10,049 is +3.3 points over 1.74 doublings, about +1.9 per doubling, the same
+rate as before. But it is noisier than the old one made it look — 52.2 → 51.5 →
+56.0 is not monotonic, so read about ±1 point into any single step. Each arm
+picks its checkpoint on its own mixed dev and the label vocabularies differ
+(103,713 / 103,973 / 104,688 parameters).
+
+**Why the mix gained only +0.6 while pure LLM gained +3.3.** `mix()` upsamples
+the LLM half by repetition until it equals the synthetic count, so the training
+set is 857k examples either way. Tripling the sentences cut repetition from
+~8.6× to ~2.6×: it bought diversity at constant exposure, while the pure-LLM
+arms grew in actual size. Anyone reading the mix arm alone would wrongly
+conclude the data stopped paying.
+
+**Where that leaves ~20,000.** The per-doubling rate is intact and above the
++1 stop rule, so more sentences should still buy accuracy on the pure-LLM
+curve. The honest caveat is that the shipped configuration is the mix, and the
+mix is now rate-limited by its own upsampling rather than by how much LLM data
+exists. Scaling the data again without revisiting how the two corpora are
+combined would likely buy another fraction of a point, not another 3.
 
 **The same data fits the channel.** Hard EM over the pairs
 (`scripts/fit-channel.ts`) re-estimates every P(Latin | Persian letter,
-position). The result is `src/channel-fitted.ts`, 981 bytes Brotli, and it
-moves the rule engine +0.8 on dev strict and faithful. The fit exposes LLM bias
-too: ا is typed `aa` 55% of the time in the LLM data against 30% measured on
-humans. Smoothing toward the table (alpha 20) is what keeps that from
-dominating.
+position). Re-fitting from 10,049 sentences moves the rule engine 58.2 → 58.3
+dev strict, 69.2 → 69.4 faithful and 83.4 → 83.8 fixtures, so it was kept; it
+costs the hybrid 0.3 strict and leaves the model untouched. The fit exposes LLM
+bias too: ا is typed `aa` far more often in LLM data than humans type it.
+Smoothing toward the table (alpha 20) is what keeps that from dominating.
 
 ## 7. Zero-shot references — how far is the ceiling?
 

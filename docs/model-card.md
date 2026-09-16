@@ -42,34 +42,42 @@ model was chosen and measured, kept as it was measured.
 * The synthetic corpus below, regenerated after fixing a generator bug. The bug
   wrote the Persian letters ع ئ ء ؤ into the Latin side of 21,008 of 425,590
   examples: 428,721 train examples, corpus hash `fd659baf6593debb`.
-* 49,890 word-level examples from 3,000 HomoRich sentences (CC0), each typed in
-  Finglish by two calibrated LLM "typist" personas: Claude Opus 5 subagents and
-  Codex GPT-5.6 luna. They were aligned to character labels by the rule
-  engine's noisy channel and repeated to equal the synthetic count. Gold and
-  dev sentences were excluded before sampling. See `docs/llm-work.md` §6 and
-  `data/provenance/distill.json`.
+* 164,990 word-level examples from 10,049 HomoRich sentences (CC0), each typed
+  in Finglish by two calibrated LLM "typist" personas: Claude Opus 5 subagents
+  (5,400 variants) and Codex GPT-5.6 luna (14,744). They were aligned to
+  character labels by the rule engine's noisy channel and repeated to equal the
+  synthetic count. Gold and dev sentences were excluded before sampling. See
+  `docs/llm-work.md` §6 and `data/provenance/distill.json`.
 
 **Evaluation.** Parity with the PyTorch checkpoint holds at 1.8e-5 against a
 2e-3 tolerance.
 
-| set | previous model (102k) | **shipped (110k)** |
+| set | 3,000-sentence model | **shipped (10,049 sentences)** |
 |---|---:|---:|
-| dev set, strict (304 real rows, the tuning surface) | 43.7% | **55.6%** |
-| dev set, against `faithful` | 53.1% | **66.3%** |
-| hand-authored fixtures (205) | 80.4% | **88.9%** |
-| **real human Finglish, gold (1,669 audited rows)** | 55.0% | **69.2%** |
-| gold, orthographic tier | 59.1% | **73.9%** |
+| dev set, strict (304 real rows, the tuning surface) | 55.6% | **56.2%** |
+| dev set, against `faithful` | 66.3% | **67.1%** |
+| hand-authored fixtures (205) | 89.0% | **92.2%** |
+| **real human Finglish, gold (1,669 audited rows)** | 69.2% | **70.3%** |
+| gold, orthographic tier | 73.9% | **75.2%** |
+| ZWNJ placement, fixtures | 41% | **56.3%** |
 
-The gold row for the previous model is on the same audited 1,669 rows, not the
-51.2% it was published at over 1,835. The audit's quarantine of 160 misaligned
-rows is a metric correction worth about 4 points by itself.
+Both columns are the same 110k architecture, recipe and audited 1,669 gold
+rows; the only change is the size of the LLM-typed half, 3,000 sentences to
+10,049. The 102k model this replaced scored 43.7 / 53.1 / 80.4 / 55.0 / 59.1.
 
-**It still trails the rule engine on real input**, 69.2% to 73.5% strict on
-gold, down from an 11-point gap. It leads on the fixtures (88.9% against 83.3%)
-and on ZWNJ. Ranked jointly with the rules (`hybrid: true`), it gives the best
-orthographic-tier score in the project, 76.3% on gold. A learning curve on the
-LLM-typed data (+2 points per doubling) says the gap has not closed because the
-data stopped helping.
+**It still trails the rule engine on real input**, 70.3% to 73.5% strict on
+gold. It leads on the fixtures (92.2% against 83.8%) and on ZWNJ. Ranked
+jointly with the rules (`hybrid: true`), it gives the best orthographic-tier
+score in the project, 76.5% on gold.
+
+**The learning curve has not flattened, but the mix is what limits it.** On
+pure LLM data, dev strict still rises about +1.9 points per doubling of
+sentences typed (52.7 at 3,000, 56.0 at 10,049). The shipped 50% mix gained
+only +0.6 over the same range, because `mix()` upsamples the LLM half to match
+the synthetic count — tripling the sentences cut repetition from ~8.6x to
+~2.6x, buying diversity at constant exposure rather than more training signal.
+More LLM data should still pay; how the two corpora are combined is now the
+tighter constraint. `docs/llm-work.md` §6 has the full curve and its noise.
 
 ## Training data
 
@@ -208,8 +216,9 @@ better, because the information needed is not in the input.
    Finglish over *colloquial* Persian originals in at least 5.4% of rows, which
    no transliterator can recover because the information is not in the input.
    48% of never-proposed words are this.
-4. **ZWNJ.** 41% placement accuracy on fixtures with the model, 0% without it —
-   rule tables structurally cannot emit U+200C. Human writers manage ~83%.
+4. **ZWNJ.** 56.3% placement accuracy on fixtures with the model, 0% without
+   it — rule tables structurally cannot emit U+200C. Human writers manage ~83%.
+   The gold set cannot measure this: its Persian side carries no ZWNJ at all.
 5. **Evaluation is one annotator.** Real typing, but a single writer's habits,
    in read-aloud register, for a text-to-speech project. `data/gold/README.md`
    has the panel protocol that would fix it.
