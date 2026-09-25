@@ -16,7 +16,7 @@
  * drift.
  */
 
-import { RuleBaseline, type ScoringParams } from "./baseline.ts";
+import { RuleBaseline, SCORING, type ScoringParams } from "./baseline.ts";
 import { bigramScore, type BigramTable } from "./bigram.ts";
 import { type FrequencyTable } from "./frequency.ts";
 import { normalize } from "./normalize.ts";
@@ -105,6 +105,8 @@ export abstract class Pipeline {
   protected readonly lexicon: ReadonlySet<string> | undefined;
   protected readonly frequency: FrequencyTable | undefined;
   protected readonly bigram: BigramTable | undefined;
+  /** The same constants the baseline ranks with; `finalHePass` is the one term applied here. */
+  protected readonly scoring: ScoringParams;
   /**
    * Word-level memo. This is what keeps the typing path inside a 16 ms frame:
    * a keystroke re-converts only the word being edited, never the sentence.
@@ -117,6 +119,7 @@ export abstract class Pipeline {
     this.frequency = options.frequency;
     this.bigram = options.bigram;
     this.cacheSize = options.cacheSize ?? 2048;
+    this.scoring = { ...SCORING, ...options.scoring };
     this.baseline = new RuleBaseline({
       ...(options.lexicon ? { lexicon: options.lexicon } : {}),
       ...(options.frequency ? { frequency: options.frequency } : {}),
@@ -325,6 +328,7 @@ export abstract class Pipeline {
    * whose candidate generator was a pair 6-gram FST rather than this beam.
    */
   protected sentencePass(spans: Span[]): void {
+    this.finalHePass(spans);
     if (this.bigram) this.contextPass(spans);
     if (!this.lexicon) return;
     for (const span of spans) {
@@ -340,6 +344,90 @@ export abstract class Pipeline {
         span.confidence = round4(attested.probability);
         span.candidates = [attested, ...span.candidates.filter((c) => c !== attested)];
       }
+    }
+  }
+
+  /**
+   * The word-final ه decision, with the one piece of context it needs.
+   *
+   * `ketaabe` is کتاب or کتابه, `khoobe` is خوب or خوبه, and the rule baseline
+   * decides between them on `fit + frequency` alone (`baseline.ts`), which is
+   * the same answer for `ketaabe` and for `ketaabe man`. It is the wrong shape
+   * of evidence: the ه here is a clitic — the copula است and the colloquial
+   * ezafe — and a clitic attaches at the end of a phrase, not in front of the
+   * next word. The engine got `in ketaabe` -> این کتاب and `havaa khoobe` ->
+   * هوا خوب for exactly that reason.
+   *
+   * So this tilts, and only tilts. It cannot be a rule: خانه and پرنده keep
+   * their ه wherever they stand (`khane bozorg ast` -> خانه بزرگ است), so
+   * position is evidence about the ه, not a decision about it.
+   *
+   * At a clause end, **every** ه-final candidate gets `scoring.finalHe` nats and
+   * the list is renormalized and reordered. Applying it to all of them, rather
+   * than to the ones that happen to have their bare form in the list too, is
+   * what keeps two ه spellings in their original order relative to each other —
+   * they are scaled by the same factor, so only ه-final against bare moves.
+   *
+   * That was learned the hard way. The first version required a pair: a
+   * candidate qualified only if its own bare form was also a candidate. It broke
+   * `gozashte` into گذاشته, because گذاشت was in the list to make گذاشته look
+   * like a clitic pair while گذشت was not, so the bonus landed on one of the two
+   * ه spellings and not the other. A pairwise swap fixed that but could not
+   * reach a ه form sitting behind a *third* candidate, which is most of them.
+   * Scaling the whole class has both properties and needs no pair bookkeeping.
+   * A list that is all ه-final, or none, is skipped: uniform scaling would not
+   * reorder anything.
+   *
+   * **The mirror half of that is not here, because it does not work.** Charging
+   * a clitic ه mid-sentence is the obvious other half and it loses steadily —
+   * the sweep is in `SCORING`. Medial is where خانه and پرنده live, the engine
+   * already gets most of them right, and there is no way to penalize the ه
+   * there without breaking them. Only the clause-final position is
+   * systematically wrong, so only the clause-final position is touched.
+   *
+   * Running here rather than in `convertWord` is what keeps the word memo
+   * context-free: candidate *generation* is still a pure function of the word,
+   * and this only reweights the cached list. On the typing path that means a
+   * word can change under the cursor — `khoobe` shows خوبه while it is the last
+   * word and becomes خوب once another follows it. That is the term working, not
+   * flicker: the evidence genuinely changed.
+   *
+   * The ceiling on the whole idea is small and was measured before it was
+   * built. An oracle allowed to flip nothing but ه-pairs — pick the right
+   * member of every pair the engine offers — is worth +0.6 on dev-faithful and
+   * +0.3 on the fixtures; letting it also insert or delete a ه the candidate
+   * list never proposed adds only +0.2 more. Candidate generation is not the
+   * limit here, ranking is, and the ranking is 538 pairs deep on dev of which
+   * just 34 are clause-final.
+   */
+  private finalHePass(spans: Span[]): void {
+    const weight = this.scoring.finalHe;
+    if (!weight) return;
+    const gain = Math.exp(weight);
+    for (let i = 0; i < spans.length; i++) {
+      const span = spans[i]!;
+      const list = span.candidates;
+      if (span.action !== "convert" || !list || list.length < 2) continue;
+      if (!endsClause(spans, i)) continue;
+      const scaled = list.map((candidate) => ({
+        candidate,
+        he: candidate.output.length > 1 && candidate.output.endsWith("ه"),
+      }));
+      if (scaled.every((s) => s.he) || !scaled.some((s) => s.he)) continue;
+      const weights = scaled.map(({ candidate, he }) =>
+        Math.max(candidate.probability, 1e-6) * (he ? gain : 1));
+      const total = weights.reduce((a, b) => a + b, 0);
+      const ranked = scaled
+        .map(({ candidate, he }, k) => ({ candidate, he, weight: weights[k]! }))
+        .sort((a, b) => b.weight - a.weight)
+        .map(({ candidate, he, weight: w }) => ({
+          ...candidate,
+          probability: round4(w / total),
+          reason: he ? `${candidate.reason} +${weight.toFixed(2)} clause-final ه` : candidate.reason,
+        }));
+      span.candidates = ranked;
+      span.output = ranked[0]!.output;
+      span.confidence = ranked[0]!.probability;
     }
   }
 
@@ -455,4 +543,19 @@ export abstract class Pipeline {
 
 export function round4(value: number): number {
   return Math.round(value * 10000) / 10000;
+}
+
+/**
+ * True when nothing but punctuation follows `spans[i]` — the position a clitic
+ * ه is written in. A comma counts: `havaa khoobe, vali sard ast` ends a clause
+ * there as surely as a full stop does. A copy span does not — an English word
+ * or a URL is still something following, and this is a claim about word order,
+ * not about what the tokenizer could convert.
+ */
+function endsClause(spans: readonly Span[], i: number): boolean {
+  for (let j = i + 1; j < spans.length; j++) {
+    if (spans[j]!.action === "space") continue;
+    return spans[j]!.action === "punct";
+  }
+  return true;
 }

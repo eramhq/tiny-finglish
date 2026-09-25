@@ -152,6 +152,13 @@ export interface ScoringParams {
   /** Skeleton-bucket stems scored per decomposition. */
   stemBucket: number;
   /**
+   * Log-odds tilt on a candidate that is another candidate plus a trailing ه,
+   * applied in the sentence pass where the word's position is known: toward the
+   * ه reading when nothing but punctuation follows the word, away from it when
+   * another word does. See `Pipeline.finalHePass`.
+   */
+  finalHe: number;
+  /**
    * Channel distributions re-estimated from data (`scripts/fit-channel.ts`),
    * replacing the ones derived from `src/rules.ts`. Unset: the table's.
    */
@@ -179,6 +186,38 @@ export interface ScoringParams {
  * After fixing how composed candidates are scored it measured 63.2 / 63.2 /
  * 63.2 / 63.1 / 62.8 strict at off / -4 / -3 / -2 / -1 — nothing to buy at any
  * cost, and a way to lose at the cheap end.
+ *
+ * `finalHe` is applied by `Pipeline.finalHePass`, not here, because only the
+ * sentence pass knows where a word sits. Swept on dev and the fixtures, as
+ * fixture word accuracy at each tier:
+ *
+ *     finalHe   0     1     1.5   2     2.5   3     4     5     6
+ *     rules     83.4  84.0  84.3  84.3  84.3  84.3  84.3  83.7  84.0
+ *     hybrid    92.2  92.5  92.8  92.8  92.8  92.8  93.1  93.1  92.8
+ *     model     91.5  91.5  91.5  91.5  91.5  91.2  91.5  90.9  90.6
+ *
+ * 2.0 is the interior of the region flat on all three, not any one tier's peak:
+ * rules are flat over 1.5-4, hybrid keeps rising to 4, and the model tier is
+ * the one that loses above 2. Past 4 it stops being a prior and starts being a
+ * rule — `برایه` is only 3.1 nats behind `برای`, so a large enough term writes
+ * one — and every tier falls back.
+ *
+ * It is **one-sided**, and that was measured rather than assumed. Tilting *away*
+ * from a clitic ه mid-sentence, which is the symmetric term the same argument
+ * suggests, is monotonically harmful: at 0.5 / 1 / 2 / 3 / 4 nats of medial
+ * penalty the rules tier reads 69.0 / 68.3 / 67.8 / 67.5 / 67.3 dev-faithful
+ * against 69.4 with none. The engine's medial ه calls are mostly already right
+ * — خانه, پنجره, حمله — so there is nothing there to win and words to lose.
+ *
+ * What it buys at 2.0 is small and unevenly spread: rules +0.9 on the fixtures
+ * and +0.1 on dev-faithful, hybrid +0.6 and +0.0, the shipped model tier +0.0
+ * and +0.1. The reason it cannot buy more is the frequency term it argues with.
+ * `خوبه`, `چطوره` and `بازه` are all in the frequency table, 1.2 to 1.7 nats
+ * behind their bare spellings, and 2.0 nats reaches them. `کتابه` is *not* in
+ * the table, so it pays `outOfTable` and forfeits کتاب's 0.69 — about 5.5 nats,
+ * which nothing safe reaches. Noun-plus-copula is therefore still wrong
+ * (`data/fixtures` ezafe-002, deliberately left failing), and fixing that class
+ * is a frequency-table or morphology job, not a ranking one.
  */
 export const SCORING: ScoringParams = {
   mode: "channel",
@@ -191,6 +230,7 @@ export const SCORING: ScoringParams = {
   beamCarry: 24,
   affix: -Infinity,
   stemBucket: 8,
+  finalHe: 2.0,
   fitted: FITTED_CHANNEL,
 };
 

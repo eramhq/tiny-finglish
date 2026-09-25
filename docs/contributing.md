@@ -19,9 +19,10 @@ the English word list, not hyperparameters. When a gold case fails, put a
 the gold case alone.
 
 Every tuned constant in the codebase follows this and says so in its own
-docstring: `UNIT_COST` and the beam width in `src/baseline.ts`,
-`FREQUENCY_RERANK` and `BIGRAM_WEIGHT` in `src/index.ts`, the bigram pair count
-in `build_bigram.py`. Gold is run once at the end of a change, as a report.
+docstring: `UNIT_COST`, the beam width and `SCORING` (including `finalHe`) in
+`src/baseline.ts`, `FREQUENCY_RERANK` and `BIGRAM_WEIGHT` in `src/index.ts`, the
+bigram pair count in `build_bigram.py`. Gold is run once at the end of a change,
+as a report.
 
 The corollary is that the fixture set has to be able to *see* what you are
 tuning. `BIGRAM_WEIGHT` was flat across two orders of magnitude on the fixtures
@@ -47,6 +48,14 @@ the constant.
 * `expectAction: "copy"` asserts the input passes through untouched.
 * Write a `notes` line saying *why* the case is interesting. A fixture without a
   reason is a fixture nobody can maintain.
+
+A fixture is allowed to fail, and `ezafe-002` does on purpose — the reference is
+right and the engine cannot reach it yet, so the row states the size of the gap
+in its `notes`. What is *not* allowed is a phenomenon whose only guard is a
+corpus-wide threshold: `ezafe` is five rows out of 211, so breaking all five
+moves `all` by two points and fails nothing. When a fixture group encodes a
+specific behaviour, assert the rows in `test/` as well —
+`test/ezafe.test.ts` is the pattern.
 
 ## Changing the model
 

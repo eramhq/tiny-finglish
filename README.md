@@ -280,25 +280,31 @@ and never has to be invalidated. No debouncing, no incremental rescoring.
 
 ### On the hand-authored fixtures
 
-The 194 fixtures in `data/fixtures/` are hand-written and include deliberately
+The 212 fixtures in `data/fixtures/` are hand-written and include deliberately
 adversarial and ambiguous cases. With the shipped 100k model:
 
 | category | n | word acc | sentence | top-3 |
 |---|---:|---:|---:|---:|
 | protected | 13 | 100.0% | 100.0% | 100.0% |
-| mixed | 7 | 90.6% | 57.1% | 57.1% |
-| adversarial | 10 | 90.0% | 90.0% | 90.0% |
-| ordinary | 70 | 82.9% | 82.9% | 85.7% |
-| sentence | 20 | 79.7% | 50.0% | 60.0% |
-| zwnj | 18 | 70.4% | 77.8% | 77.8% |
-| ambiguous | 34 | 64.7% | 70.6% | 70.6% |
-| informal | 21 | 52.4% | 52.4% | 76.2% |
-| **all** | 193 | **78.9%** | **74.1%** | **78.8%** |
+| adversarial | 10 | 100.0% | 100.0% | 100.0% |
+| sentence | 25 | 97.5% | 92.0% | 96.0% |
+| mixed | 8 | 97.3% | 87.5% | 87.5% |
+| ordinary | 74 | 90.5% | 90.5% | 97.3% |
+| ambiguous | 36 | 86.1% | 88.9% | 97.2% |
+| informal | 22 | 83.3% | 81.8% | 95.5% |
+| zwnj | 18 | 81.5% | 83.3% | 83.3% |
+| ezafe | 5 | 72.7% | 40.0% | 80.0% |
+| **all** | 211 | **91.5%** | **88.6%** | **95.3%** |
 
-**The gap between 85% on the synthetic test set and 79% here is the honest
-number for data this project did not generate** — and the gap to 51% on data it
-did not *write* is larger still. It is the synthetic-data bias the plan's risk
-register predicted, and it is why the hand-authored set exists.
+`ezafe` is the newest and weakest bucket, and deliberately so: five minimal
+pairs for the word-final ه, one of which (`in ketaabe`) is a documented miss the
+frequency table cannot yet reach. See `SCORING.finalHe` in `src/baseline.ts`.
+
+**The gap between the synthetic test set and this one is the honest number for
+data this project did not generate** — and the gap to the gold set below, data it
+did not *write*, is larger still: 91.5% here against 56.2%. It is the
+synthetic-data bias the plan's risk register predicted, and it is why the
+hand-authored set exists.
 
 ### Learned model vs the rule baseline
 
@@ -306,14 +312,16 @@ The M1 rule baseline is the floor the model has to beat. On the same fixtures:
 
 | metric | rule baseline | model (100k) |
 |---|---:|---:|
-| word accuracy | 74.2% | **78.9%** |
-| sentence exact | 71.5% | **74.1%** |
-| top-3 | **86.0%** | 78.8% |
-| CER | 0.106 | **0.087** |
-| mixed-English | 78.1% | **90.6%** |
-| ambiguous | **70.6%** | 64.7% |
-| sentence | **84.4%** | 79.7% |
-| **ZWNJ placement** | **0.0%** (0/11) | **41.2%** (7/17) |
+| word accuracy | 84.3% | **91.5%** |
+| sentence exact | 82.5% | **88.6%** |
+| top-3 | 91.5% | **95.3%** |
+| CER | 0.059 | **0.029** |
+| mixed-English | 83.8% | **97.3%** |
+| ambiguous | 80.6% | **86.1%** |
+| sentence | 94.9% | **97.5%** |
+| ezafe | **90.9%** | 72.7% |
+| adversarial | 50.0% | **100.0%** |
+| **ZWNJ placement** | **0.0%** (0/11) | **56.3%** (9/16) |
 
 (Both with the frequency table, which is the shipped configuration.)
 
@@ -322,9 +330,11 @@ positional rule tables are **structurally incapable** of emitting U+200C, so
 every one of the ~23% of Persian word types that contains one is guaranteed
 wrong. Treating ZWNJ as an ordinary output label fixes that by construction.
 
-The rule baseline wins on top-3 because it generates more diverse candidates;
-the model's distribution is more peaked. Worth remembering if you use
-`alternatives` rather than `text`.
+The rule baseline still wins where its candidate list is wider: it takes the
+`ezafe` bucket, because the word-final ه tilt (`SCORING.finalHe`) needs the two
+readings close together to move between them, and the model's distribution is
+far more peaked — `khoobe` is 0.58/0.42 for the rules and 0.95/0.05 for the
+model. Worth remembering if you use `alternatives` rather than `text`.
 
 ### The untouched gold set — real human Finglish
 
@@ -659,7 +669,7 @@ the page, not an appendix to it.
 
 ```bash
 npm install
-npm test                      # 126 JS tests
+npm test                      # 138 JS tests
 npm run typecheck
 node scripts/run-fixtures.ts  # fixture report with per-candidate reasons
 node scripts/run-fixtures.ts --verbose --rules   # rule baseline, every failure
@@ -687,7 +697,7 @@ Training:
 ```bash
 cd training
 uv venv --python 3.12 .venv && uv pip install --python .venv/bin/python torch numpy pytest brotli
-.venv/bin/python -m pytest tests -q                       # 232 tests
+.venv/bin/python -m pytest tests -q                       # 243 tests
 
 .venv/bin/python -c "from tiny_finglish_training.corpus import build; \
   from pathlib import Path; build(out_dir=Path('corpora/full'), variants=6)"
