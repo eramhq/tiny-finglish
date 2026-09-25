@@ -14,9 +14,11 @@ typing before any of it is used.
     python -m tiny_finglish_training.build_distill --export runs/llm/distill --sentences 3000 --shards 20
     python -m tiny_finglish_training.build_distill --merge runs/llm/distill
     # a later round: a new seed, sentences already typed dropped, shards continuing the series,
-    # and 3,000 of the 10,000 drawn from the clause-final ه subset (see `ends_in_he`)
+    # 3,000 of the 10,000 drawn from the clause-final ه subset (see `ends_in_he`), and that
+    # draw kept in shards 69-89 of its own so it can be typed and measured on its own
     python -m tiny_finglish_training.build_distill --export runs/llm/distill --sentences 10000 \
-        --targeted 3000 --shards 69 --seed <new> --exclude-typed --shard-start 69
+        --targeted 3000 --targeted-shards 21 --shards 69 --seed <new> \
+        --exclude-typed --shard-start 69
     # a training corpus; --mode decides how --share is reached (see `mix`)
     python -m tiny_finglish_training.build_distill --mix runs/llm/pairs.jsonl --base corpora/full-v5 \
         --share 0.5 --mode upsample --out corpora/mix
@@ -96,10 +98,13 @@ def ends_in_he(words: list[str]) -> bool:
 
 
 def sample(source: Path, n: int, seed: int, min_words: int = 4, max_words: int = 18,
-           exclude: set[str] | None = None, targeted: int = 0) -> list[dict]:
+           exclude: set[str] | None = None, targeted: int = 0,
+           shuffle: bool = True) -> list[dict]:
     """`n` sentences, of which `targeted` are drawn from the `ends_in_he` subset.
 
     `targeted` 0 is a uniform draw, which is what the first two rounds used.
+    `shuffle` False keeps the targeted draw first, so a caller can write the two
+    halves into separate shard ranges and type one of them on its own.
     """
     import pyarrow.parquet as pq
 
@@ -122,12 +127,19 @@ def sample(source: Path, n: int, seed: int, min_words: int = 4, max_words: int =
     print(f"pool {len(pool)} eligible after excluding {len(already)} already typed")
     if targeted:
         rich = [w for w in pool if ends_in_he(w)]
-        plain = [w for w in pool if not ends_in_he(w)]
-        chosen = rng.sample(rich, targeted) + rng.sample(plain, n - targeted)
-        # Shuffled so every shard carries both kinds in proportion.
-        rng.shuffle(chosen)
-        print(f"sampled {targeted} of {len(rich)} clause-final-ه and {n - targeted} of {len(plain)} "
-              f"others at seed {seed}")
+        chosen = rng.sample(rich, targeted)
+        # The remainder is drawn uniformly over everything *not already taken*,
+        # not over the complement of `rich`. Sampling the complement would make
+        # the untargeted half contain no clause-final ه at all, which is a
+        # different corpus from the one the round is supposed to blend.
+        taken = {sentence_id(w) for w in chosen}
+        rest = [w for w in pool if sentence_id(w) not in taken]
+        chosen = chosen + rng.sample(rest, n - targeted)
+        if shuffle:
+            # Every shard carries both kinds in proportion.
+            rng.shuffle(chosen)
+        print(f"sampled {targeted} of {len(rich)} clause-final-ه, then {n - targeted} "
+              f"uniformly of the remaining {len(rest)}, at seed {seed}")
     else:
         chosen = rng.sample(pool, n)
         print(f"sampled {n} uniformly at seed {seed}")
@@ -289,15 +301,25 @@ def main() -> None:
                         help="--export: drop sentences already in the committed artifact")
     parser.add_argument("--targeted", type=int, default=0,
                         help="--export: how many of --sentences to draw from the clause-final ه subset")
+    parser.add_argument("--targeted-shards", type=int, default=0,
+                        help="--export: put the targeted draw in this many shards of its own, first, "
+                             "so it can be typed and measured before the rest")
     parser.add_argument("--seed", type=int, default=20260915)
     args = parser.parse_args()
     if args.export_fidelity:
         export_fidelity(args.export_fidelity, args.shards)
     elif args.export:
         exclude = typed_ids() if args.exclude_typed else None
-        write_shards(sample(args.source, args.sentences, args.seed, exclude=exclude,
-                            targeted=args.targeted),
-                     args.export, args.shards, args.shard_start)
+        if args.targeted_shards:
+            rows = sample(args.source, args.sentences, args.seed, exclude=exclude,
+                          targeted=args.targeted, shuffle=False)
+            write_shards(rows[:args.targeted], args.export, args.targeted_shards, args.shard_start)
+            write_shards(rows[args.targeted:], args.export, args.shards - args.targeted_shards,
+                         args.shard_start + args.targeted_shards)
+        else:
+            write_shards(sample(args.source, args.sentences, args.seed, exclude=exclude,
+                                targeted=args.targeted),
+                         args.export, args.shards, args.shard_start)
     elif args.mix:
         print(json.dumps(mix(args.mix, args.base, args.share, args.out, args.seed, args.mode), indent=2))
     elif args.merge:
