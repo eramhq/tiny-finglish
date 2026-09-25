@@ -90,7 +90,19 @@ def rates(words: list[str]) -> dict[str, float]:
     }
 
 
-def check_file(path: Path) -> tuple[bool, list[str], dict]:
+def check_file(path: Path, partial: bool = False, strict: bool = False) -> tuple[bool, list[str], dict]:
+    """`partial` judges a half-written file: only the personas present, no pair check.
+
+    A worker types one persona all the way through before starting the other, so
+    mid-pass its file has one persona and no pairs to compare. Without this the
+    worker cannot measure itself until it has finished, which is exactly too late.
+
+    `strict` judges the file against `AGGREGATE` rather than `BANDS`. That is what
+    a worker should aim at: the round aggregate is the sum of the files, so a
+    worker that lands inside the loose historical envelope on every file can
+    still put the round outside it. `BANDS` is for finding gross outliers after
+    the fact, not for steering.
+    """
     rows = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
     problems: list[str] = []
     by_sentence: dict[str, dict[str, list[str]]] = collections.defaultdict(dict)
@@ -102,15 +114,16 @@ def check_file(path: Path) -> tuple[bool, list[str], dict]:
     both = [v for v in by_sentence.values() if len(v) == len(BANDS)]
     identical = sum(1 for v in both if len({tuple(f) for f in v.values()}) == 1)
     share = identical / len(both) if both else 0.0
-    if share > MAX_IDENTICAL_SHARE:
+    if share > MAX_IDENTICAL_SHARE and not partial:
         problems.append(f"{identical}/{len(both)} sentence pairs identical across personas "
                         f"({100 * share:.0f}% > {100 * MAX_IDENTICAL_SHARE:.0f}%)")
 
     measured = {}
-    for persona, bands in BANDS.items():
+    for persona, bands in (AGGREGATE if strict else BANDS).items():
         words = by_persona.get(persona)
         if not words:
-            problems.append(f"no {persona} lines")
+            if not partial:
+                problems.append(f"no {persona} lines")
             continue
         measured[persona] = rates(words)
         for habit, (low, high) in bands.items():
@@ -132,6 +145,10 @@ def main() -> None:
     parser.add_argument("--quiet", action="store_true", help="print failures only")
     parser.add_argument("--first", type=int, default=None,
                         help="lowest shard number to check, for gating one round on its own")
+    parser.add_argument("--partial", action="store_true",
+                        help="judge half-written files: only the personas present, no pair check")
+    parser.add_argument("--strict", action="store_true",
+                        help="judge each file against the round target, not the loose envelope")
     args = parser.parse_args()
 
     paths = sorted(args.directory.glob(f"{args.worker}-gen-*.jsonl"),
@@ -145,7 +162,7 @@ def main() -> None:
     pooled: dict[str, list[str]] = collections.defaultdict(list)
     pooled_both = pooled_identical = 0
     for path in paths:
-        ok, problems, stats = check_file(path)
+        ok, problems, stats = check_file(path, partial=args.partial, strict=args.strict)
         if not ok:
             failed.append(path.name)
         for persona, words in stats["words"].items():
@@ -163,6 +180,8 @@ def main() -> None:
         for problem in problems:
             print(f"       - {problem}")
 
+    if args.partial:
+        return
     print(f"\n-- round aggregate over {len(paths)} file(s) --")
     round_problems = []
     share = pooled_identical / pooled_both if pooled_both else 0.0
