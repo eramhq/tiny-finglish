@@ -21,7 +21,7 @@ from pathlib import Path
 import torch
 
 from .export import export_model
-from .labels import load_vocabs
+from .labels import EOS, load_vocabs
 from .model import ModelConfig, build
 
 #: Inputs chosen to exercise every structural path: the empty label, multi-
@@ -33,6 +33,11 @@ PARITY_INPUTS = [
     "chetori", "khoone", "doost", "aaaaaaaaaaaaaaaaaaaa",
     "abcdefghijklmnopqrstuvwxyz",
 ]
+
+#: Clause-final inputs, run with `<eos>` appended, for weights exported with
+#: the clause marker. They cover the marker at a word's end, where it sits in
+#: the neighbourhood window of the last two letters, and on a one-letter word.
+MARKED_INPUTS = ["ketabe", "khoobe", "daneshjooha", "salam", "e"]
 
 
 def main() -> None:
@@ -51,20 +56,24 @@ def main() -> None:
     model.eval()
 
     inputs, outputs = load_vocabs(args.vocab or args.checkpoint.parent / "vocab.json")
-    artifact, shadow = export_model(model, inputs, outputs, quant=args.quant)
+    marker = bool(state.get("clause_marker"))
+    artifact, shadow = export_model(model, inputs, outputs, quant=args.quant, clause_marker=marker)
 
     args.weights.parent.mkdir(parents=True, exist_ok=True)
     args.weights.write_text(json.dumps(artifact, ensure_ascii=False), encoding="utf-8")
 
     unk = inputs.encode("<unk>")
+    cases = [(text, False) for text in PARITY_INPUTS]
+    if marker:
+        cases += [(text, True) for text in MARKED_INPUTS]
     records = []
     with torch.no_grad():
-        for text in PARITY_INPUTS:
-            ids = [inputs.encode(ch, unk) for ch in text]
+        for text, marked in cases:
+            ids = [inputs.encode(ch, unk) for ch in text] + ([inputs.encode(EOS)] if marked else [])
             logits = shadow(torch.tensor([ids], dtype=torch.long))[0]
             predicted = "".join(outputs.decode(int(i)) for i in logits.argmax(dim=-1))
             records.append({
-                "input": text,
+                "input": f"{text}{EOS}" if marked else text,
                 "ids": ids,
                 "shape": list(logits.shape),
                 # float32 round-tripped through repr, so the JSON is exact to

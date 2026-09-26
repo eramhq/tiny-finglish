@@ -320,6 +320,48 @@ the model tier and 72.2 → 72.8 hybrid; chat-test (AI-typed) 75.4 → 79.0 and
 76.9 → 78.2. The copula lines stay in the corpus artifact for a later round;
 v8 was trained on the 14,660 sentences before them.
 
+**v8-eos: give the model the clause end, and change nothing else.** Next, the
+position was made visible to the model. `scripts/align-pairs.ts` marks the last word of each
+typed line `final` (the artifact's punctuation was stripped at sampling, so a
+mid-line comma is lost). A `final` example is encoded with `<eos>` after it
+(`data.py`); the id was already in the input vocabulary and never used. The
+runtime sends it where `endsClause` holds, only to weights whose header says
+`clauseMarker: true`. Training was surgery, tinySarf-style: start from v8's
+`best.pt`, freeze everything, train only the `<eos>` embedding row (64 floats)
+on the v8b corpus's 54,521 clause-final examples, 12 epochs, no weight decay
+(`train.py --surgery-from … --train-only eos-row`). Any word without the
+marker then computes exactly what v8 computes. `scripts/verify-surgery.ts`
+confirms the export differs from v8's in that one row only, and parity holds
+on marked inputs (worst delta 1.8e-5).
+
+On the model's own dev, clause-final words went from 79.6% to 83.3% and nothing
+else moved. On the evaluation sets (`scripts/ab.ts`, v8 → v8-eos, model tier,
+strict):
+
+| set | b − a | 95% CI | rows b / a |
+|---|---:|---|---|
+| dev | −0.1 | −0.4 to +0.2 | 6 / 8 |
+| fixtures | −1.6 | −3.5 to 0.0 | 3 / 9 |
+| chat-dev | +0.1 | −1.1 to +1.3 | 5 / 6 |
+| chat-dev, accepted | −0.1 | −0.8 to +0.7 | 3 / 5 |
+
+The hybrid is flat on all three. It fails the round's ship rule in substance,
+if not quite in the letter (the fixtures CI touches 0). `ketabe` → کتابه does
+flip on the model tier, but the fixture losses are the rule's own failure
+mode. `bacheha` → بچهه is دانشجوهه again, and `roosta` → روسته and
+`havapeyma` → هواپیمه put a ه on words that end in *a*. A fixture of one word is
+clause-final, and so is every word while it is the last one typed. The marker
+alone moves `ketabe` from 97/3 to 78/22, and the `finalHe` tilt does the rest.
+No tilt separates the good flips from the bad ones: `roosta` flips at about
+0.5 nats and `ketabe` needs about 1.25. One row cannot tell the copula from
+a word ending in a vowel. It learned "more ه at the end" and applied it
+everywhere.
+
+Not shipped. v8 stays, and gold and chat-test were not scored. The plumbing
+stays; old weights are unaffected because they lack the header flag. The next
+step, if any, is to unfreeze the head as well, and it would be judged on
+`ab.ts` alone.
+
 ## 9. The loanword table — both families, 501 entries
 
 `src/loan.ts` converts loanwords typed the English way (`backup` → بکاپ). Its

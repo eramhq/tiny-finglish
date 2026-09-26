@@ -113,6 +113,21 @@ and the answer — mostly register mismatch and rows that are not aligned word
 for word — is why a bigger model and a bigger language model are both the wrong
 next move.
 
+## Deciding whether a change is real
+
+Ship decisions quote `scripts/ab.ts`, not two numbers side by side:
+
+```bash
+node scripts/ab.ts --dev --a "weights=training/runs/<old>/weights.json" --b "weights=training/runs/<new>/weights.json"
+```
+
+It scores both configs on the same rows and runs a paired bootstrap over
+sentences. A difference is real only when its 95% CI excludes 0. Dev is 304
+rows, so a few words either way is noise: v8b's −0.3 on dev was about ten
+words net, inside a CI of −0.9 to +0.3. A candidate fails a "no regression"
+rule only when a CI lies wholly below 0. `docs/benchmarks.md` has the past
+decisions re-read this way.
+
 ## Things that look like bugs and are not
 
 * **`salam` → `سلم`.** Both are attested Persian words, and `سلم` wins on the

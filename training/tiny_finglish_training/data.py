@@ -5,7 +5,7 @@ from __future__ import annotations
 import torch
 
 from .corpus import Example
-from .labels import PAD, Vocab
+from .labels import EOS, PAD, Vocab
 
 PAD_ID = 0
 IGNORE_INDEX = -100
@@ -25,15 +25,25 @@ def encode_batch(
     nothing" is a real prediction the model must learn, while "there is no
     character here" must not be trained on at all. Conflating them teaches the
     model that padding is a valid output and wrecks the end of every word.
+
+    A `final` example — the word ends a clause — gets `<eos>` after its last
+    character, so the last letters can see the clause end through the
+    neighbourhood window and the backward scan (`ketabe<eos>` is کتابه, `ketabe`
+    before `man` is the ezafe). The marker's own position is IGNORE_INDEX: the
+    runtime decodes only the word's characters, so what the model predicts at
+    `<eos>` is never read, and training it would only spend capacity.
     """
-    width = max(len(e.latin) for e in examples)
+    width = max(len(e.latin) + (1 if e.final else 0) for e in examples)
     unk = inputs.encode("<unk>")
+    eos = inputs.encode(EOS)
     ids = torch.full((len(examples), width), inputs.encode(PAD), dtype=torch.long)
     targets = torch.full((len(examples), width), IGNORE_INDEX, dtype=torch.long)
 
     for row, example in enumerate(examples):
         for col, ch in enumerate(example.latin):
             ids[row, col] = inputs.encode(ch, unk)
+        if example.final:
+            ids[row, len(example.latin)] = eos
         for col, label in enumerate(example.labels):
             targets[row, col] = outputs.encode(label, 0)
 

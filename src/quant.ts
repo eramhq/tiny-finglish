@@ -33,6 +33,11 @@ export interface WeightArtifact {
     context: number;
   };
   vocab: { input: string[]; output: string[] };
+  /**
+   * The model was trained with `<eos>` after clause-final words, and expects it
+   * (`train.py --surgery-from`). Absent on older weights, which never get it.
+   */
+  clauseMarker?: boolean;
   tensors: TensorRecord[];
   payload: string[];
 }

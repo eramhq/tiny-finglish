@@ -9,7 +9,8 @@
  */
 import { createHash } from "node:crypto";
 import { existsSync, readFileSync } from "node:fs";
-import { buildTransliterator, loadFixtures, type Fixture } from "./_load.ts";
+import { buildTransliterator, DEFAULT_WEIGHTS, loadFixtures, type Fixture } from "./_load.ts";
+import { bootstrapCI } from "./_stats.ts";
 import { normalize } from "../src/normalize.ts";
 import { PUNCTUATION_FOLDS } from "../src/unicode.ts";
 import { acceptedWordAccuracy, characterErrorRate, lenientSplitWords, wordAccuracy } from "../src/metrics.ts";
@@ -104,6 +105,8 @@ export function buildFixtureReport(options: {
   useBigram?: boolean;
   useHybrid?: boolean;
   useVowels?: boolean;
+  /** Repo-relative weights file; the shipped one by default. */
+  weights?: string | undefined;
   file?: string;
   onlyId?: string | undefined;
 }): Report {
@@ -113,6 +116,7 @@ export function buildFixtureReport(options: {
     bigram: options.useBigram === true,
     hybrid: options.useHybrid === true,
     vowels: options.useVowels !== false,
+    ...(options.weights ? { weights: options.weights } : {}),
   });
   let fixtures = loadFixtures(options.file);
   if (options.onlyId) fixtures = fixtures.filter((f) => f.id === options.onlyId);
@@ -201,7 +205,7 @@ export function buildFixtureReport(options: {
     cases, byCategory, totals,
     engine: `${options.useHybrid ? "hybrid" : transliterator.hasModel ? "model" : "rules"}` +
       `${transliterator.hasContext ? " + context" : ""}`,
-    modelHash: hashFile("data/fixtures/weights.json"),
+    modelHash: transliterator.hasModel ? hashFile(options.weights ?? DEFAULT_WEIGHTS) : null,
     datasetHash: hashFile(options.file ?? "data/fixtures/fixtures.jsonl") ?? "",
   };
 }
@@ -294,7 +298,11 @@ export function formatReport(report: Report, options: { verbose?: boolean } = {}
   lines.push("");
   lines.push(`word accuracy tiers     vs expected${t.faithfulRows ? "    vs faithful" : ""}`);
   const faithfulCol = (n: number) => (t.faithfulRows ? `    ${pct(n, w.faithfulTotal).padStart(11)}` : "");
+  // Rows, not words, are resampled: see `scripts/_stats.ts`.
+  const ci = bootstrapCI(report.cases.map((c) => ({ correct: c.wordsCorrect, total: c.wordsTotal })));
+  const one = (x: number) => (x * 100).toFixed(1);
   lines.push(`  strict (headline)     ${pct(w.strict, w.total).padStart(11)}${faithfulCol(w.faithfulStrict)}`);
+  if (w.total) lines.push(`    95% CI              ${`${one(ci.lo)}–${one(ci.hi)}`.padStart(11)}    (${t.count} rows resampled)`);
   lines.push(`  orthographic          ${pct(w.orthographic, w.total).padStart(11)}${faithfulCol(w.faithfulOrthographic)}`);
   if (w.accepted !== w.strict) {
     lines.push(`  accepted spellings    ${pct(w.accepted, w.total).padStart(11)}`);

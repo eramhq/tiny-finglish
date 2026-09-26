@@ -8,13 +8,21 @@
  * rationalized away.
  *
  *     node scripts/parity.ts
+ *     node scripts/parity.ts --weights training/runs/v8-eos/weights.json --fixtures training/runs/v8-eos/parity.jsonl
+ *
+ * Paths are repo-relative; the defaults are the shipped weights and fixtures.
  */
 import { readFileSync, existsSync } from "node:fs";
 import { decodeArtifact, type WeightArtifact } from "../src/quant.ts";
 import { Transducer } from "../src/runtime.ts";
 
-const WEIGHTS = new URL("../data/fixtures/weights.json", import.meta.url);
-const FIXTURES = new URL("../data/fixtures/parity.jsonl", import.meta.url);
+const argv = process.argv.slice(2);
+const value = (name: string) => {
+  const i = argv.indexOf(`--${name}`);
+  return i >= 0 ? argv[i + 1] : undefined;
+};
+const WEIGHTS = new URL(`../${value("weights") ?? "data/fixtures/weights.json"}`, import.meta.url);
+const FIXTURES = new URL(`../${value("fixtures") ?? "data/fixtures/parity.jsonl"}`, import.meta.url);
 
 /**
  * Tolerance on a single logit. The two implementations do the same arithmetic

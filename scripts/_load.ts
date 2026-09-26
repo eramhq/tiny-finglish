@@ -10,6 +10,8 @@ import type { WeightArtifact } from "../src/quant.ts";
 
 const root = new URL("..", import.meta.url);
 
+export const DEFAULT_WEIGHTS = "data/fixtures/weights.json";
+
 export function loadLexicon(): Set<string> | undefined {
   const path = new URL("data/lexicon/fa-stems.bin", root);
   if (!existsSync(path)) return undefined;
@@ -34,17 +36,23 @@ export function loadVowels(): VowelTable | undefined {
   return decodeVowelTable(brotliDecompressSync(readFileSync(path)));
 }
 
-export function loadModel(): WeightArtifact | undefined {
-  const path = new URL("data/fixtures/weights.json", root);
+/** The shipped weights by default; `file` (repo-relative) loads another candidate. */
+export function loadModel(file = DEFAULT_WEIGHTS): WeightArtifact | undefined {
+  const path = new URL(file, root);
   if (!existsSync(path)) return undefined;
   return JSON.parse(readFileSync(path, "utf8")) as WeightArtifact;
 }
 
 export function buildTransliterator(
-  options: { model?: boolean; frequency?: boolean; bigram?: boolean; hybrid?: boolean; vowels?: boolean } = {},
+  options: {
+    model?: boolean; frequency?: boolean; bigram?: boolean; hybrid?: boolean; vowels?: boolean;
+    /** Repo-relative weights file; the shipped one by default. */
+    weights?: string;
+  } = {},
 ): Transliterator {
   const lexicon = loadLexicon();
-  const model = options.model === false ? undefined : loadModel();
+  const model = options.model === false ? undefined : loadModel(options.weights);
+  if (options.weights && options.model !== false && !model) throw new Error(`no weights at ${options.weights}`);
   const frequency = options.frequency === false ? undefined : loadFrequency();
   // Opt-in, unlike frequency. The bigram is the worst accuracy-per-byte
   // artifact in the project — 73.6 KiB for +0.9 points on gold, against 54.2

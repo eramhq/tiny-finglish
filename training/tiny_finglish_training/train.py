@@ -5,6 +5,16 @@
 Checkpoints every epoch so a run can resume, because the plan's M2 warns that
 corpus size — not model size — is the bottleneck, and a run that cannot resume
 is a run you will not repeat.
+
+**Surgery.** ``--surgery-from runs/v8-sentence/best.pt --train-only eos-row``
+starts from a trained checkpoint, freezes every parameter, and trains only the
+``<eos>`` embedding row — the clause-end marker `data.encode_batch` appends to
+`final` examples. A word without the marker never reads that row, so it
+computes exactly what the source checkpoint computed: only clause-final words
+can change, by construction. The run keeps the source's vocabularies, drops
+train examples with a label outside them, and trains on the `final` examples
+alone, since no other example reaches the row. It checks before saving that
+nothing but that row moved; ``scripts/verify-surgery.ts`` checks the export.
 """
 
 from __future__ import annotations
@@ -20,7 +30,7 @@ import torch.nn.functional as F
 
 from .corpus import read
 from .data import IGNORE_INDEX, encode_batch, length_bucketed
-from .labels import build_label_vocab, input_vocab, load_vocabs, save_vocabs
+from .labels import EOS, build_label_vocab, input_vocab, load_vocabs, save_vocabs
 from .model import ModelConfig, Transducer, build
 
 
@@ -71,6 +81,34 @@ def evaluate(model: Transducer, examples, inputs, outputs, device, batch_size: i
     }
 
 
+def surgery_mask(model: Transducer, eos: int) -> torch.Tensor:
+    """Freeze everything but the `<eos>` embedding row; return that row's mask."""
+    for parameter in model.parameters():
+        parameter.requires_grad_(False)
+    weight = model.embed.weight
+    weight.requires_grad_(True)
+    mask = torch.zeros(weight.shape[0], 1, dtype=weight.dtype, device=weight.device)
+    mask[eos] = 1.0
+    # Every row but <eos> gets a zero gradient. With no weight decay on the
+    # optimizer, AdamW's update for a row whose gradient was always zero is
+    # exactly zero, so those rows stay bit-identical.
+    weight.register_hook(lambda grad: grad * mask)
+    return mask
+
+
+def assert_surgery(model: Transducer, source: dict, eos: int) -> None:
+    """Fail loudly if anything but the `<eos>` embedding row differs from `source`."""
+    for name, tensor in model.state_dict().items():
+        before = source[name].to(tensor.device)
+        if name == "embed.weight":
+            keep = torch.ones(tensor.shape[0], dtype=torch.bool, device=tensor.device)
+            keep[eos] = False
+            if not torch.equal(tensor[keep], before[keep]):
+                raise SystemExit("surgery: an embedding row other than <eos> moved")
+        elif not torch.equal(tensor, before):
+            raise SystemExit(f"surgery: {name} moved")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--corpus", type=Path, required=True)
@@ -86,7 +124,15 @@ def main() -> None:
     parser.add_argument("--device", default="auto")
     parser.add_argument("--min-label-count", type=int, default=2)
     parser.add_argument("--resume", action="store_true")
+    parser.add_argument("--surgery-from", type=Path, default=None,
+                        help="start from this checkpoint and train only --train-only; see the module docstring")
+    parser.add_argument("--train-only", choices=["eos-row"], default=None)
     args = parser.parse_args()
+    surgery = args.surgery_from is not None
+    if surgery != (args.train_only is not None):
+        parser.error("--surgery-from and --train-only go together")
+    if surgery and args.resume:
+        parser.error("--resume is not supported with --surgery-from")
 
     torch.manual_seed(args.seed)
     random.seed(args.seed)
@@ -97,7 +143,22 @@ def main() -> None:
     dev_examples = read(args.corpus / "dev.jsonl")
 
     vocab_path = args.out / "vocab.json"
-    if args.resume and vocab_path.exists():
+    source_state = None
+    if surgery:
+        # The source's vocabularies, not the corpus's: the model's rows are
+        # indexed by them, and a label it has no row for cannot be learned by
+        # an embedding row anyway.
+        inputs, outputs = load_vocabs(args.surgery_from.parent / "vocab.json")
+        save_vocabs(vocab_path, inputs, outputs)
+        source_state = torch.load(args.surgery_from, map_location="cpu", weights_only=False)
+        known = set(outputs.symbols)
+        fits = lambda e: all(label in known for label in e.labels)
+        dropped = sum(not fits(e) for e in train_examples)
+        train_examples = [e for e in train_examples if e.final and fits(e)]
+        dev_examples = [e for e in dev_examples if fits(e)]
+        print(f"surgery from {args.surgery_from}: {len(train_examples):,} final train examples "
+              f"({dropped} dropped for a label outside the source vocab)")
+    elif args.resume and vocab_path.exists():
         inputs, outputs = load_vocabs(vocab_path)
     else:
         inputs = input_vocab()
@@ -109,15 +170,29 @@ def main() -> None:
         save_vocabs(vocab_path, inputs, outputs)
         print(f"labels: {len(outputs)} kept of {len(counts)} seen (min_count={args.min_label_count})")
 
-    config = ModelConfig(
-        input_vocab=len(inputs),
-        output_vocab=len(outputs),
-        d_model=args.d_model,
-        d_hidden=args.d_hidden,
-        n_layers=args.n_layers,
-    )
+    if source_state is not None:
+        config = ModelConfig.from_json(source_state["config"])
+    else:
+        config = ModelConfig(
+            input_vocab=len(inputs),
+            output_vocab=len(outputs),
+            d_model=args.d_model,
+            d_hidden=args.d_hidden,
+            n_layers=args.n_layers,
+        )
     model = build(config).to(device)
-    optimizer = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
+    eos = inputs.encode(EOS)
+    if source_state is not None:
+        model.load_state_dict(source_state["model"])
+        surgery_mask(model, eos)
+        optimizer = torch.optim.AdamW([model.embed.weight], lr=args.lr, weight_decay=0.0)
+        final_dev = [e for e in dev_examples if e.final]
+        print(f"source on dev: {evaluate(model, dev_examples, inputs, outputs, device)}  "
+              f"final only: {evaluate(model, final_dev, inputs, outputs, device)}")
+    else:
+        optimizer = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
+    # Recorded in the checkpoint so the export can tell the runtime to send the marker.
+    extra = {"clause_marker": True, "surgery_from": str(args.surgery_from)} if surgery else {}
 
     start_epoch = 0
     checkpoint_path = args.out / "last.pt"
@@ -161,6 +236,9 @@ def main() -> None:
             running += float(loss.detach())
 
         metrics = evaluate(model, dev_examples, inputs, outputs, device)
+        if surgery:
+            metrics["final_word_accuracy"] = evaluate(model, final_dev, inputs, outputs, device)["word_accuracy"]
+            assert_surgery(model, source_state["model"], eos)
         elapsed = time.perf_counter() - started
         record = {
             "epoch": epoch,
@@ -172,17 +250,18 @@ def main() -> None:
         print(
             f"epoch {epoch:>3}  loss {record['loss']:.4f}  "
             f"dev char {metrics['char_accuracy']:.4f}  word {metrics['word_accuracy']:.4f}  "
-            f"{elapsed:.1f}s"
+            + (f"final {metrics['final_word_accuracy']:.4f}  " if surgery else "")
+            + f"{elapsed:.1f}s"
         )
 
         torch.save(
             {"model": model.state_dict(), "optimizer": optimizer.state_dict(),
-             "epoch": epoch, "config": config.to_json()},
+             "epoch": epoch, "config": config.to_json(), **extra},
             checkpoint_path,
         )
         if metrics["word_accuracy"] > best["word_accuracy"]:
             best = record
-            torch.save({"model": model.state_dict(), "config": config.to_json(), "epoch": epoch},
+            torch.save({"model": model.state_dict(), "config": config.to_json(), "epoch": epoch, **extra},
                        args.out / "best.pt")
 
     (args.out / "history.json").write_text(

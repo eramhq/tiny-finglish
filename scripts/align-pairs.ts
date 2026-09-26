@@ -19,6 +19,13 @@
  * Pairs the channel cannot align are counted and dropped, never forced: a
  * failure is either a typo the channel has no path for or a mistyped word, and
  * neither is a label worth learning.
+ *
+ * The last word of each typed line carries `final: true`: the clause-final
+ * position `endsClause` in `src/pipeline.ts` marks at runtime, where the model
+ * sees an `<eos>` after the word (`training/.../data.py`). The artifact's words
+ * had their punctuation stripped when they were sampled (`words_of` in
+ * `build_distill.py`), so the end of the line is the only clause end it still
+ * records; a mid-line comma is lost.
  */
 import { readFileSync, writeFileSync } from "node:fs";
 import { brotliDecompressSync, gunzipSync } from "node:zlib";
@@ -43,9 +50,11 @@ const text = pairsFile.endsWith(".br")
 const lines: string[] = [];
 let total = 0;
 let failed = 0;
+let finals = 0;
 for (const line of text.split("\n")) {
   if (!line) continue;
   const row = JSON.parse(line) as { id: string; fa: string[]; finglish: string[]; persona: string; worker: string };
+  const last = row.fa.length - 1;
   row.fa.forEach((persian, k) => {
     const latin = row.finglish[k]!.replaceAll(" ", "").toLowerCase();
     if (!latin || !/^[a-z']+$/.test(latin)) return;
@@ -96,8 +105,11 @@ for (const line of text.split("\n")) {
       failed++;
       return;
     }
-    lines.push(JSON.stringify({ latin, labels: withZwnj, persian, persona: row.persona, worker: row.worker, id: row.id }));
+    lines.push(JSON.stringify({ latin, labels: withZwnj, persian, ...(k === last ? { final: true } : {}),
+      persona: row.persona, worker: row.worker, id: row.id }));
+    if (k === last) finals++;
   });
 }
 writeFileSync(out, lines.join("\n") + "\n");
-console.log(`${lines.length} examples from ${total} pairs; ${failed} unalignable (${((100 * failed) / total).toFixed(1)}%) -> ${out}`);
+console.log(`${lines.length} examples from ${total} pairs, ${finals} clause-final; ` +
+  `${failed} unalignable (${((100 * failed) / total).toFixed(1)}%) -> ${out}`);

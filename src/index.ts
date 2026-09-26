@@ -96,6 +96,8 @@ export class Transliterator extends Pipeline {
   private readonly labels: readonly string[];
   private readonly inputIndex: ReadonlyMap<string, number>;
   private readonly unkId: number;
+  /** The `<eos>` input id, when the weights were trained with the clause marker. */
+  private readonly eosId: number | null;
   private readonly hybrid: boolean;
   private readonly useLexiconSnap: boolean;
 
@@ -110,11 +112,13 @@ export class Transliterator extends Pipeline {
       this.labels = options.model.vocab.output;
       this.inputIndex = new Map(options.model.vocab.input.map((s, i) => [s, i]));
       this.unkId = this.inputIndex.get("<unk>") ?? 0;
+      this.eosId = options.model.clauseMarker ? this.inputIndex.get("<eos>") ?? null : null;
     } else {
       this.transducer = null;
       this.labels = [];
       this.inputIndex = new Map();
       this.unkId = 0;
+      this.eosId = null;
     }
   }
 
@@ -122,9 +126,27 @@ export class Transliterator extends Pipeline {
     return this.transducer !== null;
   }
 
-  protected override convertWord(word: string, opts: TransliterateOptions): Candidate[] {
+  protected override get usesClauseMarker(): boolean {
+    return this.eosId !== null;
+  }
+
+  protected override convertWord(word: string, opts: TransliterateOptions, clauseFinal = false): Candidate[] {
     if (!this.transducer) return this.convertWithRules(word, opts);
-    return this.hybrid ? this.convertJoint(word, opts) : this.convertWithModel(word, opts);
+    return this.hybrid ? this.convertJoint(word, opts, clauseFinal) : this.convertWithModel(word, opts, clauseFinal);
+  }
+
+  /**
+   * Input ids for `word`, with `<eos>` appended when it ends a clause and the
+   * weights were trained with the marker. Decoding reads only the word's own
+   * positions (`beamDecode(logits, word.length, …)`), so the marker changes
+   * what the last letters see and emits nothing itself.
+   */
+  private encode(word: string, clauseFinal: boolean): Int32Array {
+    const marked = clauseFinal && this.eosId !== null;
+    const ids = new Int32Array(word.length + (marked ? 1 : 0));
+    for (let i = 0; i < word.length; i++) ids[i] = this.inputIndex.get(word[i]!) ?? this.unkId;
+    if (marked) ids[word.length] = this.eosId!;
+    return ids;
   }
 
   /**
@@ -155,15 +177,15 @@ export class Transliterator extends Pipeline {
    * writes one and the metric splits a correct می‌کنم into two words. That is
    * the documented handicap in `src/metrics.ts`, not an accuracy loss.
    */
-  private convertJoint(word: string, opts: TransliterateOptions): Candidate[] {
-    const hypotheses = this.modelHypotheses(word, JOINT.beam);
+  private convertJoint(word: string, opts: TransliterateOptions, clauseFinal: boolean): Candidate[] {
+    const hypotheses = this.modelHypotheses(word, JOINT.beam, clauseFinal);
     const model = new Map<string, { logProb: number; form: string }>();
     for (const h of hypotheses) {
       const key = h.output.replaceAll(ZWNJ, "");
       if (!model.has(key)) model.set(key, h);
     }
     const pool = this.baseline.transliterate(word, { results: JOINT.results, extra: [...model.keys()] });
-    if (pool.length === 0) return this.convertWithModel(word, opts);
+    if (pool.length === 0) return this.convertWithModel(word, opts, clauseFinal);
 
     const floor = Math.log(JOINT.floor);
     const scored = pool.map((c) => {
@@ -185,10 +207,10 @@ export class Transliterator extends Pipeline {
   }
 
   /** The model's beam, log-softmax over the returned set, no frequency rerank. */
-  private modelHypotheses(word: string, width: number): Array<{ output: string; logProb: number; form: string }> {
-    const ids = new Int32Array(word.length);
-    for (let i = 0; i < word.length; i++) ids[i] = this.inputIndex.get(word[i]!) ?? this.unkId;
-    const logits = this.transducer!.forward(ids);
+  private modelHypotheses(
+    word: string, width: number, clauseFinal: boolean,
+  ): Array<{ output: string; logProb: number; form: string }> {
+    const logits = this.transducer!.forward(this.encode(word, clauseFinal));
     const hypotheses = beamDecode(logits, word.length, this.labels.length, this.labels, { width, results: width });
     const { probabilities } = scoreHypotheses(hypotheses, word.length);
     return hypotheses.map((h, i) => {
@@ -197,12 +219,8 @@ export class Transliterator extends Pipeline {
     });
   }
 
-  private convertWithModel(word: string, opts: TransliterateOptions): Candidate[] {
-    const ids = new Int32Array(word.length);
-    for (let i = 0; i < word.length; i++) {
-      ids[i] = this.inputIndex.get(word[i]!) ?? this.unkId;
-    }
-    const logits = this.transducer!.forward(ids);
+  private convertWithModel(word: string, opts: TransliterateOptions, clauseFinal: boolean): Candidate[] {
+    const logits = this.transducer!.forward(this.encode(word, clauseFinal));
     let hypotheses = beamDecode(logits, word.length, this.labels.length, this.labels, {
       width: opts.beamWidth ?? 8,
       results: Math.max(opts.candidatesPerSpan ?? 3, 3),

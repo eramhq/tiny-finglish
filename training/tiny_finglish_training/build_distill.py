@@ -335,8 +335,12 @@ def mix(pairs: Path, base: Path, share: float, out_dir: Path, seed: int,
     llm: dict[str, list[str]] = {"train": [], "dev": [], "test": []}
     for line in pairs.read_text(encoding="utf-8").splitlines():
         row = json.loads(line)
-        llm[llm_split_of(row, llm_split)].append(json.dumps(
-            {"latin": row["latin"], "labels": row["labels"], "persian": row["persian"]}, ensure_ascii=False))
+        # `final` only when set, so a corpus rebuilt from pairs without it is
+        # byte-identical to one built before the flag existed.
+        example = {"latin": row["latin"], "labels": row["labels"], "persian": row["persian"]}
+        if row.get("final"):
+            example["final"] = True
+        llm[llm_split_of(row, llm_split)].append(json.dumps(example, ensure_ascii=False))
     out_dir.mkdir(parents=True, exist_ok=True)
     counts = {}
     for split in ("train", "dev", "test"):

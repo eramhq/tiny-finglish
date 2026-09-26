@@ -99,6 +99,53 @@ original expectation missed is that *data* dominates the weights: frequency and
 bigrams together are 127.8 KiB against the model's 76.0 KiB, and they buy far
 more accuracy per byte.
 
+## Which past differences were real
+
+Nothing in the repo tested significance until `scripts/ab.ts` (September 2026).
+It scores two engine configs on the same rows and runs a paired bootstrap over
+rows (sentences, not words, since the words of one sentence are not independent;
+2,000 resamples, seed 42, `scripts/_stats.ts`). A difference is **real** when
+its 95% CI excludes 0. Each past decision was re-read with it, on today's
+engine (loanwords, texting skeletons and the `-o` marker included), so the
+point values differ slightly from those quoted when the decisions were made.
+
+| comparison | set | b − a, points | 95% CI | rows b / a / tied | verdict |
+|---|---|---:|---|---|---|
+| v7 → v8-sentence | dev, strict | +1.0 | +0.1 to +1.7 | 61 / 26 / 217 | real |
+| v7 → v8-sentence | chat-dev, strict | +3.3 | +1.1 to +5.6 | 39 / 18 / 143 | real |
+| v7 → v8-sentence | chat-dev, accepted | +2.6 | +1.0 to +4.3 | 36 / 14 / 150 | real |
+| v8-sentence → v8b | dev, strict | −0.3 | −0.9 to +0.3 | 29 / 36 / 239 | within noise |
+| v8-sentence → v8b | fixtures, strict | −0.5 | −2.6 to +1.5 | 5 / 8 / 228 | within noise |
+| v8-sentence → v8b | chat-dev, strict | +1.7 | +0.2 to +3.0 | 25 / 10 / 165 | real, barely |
+| v8-sentence → v8b | chat-dev, accepted | +1.5 | +0.1 to +2.9 | 25 / 12 / 163 | real, barely |
+| rules → hybrid | gold, strict | −1.4 | −2.2 to −0.7 | 318 / 355 / 996 | real |
+| rules → model | gold, strict | −1.9 | −2.8 to −1.1 | 393 / 477 / 799 | real |
+
+What this changes:
+
+* **v8 over v7 holds up** on both tuning surfaces, so shipping v8 was not luck.
+* **v8b's "losses" were noise.** Its −0.3 on dev is about ten words net and
+  its −0.5 on fixtures is two, both with CIs well across 0. Its chat-dev gain
+  is the only real movement, and its lower bound is +0.1. v8b was held back for
+  `ketabe` and for writing دانشجوهه, which are real defects; the dev and
+  fixture drops were never evidence against it.
+* **The gold ranking is real.** On the 1,669 scored gold rows the rules tier
+  (with frequency and vowels) beats both the model and the hybrid by more than
+  the noise. The model is shipped for the categories the average hides
+  (above), not for the average.
+
+Reproduce any row with, for example:
+
+```bash
+node scripts/ab.ts --dev --a "weights=training/runs/v7/weights.json" --b "weights=training/runs/v8-sentence/weights.json"
+node scripts/ab.ts --chat --tier accepted --a "weights=training/runs/v8-sentence/weights.json" --b "weights=training/runs/v8b-sentence/weights.json"
+node scripts/ab.ts --gold --a rules --b hybrid
+```
+
+`run-fixtures.ts` also prints the strict headline's own 95% CI. On dev (304
+rows) it is about ±2.6 points wide, so two single-engine numbers that differ by
+less than that say nothing without the paired test.
+
 ## Training device
 
 The plan flags PyTorch MPS kernel-launch overhead as a risk for tiny tensors.

@@ -27,9 +27,15 @@ class Example:
     latin: str
     labels: list[str]
     persian: str
+    #: The word ends a clause in its typed line, and is encoded with a trailing
+    #: `<eos>` (`data.encode_batch`). Only LLM-typed lines record it.
+    final: bool = False
 
     def to_json(self) -> dict:
-        return {"latin": self.latin, "labels": self.labels, "persian": self.persian}
+        payload = {"latin": self.latin, "labels": self.labels, "persian": self.persian}
+        if self.final:
+            payload["final"] = True
+        return payload
 
 
 def split_of(word: str, dev_share: float = 0.05, test_share: float = 0.05) -> str:
@@ -118,5 +124,6 @@ def read(path: Path) -> list[Example]:
     with path.open(encoding="utf-8") as f:
         for line in f:
             payload = json.loads(line)
-            out.append(Example(payload["latin"], payload["labels"], payload["persian"]))
+            out.append(Example(payload["latin"], payload["labels"], payload["persian"],
+                               bool(payload.get("final", False))))
     return out

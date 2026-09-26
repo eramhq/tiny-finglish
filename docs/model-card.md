@@ -58,7 +58,10 @@ only in the weights. Parity with the PyTorch checkpoint: 1.8e-5 against 2e-3.
 model prefers the ezafe reading 81/19 after the clause-final tilt. The round's
 ship rule required کتابه on every tier; it ships without it by decision, and a
 follow-up copula round (v8b) that moved it to 60/40 was not shipped because it
-started writing دانشجوهه and lost dev accuracy. v8 is also weaker than v7 on
+started writing دانشجوهه. Its dev loss (−0.3) was noise, as `scripts/ab.ts`
+later showed (`docs/benchmarks.md`). A clause-end marker trained into v8's
+`<eos>` row alone (v8-eos) flips `ketabe` but writes بچهه and روسته, so it
+was not shipped either (`docs/llm-work.md` §8). v8 is also weaker than v7 on
 the ZWNJ fixtures (77.8% vs 92.6%) and the ambiguous ones (88.9% vs 94.4%).
 
 ## v7, as of the vowel-agreement round

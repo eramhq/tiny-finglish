@@ -85,8 +85,13 @@ def export_model(
     outputs,
     *,
     quant: str = "int8",
+    clause_marker: bool = False,
 ) -> tuple[dict, Transducer]:
     """Serialize `model` and return (artifact, a model with dequantized weights).
+
+    `clause_marker` sets the header flag that tells the runtime to append
+    `<eos>` to a clause-final word. Only a model trained with the marker gets
+    it (`train.py --surgery-from`); older weights never see it.
 
     The second return value is the point: evaluating it reproduces exactly what
     the browser will compute, so reported accuracy is the accuracy that ships
@@ -128,6 +133,7 @@ def export_model(
         "alphabet": INT6_ALPHABET if quant == "int6" else "base64",
         "config": model.config.to_json(),
         "vocab": {"input": inputs.to_json(), "output": outputs.to_json()},
+        **({"clauseMarker": True} if clause_marker else {}),
         "tensors": records,
         "payload": payload_parts,
     }
@@ -151,7 +157,8 @@ def main() -> None:
     vocab_path = args.vocab or args.checkpoint.parent / "vocab.json"
     inputs, outputs = load_vocabs(vocab_path)
 
-    artifact, _ = export_model(model, inputs, outputs, quant=args.quant)
+    artifact, _ = export_model(model, inputs, outputs, quant=args.quant,
+                               clause_marker=bool(state.get("clause_marker")))
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(json.dumps(artifact, ensure_ascii=False), encoding="utf-8")
 

@@ -75,6 +75,14 @@ Full record in `docs/llm-work.md` §8 and `data/chat/README.md`.
   round moved that word 81/19 → 60/40 and broke دانشجوها, so it did not ship.
   The model is word-level and cannot see clause position; the fix is more
   likely a position feature or a scoring term than more data.
+  **A position feature, tried the cheapest way, did not work either**
+  (`docs/llm-work.md` §8, "v8-eos"). v8 with only its `<eos>` embedding row
+  trained, on clause-final words, flips `ketabe` together with the `finalHe`
+  tilt, but it also writes روسته, هواپیمه and بچهه for single words. One row
+  learned "more ه at the end", not the copula. The runtime and training
+  plumbing is in place (`clauseMarker`). The next option is to also unfreeze
+  the head, which gives up the guarantee that non-final words are unchanged,
+  so it would be judged on `scripts/ab.ts` alone.
 * **v8 lost ground on ZWNJ** (fixtures 92.6 → 77.8): chat lines are typed and
   written without the half-space, and the sentence split lets them train.
 

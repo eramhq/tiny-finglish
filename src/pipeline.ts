@@ -146,6 +146,15 @@ export abstract class Pipeline {
     return false;
   }
 
+  /**
+   * True when `convertWord`'s answer depends on whether the word ends a clause:
+   * a model trained with the `<eos>` marker. The rules never read the flag, so
+   * their memo keys stay the bare word.
+   */
+  protected get usesClauseMarker(): boolean {
+    return false;
+  }
+
   /** True when step [5] has sentence context to work with. */
   get hasContext(): boolean {
     return this.bigram !== undefined;
@@ -155,9 +164,11 @@ export abstract class Pipeline {
    * Candidates for one word — the single seam a model plugs into.
    *
    * The base implementation is the rule baseline, which is also what
-   * `Transliterator` falls back to when no weights are supplied.
+   * `Transliterator` falls back to when no weights are supplied. `clauseFinal`
+   * says nothing but punctuation follows the word (`endsClause`); only a model
+   * with the clause marker reads it.
    */
-  protected convertWord(word: string, opts: TransliterateOptions): Candidate[] {
+  protected convertWord(word: string, opts: TransliterateOptions, _clauseFinal = false): Candidate[] {
     return this.convertWithRules(word, opts);
   }
 
@@ -168,10 +179,18 @@ export abstract class Pipeline {
       forceConvert: options.forceConvert ?? [],
     });
 
-    const spans: Span[] = [];
-    for (const token of tokens) {
-      spans.push(this.spanFor(token, opts));
+    // Which tokens end a clause, by the same test `endsClause` applies to the
+    // spans later: nothing but spaces before punctuation or the end of the input.
+    const final = new Array<boolean>(tokens.length);
+    let next: "end" | "punct" | "other" = "end";
+    for (let i = tokens.length - 1; i >= 0; i--) {
+      final[i] = next !== "other";
+      const kind = tokens[i]!.kind;
+      if (kind !== "space") next = kind === "punct" ? "punct" : "other";
     }
+
+    const spans: Span[] = [];
+    tokens.forEach((token, i) => spans.push(this.spanFor(token, opts, final[i]!)));
 
     const attach = this.detachedEzafe(spans);
     this.sentencePass(spans);
@@ -255,7 +274,7 @@ export abstract class Pipeline {
 
   // -- per-token ----------------------------------------------------------
 
-  private spanFor(token: Token, opts: typeof DEFAULT_OPTIONS & TransliterateOptions): Span {
+  private spanFor(token: Token, opts: typeof DEFAULT_OPTIONS & TransliterateOptions, clauseFinal: boolean): Span {
     const base = { input: token.text, start: token.start, end: token.end };
 
     if (token.kind === "protected") {
@@ -271,7 +290,7 @@ export abstract class Pipeline {
       return { ...base, output, action: "punct", confidence: 1 };
     }
 
-    const candidates = this.convert(token.text, opts);
+    const candidates = this.convert(token.text, opts, clauseFinal);
     const best = candidates[0];
     return {
       ...base,
@@ -288,9 +307,9 @@ export abstract class Pipeline {
    * without its stretch, under the collapsed memo key, and a word-final stretch
    * is put back on every candidate afterwards (`stretch.ts`).
    */
-  protected convert(word: string, opts: TransliterateOptions): Candidate[] {
+  protected convert(word: string, opts: TransliterateOptions, clauseFinal = false): Candidate[] {
     const { base, final } = unstretch(word.toLowerCase());
-    const candidates = this.convertBase(base, opts);
+    const candidates = this.convertBase(base, opts, clauseFinal);
     if (!final) return candidates;
     return candidates.map((c) => {
       const output = restretch(c.output, final);
@@ -298,7 +317,11 @@ export abstract class Pipeline {
     });
   }
 
-  private convertBase(key: string, opts: TransliterateOptions): Candidate[] {
+  private convertBase(word: string, opts: TransliterateOptions, clauseFinal = false): Candidate[] {
+    // A clause-final word is its own memo entry only for an engine that reads
+    // the flag; for the rules both positions share the bare word's entry.
+    const marked = clauseFinal && this.usesClauseMarker;
+    const key = marked ? `${word}${CLAUSE_END_KEY}` : word;
     const cached = this.cache.get(key);
     if (cached) return cached;
 
@@ -309,9 +332,9 @@ export abstract class Pipeline {
     // cached with the list — and applied here rather than in the baseline so
     // the model and hybrid tiers get it too. The model tier is where it matters
     // most: v7 writes `salam` as سالم without it.
-    const generated = this.convertWord(key, wide);
-    const candidates = this.objectMarker(key, withLoanword(key, this.vowels
-      ? vowelPass(key, generated, this.vowels, this.scoring.vowelAgreement)
+    const generated = this.convertWord(word, wide, marked);
+    const candidates = this.objectMarker(word, withLoanword(word, this.vowels
+      ? vowelPass(word, generated, this.vowels, this.scoring.vowelAgreement)
       : generated), opts);
 
     if (this.cache.size >= this.cacheSize) {
@@ -633,6 +656,9 @@ export abstract class Pipeline {
     return out;
   }
 }
+
+/** Memo-key suffix for a word converted as clause-final: `word␟end`. */
+const CLAUSE_END_KEY = "\u241Fend";
 
 /**
  * The probability `objectMarker`'s reading takes; the engine's list shares the
