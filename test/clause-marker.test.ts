@@ -30,25 +30,25 @@ describe.skipIf(!model)("the clause marker", () => {
 
   it("is sent after a clause-final word only, for weights that ask for it", () => {
     // A fresh engine per input, so the memo cannot hide a pass.
-    const marked = () => new Transliterator({ model: { ...model!, clauseMarker: true } });
+    const marked = () => new Transliterator({ model: { ...model!, clauseMarker: true }, hybrid: false });
     expect(calls(marked(), "ketabe man ketabe")).toEqual(["ketabe", "man", "ketabe<eos>"]);
     expect(calls(marked(), "havaa khoobe, vali sard")).toEqual(["havaa", "khoobe<eos>", "vali", "sard<eos>"]);
     expect(calls(marked(), "khoobe ?")).toEqual(["khoobe<eos>"]);
   });
 
   it("is not sent before a copy span, which is still a following word", () => {
-    const marked = new Transliterator({ model: { ...model!, clauseMarker: true } });
+    const marked = new Transliterator({ model: { ...model!, clauseMarker: true }, hybrid: false });
     expect(calls(marked, "ino bebin https://example.com")).toContain("bebin");
   });
 
   it("is never sent to weights without the header flag, and one memo entry serves both positions", () => {
     const { clauseMarker: _, ...plain } = model!;
-    const unmarked = new Transliterator({ model: plain });
+    const unmarked = new Transliterator({ model: plain, hybrid: false });
     expect(calls(unmarked, "ketabe man ketabe")).toEqual(["ketabe", "man"]);
   });
 
   it("keeps the two positions apart in the memo when it is sent", () => {
-    const marked = new Transliterator({ model: { ...model!, clauseMarker: true } });
+    const marked = new Transliterator({ model: { ...model!, clauseMarker: true }, hybrid: false });
     calls(marked, "ketabe man ketabe");
     expect(calls(marked, "ketabe man ketabe")).toEqual([]);
   });

@@ -57,14 +57,14 @@ import { transliterate, configure, Transliterator } from "tiny-finglish";
 // Zero setup — rule baseline.
 transliterate("salam");
 
-// With the learned model.
+// With the learned model. The model and the rules are then ranked jointly
+// (the hybrid), the most accurate setup; `hybrid: false` lets the model decide alone.
 import weights from "tiny-finglish/weights.json" with { type: "json" };
 configure({ model: weights });
 
-// Or an explicit instance: the most accurate setup is the model and the rules
-// ranked jointly (`hybrid`). `frequency` and `bigram` are separate fetches —
+// Or an explicit instance. `frequency` and `bigram` are separate fetches —
 // see `decodeFrequencyTable` and `decodeBigramTable`.
-const engine = new Transliterator({ model: weights, hybrid: true, lexicon, frequency, bigram });
+const engine = new Transliterator({ model: weights, lexicon, frequency, bigram });
 engine.transliterate("man emrooz miram daneshgah");
 ```
 
@@ -93,8 +93,8 @@ the accuracy you choose:
 | nothing | 16.8 KiB | 68.1% | 64.7% |
 | frequency + vowels | 80.4 KiB | 78.3% | **74.4%** |
 | frequency + vowels + bigrams (opt-in) | 154.0 KiB | 78.9% | 74.9% |
-| frequency + vowels and the model (`"."`) | 167.3 KiB | 78.9% | 72.5% |
-| **...model and rules ranked jointly (`hybrid: true`)** | **167.3 KiB** | **79.4%** | 73.0% |
+| ...and the model deciding alone (`hybrid: false`) | 167.3 KiB | 78.9% | 72.5% |
+| **...and the model, ranked jointly with the rules (`"."` default)** | **167.3 KiB** | **79.4%** | 73.0% |
 
 Measured on the 1,669-row audited gold set, September 2026. The previous
 figures (62.3% for rules + frequency, 51.2% for the model) were on the
@@ -115,8 +115,8 @@ The vowel table (8.3 KiB) is fetched with it and only used with it: it carries
 the vowels of the 3,667 table words a typed `a` cannot tell apart, which is how `salam` is سلام and not سالم. See
 [the vowel-agreement round](#september-2026-vowel-agreement-and-the-v7-model).
 
-**Use the hybrid if you ship the model.** It is the most accurate setup on the
-headline: +1.1 points over the rules on gold (95% CI +0.8 to +1.4, better on
+**With a model, the hybrid is the default.** It is the most accurate setup on
+the headline: +1.1 points over the rules on gold (95% CI +0.8 to +1.4, better on
 202 sentences, worse on 69) and +0.5 over the model alone, and it writes the
 half-space. On the strict tier the rules lead by 1.4, which is the half-space
 convention, not better words.

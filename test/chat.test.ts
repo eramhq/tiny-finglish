@@ -34,7 +34,7 @@ const shared = {
   ...(loadVowels() ? { vowels: loadVowels()! } : {}),
 };
 const rules = new RuleTransliterator(shared);
-const model = hasWeights ? new Transliterator({ ...shared, model: loadModel()! }) : undefined;
+const model = hasWeights ? new Transliterator({ ...shared, model: loadModel()!, hybrid: false }) : undefined;
 const hybrid = hasWeights ? new Transliterator({ ...shared, model: loadModel()!, hybrid: true }) : undefined;
 
 /**

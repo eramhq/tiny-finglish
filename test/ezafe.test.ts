@@ -80,7 +80,7 @@ describe("word-final ه", () => {
    * this starts failing because the model writes کتابه, flip it.
    */
   it.skipIf(!hasWeights)("still writes the bare noun on the shipped model tier", () => {
-    const model = new Transliterator({ ...shared, model: loadModel()! });
+    const model = new Transliterator({ ...shared, model: loadModel()!, hybrid: false });
     expect(model.transliterate(fixtures.get("ezafe-002")!.input).text).toBe("این کتاب");
   });
 

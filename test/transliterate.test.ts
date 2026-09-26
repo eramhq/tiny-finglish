@@ -166,7 +166,7 @@ describe("hybrid arbitration", () => {
   it.skipIf(!model)("only ever answers with a word one of the engines proposed", () => {
     const shared = { ...(lexicon ? { lexicon } : {}), ...(frequency ? { frequency } : {}) };
     const rules = new Transliterator(shared);
-    const alone = new Transliterator({ ...shared, model: model! });
+    const alone = new Transliterator({ ...shared, model: model!, hybrid: false });
     const hybrid = new Transliterator({ ...shared, model: model!, hybrid: true });
     const fold = (text: string) => text.replaceAll(ZWNJ, "");
     for (const word of ["salam", "ketab", "mardom", "shahr", "nemidoonam", "saat"]) {

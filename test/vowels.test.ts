@@ -29,7 +29,7 @@ const data = {
 const shared = { ...data, ...(vowels ? { vowels } : {}) };
 const tiers: Array<[string, RuleTransliterator | Transliterator | undefined]> = [
   ["rules", new RuleTransliterator(shared)],
-  ["model", hasWeights ? new Transliterator({ ...shared, model: loadModel()! }) : undefined],
+  ["model", hasWeights ? new Transliterator({ ...shared, model: loadModel()!, hybrid: false }) : undefined],
   ["hybrid", hasWeights ? new Transliterator({ ...shared, model: loadModel()!, hybrid: true }) : undefined],
 ];
 

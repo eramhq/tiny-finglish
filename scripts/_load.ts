@@ -70,7 +70,9 @@ export function buildTransliterator(
     ...(frequency ? { frequency } : {}),
     ...(bigram ? { bigram } : {}),
     ...(vowels ? { vowels } : {}),
-    ...(options.hybrid ? { hybrid: true } : {}),
+    // Explicit either way: the library defaults to the hybrid when given a
+    // model, and `--rules`/model-only runs must not inherit that silently.
+    hybrid: options.hybrid === true,
   });
 }
 

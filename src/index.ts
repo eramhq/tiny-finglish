@@ -52,10 +52,11 @@ export interface TransliteratorOptions extends PipelineOptions {
    * Rank the rule baseline's candidates and the model's in one score, instead
    * of letting the model decide alone. Requires `model`; ignored without it.
    *
-   * Off by default. It is the most accurate configuration on the dev set's
-   * orthographic tier and it places ZWNJ, but neither real evaluation set
-   * writes ZWNJ, so the strict headline charges it for placing one correctly.
-   * See `convertJoint` and `src/metrics.ts`.
+   * On by default whenever a model is given: it is the most accurate setup on
+   * the orthographic headline, gold scored once (rules 78.3, model alone 78.9,
+   * hybrid 79.4), and it writes the half-space. `false` lets the model decide
+   * alone. The strict tier ranks it below the rules only because no evaluation
+   * reference writes ZWNJ. See `convertJoint` and `src/metrics.ts`.
    */
   hybrid?: boolean;
   /**
@@ -103,7 +104,7 @@ export class Transliterator extends Pipeline {
 
   constructor(options: TransliteratorOptions = {}) {
     super(options);
-    this.hybrid = options.hybrid ?? false;
+    this.hybrid = options.hybrid ?? true;
     this.useLexiconSnap = options.useLexiconSnap ?? false;
 
     if (options.model) {
