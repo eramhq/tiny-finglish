@@ -6,7 +6,8 @@
  *   node scripts/ab.ts --chat --a model --b "model,bigram"
  *
  * A side is a comma- or space-separated list of: `rules | model | hybrid`
- * (default `model`), `weights=<repo-relative path>`, `bigram`, `no-vowels`,
+ * (default `model`), `weights=<repo-relative path>`, `vowels=<path>` (another
+ * vowel table), `bigram`, `no-vowels`,
  * `no-frequency` — the `run-fixtures.ts` flag vocabulary. Datasets are the
  * `run-fixtures.ts` ones: `--dev`, `--gold`, `--chat`, `--chat-test`, fixtures
  * by default.
@@ -53,10 +54,12 @@ interface Side {
 function run(spec: string): Side {
   let engine = "model";
   let weights: string | undefined;
+  let vowelsFile: string | undefined;
   const extras = new Set<string>();
   for (const token of spec.split(/[\s,]+/).filter(Boolean)) {
     if (token === "rules" || token === "model" || token === "hybrid") engine = token;
     else if (token.startsWith("weights=")) weights = token.slice("weights=".length);
+    else if (token.startsWith("vowels=")) vowelsFile = token.slice("vowels=".length);
     else if (token === "bigram" || token === "no-vowels" || token === "no-frequency") extras.add(token);
     else throw new Error(`unknown engine option ${JSON.stringify(token)} in ${JSON.stringify(spec)}`);
   }
@@ -68,9 +71,10 @@ function run(spec: string): Side {
     useVowels: !extras.has("no-vowels"),
     useFrequency: !extras.has("no-frequency"),
     weights,
+    vowelsFile,
     file,
   });
-  return { label: `${report.engine}${weights ? ` [${weights}]` : ""}${extras.size ? ` +${[...extras].join(",")}` : ""}`, cases: report.cases };
+  return { label: `${report.engine}${weights ? ` [${weights}]` : ""}${vowelsFile ? ` [vowels ${vowelsFile}]` : ""}${extras.size ? ` +${[...extras].join(",")}` : ""}`, cases: report.cases };
 }
 
 const specA = value("a");

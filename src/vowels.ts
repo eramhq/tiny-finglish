@@ -1,5 +1,10 @@
 /**
- * Vowel agreement — the evidence a typed `a` carries that the script drops.
+ * Vowel agreement — the evidence a typed vowel carries that the script drops.
+ *
+ * Written below for ا, where it started; the table now also groups words that
+ * differ by a و (`build_vowels.py --group alef-vav`), so `shohar` weighs شوهر
+ * (*šohar*) against شهر (*šahr*) the same way: a typed `o` where شهر has an
+ * `a` is evidence against it.
  *
  * A typed `a` is ا or nothing, so `salam` reaches both سلام ("hello") and سالم
  * ("healthy"). Each has one ا and one unwritten vowel, and the channel in
@@ -142,9 +147,15 @@ export function vowelMismatches(typed: readonly string[], vowels: string): numbe
   return previous[vowels.length]!;
 }
 
-/** The confusable group a word belongs to: its spelling with ا and آ removed. */
-function alefGroup(word: string): string {
-  return word.replace(/[اآ]/gu, "");
+/**
+ * The confusable group a word belongs to: its spelling without the letters a
+ * typed vowel may or may not stand for, ا/آ, و and ی. It must remove at least
+ * the letters the table was grouped by (`build_vowels.py --group`); removing
+ * more is safe with any table, since the pass only compares vowels, and only
+ * charges.
+ */
+function confusableGroup(word: string): string {
+  return word.replace(/[اآوی]/gu, "");
 }
 
 /**
@@ -178,7 +189,7 @@ export function vowelPass(
   const groups = new Map<string, number[]>();
   candidates.forEach((candidate, i) => {
     if (!table.has(candidate.output)) return;
-    const key = alefGroup(candidate.output);
+    const key = confusableGroup(candidate.output);
     const members = groups.get(key);
     if (members) members.push(i);
     else groups.set(key, [i]);

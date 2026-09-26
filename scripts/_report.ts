@@ -116,6 +116,8 @@ export function buildFixtureReport(options: {
   useVowels?: boolean;
   /** Repo-relative weights file; the shipped one by default. */
   weights?: string | undefined;
+  /** Vowel table file; the shipped one by default. */
+  vowelsFile?: string | undefined;
   file?: string;
   onlyId?: string | undefined;
 }): Report {
@@ -126,6 +128,7 @@ export function buildFixtureReport(options: {
     hybrid: options.useHybrid === true,
     vowels: options.useVowels !== false,
     ...(options.weights ? { weights: options.weights } : {}),
+    ...(options.vowelsFile ? { vowelsFile: options.vowelsFile } : {}),
   });
   let fixtures = loadFixtures(options.file);
   if (options.onlyId) fixtures = fixtures.filter((f) => f.id === options.onlyId);

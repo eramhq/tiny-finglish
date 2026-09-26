@@ -59,15 +59,17 @@ round; gains are paired, with 95% CIs from `scripts/ab.ts`):
 
 | artifact | Brotli | gold gain | KiB per point |
 |---|---:|---:|---:|
-| word frequency + vowels | 63.6 KiB | +11.1 over no data | **5.7** |
-| model weights + runtime, as the hybrid (default) | 87.0 KiB | +1.5 (+1.2 to +1.7) over rules | **58** |
-| model weights + runtime, deciding alone | 87.0 KiB | +0.6 (+0.1 to +1.1) over rules | 145 |
-| word bigrams, on the rules | 73.6 KiB | +0.6 (+0.4 to +0.8) | 123 |
-| word bigrams, on the hybrid | 73.6 KiB | +0.3 (+0.1 to +0.5) | 245 |
+| word frequency + vowels | 68.6 KiB | +11.5 over no data | **6.0** |
+| of which the vowel table | 13.3 KiB | +0.8 (+0.6 to +1.0) on the rules | 17 |
+| model weights + runtime, as the hybrid (default) | 87.1 KiB | +1.1 (+0.8 to +1.3) over rules | **79** |
+| model weights + runtime, deciding alone | 87.1 KiB | +0.2 (−0.3 to +0.6) over rules, noise | — |
+| word bigrams, on the rules | 73.6 KiB | +0.5 (+0.3 to +0.7) | 147 |
+| word bigrams, on the hybrid | 73.6 KiB | +0.2 (+0.1 to +0.4) | 368 |
 
-The model is no longer negative: that was the strict tier charging it for the
-half-space. It is still ten times the cost per point of the frequency
-table, which is why its weights are a separate, optional fetch. The bigrams
+Measured with the vowel table that covers و (13.3 KiB); the rules gained the
+most from it, which narrowed the model's lead. The model is no longer negative:
+that was the strict tier charging it for the half-space. It is still thirteen
+times the cost per point of the frequency table, which is why its weights are a separate, optional fetch. The bigrams
 cost more per point than the model, and less again once the model is there,
 so they stay opt-in.
 

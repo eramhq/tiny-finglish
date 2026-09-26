@@ -30,8 +30,9 @@ export function loadBigram(): BigramTable | undefined {
   return decodeBigramTable(brotliDecompressSync(readFileSync(path)));
 }
 
-export function loadVowels(): VowelTable | undefined {
-  const path = new URL("data/lexicon/fa-vowels.bin", root);
+/** The shipped vowel table by default; `file` (repo-relative or absolute) loads another. */
+export function loadVowels(file = "data/lexicon/fa-vowels.bin"): VowelTable | undefined {
+  const path = new URL(file, root);
   if (!existsSync(path)) return undefined;
   return decodeVowelTable(brotliDecompressSync(readFileSync(path)));
 }
@@ -48,6 +49,8 @@ export function buildTransliterator(
     model?: boolean; frequency?: boolean; bigram?: boolean; hybrid?: boolean; vowels?: boolean;
     /** Repo-relative weights file; the shipped one by default. */
     weights?: string;
+    /** Vowel table file; the shipped one by default. */
+    vowelsFile?: string;
   } = {},
 ): Transliterator {
   const lexicon = loadLexicon();
@@ -63,7 +66,8 @@ export function buildTransliterator(
   // Rides with the frequency table: it only carries vowels for table words, and
   // at 8.1 KiB it is the cheapest point this project has bought. `--no-vowels`
   // is the ablation.
-  const vowels = frequency && options.vowels !== false ? loadVowels() : undefined;
+  const vowels = frequency && options.vowels !== false ? loadVowels(options.vowelsFile) : undefined;
+  if (options.vowelsFile && frequency && options.vowels !== false && !vowels) throw new Error(`no vowel table at ${options.vowelsFile}`);
   return new Transliterator({
     ...(model ? { model } : {}),
     ...(lexicon ? { lexicon } : {}),

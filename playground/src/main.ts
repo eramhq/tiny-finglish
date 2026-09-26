@@ -36,7 +36,7 @@ const SETUP_NAMES: Record<Setup, string> = {
  * rules entry with frequency and vowels, the full entry plus the weights, and
  * the bigrams on top when sentence context is on.
  */
-const DOWNLOAD_KIB: Record<Setup, number> = { rules: 80.4, model: 167.3, hybrid: 167.3 };
+const DOWNLOAD_KIB: Record<Setup, number> = { rules: 85.5, model: 172.6, hybrid: 172.6 };
 const BIGRAM_KIB = 73.6;
 
 /** A converted word below this confidence is marked as unsure. */

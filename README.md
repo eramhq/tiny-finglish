@@ -90,11 +90,11 @@ the accuracy you choose:
 
 | + data | Brotli | gold, orthographic (headline) | gold, strict |
 |---|---:|---:|---:|
-| nothing | 16.8 KiB | 69.9% | 65.0% |
-| frequency + vowels | 80.4 KiB | 81.0% | **74.7%** |
-| frequency + vowels + bigrams (opt-in) | 154.0 KiB | 81.5% | 75.2% |
-| ...and the model deciding alone (`hybrid: false`) | 167.3 KiB | 81.5% | 72.5% |
-| **...and the model, ranked jointly with the rules (`"."` default)** | **167.3 KiB** | **82.4%** | 73.3% |
+| nothing | 16.9 KiB | 69.9% | 65.0% |
+| frequency + vowels | 85.5 KiB | 81.4% | **75.1%** |
+| frequency + vowels + bigrams (opt-in) | 159.1 KiB | 81.9% | 75.5% |
+| ...and the model deciding alone (`hybrid: false`) | 172.6 KiB | 81.6% | 72.6% |
+| **...and the model, ranked jointly with the rules (`"."` default)** | **172.6 KiB** | **82.5%** | 73.3% |
 
 Measured on the 1,669-row audited gold set, September 2026. The previous
 figures (62.3% for rules + frequency, 51.2% for the model) were on the
@@ -112,20 +112,21 @@ the model and the hybrid. Strict stays in the table. See
 
 The frequency table is HomoRich's top 25,000 words plus 566 chat words it
 lacked (کجایی, کتابه, حوصلم — see [the chat round](#september-2026-chat)).
-The vowel table (8.3 KiB) is fetched with it and only used with it: it carries
-the vowels of the 3,667 table words a typed `a` cannot tell apart, which is how `salam` is سلام and not سالم. See
+The vowel table (13.3 KiB) is fetched with it and only used with it: it carries
+the vowels of the 6,024 table words a typed vowel cannot tell apart, which is
+how `salam` is سلام and not سالم, and `shohar` شوهر and not شهر. See
 [the vowel-agreement round](#september-2026-vowel-agreement-and-the-v7-model).
 
 **With a model, the hybrid is the default.** It is the most accurate setup on
-the headline: +1.5 points over the rules on gold (95% CI +1.2 to +1.7, better on
-205 sentences, worse on 44) and +0.9 over the model alone, and it writes the
-half-space. On the strict tier the rules lead by 1.4, which is the half-space
+the headline: +1.1 points over the rules on gold (95% CI +0.8 to +1.3, better on
+163 sentences, worse on 43) and +0.9 over the model alone, and it writes the
+half-space. On the strict tier the rules lead by 1.8, which is the half-space
 convention, not better words.
 
-**The bigram row is opt-in**, because 73.6 KiB for +0.6 points on the
-headline is 123 KiB per point, against 6 for the frequency table and 58 for the
+**The bigram row is opt-in**, because 73.6 KiB for +0.5 points on the
+headline is 147 KiB per point, against 6 for the frequency table and 79 for the
 model as the hybrid — the worst accuracy-per-byte artifact here, and worth
-only +0.3 once the model is loaded. It is built, committed, measured and documented; it is not in
+only +0.2 once the model is loaded. It is built, committed, measured and documented; it is not in
 the default download and not in the headline. Turn it on with
 `new Transliterator({ bigram })` or `node scripts/run-fixtures.ts --bigram`.
 
@@ -215,6 +216,14 @@ rows and bootstraps over sentences (`docs/benchmarks.md`).
   are conventions or typos in the reference (پدرو for پدر و), and about 5% are
   debatable, where spacing changes the meaning (عملکرد and عمل کرد, درآمد and در
   آمد) or hides a real error (رستورانو for رستوران و).
+* **The vowel table covers و too** (+5.0 KiB, 8.3 → 13.3 KiB). Words that
+  differ by a و as well as an ا are now compared by the vowels typed, so
+  `shohar` is شوهر (husband), not the commoner شهر (city), and `khob` is خب.
+  Dev: +0.9 rules, +0.7 hybrid, both real; shohar alone was 7 of dev's
+  long-vowel errors. Gold, scored once: +0.5 rules (+0.3 to +0.6, real), +0.1
+  hybrid (noise). It costs دم → دوم and ول → ولع on dev, where the table's
+  most common pronunciation is not the one typed. Adding ی as well (25.9 KiB)
+  changed no output on any set, so it is not shipped.
 
 ### September 2026: the object marker, abbreviations and a better loanword guard
 
@@ -521,11 +530,11 @@ after Brotli at 500k, for no measurable accuracy cost — which is what makes th
 | keystroke, incremental word | < 0.01 ms | 16 ms |
 | keystroke, end of sentence (warm) | 0.03 ms | 16 ms |
 | sentence, cold | ~40 ms | 100 ms |
-| shipped bundle, Brotli | **167.3 KiB** | ~250 KiB soft cap |
+| shipped bundle, Brotli | **172.6 KiB** | ~250 KiB soft cap |
 
-The bundle is 19.3 KiB of code, 84.4 KiB of weights, 55.3 KiB of frequency and
-8.3 KiB of vowels; the last two are separate fetches, never bundled, so a
-consumer who wants only the rules pays 16.8 KiB. About 3.8 KiB of the code is the
+The bundle is 19.6 KiB of code, 84.4 KiB of weights, 55.3 KiB of frequency and
+13.3 KiB of vowels; the last two are separate fetches, never bundled, so a
+consumer who wants only the rules pays 16.9 KiB. About 3.8 KiB of the code is the
 loanword and abbreviation tables, which is bundled because the rules-only tier needs it too. The 73.6 KiB bigram and the 98.3 KiB lexicon are built and
 measured but not counted — see the accuracy-per-byte table below. Both budgets
 are enforced in CI.

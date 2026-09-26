@@ -69,7 +69,7 @@ const vowelsPath = new URL("data/lexicon/fa-vowels.bin", root);
 if (existsSync(vowelsPath)) {
   const vowels = readFileSync(vowelsPath);
   rows.push({
-    component: "vowels of confusable words (3.7k words, pre-Brotli on disk)",
+    component: "vowels of confusable words (6.0k words, pre-Brotli on disk)",
     raw: vowels.length, gzip: vowels.length, brotli: vowels.length,
   });
 }

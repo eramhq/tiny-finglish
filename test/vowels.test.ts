@@ -128,3 +128,18 @@ describe.skipIf(!vowels)("on the shipped engines", () => {
     }
   });
 });
+
+/**
+ * The و groups (`build_vowels.py --group alef-vav`): شوهر and شهر differ by a
+ * و, and a typed `o` where شهر has an `a` counts against شهر. Before them the
+ * rules and the hybrid wrote شهر for all 7 `shohar` on dev.
+ */
+describe.skipIf(!vowels)("vowel agreement across و", () => {
+  for (const [name, engine] of tiers) {
+    if (name === "model") continue;
+    it.skipIf(!engine)(`writes shohar as شوهر and shahr as شهر on the ${name} tier`, () => {
+      expect(engine!.transliterate("madar shohar").text).toBe("مادر شوهر");
+      expect(engine!.transliterate("shahr").text).toBe("شهر");
+    });
+  }
+});
