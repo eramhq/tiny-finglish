@@ -43,6 +43,12 @@ export interface CaseResult {
 export interface Tiers {
   strict: number;
   orthographic: number;
+  /**
+   * Reference words after the orthographic join, which merges `می کنم` into
+   * one word: the orthographic tier's own denominator. Dividing its count by
+   * the strict `total` instead scored a perfect `می کنم` row at 50%.
+   */
+  orthographicTotal: number;
   /** Strict against the closest of `expected` and the row's `alternatives`. */
   accepted: number;
   /** Strict plus the refunded cost of runs both judges accepted. */
@@ -53,12 +59,13 @@ export interface Tiers {
   faithfulStrict: number;
   faithfulOrthographic: number;
   faithfulTotal: number;
+  faithfulOrthographicTotal: number;
   total: number;
 }
 
 function emptyTiers(): Tiers {
-  return { strict: 0, orthographic: 0, accepted: 0, judged: 0, unjudged: 0,
-    faithfulStrict: 0, faithfulOrthographic: 0, faithfulTotal: 0, total: 0 };
+  return { strict: 0, orthographic: 0, orthographicTotal: 0, accepted: 0, judged: 0, unjudged: 0,
+    faithfulStrict: 0, faithfulOrthographic: 0, faithfulTotal: 0, faithfulOrthographicTotal: 0, total: 0 };
 }
 
 function addTiers(into: Tiers, from: Tiers): void {
@@ -221,7 +228,9 @@ function scoreTiers(
   const tiers = emptyTiers();
   tiers.total = strict.total;
   tiers.strict = strict.correct;
-  tiers.orthographic = wordAccuracy(expected, got, lenientSplitWords).correct;
+  const orthographic = wordAccuracy(expected, got, lenientSplitWords);
+  tiers.orthographic = orthographic.correct;
+  tiers.orthographicTotal = orthographic.total;
   tiers.accepted = acceptedWordAccuracy(accepted, got).correct;
 
   // Refund what both judges accepted. Errors are capped at the reference
@@ -241,7 +250,9 @@ function scoreTiers(
     const faithful = normalize(fixture.faithful);
     tiers.faithfulTotal = wordAccuracy(faithful, got).total;
     tiers.faithfulStrict = wordAccuracy(faithful, got).correct;
-    tiers.faithfulOrthographic = wordAccuracy(faithful, got, lenientSplitWords).correct;
+    const faithfulOrthographic = wordAccuracy(faithful, got, lenientSplitWords);
+    tiers.faithfulOrthographic = faithfulOrthographic.correct;
+    tiers.faithfulOrthographicTotal = faithfulOrthographic.total;
   }
   return tiers;
 }
@@ -297,13 +308,14 @@ export function formatReport(report: Report, options: { verbose?: boolean } = {}
   const w = t.tiers;
   lines.push("");
   lines.push(`word accuracy tiers     vs expected${t.faithfulRows ? "    vs faithful" : ""}`);
-  const faithfulCol = (n: number) => (t.faithfulRows ? `    ${pct(n, w.faithfulTotal).padStart(11)}` : "");
+  const faithfulCol = (n: number, d = w.faithfulTotal) => (t.faithfulRows ? `    ${pct(n, d).padStart(11)}` : "");
   // Rows, not words, are resampled: see `scripts/_stats.ts`.
   const ci = bootstrapCI(report.cases.map((c) => ({ correct: c.wordsCorrect, total: c.wordsTotal })));
   const one = (x: number) => (x * 100).toFixed(1);
   lines.push(`  strict (headline)     ${pct(w.strict, w.total).padStart(11)}${faithfulCol(w.faithfulStrict)}`);
   if (w.total) lines.push(`    95% CI              ${`${one(ci.lo)}–${one(ci.hi)}`.padStart(11)}    (${t.count} rows resampled)`);
-  lines.push(`  orthographic          ${pct(w.orthographic, w.total).padStart(11)}${faithfulCol(w.faithfulOrthographic)}`);
+  lines.push(`  orthographic          ${pct(w.orthographic, w.orthographicTotal).padStart(11)}` +
+    faithfulCol(w.faithfulOrthographic, w.faithfulOrthographicTotal));
   if (w.accepted !== w.strict) {
     lines.push(`  accepted spellings    ${pct(w.accepted, w.total).padStart(11)}`);
   }

@@ -40,10 +40,9 @@ const tier = value("tier") ?? "strict";
 if (tier !== "strict" && tier !== "accepted" && tier !== "orthographic") {
   throw new Error(`--tier is strict, accepted or orthographic, not ${tier}`);
 }
-const score = (c: CaseResult): Counts => ({
-  correct: tier === "accepted" ? c.tiers.accepted : tier === "orthographic" ? c.tiers.orthographic : c.wordsCorrect,
-  total: c.wordsTotal,
-});
+const score = (c: CaseResult): Counts => tier === "orthographic"
+  ? { correct: c.tiers.orthographic, total: c.tiers.orthographicTotal }
+  : { correct: tier === "accepted" ? c.tiers.accepted : c.wordsCorrect, total: c.wordsTotal };
 
 interface Side {
   label: string;

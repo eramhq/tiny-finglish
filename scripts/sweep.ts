@@ -90,7 +90,7 @@ for (const scoring of combinations()) {
     ...(model ? { model, hybrid: engineName === "hybrid" } : {}),
     scoring: fitted ? { ...scoring, fitted } : scoring,
   });
-  let strict = 0, faithful = 0, ortho = 0, devTotal = 0, faithfulTotal = 0;
+  let strict = 0, faithful = 0, ortho = 0, orthoTotal = 0, devTotal = 0, faithfulTotal = 0;
   for (const row of dev) {
     const got = normalize(engine.transliterate(row.input).text);
     const s = wordAccuracy(normalize(row.expected!), got);
@@ -99,7 +99,9 @@ for (const scoring of combinations()) {
     const f = wordAccuracy(normalize(row.faithful!), got);
     faithful += f.correct;
     faithfulTotal += f.total;
-    ortho += wordAccuracy(normalize(row.faithful!), got, lenientSplitWords).correct;
+    const o = wordAccuracy(normalize(row.faithful!), got, lenientSplitWords);
+    ortho += o.correct;
+    orthoTotal += o.total;
   }
   let fx = 0, fxTotal = 0;
   for (const row of fixtures) {
@@ -118,6 +120,6 @@ for (const scoring of combinations()) {
   const objective = parts.reduce((a, b) => a + b, 0) / parts.length;
   console.log(
     `| ${axes.map(([k]) => String(scoring[k])).join(" | ")} | ${pct(strict, devTotal)} | ${pct(faithful, faithfulTotal)} | ` +
-    `${pct(ortho, faithfulTotal)} | ${pct(fx, fxTotal)} |${chTotal ? ` ${pct(ch, chTotal)} |` : ""} ${(objective * 100).toFixed(2)} |`,
+    `${pct(ortho, orthoTotal)} | ${pct(fx, fxTotal)} |${chTotal ? ` ${pct(ch, chTotal)} |` : ""} ${(objective * 100).toFixed(2)} |`,
   );
 }
