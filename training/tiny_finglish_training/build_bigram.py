@@ -72,8 +72,8 @@ from pathlib import Path
 
 import brotli
 
-from .build_frequency import EVALUATION_FILES, encode_front_coded, load_gold_keys
-from .normalize import fold_for_match, normalize
+from .build_frequency import EVALUATION_FILES, encode_front_coded, leak_key, load_gold_keys
+from .normalize import normalize
 
 ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_SOURCE = Path("corpora/homorich.parquet")
@@ -111,7 +111,7 @@ def build(source: Path, out: Path, golds: list[Path], vocab_size: int, min_count
     for sentence in table.column("Grapheme").to_pylist():
         if not sentence:
             continue
-        if fold_for_match(sentence) in gold_keys:
+        if leak_key(sentence) in gold_keys:
             excluded += 1
             continue
         used += 1

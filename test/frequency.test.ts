@@ -46,11 +46,16 @@ describe("decodeFrequencyTable", () => {
     expect(frequencyScore(undefined, "الف")).toBe(0);
   });
 
-  it("decodes the committed 25k artifact", () => {
+  it("decodes the committed artifact: the top 25k plus the chat supplement", () => {
     const path = new URL("../data/lexicon/fa-frequency.bin", import.meta.url);
     if (!existsSync(path)) return;
     const table = decodeFrequencyTable(brotliDecompressSync(readFileSync(path)));
-    expect(table.size).toBe(25000);
+    const provenance = JSON.parse(readFileSync(new URL("../data/provenance/frequency.json", import.meta.url), "utf8"));
+    expect(table.size).toBe(25000 + (provenance.supplement?.words ?? 0));
+    // Every supplement word enters at the one swept score.
+    for (const word of Object.keys(provenance.supplement?.counts ?? {})) {
+      expect(table.get(word)).toBeCloseTo(Math.round(255 * provenance.supplement.score) / 255, 6);
+    }
     for (const score of table.values()) {
       expect(score).toBeGreaterThanOrEqual(0);
       expect(score).toBeLessThanOrEqual(1);

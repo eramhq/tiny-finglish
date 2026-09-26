@@ -45,7 +45,7 @@ let total = 0;
 let failed = 0;
 for (const line of text.split("\n")) {
   if (!line) continue;
-  const row = JSON.parse(line) as { fa: string[]; finglish: string[]; persona: string; worker: string };
+  const row = JSON.parse(line) as { id: string; fa: string[]; finglish: string[]; persona: string; worker: string };
   row.fa.forEach((persian, k) => {
     const latin = row.finglish[k]!.replaceAll(" ", "").toLowerCase();
     if (!latin || !/^[a-z']+$/.test(latin)) return;
@@ -96,7 +96,7 @@ for (const line of text.split("\n")) {
       failed++;
       return;
     }
-    lines.push(JSON.stringify({ latin, labels: withZwnj, persian, persona: row.persona, worker: row.worker }));
+    lines.push(JSON.stringify({ latin, labels: withZwnj, persian, persona: row.persona, worker: row.worker, id: row.id }));
   });
 }
 writeFileSync(out, lines.join("\n") + "\n");

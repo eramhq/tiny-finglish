@@ -51,9 +51,15 @@ were chosen and measured, kept as it was measured.
   sentences were excluded before sampling. See `docs/llm-work.md` §6 and
   `data/provenance/distill.json`.
 
+**v8 was trained and held back.** A chat typing round (1,701 more
+sentences, `docs/llm-work.md` §8) produced weights that beat v7 on dev, the
+fixtures, chat-dev and, scored once, gold (72.4 vs 71.1 on the model tier).
+They are not shipped because the model tier writes `ketabe` as کتاب, which the
+round's ship rule forbids. The table below is still v7.
+
 **Evaluation.** Parity with the PyTorch checkpoint holds at 1.9e-5 against a
-2e-3 tolerance. Both columns use the same shipped scoring — frequency, the
-vowel-agreement term and `heBorrow` — so they differ only in the weights:
+2e-3 tolerance. Both columns use the scoring shipped with v7 — frequency, the
+vowel-agreement term and `heBorrow` (since removed) — so they differ only in the weights:
 
 | set | v6 (10,049 sentences) | **v7, shipped (12,971)** |
 |---|---:|---:|

@@ -9,6 +9,36 @@ as a result, and what remains genuinely open.
 
 ---
 
+## 0a. September 2026 — the chat round
+
+Full record in `docs/llm-work.md` §8 and `data/chat/README.md`.
+
+* **Chat is measured now, but AI-typed.** `data/chat/` has 200 dev and 100
+  test messages, written and typed by LLMs, reviewed by two families. Its
+  numbers are differences between engines, not absolutes.
+* **The engine's chat gaps were mostly recall, not data.** Table words the
+  channel could not reach (`kojai` → کجایی, `merci` → مرسی) and a tie-break
+  that undid table words the stem lexicon lacks. Fixing them, plus 566 chat
+  words added to the frequency table, moved chat-test +1.9 on rules and hybrid
+  with gold flat. `heBorrow` is gone.
+* **v8 is trained and held back over `ketabe` on the model tier.** It beats v7
+  on every surface, held-out ones included. Shipping it means relaxing the ship
+  rule for that one word, or teaching the model the copula (a small typing
+  round of clause-final noun + ه chat lines is the obvious try).
+
+Still open, from the chat-dev errors that remain:
+
+1. **English-spelled loanwords**: `cake`, `backup`, `message`, `offside`,
+   `size` typed the English way for a Persian reference. The channel reads
+   them letter by letter; a small loanword table is the likely fix.
+2. **Emphasis doubling**: `merciii`, `kondeee`. Collapsing a run of three or
+   more identical letters is cheap, but `aaaaaaa` is a fixture and has to keep
+   working.
+3. **The colloquial object marker** `-o` (`dishabo` → دیشبو) and texting
+   abbreviations (`mrc`).
+4. **A human-typed chat set.** The AI-typed one cannot say how well real chat
+   converts, only which engine converts it better.
+
 ## 0. September 2026 — what the LLM-in-the-loop round settled
 
 Full record in `docs/llm-work.md` and `docs/error-taxonomy.md`. What changed

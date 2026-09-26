@@ -90,7 +90,8 @@ export function latinSkeleton(word: string): string {
       i++;
       continue;
     }
-    const single = LATIN_SINGLE[word[i]!];
+    // A soft `c` — before `i` or `y`, the `ci` unit in `rules.ts` — is س.
+    const single = word[i] === "c" && /[iy]/.test(word[i + 1] ?? "") ? "س" : LATIN_SINGLE[word[i]!];
     if (single) letters.push(single);
   }
   return finishKey(letters);
@@ -266,10 +267,16 @@ export class Channel {
     return { emissions, insertions };
   }
 
-  /** Replace the table-derived distributions with fitted ones (see `fit-channel.ts`). */
+  /**
+   * Replace the table-derived distributions with fitted ones (see `fit-channel.ts`).
+   *
+   * Per (output, position): an output the fit never saw keeps the table's
+   * distribution. That is what a refit would give it anyway — with no counts,
+   * smoothing returns the prior — and it lets a decoder-only table entry added
+   * after the fit (`ci` for سی) work without refitting every other letter.
+   */
   static fromFitted(fitted: FittedChannel, params: { insertion: number; gemination: number }): Channel {
     const channel = new Channel(params);
-    channel.emissions.clear();
     for (const [key, spellings] of Object.entries(fitted.emissions)) {
       const [fa, pos] = key.split("|") as [string, Position];
       const perPos = channel.emissions.get(fa) ?? new Map<Position, Emission[]>();

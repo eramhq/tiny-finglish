@@ -13,6 +13,8 @@
     "au",
     "ay",
     "ch",
+    "ci",
+    "cy",
     "ee",
     "eh",
     "ei",
@@ -624,6 +626,35 @@
         ],
         "role": "variant",
         "w": 6
+      },
+      {
+        "fa": "سی",
+        "latin": [
+          "ci",
+          "cy"
+        ],
+        "latinWeights": [
+          0.9,
+          0.1
+        ],
+        "role": "variant",
+        "w": 2
+      },
+      {
+        "fa": "یی",
+        "latin": [
+          "i",
+          "ei"
+        ],
+        "latinWeights": [
+          0.6,
+          0.4
+        ],
+        "pos": [
+          "final"
+        ],
+        "role": "variant",
+        "w": 5
       }
     ]
   },
@@ -1186,6 +1217,35 @@
       ],
       "role": "variant",
       "w": 6
+    },
+    {
+      "fa": "سی",
+      "latin": [
+        "ci",
+        "cy"
+      ],
+      "latinWeights": [
+        0.9,
+        0.1
+      ],
+      "role": "variant",
+      "w": 2
+    },
+    {
+      "fa": "یی",
+      "latin": [
+        "i",
+        "ei"
+      ],
+      "latinWeights": [
+        0.6,
+        0.4
+      ],
+      "pos": [
+        "final"
+      ],
+      "role": "variant",
+      "w": 5
     }
   ]
 }

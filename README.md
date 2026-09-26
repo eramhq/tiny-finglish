@@ -89,20 +89,21 @@ the accuracy you choose:
 
 | + data | Brotli | gold word accuracy |
 |---|---:|---:|
-| nothing | 11.3 KiB | 64.5% |
-| **frequency + vowels** | **73.5 KiB** | **74.3%** |
-| frequency + vowels + bigrams (opt-in) | 147.1 KiB | 74.7% |
-| frequency + vowels and the model (`"."`) | 160.0 KiB | 71.2% |
-| ...model and rules ranked jointly (`hybrid: true`) | 160.0 KiB | 72.1% (76.9% orthographic) |
+| nothing | 11.3 KiB | 64.6% |
+| **frequency + vowels** | **74.9 KiB** | **74.3%** |
+| frequency + vowels + bigrams (opt-in) | 148.5 KiB | 74.7% |
+| frequency + vowels and the model (`"."`) | 161.3 KiB | 71.1% |
+| ...model and rules ranked jointly (`hybrid: true`) | 161.3 KiB | 72.2% (77.0% orthographic) |
 
 Measured on the 1,669-row audited gold set, September 2026. The previous
 figures (62.3% for rules + frequency, 51.2% for the model) were on the
 1,835-row set before its audit; see
 [the September 2026 round](#september-2026-dictionary-decoding-llm-distillation-llm-measurement).
 
-The vowel table (8.1 KiB) is fetched with the frequency table and only used
-with it: it carries the vowels of the 3,615 table words a typed `a` cannot tell
-apart, which is how `salam` is سلام and not سالم. See
+The frequency table is HomoRich's top 25,000 words plus 566 chat words it
+lacked (کجایی, کتابه, حوصلم — see [the chat round](#september-2026-chat)).
+The vowel table (8.3 KiB) is fetched with it and only used with it: it carries
+the vowels of the 3,667 table words a typed `a` cannot tell apart, which is how `salam` is سلام and not سالم. See
 [the vowel-agreement round](#september-2026-vowel-agreement-and-the-v7-model).
 
 **The model is still behind the rules on real input**, by 3.1 points, down from
@@ -158,6 +159,57 @@ Full detail in [`docs/architecture.md`](docs/architecture.md).
 
 ## Measured results
 
+### September 2026: chat
+
+Users mostly type Finglish in chat, and nothing measured it: gold and dev are
+read-aloud sentences. This round built a chat test set, fixed the engine's chat
+gaps without training, typed a chat corpus, and trained v8 on it.
+
+**Every chat number here is AI-typed.** An LLM wrote the Persian and another
+typed the Finglish, and LLM typing converts 10–17 points easier than human
+typing ([`docs/llm-work.md`](docs/llm-work.md) §5). Read the chat columns as
+differences, not as how well it handles chat. The set is described in
+[`data/chat/README.md`](data/chat/README.md): 300 messages, written by Claude,
+reviewed by Claude and luna (kept only when both accept), typed by Claude with a
+`texting` persona unlike the training typists', split into `chat-dev` (200, for
+tuning) and `chat-test` (100, scored once).
+
+Engine changes, each measured on its own against dev, the fixtures and chat-dev:
+
+* **A chat supplement to the frequency table**: 566 words from the chat
+  training pool that HomoRich's top 25,000 lacks, all at one score (0.4, the
+  interior of a region flat over 0.35–0.45 on every tier). +1.2 KiB.
+* **The lexicon tie-break counts table words as attested.** It had been
+  swapping a right answer the stem lexicon lacks (کتابه) back to its stem.
+* **`ci` → سی** (`merci`, `cinema`) and **a final `i`/`ei` → یی** (`kojai`,
+  `tanhaei`): table words no channel path could reach before.
+* **`heBorrow` is removed.** With کتابه in the table it bought nothing on any
+  tier, and off gives `bekhatere` back as بخاطر on the model tier.
+
+Scored once, at the end (strict; chat-test also against the closest accepted
+spelling):
+
+| tier | gold before → after | chat-test before → after (AI-typed) |
+|---|---:|---:|
+| rules + frequency | 74.3 → **74.3** | 83.7 → **85.6** |
+| model + frequency (v7) | 71.2 → **71.1** | 75.4 → **75.4** (accepted 83.9) |
+| hybrid | 72.1 → **72.2** | 75.0 → **76.9** (accepted 85.4) |
+
+Dev is unchanged within 0.2 on every tier; fixtures (now 227, with 16 `chat`
+rows) rules 85.9 → 87.6, hybrid 90.5 → 92.2, model 90.2 → 90.2.
+
+**v8 is trained and held back, over one word.** 1,701 chat sentences (700
+HomoRich lines with a chat word, 1,001 of the reviewed LLM chat lines) typed by
+five luna agents took the corpus to 14,660 sentences. The better of two arms
+(LLM examples split by sentence rather than by word, so خوبی trains instead of
+landing in test) beats v7 everywhere: dev strict 57.1 → 58.0, fixtures 90.2 →
+92.2, chat-dev 84.1 → 87.0, and — scored once, for the record — gold 71.1 →
+72.4 and chat-test 75.4 → 79.0. It writes `merci` and `kojaei` on the model tier,
+which v7 never did. But the ship rule also requires `ketabe` → کتابه on every
+tier, and v8's model tier writes کتاب: it prefers the bare noun 81/19 even after
+the clause-final tilt, and closing that takes `finalHe` 3.5, a setting where the
+model tier starts losing fixtures. So v7 stays.
+
 ### September 2026: vowel agreement, and the v7 model
 
 `salam` came out سالم ("healthy") instead of سلام ("hello") on every tier. The
@@ -176,7 +228,7 @@ category, long vowels, and it is what let the retrained model ship. Gold, strict
 
 | tier | before | after | what changed |
 |---|---:|---:|---|
-| rules + frequency | 73.8 / 76.0 | **74.3 / 76.4** | vowels +0.4, `heBorrow` +0.1 |
+| rules + frequency | 73.8 / 76.0 | **74.3 / 76.4** | vowels +0.4, `heBorrow` +0.1 (removed since) |
 | model + frequency | 70.5 / 75.4 | **71.2 / 75.9** | v6 → v7, plus both terms |
 | hybrid | 72.1 / 76.8 | **72.1 / 76.9** | v6 → v7, plus both terms |
 
@@ -194,6 +246,7 @@ Fixtures: 84.3 → 87.8, 91.5 → 93.7, 92.8 → 93.4.
   `SCORING.heBorrow`: at a clause end only, an out-of-table ه form borrows its
   bare form's frequency. It is tuned to the one cost at which no tier loses, not
   to a flat region, and it costs `bekhatere` typed alone on the model tier.
+  (The chat round removed it: the supplement put کتابه in the table.)
 * **Two things the plan assumed that measurement changed.** Scoring a vowel-count
   mismatch as "no evidence" made the term worth nothing on dev; charging a typed
   vowel the word does not have (`saham` against سهم) is what makes it pay. And
@@ -312,10 +365,10 @@ after Brotli at 500k, for no measurable accuracy cost — which is what makes th
 | keystroke, incremental word | < 0.01 ms | 16 ms |
 | keystroke, end of sentence (warm) | 0.03 ms | 16 ms |
 | sentence, cold | ~40 ms | 100 ms |
-| shipped bundle, Brotli | **160.0 KiB** | ~250 KiB soft cap |
+| shipped bundle, Brotli | **161.3 KiB** | ~250 KiB soft cap |
 
-The bundle is 13.8 KiB of code, 84.0 KiB of weights, 54.1 KiB of frequency and
-8.1 KiB of vowels; the last two are separate fetches, never bundled, so a
+The bundle is 13.8 KiB of code, 84.0 KiB of weights, 55.3 KiB of frequency and
+8.3 KiB of vowels; the last two are separate fetches, never bundled, so a
 consumer who wants only the rules pays 11.3 KiB. The 73.6 KiB bigram and the 98.3 KiB lexicon are built and
 measured but not counted — see the accuracy-per-byte table below. Both budgets
 are enforced in CI.
@@ -327,7 +380,7 @@ and never has to be invalidated. No debouncing, no incremental rescoring.
 
 ### On the hand-authored fixtures
 
-The 212 fixtures in `data/fixtures/` are hand-written and include deliberately
+The 228 fixtures in `data/fixtures/` are hand-written and include deliberately
 adversarial and ambiguous cases. With the shipped 100k model:
 
 | category | n | word acc | sentence | top-3 |
@@ -341,17 +394,20 @@ adversarial and ambiguous cases. With the shipped 100k model:
 | adversarial | 10 | 90.0% | 90.0% | 100.0% |
 | ezafe | 5 | 81.8% | 60.0% | 80.0% |
 | informal | 22 | 79.2% | 77.3% | 95.5% |
-| **all** | 211 | **93.7%** | **91.5%** | **96.7%** |
+| chat | 16 | 51.7% | 25.0% | 68.8% |
+| **all** | 227 | **90.2%** | **86.8%** | **94.7%** |
 
-`ezafe` is five minimal pairs for the word-final ه. `in ketaabe`, a documented
-miss for two rounds, now passes on the rules and model tiers
-(`SCORING.heBorrow`); the model's remaining miss is `dare khune baaze`, where it
-writes the detached ezafe as داره. The one adversarial miss is `aaaaaaa`, one ا
+`chat` is new this round: the chat failures the round targeted, in different
+words from the chat test set. v7 writes most of them wrong; the rules tier gets
+11 of 16 and the hybrid 10 (`test/chat.test.ts`). `ezafe` is five minimal pairs
+for the word-final ه. `in ketaabe` passes on the rules and hybrid tiers; the
+model tier writes کتاب again since `heBorrow` went, and its other miss is
+`dare khune baaze`, where it writes the detached ezafe as داره. The one adversarial miss is `aaaaaaa`, one ا
 short. See `SCORING.finalHe` in `src/baseline.ts`.
 
 **The gap between the synthetic test set and this one is the honest number for
 data this project did not generate** — and the gap to the gold set below, data it
-did not *write*, is larger still: 93.7% here against 57.0% on the dev set. It is the
+did not *write*, is larger still: 90.2% here against 57.1% on the dev set. It is the
 synthetic-data bias the plan's risk register predicted, and it is why the
 hand-authored set exists.
 
@@ -667,7 +723,9 @@ context](#sentence-context-measured-and-not-shipped-by-default).
 human-typed Finglish — a large improvement on the author-written set it
 replaced — but written by a single person for a text-to-speech project, so it
 is read-aloud register rather than chat, with that writer's habits baked in.
-`data/gold/README.md` has the panel protocol that would fix it.
+`data/gold/README.md` has the panel protocol that would fix it. The chat sets
+cover chat, but they are AI-typed, so they measure differences, not how well
+real chat typing converts.
 
 **Part of the gold set is unreachable by any transliterator.** The annotator
 often typed a *formal* Finglish rendering of a *colloquial* Persian original:

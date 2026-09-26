@@ -51,8 +51,9 @@ the constant.
 
 A fixture is allowed to fail, as long as the row states the size of the gap in
 its `notes` — `ezafe-002` did, for two rounds, until `SCORING.heBorrow` closed
-it, and its test was flipped on purpose when it did. What is *not* allowed is a phenomenon whose only guard is a
-corpus-wide threshold: `ezafe` is five rows out of 211, so breaking all five
+it, and its test was flipped on purpose when it did (the chat supplement later
+closed it for good and `heBorrow` was removed). What is *not* allowed is a phenomenon whose only guard is a
+corpus-wide threshold: `ezafe` is five rows out of 227, so breaking all five
 moves `all` by two points and fails nothing. When a fixture group encodes a
 specific behaviour, assert the rows in `test/` as well —
 `test/ezafe.test.ts` is the pattern.

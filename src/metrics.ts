@@ -77,6 +77,30 @@ export function wordAccuracy(
 }
 
 /**
+ * Word accuracy against the closest of several accepted references.
+ *
+ * The chat sets list, per message, the other spellings of the same words that
+ * are equally correct in chat — آره/اره, میخوام/می‌خوام. The strict metric
+ * scores against `references[0]` alone and stays the headline; this is the
+ * tier that stops a legitimate variant from costing a word. Errors are counted
+ * against each reference, the fewest win, and the total is the first
+ * reference's, so the two tiers share a denominator.
+ */
+export function acceptedWordAccuracy(
+  references: readonly string[],
+  hypothesis: string,
+  split: (text: string) => string[] = splitWords,
+): { correct: number; total: number } {
+  const first = wordAccuracy(references[0] ?? "", hypothesis, split);
+  let errors = first.total - first.correct;
+  for (const reference of references.slice(1)) {
+    const w = wordAccuracy(reference, hypothesis, split);
+    errors = Math.min(errors, w.total - w.correct);
+  }
+  return { correct: Math.max(0, first.total - errors), total: first.total };
+}
+
+/**
  * Marks folded to a separator before splitting.
  *
  * Latin and Persian sentence punctuation, brackets, quotes and dashes. The

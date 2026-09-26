@@ -3,20 +3,22 @@
   "date": "2026-09-26",
   "source": {
     "corpus": "MahtaFetrat/HomoRich-G2P-Persian, Persian side (CC0-1.0)",
-    "sampled": 12971,
+    "sampled": 14660,
     "seed": [
       20260915,
       20260916,
-      20260917
+      20260917,
+      20260926
     ],
-    "words": "4-18 per sentence, Persian letters only",
-    "leakageGuard": "load_gold_keys(*EVALUATION_FILES): gold, quarantined gold and dev sentences excluded before sampling",
+    "words": "4-18 per sentence, Persian letters only; the chat round 2-12 (HomoRich) and 1+ (chat lines)",
+    "leakageGuard": "load_gold_keys(*EVALUATION_FILES) on leak_key (the sentence's folded words, not the raw string): gold, quarantined gold, dev, the fixtures and both chat sets excluded before sampling; the chat round also drops a line sharing four words running with a chat-dev or chat-test message (load_ngrams)",
     "$comment": "Three samples over the same pool. Seed 20260915 drew the first 3,000; seed 20260916 drew 7,050 more; seed 20260917 drew 3,000 more, this time NOT uniformly. Each round excluded the ids already in the artifact before anything was typed (--exclude-typed), so no sentence is sampled twice. The pool was 413,734 sentences and 403,685 after removing the first two rounds.",
-    "targeting": "Round 3 (shards 69-89) is a targeted draw: all 3,000 sentences end in a word written with a final ه (build_distill.ends_in_he), because the corpus under-represented that position by three to six times. HomoRich is written Persian and spells the copula است, where people type it as a ه on the word before: 3.4% of the eligible pool ends in a ه word against 9.7% of the dev set's human typing and 18.9% of the gold set's. The merged corpus is 16.6% of sentences ending that way. The remaining 7,000 of the round (shards 90-137, a uniform draw over everything not already taken, 2.9% ه-final) are exported but NOT typed."
+    "targeting": "Round 3 (shards 69-89) is a targeted draw: all 3,000 sentences end in a word written with a final ه (build_distill.ends_in_he), because the corpus under-represented that position by three to six times. HomoRich is written Persian and spells the copula است, where people type it as a ه on the word before: 3.4% of the eligible pool ends in a ه word against 9.7% of the dev set's human typing and 18.9% of the gold set's. The merged corpus is 16.6% of sentences ending that way. The remaining 7,000 of the round (shards 90-137, a uniform draw over everything not already taken, 2.9% ه-final) are exported but NOT typed.",
+    "chatRound": "Round 4 (shards 138-149, seed 20260926) is chat. Shards 138-142: 700 HomoRich sentences drawn with --targeted-predicate chat-word (a word from data/chat/chat-words.txt and none of its written-register markers), 2-12 words, from 6,782 eligible. Shards 143-149: 1,001 LLM-written chat lines (data/chat/chat-lines.jsonl, ids ch-), 18 of 1,019 dropped by the chat leakage guard. Shards 90-137 (the untyped uniform draw of round 3) are still untyped, which is why this round starts at 138."
   },
   "workers": {
     "claude": "Claude Opus 5 in-session subagents, shards 0-17 (5,400 variants)",
-    "luna": "Codex CLI 0.154.0, gpt-5.6-luna, reasoning xhigh, herdr panes. Shards 18-19 in the pilot (600 variants); shards 20-68 in the scale-up (14,144 variants), typed by 10 agents in parallel; shards 69-89 in the targeted round (5,737 variants kept), typed by 5 agents. Shards 67-68 are a repair pass from the scale-up. Every shard 69-89 was gated by check_typing.py before merge."
+    "luna": "Codex CLI 0.154.0, gpt-5.6-luna, reasoning xhigh, herdr panes. Shards 18-19 in the pilot (600 variants); shards 20-68 in the scale-up (14,144 variants), typed by 10 agents in parallel; shards 69-89 in the targeted round (5,737 variants kept), typed by 5 agents. Shards 67-68 are a repair pass from the scale-up. Every shard 69-89 was gated by check_typing.py before merge. Shards 138-149 in the chat round (3,366 variants kept of 3,402), typed by 5 agents on Codex CLI 0.157.x, gated by check_typing.py before merge."
   },
   "prompt": {
     "file": "data/provenance/prompts/distill-generate.md",
@@ -28,13 +30,14 @@
     ],
     "workerRules": "Every worker was told to type each word by hand and never to write code that produces Finglish; to read only the prompt, its own shard and its own output file; and to append every ~25 sentences with a quoted heredoc. The heredoc rule was added mid-run: Finglish apostrophes had been breaking shell-argument quoting and damaging 2.2% of lines.",
     "habitEnforcement": "luna's everyday persona missed two rates stated in the card (aa ~15/100w, ~11 detached affixes/100w). The worker prompt restated them; the card itself was not edited. Measured over the 7,049 new sentences, luna/everyday then sat at aa 21.8 and detached 14.1 against the human's 18.4 and 10.8 - habit L1 0.34, closer to the human than claude/everyday's 0.35. Round 3: restating the rates in the worker prompt failed three times - luna/everyday came back at aa 42, 33 and 36 per 100 words against a 13-27 band, with 36% of persona pairs byte-identical on the first attempt. Prose does not control the rate. What worked was giving the worker the measuring instrument: check_typing.py --partial --strict after every 25-sentence batch. Under that loop a worker measured 37.7, deleted its own batch and retyped it unprompted. Round 3 landed at everyday aa 26.0 / detached 9.1, careful aa 39.1 / detached 1.2, identical pairs 13.6%, with 0 of 21 files outside their band. The card was not edited.",
-    "yield": "Round 3 lost 263 of ~6,000 variants to the merge validator, all length mismatches and 202 of them one string short. The targeted subset is colloquial and HomoRich writes colloquial compounds with a space - بی ادبا, کشته های, لذت بخشه - which typists read as one word and type as one string, against the prompt's one-string-per-Persian-word rule. Earlier rounds had 3 such refusals in ~20,000 variants. The validator drops them, so the cost is yield and not corpus quality: 2,922 of the 3,000 targeted sentences survived."
+    "yield": "Round 3 lost 263 of ~6,000 variants to the merge validator, all length mismatches and 202 of them one string short. The targeted subset is colloquial and HomoRich writes colloquial compounds with a space - بی ادبا, کشته های, لذت بخشه - which typists read as one word and type as one string, against the prompt's one-string-per-Persian-word rule. Earlier rounds had 3 such refusals in ~20,000 variants. The validator drops them, so the cost is yield and not corpus quality: 2,922 of the 3,000 targeted sentences survived.",
+    "chatRound": "Same prompt and personas, plus two notes in the worker message for this round only: loanwords may take their foreign spelling in both personas (مرسی as 'merci' about half the time, اوکی as 'ok'), the one place 'c' is allowed, because the ship rule needs `merci` on the model tier and the card otherwise forbids c; and short messages keep one string per Persian word. The typed round has merci 16, mersi 12. Identical persona pairs ran at 16-26% on the first finished shards, most of them containing a long ا, so careful was not really differing: workers were told to check each finished file and retype the careful line of identical pairs with an ا, which took the round to 9.4% (limit 15%). Round aggregate: everyday aa 20.8 / detached 8.5, careful aa 29.6 / detached 0.2, 0 of 12 files outside their band."
   },
   "artifact": {
     "file": "data/distill/llm-finglish.jsonl.br",
-    "variants": 25880,
-    "sentences": 12971,
-    "sha256": "d568592463bc807739bf30efec9663f09b8cf19a14fade966f1861401bd5f7ac"
+    "variants": 29246,
+    "sentences": 14660,
+    "sha256": "998fba1100fbaf29e2bd43a6b77ef18d0a3e7d5d6cb21435f4a750cbbb527fa9"
   },
   "shards": {
     "claude-gen-0.jsonl": "2262bd34fee60111",
@@ -264,7 +267,31 @@
     "shard-96.jsonl": "e05b753e52e17d5e",
     "shard-97.jsonl": "b113b5c665b52f69",
     "shard-98.jsonl": "6085640bec64745f",
-    "shard-99.jsonl": "3b60309431c3e9f3"
+    "shard-99.jsonl": "3b60309431c3e9f3",
+    "shard-138.jsonl": "c715df8bef5fc851",
+    "luna-gen-138.jsonl": "6314f32812ac0a11",
+    "shard-139.jsonl": "1191480179e80f28",
+    "luna-gen-139.jsonl": "e3275a0c07cd9cf7",
+    "shard-140.jsonl": "c49175442ec21f31",
+    "luna-gen-140.jsonl": "105c5f7f101df39a",
+    "shard-141.jsonl": "619cca8fee7d5acc",
+    "luna-gen-141.jsonl": "0392643658d67723",
+    "shard-142.jsonl": "c5f1d5475c2da3cb",
+    "luna-gen-142.jsonl": "3426d54f7e697021",
+    "shard-143.jsonl": "42b49d606e4d686f",
+    "luna-gen-143.jsonl": "edce118b145c3871",
+    "shard-144.jsonl": "1a49908d91cbc407",
+    "luna-gen-144.jsonl": "26ddd85ce4de9f26",
+    "shard-145.jsonl": "2c656c632bab066a",
+    "luna-gen-145.jsonl": "f8b7166848cbeff9",
+    "shard-146.jsonl": "9a2baa10c5366047",
+    "luna-gen-146.jsonl": "aff74a6b78ba7353",
+    "shard-147.jsonl": "2a960bc53e58aa6c",
+    "luna-gen-147.jsonl": "7e4f400997af240c",
+    "shard-148.jsonl": "ac2728061e0e8a78",
+    "luna-gen-148.jsonl": "6c02499d0a95366f",
+    "shard-149.jsonl": "6e3094f017fbf3c2",
+    "luna-gen-149.jsonl": "8b7caa72644cc139"
   },
   "fidelityTest": {
     "method": "scripts/fidelity.ts: LLM typists romanized the dev set faithful Persian; compared with the human typing of the same sentences",
@@ -299,10 +326,10 @@
   },
   "alignment": {
     "script": "scripts/align-pairs.ts",
-    "pairs": 176671,
-    "aligned": 164990,
-    "unalignable": "6.6%",
-    "$comment": "4.9% at 3,000 sentences; luna's typing is slightly harder to align than claude's."
+    "pairs": 240979,
+    "aligned": 224876,
+    "unalignable": "6.7%",
+    "$comment": "4.9% at 3,000 sentences, 6.6% at 10,049. Rows now carry their sentence id, for mix --llm-split sentence."
   },
   "uses": {
     "channelFit": {

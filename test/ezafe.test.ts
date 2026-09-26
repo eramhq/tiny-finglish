@@ -59,11 +59,11 @@ describe("word-final ه", () => {
   });
 
   /**
-   * ezafe-002 was the documented miss for two rounds, and this test pinned
-   * where it missed: کتابه was generated and ranked but ~5.5 nats behind کتاب,
-   * because it is absent from the frequency table. `SCORING.heBorrow` closed
-   * that gap, so the pin was flipped on purpose — it now asserts the fixture
-   * passes, and that the borrowed credit stays at the clause end.
+   * ezafe-002 was the documented miss for two rounds: کتابه was generated and
+   * ranked but ~5.5 nats behind کتاب, because it was absent from the frequency
+   * table. `heBorrow` closed that for one round; the chat supplement then put
+   * کتابه in the table itself and `heBorrow` was removed. The rules tier reads
+   * it from the table, and only at the clause end.
    */
   it("writes noun-plus-copula at a clause end, and only there", () => {
     const row = fixtures.get("ezafe-002")!;
@@ -71,9 +71,17 @@ describe("word-final ه", () => {
     expect(rules.transliterate("ketaabe man").text).toBe("کتاب من");
   });
 
-  it.skipIf(!hasWeights)("writes noun-plus-copula on the shipped model tier", () => {
+  /**
+   * The model tier is back to missing it, and this pins where. Without the
+   * borrow it has only `finalHe` against its own preference: v7 puts کتاب at
+   * 0.89 after the +2 nats, and v8 (held back) at 0.81 for `ketabe`. Reaching
+   * it takes `finalHe` 3.5, where the model tier starts losing fixtures — a
+   * point, not a region, which is what `heBorrow` was removed for being. If
+   * this starts failing because the model writes کتابه, flip it.
+   */
+  it.skipIf(!hasWeights)("still writes the bare noun on the shipped model tier", () => {
     const model = new Transliterator({ ...shared, model: loadModel()! });
-    expect(model.transliterate(fixtures.get("ezafe-002")!.input).text).toBe("این کتابه");
+    expect(model.transliterate(fixtures.get("ezafe-002")!.input).text).toBe("این کتاب");
   });
 
   it("writes the clitic ه only at a clause end", () => {

@@ -353,7 +353,10 @@ export abstract class Pipeline {
     for (const span of spans) {
       if (span.action !== "convert" || !span.candidates || span.candidates.length < 2) continue;
       const best = span.candidates[0]!;
-      if (this.lexicon.has(best.output)) continue;
+      // A frequency-table word is attested too. Without this the tie-break
+      // undid right answers the lexicon lacks — v7 ranked کتابه first for
+      // `ketabe` and this swapped it back to the stem کتاب.
+      if (this.lexicon.has(best.output) || this.frequency?.has(best.output)) continue;
       const attested = span.candidates.find((c) => this.lexicon!.has(c.output));
       // Only override a genuinely uncertain call. A confident model answer that
       // is simply not in a 100k-stem lexicon is usually an inflected form, not
@@ -397,14 +400,10 @@ export abstract class Pipeline {
    * A list that is all ه-final, or none, is skipped: uniform scaling would not
    * reorder anything.
    *
-   * On top of the class-wide tilt, an out-of-table ه candidate whose bare form
-   * is in the frequency table borrows that form's credit, less
-   * `scoring.heBorrow` (`SCORING` has the sweep). That is what writes کتابه:
-   * without it, کتابه forfeits کتاب's frequency entirely and starts ~5.5 nats
-   * behind, which no safe `finalHe` reaches. It is per-candidate, not
-   * class-wide, and so it can reorder two ه spellings — which is why it is
-   * clamped at zero, tuned to the only cost no tier loses at, and limited to
-   * this position.
+   * A per-candidate borrow once sat on top of this — an out-of-table ه form
+   * took its bare form's frequency (`heBorrow`) — to reach کتابه. It is gone:
+   * the chat supplement put the copula forms in the frequency table itself, and
+   * the borrow then bought nothing on any tier (`SCORING` has the sweep).
    *
    * **The mirror half of that is not here, because it does not work.** Charging
    * a clitic ه mid-sentence is the obvious other half and it loses steadily —
@@ -432,13 +431,6 @@ export abstract class Pipeline {
     const weight = this.scoring.finalHe;
     if (!weight) return;
     const gain = Math.exp(weight);
-    const borrow = (output: string): number => {
-      const frequency = this.frequency;
-      if (!frequency || !Number.isFinite(this.scoring.heBorrow) || frequency.has(output)) return 0;
-      const bare = frequency.get(output.slice(0, -1));
-      if (!bare) return 0;
-      return Math.max(0, this.scoring.frequency * bare - this.scoring.outOfTable - this.scoring.heBorrow);
-    };
     for (let i = 0; i < spans.length; i++) {
       const span = spans[i]!;
       const list = span.candidates;
@@ -450,7 +442,7 @@ export abstract class Pipeline {
       }));
       if (scaled.every((s) => s.he) || !scaled.some((s) => s.he)) continue;
       const weights = scaled.map(({ candidate, he }) =>
-        Math.max(candidate.probability, 1e-6) * (he ? gain * Math.exp(borrow(candidate.output)) : 1));
+        Math.max(candidate.probability, 1e-6) * (he ? gain : 1));
       const total = weights.reduce((a, b) => a + b, 0);
       const ranked = scaled
         .map(({ candidate, he }, k) => ({ candidate, he, weight: weights[k]! }))

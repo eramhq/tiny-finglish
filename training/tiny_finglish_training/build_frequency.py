@@ -45,7 +45,11 @@ DEFAULT_SOURCE = Path("corpora/homorich.parquet")
 DEFAULT_OUT = ROOT / "data" / "lexicon" / "fa-frequency.bin"
 
 TERMINATOR = 0xFF
+ZWNJ_CHAR = "\u200c"
 _PUNCT = re.compile(r"[^\w‌؀-ۿ]")
+#: A word break for the leakage key: anything that is not a letter, plus the
+#: Persian marks that sit inside the Arabic block.
+_WORD_BREAK = re.compile(r"[^\w‌؀-ۿ]|[،؛؟٪-٬۔]")
 
 
 def encode_front_coded(words: list[str]) -> tuple[bytes, list[str]]:
@@ -71,8 +75,37 @@ def encode_front_coded(words: list[str]) -> tuple[bytes, list[str]]:
     return bytes(out), alphabet
 
 
+def leak_key(text: str) -> str:
+    """The leakage guard's key for one sentence: its folded words, one space apart.
+
+    Words and not the raw string. Keyed on the string, "سلام، خوبی؟" slips past
+    an evaluation row "سلام خوبی" — harmless when every evaluation sentence was
+    a long read-aloud one, not once the chat sets hold two-word messages that a
+    corpus writes with a comma. `fold_for_match` per word also makes می‌خوام and
+    میخوام one key.
+    """
+    return " ".join(fold_for_match(w) for w in _WORD_BREAK.sub(" ", normalize(text)).split())
+
+
+def read_sentences(source: Path) -> list[str]:
+    """Persian sentences from a HomoRich parquet, a JSONL, or a text file of lines.
+
+    A JSONL row gives its sentence as `text`, or as `words` (a shard file from
+    `build_distill.py --export`).
+    """
+    if source.suffix == ".parquet":
+        import pyarrow.parquet as pq
+
+        return pq.read_table(source, columns=["Grapheme"]).column("Grapheme").to_pylist()
+    lines = [line for line in source.read_text(encoding="utf-8").splitlines() if line.strip()]
+    if source.suffix == ".jsonl":
+        rows = [json.loads(line) for line in lines]
+        return [row["text"] if "text" in row else " ".join(row["words"]) for row in rows]
+    return [line for line in lines if not line.startswith("#")]
+
+
 def load_gold_keys(*golds: Path) -> set[str]:
-    """Match keys for every gold sentence, for the leakage guard.
+    """Match keys (`leak_key`) for every evaluation sentence, for the leakage guard.
 
     Factored out because `build_bigram.py` must use exactly this guard and not
     a second implementation of it. A bigram model memorizes sentence-local
@@ -92,22 +125,95 @@ def load_gold_keys(*golds: Path) -> set[str]:
             if line:
                 row = json.loads(line)
                 # Dev rows may be trimmed to an aligned span; `source` is the
-                # whole sentence, which is what HomoRich holds.
-                keys.add(fold_for_match(row.get("source") or row["expected"]))
+                # whole sentence, which is what HomoRich holds. Fixture rows
+                # that assert a copy have no Persian reference at all.
+                text = row.get("source") or row.get("expected")
+                if text:
+                    keys.add(leak_key(text))
     return keys
 
 
+def load_ngrams(*files: Path, n: int = 4) -> set[tuple[str, ...]]:
+    """Every word `n`-gram of the evaluation sentences in `files`, folded as `leak_key` is.
+
+    The chat sets need this on top of the sentence key. A training sentence
+    that *contains* a four-word test message, or shares four words running
+    with it, teaches the model that message word for word; an exact-match key
+    never sees it.
+    """
+    grams: set[tuple[str, ...]] = set()
+    for path in files:
+        if not path.exists():
+            continue
+        for line in path.read_text(encoding="utf-8").splitlines():
+            if line:
+                row = json.loads(line)
+                grams |= ngrams_of(leak_key(row.get("source") or row.get("expected") or ""), n)
+    return grams
+
+
+def ngrams_of(key: str, n: int = 4) -> set[tuple[str, ...]]:
+    words = key.split()
+    return {tuple(words[i:i + n]) for i in range(len(words) - n + 1)}
+
+
 #: Every file whose sentences are excluded from corpus counts: both gold files,
-#: including the quarantined rows (still gold-derived text), and the dev set, so
-#: a table tuned against dev was never counted over it.
+#: including the quarantined rows (still gold-derived text), the dev set, so a
+#: table tuned against dev was never counted over it, the fixtures, and both chat
+#: sets.
+#: The chat evaluation sets. Short messages, so they also get the 4-gram guard
+#: (`load_ngrams`) wherever a chat corpus is drawn.
+CHAT_FILES = [
+    ROOT / "data" / "chat" / "chat-dev.jsonl",
+    ROOT / "data" / "chat" / "chat-test.jsonl",
+]
+
 EVALUATION_FILES = [
     ROOT / "data" / "gold" / "gold.jsonl",
     ROOT / "data" / "gold" / "gold-misaligned.jsonl",
     ROOT / "data" / "dev" / "dev.jsonl",
+    ROOT / "data" / "fixtures" / "fixtures.jsonl",
+    *CHAT_FILES,
 ]
 
 
-def build(source: Path, out: Path, golds: list[Path], top: int) -> dict:
+def supplement_words(files: list[Path], table: set[str], golds: list[Path], min_count: int) -> dict[str, int]:
+    """Words of `files` absent from `table` and seen at least `min_count` times there.
+
+    The chat round's reason for this: HomoRich's top 25,000 has no کجایی,
+    اوکی or فدات, and there is no other way into the table. `files` is the
+    Persian side of the chat training pool, never an evaluation set — and to
+    make that a check rather than a promise, a line whose words are an
+    evaluation sentence is skipped here too.
+
+    A word counts as present when its solid form is, since the engine indexes
+    the table solid (`SkeletonIndex`): میخوام is not added over a table
+    می‌خوام.
+    """
+    gold_keys = load_gold_keys(*golds)
+    solid = {w.replace(ZWNJ_CHAR, "") for w in table}
+    counts: collections.Counter[str] = collections.Counter()
+    for path in files:
+        for sentence in read_sentences(path):
+            if not sentence or leak_key(sentence) in gold_keys:
+                continue
+            # `_WORD_BREAK`, not the table's `_PUNCT`: chat lines carry ؟ and ،,
+            # which sit inside the Arabic block `_PUNCT` keeps.
+            for word in _WORD_BREAK.sub(" ", normalize(sentence)).split():
+                if word.replace(ZWNJ_CHAR, "") not in solid:
+                    counts[word] += 1
+    # One spelling per solid form, the commoner, counted over both: میخوام and
+    # می‌خوام are one word and take one slot.
+    spellings: dict[str, collections.Counter[str]] = collections.defaultdict(collections.Counter)
+    for word, count in counts.items():
+        spellings[word.replace(ZWNJ_CHAR, "")][word] += count
+    return {forms.most_common(1)[0][0]: total for forms in spellings.values()
+            if (total := sum(forms.values())) >= min_count}
+
+
+def build(source: Path, out: Path, golds: list[Path], top: int,
+          supplement: list[Path] | None = None, supplement_score: float = 0.3,
+          supplement_min: int = 2) -> dict:
     import pyarrow.parquet as pq
 
     gold_keys = load_gold_keys(*golds)
@@ -118,7 +224,7 @@ def build(source: Path, out: Path, golds: list[Path], top: int) -> dict:
     for sentence in table.column("Grapheme").to_pylist():
         if not sentence:
             continue
-        if fold_for_match(sentence) in gold_keys:
+        if leak_key(sentence) in gold_keys:
             excluded += 1
             continue
         used += 1
@@ -136,6 +242,11 @@ def build(source: Path, out: Path, golds: list[Path], top: int) -> dict:
     # float array would be 4x the size for no gain.
     peak = kept[0][1]
     ranked = {w: max(1, min(255, round(255 * math.log1p(c) / math.log1p(peak)))) for w, c in kept}
+    # Supplement words have no HomoRich count worth the name, so they all enter
+    # at one score, swept in the chat round rather than derived.
+    added = supplement_words(supplement, set(ranked), golds, supplement_min) if supplement else {}
+    for word in added:
+        ranked[word] = max(1, min(255, round(255 * supplement_score)))
 
     words = sorted(ranked)
     blob, alphabet = encode_front_coded(words)
@@ -154,6 +265,14 @@ def build(source: Path, out: Path, golds: list[Path], top: int) -> dict:
         "wordTokens": tokens,
         "wordTypes": len(counts),
         "kept": len(words),
+        **({"supplement": {
+            "files": [str(p.relative_to(ROOT)) if p.is_absolute() and p.is_relative_to(ROOT) else str(p)
+                      for p in supplement],
+            "score": supplement_score,
+            "minCount": supplement_min,
+            "words": len(added),
+            "counts": dict(sorted(added.items(), key=lambda kv: (-kv[1], kv[0]))),
+        }} if supplement else {}),
         "tokenCoverage": round(coverage, 4),
         "alphabet": len(alphabet),
         "rawBytes": len(blob),
@@ -168,12 +287,19 @@ def main() -> None:
     parser.add_argument("--out", type=Path, default=DEFAULT_OUT)
     parser.add_argument("--gold", type=Path, nargs="+", default=EVALUATION_FILES)
     parser.add_argument("--top", type=int, default=25000)
+    parser.add_argument("--supplement", type=Path, nargs="+",
+                        help="Persian lines (JSONL/text) whose out-of-table words are added; see supplement_words")
+    parser.add_argument("--supplement-score", type=float, default=0.3,
+                        help="the one score, in [0,1], every supplement word enters at")
+    parser.add_argument("--supplement-min", type=int, default=2,
+                        help="how many times a word must occur in --supplement to be added")
     args = parser.parse_args()
 
     if not args.source.exists():
         raise SystemExit(f"{args.source} not found; see build_pronunciation.py for the download line.")
 
-    manifest = build(args.source, args.out, list(args.gold), args.top)
+    manifest = build(args.source, args.out, list(args.gold), args.top,
+                     args.supplement, args.supplement_score, args.supplement_min)
     (ROOT / "data" / "provenance" / "frequency.json").write_text(
         json.dumps({"$comment": "GENERATED by training/tiny_finglish_training/build_frequency.py.", **manifest},
                    indent=2) + "\n", encoding="utf-8")

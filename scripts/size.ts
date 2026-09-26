@@ -58,7 +58,7 @@ const frequencyPath = new URL("data/lexicon/fa-frequency.bin", root);
 if (existsSync(frequencyPath)) {
   const frequency = readFileSync(frequencyPath);
   rows.push({
-    component: "word frequency (25k words, pre-Brotli on disk)",
+    component: "word frequency (25k words + 566 chat words, pre-Brotli on disk)",
     raw: frequency.length, gzip: frequency.length, brotli: frequency.length,
   });
 }
@@ -69,7 +69,7 @@ const vowelsPath = new URL("data/lexicon/fa-vowels.bin", root);
 if (existsSync(vowelsPath)) {
   const vowels = readFileSync(vowelsPath);
   rows.push({
-    component: "vowels of confusable words (3.6k words, pre-Brotli on disk)",
+    component: "vowels of confusable words (3.7k words, pre-Brotli on disk)",
     raw: vowels.length, gzip: vowels.length, brotli: vowels.length,
   });
 }

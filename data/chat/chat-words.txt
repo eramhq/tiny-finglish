@@ -1,0 +1,136 @@
+# Chat words: a sentence containing one of these, and none of the `!` words, is
+# drawn by `build_distill.py --targeted-predicate chat-word`. One word per line,
+# compared after normalize() with ZWNJ removed, so میخوام also matches می‌خوام.
+#
+# Chosen as markers of chat register, not of Persian in general: every entry is
+# either a greeting or reply formula, a colloquial verb or pronoun form that
+# written Persian spells differently (میخوام / می‌خواهم), or a chat loanword.
+# Measured on HomoRich before this list was cut down: شده, کن, بکن, چرا,
+# داریم, زنگ, خسته, دلم and حوصله each admitted thousands of read-aloud
+# sentences, and اره is as often "saw" as "yeah", so they are not here.
+#
+# `!` lines are the other half: a sentence containing one is written register
+# and is not drawn even if it has a chat word. خوبی is the case that needs it -
+# "به خوبی ... می‌کند" is its commonest use in HomoRich.
+#
+# greetings, thanks, goodbyes, replies
+سلام
+خوبی
+خوبین
+خوبید
+خوبم
+مرسی
+ممنون
+ممنونم
+مچکرم
+باشه
+آره
+نه‌خیر
+خداحافظ
+خدافظ
+بای
+فعلا
+شب‌بخیر
+صبح‌بخیر
+عزیزم
+قربونت
+قربونتم
+فدات
+فداتشم
+دمت
+مخلصیم
+چاکرم
+ایول
+آفرین
+حله
+اوکی
+اوکیه
+باحال
+باحاله
+# questions
+چطوری
+چطورین
+چطوره
+کجایی
+کجاین
+کجاس
+چیکار
+چیکارا
+چکار
+چته
+چیه
+چیشد
+کیه
+# colloquial verb forms
+میخوام
+نمیخوام
+میخوای
+میخوایم
+میدونم
+نمیدونم
+میدونی
+نمیدونی
+میام
+نمیام
+میای
+میاین
+میرم
+نمیرم
+میری
+بریم
+بیا
+بیاین
+ببین
+ببینم
+میبینمت
+میگم
+میگی
+بگو
+بگم
+نمیشه
+میشه
+# colloquial nouns, pronouns and particles
+خونم
+حوصلم
+خستم
+خیالت
+اینجوری
+اونجوری
+اونجا
+یکم
+یه
+اون
+اینو
+اونو
+بهت
+بهم
+باهات
+باهم
+واسه
+واسم
+واست
+# written-register markers (exclusions)
+!است
+!هستند
+!می‌باشد
+!می‌باشند
+!می‌شود
+!می‌شوند
+!می‌کند
+!می‌کنند
+!می‌دهد
+!می‌دهند
+!می‌رود
+!می‌روند
+!می‌آید
+!می‌آیند
+!می‌خواهم
+!می‌خواهد
+!می‌خواهی
+!نمی‌دانم
+!نمی‌خواهم
+!را
+!دارد
+!ندارد
+!شده‌اند
+!آیا

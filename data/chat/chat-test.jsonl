@@ -1,0 +1,100 @@
+{"id": "t1-008", "category": "chat", "input": "amoo ina key miresan?", "expected": "عمو اینا کی میرسن؟", "alternatives": ["عمو اینا کی می‌رسن؟"], "typedBy": "llm", "scene": "family"}
+{"id": "t1-126", "category": "chat", "input": "chera enghad dir ersal mikonid?", "expected": "چرا اینقدر دیر ارسال میکنید؟", "alternatives": ["چرا اینقدر دیر ارسال می‌کنید؟"], "typedBy": "llm", "scene": "shopping"}
+{"id": "t1-064", "category": "chat", "input": "halle pas shanbe mibinamet", "expected": "حله، پس شنبه میبینمت", "alternatives": ["حله، پس شنبه می‌بینمت"], "typedBy": "llm", "scene": "work"}
+{"id": "t2-042", "category": "chat", "input": "emruz nemitunam biam sar kar marizam", "expected": "امروز نمیتونم بیام سر کار مریضم", "alternatives": ["امروز نمی‌تونم بیام سر کار مریضم"], "typedBy": "llm", "scene": "health"}
+{"id": "t1-118", "category": "chat", "input": "in model mojud nist?", "expected": "این مدل موجود نیست؟", "alternatives": [], "typedBy": "llm", "scene": "shopping"}
+{"id": "t2-109", "category": "chat", "input": "sharjeret kojast? batrim tamum shd", "expected": "شارژرت کجاست؟ باتریم تموم شد", "alternatives": ["شارژرت کجاس؟ باتریم تموم شد"], "typedBy": "llm", "scene": "tech"}
+{"id": "t2-117", "category": "chat", "input": "linkesho baram befrest", "expected": "لینکشو برام بفرست", "alternatives": [], "typedBy": "llm", "scene": "tech"}
+{"id": "t2-154", "category": "chat", "input": "bashe halle nim saat dige unjam", "expected": "باشه حله نیم ساعت دیگه اونجام", "alternatives": ["باشه حله نیم ساعت دیگه اون‌جام"], "typedBy": "llm", "scene": "smalltalk"}
+{"id": "t2-081", "category": "chat", "input": "key mirsi?", "expected": "کی میرسی؟", "alternatives": ["کی می‌رسی؟"], "typedBy": "llm", "scene": "couple"}
+{"id": "t1-001", "category": "chat", "input": "salam maman khobi?", "expected": "سلام مامان خوبی؟", "alternatives": [], "typedBy": "llm", "scene": "family"}
+{"id": "t1-135", "category": "chat", "input": "emshab bia khabgah ba ham bekhunim", "expected": "امشب بیا خوابگاه با هم بخونیم", "alternatives": [], "typedBy": "llm", "scene": "university"}
+{"id": "t2-131", "category": "chat", "input": "hoselam sar rafte", "expected": "حوصلم سر رفته", "alternatives": ["حوصله‌م سر رفته"], "typedBy": "llm", "scene": "smalltalk"}
+{"id": "t1-139", "category": "chat", "input": "kelas saat hashto nemiam ye hazeri baram bezan", "expected": "کلاس ساعت هشتو نمیام، یه حاضری برام بزن", "alternatives": ["کلاس ساعت هشتو نمی‌یام، یه حاضری برام بزن"], "typedBy": "llm", "scene": "university"}
+{"id": "t1-012", "category": "chat", "input": "kilid khoone ro yadam raft bebaram", "expected": "کلید خونه رو یادم رفت ببرم", "alternatives": [], "typedBy": "llm", "scene": "family"}
+{"id": "t2-122", "category": "chat", "input": "bluetoothet ro roshan kon", "expected": "بلوتوثتو روشن کن", "alternatives": [], "typedBy": "llm", "scene": "tech"}
+{"id": "t1-170", "category": "chat", "input": "noh shab shabake se pakhsh mikone", "expected": "نه شب، شبکه سه پخش میکنه", "alternatives": ["نه شب، شبکه سه پخش می‌کنه"], "typedBy": "llm", "scene": "football"}
+{"id": "t2-185", "category": "chat", "input": "ghadamesh mobarak bashe", "expected": "قدمش مبارک باشه", "alternatives": [], "typedBy": "llm", "scene": "occasions"}
+{"id": "t2-069", "category": "chat", "input": "saat haft jolo cinema montazeretam", "expected": "ساعت هفت جلو سینما منتظرتم", "alternatives": [], "typedBy": "llm", "scene": "couple"}
+{"id": "t2-008", "category": "chat", "input": "ye resturan khub soragh dari?", "expected": "یه رستوران خوب سراغ داری؟", "alternatives": [], "typedBy": "llm", "scene": "food"}
+{"id": "t2-105", "category": "chat", "input": "code taeid barat umad?", "expected": "کد تایید برات اومد؟", "alternatives": [], "typedBy": "llm", "scene": "tech"}
+{"id": "t2-054", "category": "chat", "input": "vaksan zadi ya na", "expected": "واکسن زدی یا نه", "alternatives": [], "typedBy": "llm", "scene": "health"}
+{"id": "t1-060", "category": "chat", "input": "modir goft gozaresh ta zohr bayad amade bashe", "expected": "مدیر گفت گزارش تا ظهر باید آماده باشه", "alternatives": [], "typedBy": "llm", "scene": "work"}
+{"id": "t1-031", "category": "chat", "input": "are diruz online dadam", "expected": "آره دیروز آنلاین دادم", "alternatives": ["اره دیروز آنلاین دادم"], "typedBy": "llm", "scene": "family"}
+{"id": "t2-079", "category": "chat", "input": "baashe ashti vli dafe akharet bashe", "expected": "باشه آشتی ولی دفعه آخرت باشه", "alternatives": [], "typedBy": "llm", "scene": "couple"}
+{"id": "t1-101", "category": "chat", "input": "gheymatesh chande?", "expected": "قیمتش چنده؟", "alternatives": [], "typedBy": "llm", "scene": "shopping"}
+{"id": "t1-177", "category": "chat", "input": "mosavi shod heyf shod", "expected": "مساوی شد، حیف شد", "alternatives": [], "typedBy": "llm", "scene": "football"}
+{"id": "t1-149", "category": "chat", "input": "man bakhshe avalo minevisam", "expected": "من بخش اولو مینویسم", "alternatives": ["من بخش اولو می‌نویسم"], "typedBy": "llm", "scene": "university"}
+{"id": "t2-126", "category": "chat", "input": "bordamesh tamirgah goftan madarbordesh sukhte", "expected": "بردمش تعمیرگاه گفتن مادربردش سوخته", "alternatives": [], "typedBy": "llm", "scene": "tech"}
+{"id": "t1-025", "category": "chat", "input": "baba goft mashino bebar karwash", "expected": "بابا گفت ماشینو ببر کارواش", "alternatives": [], "typedBy": "llm", "scene": "family"}
+{"id": "t1-122", "category": "chat", "input": "jensesh asle ya fake e?", "expected": "جنسش اصله یا فیکه؟", "alternatives": [], "typedBy": "llm", "scene": "shopping"}
+{"id": "t1-071", "category": "chat", "input": "dongi hesab mikonim", "expected": "دنگی حساب میکنیم", "alternatives": ["دنگی حساب می‌کنیم"], "typedBy": "llm", "scene": "trip"}
+{"id": "t2-150", "category": "chat", "input": "metro emruz kheili sholugh bud", "expected": "مترو امروز خیلی شلوغ بود", "alternatives": [], "typedBy": "llm", "scene": "smalltalk"}
+{"id": "t2-113", "category": "chat", "input": "baste internetam tamum shode", "expected": "بسته اینترنتم تموم شده", "alternatives": [], "typedBy": "llm", "scene": "tech"}
+{"id": "t1-137", "category": "chat", "input": "ta yekshanbe vaght darim", "expected": "تا یکشنبه وقت داریم", "alternatives": [], "typedBy": "llm", "scene": "university"}
+{"id": "t1-040", "category": "chat", "input": "hoghugha key miad?", "expected": "حقوقا کی میاد؟", "alternatives": ["حقوقا کی می‌یاد؟"], "typedBy": "llm", "scene": "work"}
+{"id": "t1-036", "category": "chat", "input": "file gozaresho baram befrest", "expected": "فایل گزارشو برام بفرست", "alternatives": [], "typedBy": "llm", "scene": "work"}
+{"id": "t2-181", "category": "chat", "input": "sizdah bedar miayn bagh?", "expected": "سیزده بدر میاین باغ؟", "alternatives": ["سیزده بدر می‌آین باغ؟", "سیزده‌بدر میاین باغ؟"], "typedBy": "llm", "scene": "occasions"}
+{"id": "t1-134", "category": "chat", "input": "man hichi nakhundam badbakht shodam", "expected": "من هیچی نخوندم، بدبخت شدم", "alternatives": [], "typedBy": "llm", "scene": "university"}
+{"id": "t2-084", "category": "chat", "input": "ghahr nakon dge", "expected": "قهر نکن دیگه", "alternatives": [], "typedBy": "llm", "scene": "couple"}
+{"id": "t1-107", "category": "chat", "input": "peyk dame dare paein miri?", "expected": "پیک دم دره، پایین میری؟", "alternatives": ["پیک دم دره، پایین می‌ری؟"], "typedBy": "llm", "scene": "shopping"}
+{"id": "t2-048", "category": "chat", "input": "azmayesh khunam khub bud khiyalet rahat", "expected": "آزمایش خونم خوب بود خیالت راحت", "alternatives": [], "typedBy": "llm", "scene": "health"}
+{"id": "t2-013", "category": "chat", "input": "sefaresh dadam nim saat dige mirese", "expected": "سفارش دادم نیم ساعت دیگه میرسه", "alternatives": ["سفارش دادم نیم ساعت دیگه می‌رسه"], "typedBy": "llm", "scene": "food"}
+{"id": "t1-186", "category": "chat", "input": "pam pich khord in hafte nemitunam bazi konam", "expected": "پام پیچ خورد، این هفته نمیتونم بازی کنم", "alternatives": ["پام پیچ خورد، این هفته نمی‌تونم بازی کنم"], "typedBy": "llm", "scene": "football"}
+{"id": "t2-009", "category": "chat", "input": "miz baraye chahar nafar rezerv kardam", "expected": "میز برای چهار نفر رزرو کردم", "alternatives": [], "typedBy": "llm", "scene": "food"}
+{"id": "t2-090", "category": "chat", "input": "hosele dava nadaram", "expected": "حوصله دعوا ندارم", "alternatives": [], "typedBy": "llm", "scene": "couple"}
+{"id": "t2-089", "category": "chat", "input": "man eshtebah kardam mazerat mikham", "expected": "من اشتباه کردم معذرت میخوام", "alternatives": ["من اشتباه کردم معذرت می‌خوام"], "typedBy": "llm", "scene": "couple"}
+{"id": "t2-093", "category": "chat", "input": "hamkaram bud baba hesudi nakon", "expected": "همکارم بود بابا حسودی نکن", "alternatives": [], "typedBy": "llm", "scene": "couple"}
+{"id": "t2-187", "category": "chat", "input": "tarfiet mobarak rais", "expected": "ترفیعت مبارک رئیس", "alternatives": [], "typedBy": "llm", "scene": "occasions"}
+{"id": "t1-175", "category": "chat", "input": "bache ha ye nafar kam darim yeki dige biyarid", "expected": "بچه ها یه نفر کم داریم، یکی دیگه بیارید", "alternatives": ["بچه‌ها یه نفر کم داریم، یکی دیگه بیارید"], "typedBy": "llm", "scene": "football"}
+{"id": "t1-090", "category": "chat", "input": "karteto bezar kenar man hesab mikonam", "expected": "کارتتو بذار کنار، من حساب میکنم", "alternatives": ["کارتتو بذار کنار، من حساب می‌کنم"], "typedBy": "llm", "scene": "trip"}
+{"id": "t1-080", "category": "chat", "input": "ye restoran kenare darya peyda kardam", "expected": "یه رستوران کنار دریا پیدا کردم", "alternatives": [], "typedBy": "llm", "scene": "trip"}
+{"id": "t2-073", "category": "chat", "input": "maloome ke narahati bgo chi shode", "expected": "معلومه که ناراحتی بگو چی شده", "alternatives": [], "typedBy": "llm", "scene": "couple"}
+{"id": "t1-026", "category": "chat", "input": "shab dir miam montazeram namunid", "expected": "شب دیر میام، منتظرم نمونید", "alternatives": ["شب دیر می‌یام، منتظرم نمونید"], "typedBy": "llm", "scene": "family"}
+{"id": "t1-115", "category": "chat", "input": "variz kardam residesho mifrestam", "expected": "واریز کردم، رسیدشو میفرستم", "alternatives": ["واریز کردم، رسیدشو می‌فرستم"], "typedBy": "llm", "scene": "shopping"}
+{"id": "t2-015", "category": "chat", "input": "namak nadare yekam", "expected": "نمک نداره یکم", "alternatives": [], "typedBy": "llm", "scene": "food"}
+{"id": "t2-157", "category": "chat", "input": "kelaset key tamoom mishe", "expected": "کلاست کی تموم میشه", "alternatives": ["کلاست کی تموم می‌شه"], "typedBy": "llm", "scene": "smalltalk"}
+{"id": "t1-119", "category": "chat", "input": "tamum shode hafte bad miad", "expected": "تموم شده، هفته بعد میاد", "alternatives": ["تموم شده، هفته بعد می‌یاد"], "typedBy": "llm", "scene": "shopping"}
+{"id": "t1-039", "category": "chat", "input": "farda morakhasi mikham mishe jaye man bashi?", "expected": "فردا مرخصی میخوام، میشه جای من باشی؟", "alternatives": ["فردا مرخصی می‌خوام، می‌شه جای من باشی؟"], "typedBy": "llm", "scene": "work"}
+{"id": "t1-138", "category": "chat", "input": "ostad ahmadi kheyli sakht nomre mide", "expected": "استاد احمدی خیلی سخت نمره میده", "alternatives": ["استاد احمدی خیلی سخت نمره می‌ده"], "typedBy": "llm", "scene": "university"}
+{"id": "t1-172", "category": "chat", "input": "saleno saat shish rezerv kardam", "expected": "سالنو ساعت شش رزرو کردم", "alternatives": [], "typedBy": "llm", "scene": "football"}
+{"id": "t1-184", "category": "chat", "input": "halle har ki bakht sham mide", "expected": "حله، هر کی باخت شام میده", "alternatives": ["حله، هر کی باخت شام می‌ده"], "typedBy": "llm", "scene": "football"}
+{"id": "t1-189", "category": "chat", "input": "keyf kardam ajab bazi bud", "expected": "کیف کردم، عجب بازی بود", "alternatives": [], "typedBy": "llm", "scene": "football"}
+{"id": "t1-153", "category": "chat", "input": "khabgah baz ab garm nadare", "expected": "خوابگاه باز آب گرم نداره", "alternatives": [], "typedBy": "llm", "scene": "university"}
+{"id": "t1-007", "category": "chat", "input": "emshab khune madarbozorg davatim", "expected": "امشب خونه مادربزرگ دعوتیم", "alternatives": [], "typedBy": "llm", "scene": "family"}
+{"id": "t2-123", "category": "chat", "input": "emailamo check kardam chizi nayomade", "expected": "ایمیلمو چک کردم چیزی نیومده", "alternatives": [], "typedBy": "llm", "scene": "tech"}
+{"id": "t2-180", "category": "chat", "input": "eydi mano yadet nare", "expected": "عیدی منو یادت نره", "alternatives": [], "typedBy": "llm", "scene": "occasions"}
+{"id": "t1-125", "category": "chat", "input": "baste asib dide bud aks gereftam", "expected": "بسته آسیب دیده بود، عکس گرفتم", "alternatives": [], "typedBy": "llm", "scene": "shopping"}
+{"id": "t1-075", "category": "chat", "input": "hanuz na emshab mibandam", "expected": "هنوز نه، امشب میبندم", "alternatives": ["هنوز نه، امشب می‌بندم"], "typedBy": "llm", "scene": "trip"}
+{"id": "t2-099", "category": "chat", "input": "khamush roshanesh kon dorost mishe", "expected": "خاموش روشنش کن درست میشه", "alternatives": ["خاموش روشنش کن درست می‌شه"], "typedBy": "llm", "scene": "tech"}
+{"id": "t2-051", "category": "chat", "input": "baba ro bordim bimarestan", "expected": "بابا رو بردیم بیمارستان", "alternatives": [], "typedBy": "llm", "scene": "health"}
+{"id": "t1-072", "category": "chat", "input": "jome sob zud rah biftim ke be terafik nakhorim", "expected": "جمعه صبح زود راه بیفتیم که به ترافیک نخوریم", "alternatives": [], "typedBy": "llm", "scene": "trip"}
+{"id": "t2-088", "category": "chat", "input": "akhar hafte berim shomal?", "expected": "آخر هفته بریم شمال؟", "alternatives": [], "typedBy": "llm", "scene": "couple"}
+{"id": "t2-083", "category": "chat", "input": "hamishe hagh ba toe dige", "expected": "همیشه حق با توئه دیگه", "alternatives": [], "typedBy": "llm", "scene": "couple"}
+{"id": "t2-047", "category": "chat", "input": "kamaram gerefte nemitoonam tekun bokhoram", "expected": "کمرم گرفته نمیتونم تکون بخورم", "alternatives": ["کمرم گرفته نمی‌تونم تکون بخورم"], "typedBy": "llm", "scene": "health"}
+{"id": "t2-033", "category": "chat", "input": "sarma khordam", "expected": "سرما خوردم", "alternatives": [], "typedBy": "llm", "scene": "health"}
+{"id": "t1-003", "category": "chat", "input": "daram miam khune ta nim saat dige unjam", "expected": "دارم میام خونه، تا نیم ساعت دیگه اونجام", "alternatives": ["دارم می‌یام خونه، تا نیم ساعت دیگه اونجام"], "typedBy": "llm", "scene": "family"}
+{"id": "t2-075", "category": "chat", "input": "khabam bord be khodaaa", "expected": "خوابم برد به خدا", "alternatives": [], "typedBy": "llm", "scene": "couple"}
+{"id": "t2-133", "category": "chat", "input": "inja dare barf miad", "expected": "اینجا داره برف میاد", "alternatives": ["اینجا داره برف می‌آد"], "typedBy": "llm", "scene": "smalltalk"}
+{"id": "t1-042", "category": "chat", "input": "aghaye rezaei soraghto migereft", "expected": "آقای رضایی سراغتو میگرفت", "alternatives": ["آقای رضایی سراغتو می‌گرفت"], "typedBy": "llm", "scene": "work"}
+{"id": "t1-176", "category": "chat", "input": "eyval se ta gol zadim", "expected": "ایول، سه تا گل زدیم", "alternatives": [], "typedBy": "llm", "scene": "football"}
+{"id": "t1-151", "category": "chat", "input": "boro daftaresh saat dah unjast", "expected": "برو دفترش، ساعت ده اونجاست", "alternatives": ["برو دفترش، ساعت ده اونجاس"], "typedBy": "llm", "scene": "university"}
+{"id": "t2-121", "category": "chat", "input": "balad nistam ba in gushie kar konam", "expected": "بلد نیستم با این گوشیه کار کنم", "alternatives": [], "typedBy": "llm", "scene": "tech"}
+{"id": "t1-187", "category": "chat", "input": "kholase bazi ro didi?", "expected": "خلاصه بازی رو دیدی؟", "alternatives": [], "typedBy": "llm", "scene": "football"}
+{"id": "t1-166", "category": "chat", "input": "davar koore penalty bud", "expected": "داور کوره، پنالتی بود", "alternatives": [], "typedBy": "llm", "scene": "football"}
+{"id": "t2-171", "category": "chat", "input": "tasliyat migam khoda rahmateshun kone", "expected": "تسلیت میگم خدا رحمتشون کنه", "alternatives": ["تسلیت می‌گم خدا رحمتشون کنه"], "typedBy": "llm", "scene": "occasions"}
+{"id": "t2-108", "category": "chat", "input": "az tanzimat boro to ghesmate hesab", "expected": "از تنظیمات برو تو قسمت حساب", "alternatives": [], "typedBy": "llm", "scene": "tech"}
+{"id": "t2-059", "category": "chat", "input": "do ruz esterahat motlagh neveshte", "expected": "دو روز استراحت مطلق نوشته", "alternatives": [], "typedBy": "llm", "scene": "health"}
+{"id": "t2-168", "category": "chat", "input": "arusitun kie?", "expected": "عروسیتون کیه؟", "alternatives": [], "typedBy": "llm", "scene": "occasions"}
+{"id": "t2-192", "category": "chat", "input": "shirinisho key midi?", "expected": "شیرینیشو کی میدی؟", "alternatives": ["شیرینیشو کی می‌دی؟"], "typedBy": "llm", "scene": "occasions"}
+{"id": "t1-190", "category": "chat", "input": "natije chand chand shod?", "expected": "نتیجه چند چند شد؟", "alternatives": [], "typedBy": "llm", "scene": "football"}
+{"id": "t1-152", "category": "chat", "input": "karte daneshjuim gom shode", "expected": "کارت دانشجوییم گم شده", "alternatives": [], "typedBy": "llm", "scene": "university"}
+{"id": "t2-173", "category": "chat", "input": "marasem khatm kojast?", "expected": "مراسم ختم کجاست؟", "alternatives": ["مراسم ختم کجاس؟"], "typedBy": "llm", "scene": "occasions"}
+{"id": "t2-052", "category": "chat", "input": "dandunam dard gerefte bayad beram dandunpezeshki", "expected": "دندونم درد گرفته باید برم دندونپزشکی", "alternatives": ["دندونم درد گرفته باید برم دندون‌پزشکی"], "typedBy": "llm", "scene": "health"}
+{"id": "t2-061", "category": "chat", "input": "tabet umad paeen?", "expected": "تبت اومد پایین؟", "alternatives": [], "typedBy": "llm", "scene": "health"}
+{"id": "t2-055", "category": "chat", "input": "halam aslan khub nist", "expected": "حالم اصلا خوب نیست", "alternatives": [], "typedBy": "llm", "scene": "health"}
+{"id": "t2-001", "category": "chat", "input": "sham chi darim?", "expected": "شام چی داریم؟", "alternatives": [], "typedBy": "llm", "scene": "food"}
+{"id": "t2-068", "category": "chat", "input": "emshab bebinamet?", "expected": "امشب ببینمت؟", "alternatives": [], "typedBy": "llm", "scene": "couple"}
+{"id": "t2-006", "category": "chat", "input": "dastur pokht kashk bademjun ro baram befrest", "expected": "دستور پخت کشک بادمجون رو برام بفرست", "alternatives": [], "typedBy": "llm", "scene": "food"}
+{"id": "t1-091", "category": "chat", "input": "jade chalus baze?", "expected": "جاده چالوس بازه؟", "alternatives": [], "typedBy": "llm", "scene": "trip"}
+{"id": "t1-160", "category": "chat", "input": "khaste shodam az in term faghat mikham tamum she", "expected": "خسته شدم از این ترم، فقط میخوام تموم شه", "alternatives": ["خسته شدم از این ترم، فقط می‌خوام تموم شه"], "typedBy": "llm", "scene": "university"}

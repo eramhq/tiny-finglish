@@ -12,7 +12,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { buildTransliterator, loadFixtures, type Fixture } from "./_load.ts";
 import { normalize } from "../src/normalize.ts";
 import { PUNCTUATION_FOLDS } from "../src/unicode.ts";
-import { characterErrorRate, lenientSplitWords, wordAccuracy } from "../src/metrics.ts";
+import { acceptedWordAccuracy, characterErrorRate, lenientSplitWords, wordAccuracy } from "../src/metrics.ts";
 import { loadJudgments, mismatchTriples } from "./_judgments.ts";
 import type { TransliterationResult } from "../src/types.ts";
 
@@ -42,6 +42,8 @@ export interface CaseResult {
 export interface Tiers {
   strict: number;
   orthographic: number;
+  /** Strict against the closest of `expected` and the row's `alternatives`. */
+  accepted: number;
   /** Strict plus the refunded cost of runs both judges accepted. */
   judged: number;
   /** Charged runs with no verdict yet. Reported, never guessed. */
@@ -54,7 +56,7 @@ export interface Tiers {
 }
 
 function emptyTiers(): Tiers {
-  return { strict: 0, orthographic: 0, judged: 0, unjudged: 0,
+  return { strict: 0, orthographic: 0, accepted: 0, judged: 0, unjudged: 0,
     faithfulStrict: 0, faithfulOrthographic: 0, faithfulTotal: 0, total: 0 };
 }
 
@@ -173,7 +175,7 @@ export function buildFixtureReport(options: {
     }
 
     const words = wordAccuracy(expected, got);
-    const tiers = scoreTiers(fixture, expected, got, words, judgments);
+    const tiers = scoreTiers(fixture, accepted, got, words, judgments);
     addTiers(totals.tiers, tiers);
     if (fixture.faithful !== undefined) totals.faithfulRows++;
 
@@ -206,15 +208,17 @@ export function buildFixtureReport(options: {
 
 function scoreTiers(
   fixture: Fixture,
-  expected: string,
+  accepted: readonly string[],
   got: string,
   strict: { correct: number; total: number },
   judgments: ReturnType<typeof loadJudgments>,
 ): Tiers {
+  const expected = accepted[0]!;
   const tiers = emptyTiers();
   tiers.total = strict.total;
   tiers.strict = strict.correct;
   tiers.orthographic = wordAccuracy(expected, got, lenientSplitWords).correct;
+  tiers.accepted = acceptedWordAccuracy(accepted, got).correct;
 
   // Refund what both judges accepted. Errors are capped at the reference
   // length exactly as `wordAccuracy` caps them, so refunds are taken off the
@@ -292,6 +296,9 @@ export function formatReport(report: Report, options: { verbose?: boolean } = {}
   const faithfulCol = (n: number) => (t.faithfulRows ? `    ${pct(n, w.faithfulTotal).padStart(11)}` : "");
   lines.push(`  strict (headline)     ${pct(w.strict, w.total).padStart(11)}${faithfulCol(w.faithfulStrict)}`);
   lines.push(`  orthographic          ${pct(w.orthographic, w.total).padStart(11)}${faithfulCol(w.faithfulOrthographic)}`);
+  if (w.accepted !== w.strict) {
+    lines.push(`  accepted spellings    ${pct(w.accepted, w.total).padStart(11)}`);
+  }
   lines.push(`  judged-acceptable     ${pct(w.judged, w.total).padStart(11)}    unjudged runs: ${w.unjudged}`);
 
   if (options.verbose) {

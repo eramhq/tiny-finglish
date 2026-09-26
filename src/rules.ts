@@ -184,10 +184,23 @@ export const ZWNJ_RULES: readonly Grapheme[] = [
  *     `SILENT` can never be decoded. Attaching it to `kh` makes it reachable at
  *     the silent و's own prior, w=6 against خ's 70 — a candidate that frequency
  *     can promote, not a default.
+ *   * `ci` and `cy` for سی. Chat types loanwords in their own spelling —
+ *     `merci` for مرسی, `cinema` for سینما — and a soft `c` is س. As a letter
+ *     `c` is only ever ک here (`latinWeights` measured it at 1.8% of ک), so the
+ *     softening lives in the unit that carries its context: `c` before `i`/`y`.
+ *     `ce` is not here: as a unit it would share س's output with `s`, and the
+ *     fitted channel would smooth it to nothing (`Channel.fromFitted`).
+ *   * `i` and `ei` for a final یی. Persian writes the glide of a hiatus —
+ *     کجایی, تنهایی, دانشجویی — as a second ی, and typists mostly do not type
+ *     it: `kojai`, `kojaei`. Letter by letter one `i` is one ی, so every such
+ *     word was unreachable however common. Word-final only, where the glide
+ *     sits; the frequency table decides whether the doubled ی is a word.
  */
 export const VARIANTS: readonly Grapheme[] = [
   { fa: "ی", latin: ["iy"], pos: ["medial", "final"], role: "variant", w: 90 },
   { fa: "خو", latin: ["kh"], role: "variant", w: 6 },
+  { fa: "سی", latin: ["ci", "cy"], latinWeights: [0.9, 0.1], role: "variant", w: 2 },
+  { fa: "یی", latin: ["i", "ei"], latinWeights: [0.6, 0.4], pos: ["final"], role: "variant", w: 5 },
 ];
 
 export const GRAPHEMES: readonly Grapheme[] = [

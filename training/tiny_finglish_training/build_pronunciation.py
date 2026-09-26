@@ -38,7 +38,8 @@ from pathlib import Path
 
 import brotli
 
-from .normalize import fold_for_match, normalize
+from .build_frequency import leak_key
+from .normalize import normalize
 
 ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_SOURCE = Path("corpora/homorich.parquet")
@@ -71,7 +72,7 @@ def count_pronunciations(
     for grapheme, phoneme in zip(graphemes, phonemes):
         if not grapheme or not phoneme:
             continue
-        if fold_for_match(grapheme) in gold_keys:
+        if leak_key(grapheme) in gold_keys:
             excluded += 1
             continue
         words, sounds = grapheme.split(), phoneme.split()
@@ -92,7 +93,7 @@ def count_pronunciations(
 
 def build(source: Path, out: Path, gold: Path) -> dict:
     gold_keys = {
-        fold_for_match(json.loads(line)["expected"])
+        leak_key(json.loads(line)["expected"])
         for line in gold.read_text(encoding="utf-8").splitlines()
         if line
     }

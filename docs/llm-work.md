@@ -231,3 +231,73 @@ way the reference does, which the rule engine often cannot: it follows the
 typist's spacing, and its model half emits ZWNJ where the reference writes
 none. No LLM gets near the 85–92% band either. Formal typing over colloquial
 references caps them as it caps everything else.
+
+## 8. Chat — a test set, a supplement, and a typing round
+
+Nothing measured chat, which is what users mostly type. This round used both
+families for three jobs (`data/chat/README.md`, `data/provenance/chat.json`).
+
+**Writing and review.** Claude subagents wrote 1,040 training chat lines over
+eight topics (`chat-write.md`) and, separately, 384 test messages over twelve
+scenes (`chat-test-write.md`). Every line then went to a second Claude
+subagent and to luna with the same review prompt (`chat-review.md`), and was
+kept only if both accepted it:
+
+| | both accept | Claude only | luna only | neither |
+|---|---:|---:|---:|---:|
+| training lines | 1,019 (+11 duplicates) | 7 | 2 | 1 |
+| test messages | 376 | 8 | 0 | 0 |
+
+Acceptance near 99% is plausible for a model reviewing its own family's
+colloquial Persian, and it is the weak point of this set: luna was the only
+reviewer that rejected anything much, and several of its rejects are
+defensible spellings (خونشون, آلودس). Both-accept is conservative, so the cost
+is yield, not quality.
+
+**The test set is typed by a different family and persona than the
+training data.** Claude typed it with a `texting` persona (`chat-typing.md`):
+lowercase, dropped vowels (`mrc`, `bgo`), foreign spellings of loanwords about
+half the time (`backup`, `like`), doubled letters for emphasis. The training
+round is luna with the calibrated `everyday`/`careful` personas. A model trained
+on luna's habits cannot pass the test set by having learned its typist, and
+that is the only protection against the flattery of AI typing this set has.
+Its numbers are still AI-typed and still optimistic.
+
+**The typing round.** 1,701 sentences, shards 138-149: 700 HomoRich lines
+drawn with the `chat-word` predicate and 1,001 of the reviewed chat lines,
+typed by five luna agents in about two hours. Two notes were added to the worker
+message for this round only. Loanwords may take their foreign spelling, the one
+place the cards allow `c` (the typed round has `merci` 16 times and `mersi` 12).
+And short messages keep one string per Persian word.
+
+Short sentences made the old problem worse: the first finished shards had
+16-26% of persona pairs byte-identical, against a 15% round limit, and most of
+those pairs contained a long ا, so `careful` was typing it the `everyday` way.
+Workers were told to check each finished file and retype the `careful` line of
+identical pairs that contain an ا. That took the round to 9.4%. Round
+aggregate: everyday `aa` 20.8 / detached 8.5, careful 29.6 / 0.2, 0 of 12
+files outside their band. 3,366 of 3,402 lines survived the merge validator.
+
+**v8, two arms, same recipe as v7** (`upsample 0.5`, 12 epochs, int6).
+`v8-word` places LLM examples by the synthetic corpus's per-word split;
+`v8-sentence` by sentence id (`mix --llm-split sentence`). The per-word split
+puts خوبی and چطوره in test, so under it no typed example of them ever trains.
+Model tier, dev strict / faithful, fixtures, chat-dev (AI-typed, closest
+accepted spelling):
+
+| weights | dev | fixtures | chat-dev |
+|---|---:|---:|---:|
+| v7 (shipped) | 57.1 / 67.9 | 90.2 | 84.1 |
+| v8-word | 56.9 / 67.7 | 92.5 | 86.5 |
+| **v8-sentence** | **58.0 / 68.9** | 92.2 | **87.0** |
+
+The sentence split wins, which says the word split was costing more than chat
+words: a word held out of training is held out of every sentence it occurs in.
+v8-sentence also writes `merci` and `kojaei` on the model tier, which v7 never
+did. It is **held back** by the ship rule, which also requires `ketabe` →
+کتابه on every tier. The model prefers کتاب 81/19 after the clause-final tilt,
+because in its data `ketabe` is far more often the ezafe (`ketabe man`) than the
+copula. Re-sweeping `finalHe` for v8 is flat over 2-3 on all three tiers; the
+model tier reaches کتابه only at 3.5, by 0.03 nats, where it starts losing
+fixtures. Scored once, for the record: gold 71.1 → 72.4 on the model tier,
+72.2 → 72.8 hybrid; chat-test 75.4 → 79.0 and 76.9 → 78.2.

@@ -11,6 +11,8 @@
  *   node scripts/run-fixtures.ts --gold          # untouched gold: real human Finglish
  *   node scripts/run-fixtures.ts --gold --gold-set authored   # the old 71 authored pairs
  *   node scripts/run-fixtures.ts --dev           # real human Finglish disjoint from gold — the tuning surface
+ *   node scripts/run-fixtures.ts --chat          # chat-dev: AI-typed chat messages — the chat tuning surface
+ *   node scripts/run-fixtures.ts --chat-test     # chat-test: scored once, at the end, like gold
  *   node scripts/run-fixtures.ts --id ordinary-001
  */
 import { buildFixtureReport, formatReport } from "./_report.ts";
@@ -28,8 +30,9 @@ const report = buildFixtureReport({
   useBigram: flag("bigram"),
   useVowels: !flag("no-vowels"),
   useHybrid: flag("hybrid"),
-  file: flag("dev")
-    ? "data/dev/dev.jsonl"
+  file: flag("chat") ? "data/chat/chat-dev.jsonl"
+    : flag("chat-test") ? "data/chat/chat-test.jsonl"
+    : flag("dev") ? "data/dev/dev.jsonl"
     : flag("gold")
       ? (value("gold-set") === "authored" ? "data/gold/authored.jsonl" : "data/gold/gold.jsonl")
       : "data/fixtures/fixtures.jsonl",

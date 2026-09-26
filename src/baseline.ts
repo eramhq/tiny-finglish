@@ -165,12 +165,6 @@ export interface ScoringParams {
    */
   vowelAgreement: number;
   /**
-   * Cost, in nats, charged to a clause-final ه candidate that is absent from
-   * the frequency table but whose bare form is in it, against the bare form's
-   * frequency credit it borrows. `Infinity` is off. See `Pipeline.finalHePass`.
-   */
-  heBorrow: number;
-  /**
    * Channel distributions re-estimated from data (`scripts/fit-channel.ts`),
    * replacing the ones derived from `src/rules.ts`. Unset: the table's.
    */
@@ -229,7 +223,8 @@ export interface ScoringParams {
  * the table, so it pays `outOfTable` and forfeits کتاب's 0.69 — about 5.5 nats,
  * which `finalHe` alone cannot safely reach.
  *
- * `heBorrow` reaches it, narrowly. At a clause end only, a ه candidate that is
+ * `heBorrow` reached it, narrowly, for one round, and is **removed**. At a
+ * clause end only, a ه candidate that was
  * out of the table but whose bare form is in it is scored as if it were in the
  * table at the bare form's frequency, less `heBorrow` nats — so کتابه borrows
  * کتاب's 0.69. This is the stem back-off `frequency.ts` rejects, cut down to the
@@ -249,6 +244,22 @@ export interface ScoringParams {
  * is `bekhatere` typed alone, which the model tier now writes بخاطره: a word
  * that in running text is almost never clause-final. No tier's dev-faithful
  * moves down at any setting.
+ *
+ * The chat round took its reason away. The chat supplement to the frequency
+ * table (`build_frequency.py --supplement`) puts کتابه and other copula forms
+ * in the table itself, and a word in the table borrowed nothing. Re-swept with
+ * the supplement, the tie-break change and `ci`/final `یی`, on dev-faithful /
+ * fixtures / chat-dev (AI-typed), v7 weights:
+ *
+ *     heBorrow   off                 4                   2                   1
+ *     rules      69.8 / 87.1 / 85.3  69.8 / 87.1 / 85.3  69.9 / 87.1 / 85.4  69.9 / 87.1 / 85.4
+ *     model      67.9 / 90.2 / 84.1  67.9 / 90.2 / 84.1  67.9 / 89.9 / 84.3  67.9 / 89.7 / 84.3
+ *     hybrid     69.3 / 91.7 / 86.0  69.3 / 91.7 / 86.0  69.3 / 91.7 / 86.2  69.3 / 91.7 / 86.2
+ *
+ * Nothing moves more than 0.3, the objective is flat to 0.06 on every tier,
+ * `in ketaabe` reads the same at off and 2 on all three, and off gives
+ * `bekhatere` back as بخاطر on the model tier. A trick that works at one
+ * setting and buys nothing is not worth its code, so it went.
  *
  * `vowelAgreement` is applied by `Pipeline.convert` through `vowelPass`
  * (`vowels.ts`), and only when the vowel table is loaded. Swept on dev-faithful
@@ -280,7 +291,6 @@ export const SCORING: ScoringParams = {
   stemBucket: 8,
   finalHe: 2.0,
   vowelAgreement: 3.0,
-  heBorrow: 2.0,
   fitted: FITTED_CHANNEL,
 };
 
