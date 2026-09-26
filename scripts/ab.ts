@@ -15,7 +15,8 @@
  * resamples rows once per iteration for both, so only the difference the
  * engines make is left in the interval. "real" means the 95% CI excludes 0.
  * `--tier accepted` scores each row against the closest of `expected` and its
- * `alternatives` (how chat-dev is quoted) instead of strict against `expected`.
+ * `alternatives` (how chat-dev is quoted) instead of strict against `expected`;
+ * `--tier orthographic` forgives ZWNJ and joining (`lenientSplitWords`).
  * `--quiet` drops the per-row listing.
  */
 import { buildFixtureReport, type CaseResult } from "./_report.ts";
@@ -36,9 +37,13 @@ const file = flag("chat") ? "data/chat/chat-dev.jsonl"
     : "data/fixtures/fixtures.jsonl";
 
 const tier = value("tier") ?? "strict";
-if (tier !== "strict" && tier !== "accepted") throw new Error(`--tier is strict or accepted, not ${tier}`);
-const score = (c: CaseResult): Counts =>
-  ({ correct: tier === "accepted" ? c.tiers.accepted : c.wordsCorrect, total: c.wordsTotal });
+if (tier !== "strict" && tier !== "accepted" && tier !== "orthographic") {
+  throw new Error(`--tier is strict, accepted or orthographic, not ${tier}`);
+}
+const score = (c: CaseResult): Counts => ({
+  correct: tier === "accepted" ? c.tiers.accepted : tier === "orthographic" ? c.tiers.orthographic : c.wordsCorrect,
+  total: c.wordsTotal,
+});
 
 interface Side {
   label: string;
