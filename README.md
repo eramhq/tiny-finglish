@@ -73,14 +73,14 @@ Four entry points, measured with `node scripts/size.ts --tiers`:
 
 | entry | contents | gzip | Brotli |
 |---|---|---:|---:|
-| `tiny-finglish` | tokenizer, rules, dictionary, beam, model runtime, sentence pass | 15.6 KiB | **13.8 KiB** |
-| `tiny-finglish/rules` | the same, without the model runtime | 12.8 KiB | **11.3 KiB** |
+| `tiny-finglish` | tokenizer, rules, dictionary, loanwords, beam, model runtime, sentence pass | 21.3 KiB | **18.6 KiB** |
+| `tiny-finglish/rules` | the same, without the model runtime | 18.3 KiB | **16.0 KiB** |
 | `tiny-finglish/normalize` | Persian text normalization alone | 0.9 KiB | **0.8 KiB** |
 | `tiny-finglish/metrics` | word accuracy and CER, to score it yourself | 0.5 KiB | **0.4 KiB** |
 
 `./rules` is not a reduced reimplementation — `RuleTransliterator` extends the
 same `Pipeline` as `Transliterator` and overrides nothing, and the two produce
-byte-identical output on all 2,029 committed inputs. The 2.5 KiB it saves is
+byte-identical output on all 2,585 committed inputs. The 2.5 KiB it saves is
 the neural runtime, which `"."` imports unconditionally because its constructor
 builds a `Transducer`; `"sideEffects": false` cannot help a bundler there.
 
@@ -89,11 +89,11 @@ the accuracy you choose:
 
 | + data | Brotli | gold word accuracy |
 |---|---:|---:|
-| nothing | 11.3 KiB | 64.6% |
-| **frequency + vowels** | **74.9 KiB** | **74.3%** |
-| frequency + vowels + bigrams (opt-in) | 148.5 KiB | 74.7% |
-| frequency + vowels and the model (`"."`) | 161.8 KiB | 72.4% |
-| ...model and rules ranked jointly (`hybrid: true`) | 161.8 KiB | 72.8% (77.5% orthographic) |
+| nothing | 16.0 KiB | 64.7% |
+| **frequency + vowels** | **79.6 KiB** | **74.3%** |
+| frequency + vowels + bigrams (opt-in) | 153.2 KiB | 74.8% |
+| frequency + vowels and the model (`"."`) | 166.6 KiB | 72.4% |
+| ...model and rules ranked jointly (`hybrid: true`) | 166.6 KiB | 72.9% (77.5% orthographic) |
 
 Measured on the 1,669-row audited gold set, September 2026. The previous
 figures (62.3% for rules + frequency, 51.2% for the model) were on the
@@ -141,6 +141,12 @@ dictionary is actively harmful here: `man` is من, `to` is تو, `in` is این
 `bad` is بد, `sad` is صد, `dust` is دوست, `name` is نامه. See
 `src/english.ts`.
 
+A table of 445 loanwords outranks it: `pizza`, `email`, `backup` and a capped
+list of 15 chat brands (`instagram`, `google`) convert to پیتزا, ایمیل, بکاپ,
+اینستاگرام, گوگل, unless the words next to them are English (`open google
+chrome` keeps `google chrome`), they are capitalized mid-sentence, or you pass
+them in `protect`. Every other brand stays English. See `src/loan.ts`.
+
 ## How it works
 
 ```
@@ -158,6 +164,58 @@ of 504 candidates per word and a p99 of ~92,000.
 Full detail in [`docs/architecture.md`](docs/architecture.md).
 
 ## Measured results
+
+### September 2026: stretched words and loanwords
+
+The two largest fixable groups left in chat-dev after the chat round, both
+fixed in front of the model, so every tier gets them and nothing was retrained.
+
+* **Stretched words** (`src/stretch.ts`). `merciiii` is converted as `merci`
+  and the stretch is written back on the last Persian letter, the way Persian
+  chat stretches: مرسیییی. A run of two (`aa`) is a spelling, not a stretch;
+  a stretch is written back only at the end of a word and only when the letters
+  agree (`hmmm` → هممم, `okkk` → اوکی). **The metric folds a stretch** —
+  three or more of one Persian letter — to one letter on both sides, so
+  مرسیییی scores as مرسی. That is a metric correction, reported alone below.
+* **Loanwords typed the English way** (`src/loan.ts`). `backup`, `cake`,
+  `pizza`, `email` → بکاپ, کیک, پیتزا, ایمیل, plus Persian endings on a table
+  stem (`laptopam` → لپتاپم, `storyasho` → استوریاشو, `laptope` → لپتاپه at a
+  clause end and لپتاپ in `laptope man`), and 15 chat brands (`instagram`,
+  `google`, `digikala`). The table overrides the English list; a table word
+  next to English stays English. 494 entries were written by two Claude
+  subagents blind to the evaluation sets, 15 brands added by hand, and each
+  reviewed by Claude and by luna: 474 accepted by both. A mechanical guard then
+  drops 29 whose letters the engine already reads as an everyday Persian word
+  (`love` → لو, `file` → فیل), leaving 445. Provenance and every drop are in
+  `data/provenance/loanwords.json`. +4.8 KiB Brotli of JS, 3.4 KiB of it the
+  table.
+
+Each measured against `main` on dev, chat-dev (AI-typed, closest accepted
+spelling) and the 241 fixtures, which now include 13 rows for these two fixes:
+
+| change | rules chat-dev | model chat-dev | hybrid chat-dev | dev, fixtures |
+|---|---:|---:|---:|---|
+| metric fold alone | +0.2 | +0.2 | +0.3 | dev 0.0 |
+| stretch, on the fold | +0.1 | 0.0 | +0.1 | dev 0.0 |
+| loanwords, on the fold without stretch | +3.1 | +3.6 | +3.5 | dev faithful +0.1 / +0.1 / 0.0 |
+| **both** | **85.7 → 89.1** | **87.0 → 90.8** | **86.6 → 90.5** | no loss anywhere |
+
+Fixtures with both: rules 86.1 → 89.3, model 89.3 → 93.3, hybrid 89.1 → 93.3,
+partly by construction; on the 227 fixtures from before this round 87.6 → 88.2,
+92.2 → 92.8, 92.0 → 92.5 (`email et ro befrest`, `ok bashe`).
+
+Scored once, at the end (strict; chat-test is AI-typed):
+
+| tier | gold before → after | chat-test before → after |
+|---|---:|---:|
+| rules + frequency | 74.3 → **74.3** | 85.6 → **86.2** |
+| model + frequency | 72.4 → **72.4** | 79.0 → **80.1** (accepted 87.9 → 89.0) |
+| hybrid | 72.8 → **72.9** | 78.2 → **79.0** (accepted 87.1 → 87.9) |
+
+Gold is flat, as expected: read-aloud typing has almost no stretches or
+English spellings. Chat-test gains less than chat-dev because it has fewer
+English-spelled loanwords (10 table hits in 100 messages), and one of them,
+`file`, is a word the guard drops.
 
 ### September 2026: chat
 
@@ -372,11 +430,12 @@ after Brotli at 500k, for no measurable accuracy cost — which is what makes th
 | keystroke, incremental word | < 0.01 ms | 16 ms |
 | keystroke, end of sentence (warm) | 0.03 ms | 16 ms |
 | sentence, cold | ~40 ms | 100 ms |
-| shipped bundle, Brotli | **161.8 KiB** | ~250 KiB soft cap |
+| shipped bundle, Brotli | **166.6 KiB** | ~250 KiB soft cap |
 
-The bundle is 13.8 KiB of code, 84.4 KiB of weights, 55.3 KiB of frequency and
+The bundle is 18.6 KiB of code, 84.4 KiB of weights, 55.3 KiB of frequency and
 8.3 KiB of vowels; the last two are separate fetches, never bundled, so a
-consumer who wants only the rules pays 11.3 KiB. The 73.6 KiB bigram and the 98.3 KiB lexicon are built and
+consumer who wants only the rules pays 16.0 KiB. About 3.4 KiB of the code is the
+loanword table, which is bundled because the rules-only tier needs it too. The 73.6 KiB bigram and the 98.3 KiB lexicon are built and
 measured but not counted — see the accuracy-per-byte table below. Both budgets
 are enforced in CI.
 
@@ -752,8 +811,15 @@ it is the language model. Anything claiming above 95% offline in this budget
 should be assumed to be leakage until proven otherwise.
 
 **Specific known misses**, each with a fixture: `SALAM` in all-caps is preserved
-as an identifier; `email` is preserved as English rather than converted to
-ایمیل; `اول` romanizes as `ool` rather than `avval`.
+as an identifier; `اول` romanizes as `ool` rather than `avval`.
+
+**Loanwords and stretches have edges.** The loanword table only knows 445
+English spellings, and its guard drops a loanword whose letters also spell an
+everyday Persian word, so `file`, `delete` and `battery` are still read as
+Finglish (فیل, دلت, بطری). A brand outside the capped list stays English. A
+stretch in the middle of a word (`salaaaam`) is collapsed and not written back,
+and a stretch is only written back when the letters agree (`okkk` is plain
+اوکی).
 
 ## Privacy
 

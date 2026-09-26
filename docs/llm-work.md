@@ -319,3 +319,33 @@ and the rules and hybrid tiers write کتابه. Scored once: gold 71.1 → 72.4
 the model tier and 72.2 → 72.8 hybrid; chat-test (AI-typed) 75.4 → 79.0 and
 76.9 → 78.2. The copula lines stay in the corpus artifact for a later round;
 v8 was trained on the 14,660 sentences before them.
+
+## 9. The loanword table — both families, 501 entries
+
+`src/loan.ts` converts loanwords typed the English way (`backup` → بکاپ). Its
+table is LLM output, reviewed the usual way, and recorded in
+`data/lexicon/loanwords.tsv` (every entry with both verdicts and reasons) and
+`data/provenance/loanwords.json`.
+
+* **Written** by two Claude subagents (`loanwords-write.md`), five fixed
+  categories each (tech, social, food, shopping, clothes; sport, school, cars,
+  health, chat), blind to every evaluation set: 494 entries after 8 cross-shard
+  duplicates. 15 chat brands were added by hand as a capped section.
+* **Reviewed** by a separate Claude subagent and by luna
+  (`loanwords-review.md`): is this the Persian people type, is this the English
+  spelling people type, and does it collide with a Persian word. On the 486
+  non-brand rows both accepted 459; luna alone rejected 20, mostly compounds
+  (`powerbank`, `hotdog`) and collisions (`post` پست, `card` کارد, `cool`
+  کول); Claude alone rejected 3 (`top` توپ, `gel` گل, `ampoule`); both
+  rejected 4 (`bus`, `cash`, `trailer`, `poloshirt`). Only entries both accept
+  are built.
+* **A prompt error, and its fix.** The first review prompt listed "a brand" as
+  a reason to reject, meant for the writers, and both families rejected all 15
+  brands. The prompt was amended with a section on the brand list and both
+  re-reviewed just those rows: 15 of 15 accepted by both. Both prompt hashes
+  are in the provenance file.
+* **A mechanical guard** (`scripts/build-loanwords.ts`) then drops Finglish
+  homographs and any entry whose letters the rules engine already reads as a
+  table word of frequency ≥ 0.25 that is not the entry: 29 drops, among them
+  `love` (لو) and `short` (شرط), and some real loanwords, `file` (فیل) and
+  `delete` (دلت). 445 are built.

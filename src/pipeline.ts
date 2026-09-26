@@ -19,7 +19,9 @@
 import { RuleBaseline, SCORING, type ScoringParams } from "./baseline.ts";
 import { bigramScore, type BigramTable } from "./bigram.ts";
 import { type FrequencyTable } from "./frequency.ts";
+import { loanwordSpellings } from "./loan.ts";
 import { normalize } from "./normalize.ts";
+import { restretch, unstretch } from "./stretch.ts";
 import { tokenize, type Token } from "./tokenize.ts";
 import { vowelPass, type VowelTable } from "./vowels.ts";
 import type {
@@ -281,8 +283,22 @@ export abstract class Pipeline {
     };
   }
 
+  /**
+   * Candidates for one word, stretch included. A stretched word is converted
+   * without its stretch, under the collapsed memo key, and a word-final stretch
+   * is put back on every candidate afterwards (`stretch.ts`).
+   */
   protected convert(word: string, opts: TransliterateOptions): Candidate[] {
-    const key = word.toLowerCase();
+    const { base, final } = unstretch(word.toLowerCase());
+    const candidates = this.convertBase(base, opts);
+    if (!final) return candidates;
+    return candidates.map((c) => {
+      const output = restretch(c.output, final);
+      return output === c.output ? c : { ...c, output, reason: `${c.reason}, stretched` };
+    });
+  }
+
+  private convertBase(key: string, opts: TransliterateOptions): Candidate[] {
     const cached = this.cache.get(key);
     if (cached) return cached;
 
@@ -294,9 +310,9 @@ export abstract class Pipeline {
     // the model and hybrid tiers get it too. The model tier is where it matters
     // most: v7 writes `salam` as سالم without it.
     const generated = this.convertWord(key, wide);
-    const candidates = this.vowels
+    const candidates = withLoanword(key, this.vowels
       ? vowelPass(key, generated, this.vowels, this.scoring.vowelAgreement)
-      : generated;
+      : generated);
 
     if (this.cache.size >= this.cacheSize) {
       // Cheap FIFO eviction. A true LRU costs more bookkeeping than it saves at
@@ -566,6 +582,33 @@ export abstract class Pipeline {
     }
     return out;
   }
+}
+
+/**
+ * The probability a loanword-table hit takes (`loan.ts`). The engine's own
+ * candidates share the rest, so they stay in the list as alternatives, and the
+ * gap is wide enough that neither the lexicon tie-break (0.25) nor the
+ * clause-final ه tilt can put an engine spelling above the table's.
+ */
+const LOANWORD_SHARE = 0.9;
+
+/**
+ * Put the table's Persian first when `word` is a loanword-table word. A final
+ * `e` gives two spellings, bare and with ه (`laptope`), and `finalHePass`
+ * chooses between them by position, so the bare one leads.
+ */
+function withLoanword(word: string, engine: Candidate[]): Candidate[] {
+  const spellings = loanwordSpellings(word);
+  if (!spellings) return engine;
+  const shares = spellings.length === 1 ? [1] : [0.6, 0.4];
+  const loan = spellings.map((output, i) => ({
+    output,
+    probability: round4(LOANWORD_SHARE * shares[i]!),
+    reason: "loanword",
+  }));
+  const rest = engine.filter((c) => !spellings.includes(c.output));
+  const total = rest.reduce((sum, c) => sum + c.probability, 0) || 1;
+  return [...loan, ...rest.map((c) => ({ ...c, probability: round4(((1 - LOANWORD_SHARE) * c.probability) / total) }))];
 }
 
 export function round4(value: number): number {

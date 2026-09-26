@@ -14,6 +14,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { RuleTransliterator, Transliterator } from "../src/index.ts";
 import { loadFrequency, loadLexicon, loadModel, loadVowels } from "../scripts/_load.ts";
+import { wordAccuracy } from "../src/metrics.ts";
 
 const root = new URL("..", import.meta.url);
 const hasWeights = existsSync(new URL("data/fixtures/weights.json", root));
@@ -40,16 +41,23 @@ const hybrid = hasWeights ? new Transliterator({ ...shared, model: loadModel()!,
  * The fixture rows each tier gets exactly. What is missing is documented, not
  * forgotten: اوکی and فدات are table words no channel path reaches from `okey`
  * and `fadat` (an initial `o` for او was tried and cost the hybrid 0.4 on dev),
- * and حله and خستم lose to commoner table words (حال, خسته).
+ * and حله and خستم lose to commoner table words (حال, خسته). `ok bashe`
+ * (chat-014) passes since the loanword table, which has `ok`. On the model
+ * tier `bashee` is باشی: a run of two is not a stretch, so it reaches the model
+ * as typed.
  */
 const EXACT = {
   rules: ["chat-001", "chat-004", "chat-005", "chat-006", "chat-007", "chat-008", "chat-010", "chat-011",
-    "chat-012", "chat-015", "chat-016"],
+    "chat-012", "chat-014", "chat-015", "chat-016", ...range(17, 29)],
   hybrid: ["chat-001", "chat-004", "chat-005", "chat-007", "chat-008", "chat-010", "chat-011", "chat-012",
-    "chat-015", "chat-016"],
+    "chat-014", "chat-015", "chat-016", "chat-006", ...range(17, 29)],
   model: ["chat-001", "chat-002", "chat-005", "chat-006", "chat-007", "chat-008", "chat-010", "chat-011",
-    "chat-012", "chat-013", "chat-016"],
+    "chat-012", "chat-013", "chat-014", "chat-016", "chat-017", ...range(19, 29)],
 } as const;
+
+function range(from: number, to: number): string[] {
+  return Array.from({ length: to - from + 1 }, (_, i) => `chat-${String(from + i).padStart(3, "0")}`);
+}
 
 /**
  * The v8 ship rule: these pass on every tier. `ketabe` was part of it and
@@ -59,7 +67,7 @@ const SHIP_RULE = [["salam", "سلام"], ["merci", "مرسی"], ["kojaei", "ک�
 
 describe("chat fixtures", () => {
   it("has the chat fixtures to assert", () => {
-    expect(fixtures.size).toBe(16);
+    expect(fixtures.size).toBe(29);
   });
 
   for (const id of EXACT.rules) {
@@ -131,6 +139,84 @@ describe("the fixes, and where each one stops", () => {
 
   it.skipIf(!model)("writes بخاطر for bekhatere on every tier, now heBorrow is gone", () => {
     for (const engine of [rules, model!, hybrid!]) expect(engine.transliterate("bekhatere").text).toBe("بخاطر");
+  });
+});
+
+describe("stretched words", () => {
+  const engines = () => [rules, ...(model ? [model, hybrid!] : [])];
+
+  it("converts the word without its stretch and writes the stretch back", () => {
+    for (const engine of engines()) {
+      expect(engine.transliterate("merciiii").text).toBe("مرسیییی");
+      expect(engine.transliterate("hmmm").text).toBe("هممم");
+      // Every candidate that ends on a vowel letter gets it, not just the first.
+      for (const { output } of engine.transliterate("merciiii").spans[0]!.candidates!) {
+        if (/[اویه]$/u.test(output)) expect(output, output).toMatch(/(.)\1\1\1$/u);
+      }
+    }
+  });
+
+  it("caps the written-back stretch at six letters", () => {
+    expect(rules.transliterate("merciiiiiiiiii").text).toBe(`مرس${"ی".repeat(6)}`);
+  });
+
+  it("only collapses when the letters disagree, or the stretch is medial", () => {
+    for (const engine of engines()) {
+      // A consonant run on the ی of اوکی.
+      expect(engine.transliterate("okkk").text).toBe("اوکی");
+      expect(engine.transliterate("salaaaam").text).toBe("سلام");
+    }
+  });
+
+  it("scores a stretched word as the word", () => {
+    expect(wordAccuracy("مرسی مامان", rules.transliterate("merciii maman").text)).toEqual({ correct: 2, total: 2 });
+  });
+});
+
+describe("loanwords", () => {
+  const engines = () => [rules, ...(model ? [model, hybrid!] : [])];
+
+  it("writes the table's Persian on every tier", () => {
+    for (const engine of engines()) {
+      for (const [input, expected] of [["backup", "بکاپ"], ["cake", "کیک"], ["pizza", "پیتزا"], ["email", "ایمیل"],
+        ["message", "مسیج"], ["instagram", "اینستاگرام"]] as const) {
+        expect(engine.transliterate(input).text, input).toBe(expected);
+      }
+    }
+  });
+
+  it("reads Persian endings on a table stem, written solid", () => {
+    for (const [input, expected] of [["laptopam", "لپتاپم"], ["postamo", "پستمو"], ["storyasho", "استوریاشو"],
+      ["linketo", "لینکتو"], ["oki", "اوکی"]] as const) {
+      expect(rules.transliterate(input).text, input).toBe(expected);
+    }
+  });
+
+  it("lets position choose the final e: ezafe mid-phrase, copula at the end", () => {
+    for (const engine of engines()) {
+      expect(engine.transliterate("laptope man").text).toBe("لپتاپ من");
+      expect(engine.transliterate("laptope").text).toBe("لپتاپه");
+    }
+  });
+
+  it("keeps the detached ending as typed (mixed-004)", () => {
+    for (const engine of engines()) expect(engine.transliterate("email et ro befrest").text).toBe("ایمیل ات رو بفرست");
+  });
+
+  it("stays English among English words", () => {
+    expect(rules.transliterate("google chrome").text).toBe("google chrome");
+    expect(rules.transliterate("tu google bezan").text).toBe("تو گوگل بزن");
+  });
+
+  it("leaves Finglish homographs alone", () => {
+    expect(rules.transliterate("bad").text).toBe(rules.transliterate("bad", { forceConvert: ["bad"] }).text);
+    expect(rules.transliterate("name").text).toBe("نامه");
+    expect(rules.transliterate("mast").text).toBe("ماست");
+  });
+
+  it("still lets protect and forceConvert win", () => {
+    expect(rules.transliterate("pizza", { protect: ["pizza"] }).text).toBe("pizza");
+    expect(rules.transliterate("google chrome", { forceConvert: ["google"] }).text).toBe("گوگل chrome");
   });
 });
 

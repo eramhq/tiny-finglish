@@ -52,6 +52,14 @@ is in `alternatives`. The headline is strict word accuracy against
 of `expected` and `alternatives`, and that tier is the chat-dev column in
 `sweep.ts`.
 
+**A stretch folds to one letter when scoring**, on both sides (`splitWords` in
+`src/metrics.ts`): three or more of one Persian letter, مرسیییی, count as
+مرسی. The engine writes a typed stretch back (`merciii` → مرسییی, see
+`src/stretch.ts`) and the references drop it, so without the fold keeping the
+emphasis would cost a word. It is a metric correction, measured on its own
+before the engine handled stretches: dev and fixtures 0.0, chat-dev +0.2 to
++0.3 (AI-typed), where the engines already wrote `merciii` as مرسییی.
+
 ## Leakage
 
 `chat-dev.jsonl` and `chat-test.jsonl` are in `EVALUATION_FILES`

@@ -9,6 +9,34 @@ as a result, and what remains genuinely open.
 
 ---
 
+## 0b. September 2026 — stretched words and loanwords
+
+Full record in the README's round section and `data/provenance/loanwords.json`.
+
+* **Stretched words are read without the stretch and written back with it**
+  (`src/stretch.ts`), and the metric folds a stretch to one letter. Chat-dev
+  has four stretched words, so this is worth +0.1 to +0.3 there (AI-typed) and
+  nothing elsewhere; it is correctness, not a score.
+* **A 445-word loanword table** (`src/loan.ts`, written by Claude, reviewed by
+  Claude and luna, then a mechanical guard) moved chat-dev +3.1 to +3.6 on
+  every tier with dev and the fixtures up slightly and gold flat. Chat-test
+  gained +0.6 to +1.1. `mixed-004` (`email et ro befrest`) passes.
+* **It costs 4.8 KiB of JS**, more than the 2–3 KiB estimated, because the
+  table is bundled for the rules-only tier.
+
+Closed from 0a's list: items 1 (English-spelled loanwords) and 2 (emphasis
+doubling). Still open from this round:
+
+1. **The guard is crude.** It drops a loanword when the engine reads its
+   letters as a table word above a frequency of 0.25, which keeps `love` and
+   `bus` Finglish but also loses `file`, `delete` and `battery`. A guard that
+   knew how a Finglish typist would spell the colliding word (`fil`, not
+   `file`) could keep them.
+2. **Medial stretches** (`salaaaam`) collapse and are not written back.
+3. **`pm`, `dm` and other chat abbreviations** are not in the table.
+4. Still: the colloquial object marker on native words (`dishabo`), texting
+   abbreviations (`mrc`), and a human-typed chat set.
+
 ## 0a. September 2026 — the chat round
 
 Full record in `docs/llm-work.md` §8 and `data/chat/README.md`.

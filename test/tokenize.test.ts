@@ -84,9 +84,46 @@ describe("tokenize", () => {
   });
 
   it("protects English words that Finglish cannot produce", () => {
-    for (const word of ["the", "through", "meeting", "settings", "whatever"]) {
+    for (const word of ["the", "through", "settings", "whatever"]) {
       expect(tokenize(word)[0]!.kind, `${word} should be protected`).toBe("protected");
     }
+  });
+
+  it("reads a stretched word without its stretch", () => {
+    expect(kinds("pleaseee")).toEqual(["protected:english"]);
+    expect(kinds("merciii")).toEqual(["word"]);
+  });
+
+  it("converts a loanword-table word the English list would protect", () => {
+    // `pizza`, `email` and `meeting` are in ENGLISH_WORDS; the table wins.
+    for (const word of ["pizza", "email", "meeting", "instagram", "laptopam"]) {
+      expect(tokenize(word)[0]!.kind, `${word} should convert`).toBe("word");
+      expect(tokenize(word)[0]!.loanword, word).toBe(true);
+    }
+    // `bad` and `name` are Finglish homographs; the build guard keeps them out.
+    for (const word of ["bad", "name", "mast"]) expect(tokenize(word)[0]!.loanword, word).toBeUndefined();
+  });
+
+  it("keeps a table word English among English words", () => {
+    expect(protectedText("open google chrome")).toEqual(["google", "chrome"]);
+    expect(protectedText("send the backup")).toEqual(["the", "backup"]);
+    // Repeats to a fixed point: `download` is next to `google` only once
+    // `google` has gone back to English.
+    expect(protectedText("download google chrome")).toEqual(["download", "google", "chrome"]);
+    // Finglish neighbours leave it converted.
+    expect(protectedText("tu google bezan")).toEqual([]);
+    // Two table words side by side are neither of them English.
+    expect(protectedText("pizza burger")).toEqual([]);
+    expect(protectedText("pizza coffee")).toEqual(["pizza", "coffee"]);
+  });
+
+  it("lets protect, forceConvert and a mid-sentence capital outrank the table", () => {
+    expect(tokenize("pizza", { protect: ["pizza"] })[0]!.kind).toBe("protected");
+    expect(kinds("farda ba Google meeting daram")).toEqual(
+      ["word", "space", "word", "space", "protected:english", "space", "protected:english", "space", "word"]);
+    // Converted, and never reverted: `chrome` next to it does not matter.
+    const forced = tokenize("google chrome", { forceConvert: ["google"] });
+    expect(forced[0]!.kind).toBe("word");
   });
 
   it("honours protect and forceConvert overrides", () => {

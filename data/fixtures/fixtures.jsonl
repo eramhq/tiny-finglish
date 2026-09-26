@@ -138,7 +138,7 @@
 {"id": "mixed-001", "category": "mixed", "input": "salam, man emrooz miram Muscat", "expected": "سلام، من امروز میرم Muscat", "alternatives": [], "notes": "The plan's worked example. Muscat is capitalized mid-sentence, so it is preserved."}
 {"id": "mixed-002", "category": "mixed", "input": "man React kar mikonam", "expected": "من React کار می‌کنم", "alternatives": [], "notes": "Framework name preserved."}
 {"id": "mixed-003", "category": "mixed", "input": "in link ro bebin", "expected": "این لینک رو ببین", "alternatives": [], "notes": "`link` is a Persian loanword and should convert."}
-{"id": "mixed-004", "category": "mixed", "input": "email et ro befrest", "expected": "ایمیل ات رو بفرست", "alternatives": [], "notes": "KNOWN LIMITATION: `email` is in the English list, so it is preserved rather than converted to ایمیل."}
+{"id": "mixed-004", "category": "mixed", "input": "email et ro befrest", "expected": "ایمیل ات رو بفرست", "alternatives": [], "notes": "`email` is in the English list; the loanword table (`src/loan.ts`) converts it to ایمیل, and the detached `et` stays its own word, as typed. Was a known limitation until the loanword round."}
 {"id": "mixed-005", "category": "mixed", "input": "farda ba Google meeting daram", "expected": "فردا با Google meeting دارم", "alternatives": []}
 {"id": "mixed-006", "category": "mixed", "input": "az iPhone estefade mikonam", "expected": "از iPhone استفاده می‌کنم", "alternatives": [], "notes": "camelCase product name."}
 {"id": "mixed-007", "category": "mixed", "input": "Ali be Tehran raft", "expected": "علی به تهران رفت", "alternatives": [], "notes": "Persian proper nouns must convert even though capitalized — they are in the homograph override list."}
@@ -165,7 +165,7 @@
 {"id": "adversarial-001", "category": "adversarial", "input": "", "expected": "", "alternatives": [], "notes": "Empty input must not throw."}
 {"id": "adversarial-002", "category": "adversarial", "input": "   ", "expected": "   ", "alternatives": [], "notes": "Whitespace preserved exactly."}
 {"id": "adversarial-003", "category": "adversarial", "input": "!!!", "expected": "!!!", "alternatives": [], "notes": "Punctuation-only; ! has no Persian variant."}
-{"id": "adversarial-004", "category": "adversarial", "input": "aaaaaaa", "expected": "اااااا", "alternatives": [], "notes": "Degenerate repetition; any stable output is acceptable, it must not hang."}
+{"id": "adversarial-004", "category": "adversarial", "input": "aaaaaaa", "expected": "آااااا", "alternatives": [], "notes": "Degenerate repetition; any stable output is acceptable, it must not hang. Since the stretch round: the run collapses to `aa` (آ) and is written back, capped at six letters, آ stretching as ا."}
 {"id": "adversarial-005", "category": "adversarial", "input": "kh", "expected": "خ", "alternatives": [], "notes": "A bare digraph."}
 {"id": "adversarial-006", "category": "adversarial", "input": "SALAM", "expected": "SALAM", "alternatives": [], "notes": "KNOWN LIMITATION: ALLCAPS matches the identifier pattern and is preserved. Someone shouting gets no conversion.", "expectAction": "copy"}
 {"id": "adversarial-007", "category": "adversarial", "input": "Salam", "expected": "سلام", "alternatives": [], "notes": "Sentence-initial capital still converts."}
@@ -226,3 +226,16 @@
 {"id": "chat-014", "category": "chat", "input": "ok bashe", "expected": "اوکی باشه", "alternatives": [], "notes": "`ok` is chat Persian here, not English."}
 {"id": "chat-015", "category": "chat", "input": "che khabara", "expected": "چه خبرا", "alternatives": [], "notes": "Chat formula."}
 {"id": "chat-016", "category": "chat", "input": "salam khubi?", "expected": "سلام خوبی؟", "alternatives": [], "notes": "`u` for و in a greeting."}
+{"id": "chat-017", "category": "chat", "input": "khubiiii", "expected": "خوبیییی", "alternatives": [], "notes": "Stretch: converted as `khubi`, and the four typed i put back on the ی (`src/stretch.ts`). Scored with the stretch folded, so خوبی matches too."}
+{"id": "chat-018", "category": "chat", "input": "bashee", "expected": "باشه", "alternatives": [], "notes": "A run of two is a spelling, not a stretch, and is left alone."}
+{"id": "chat-019", "category": "chat", "input": "hmmm", "expected": "هممم", "alternatives": [], "notes": "A consonant stretch on a consonant is kept."}
+{"id": "chat-020", "category": "chat", "input": "salaaaam", "expected": "سلام", "alternatives": [], "notes": "A stretch in the middle of a word collapses (`aaaa` to `aa`) and is not written back."}
+{"id": "chat-021", "category": "chat", "input": "laptopam kharab shode", "expected": "لپتاپم خراب شده", "alternatives": [], "notes": "Loanword stem plus the possessive: the table has `laptop` (`src/loan.ts`); letter by letter it was لپتپم."}
+{"id": "chat-022", "category": "chat", "input": "storyamo didi?", "expected": "استوریامو دیدی؟", "alternatives": [], "notes": "Loanword stem plus plural, possessive and object marker, written solid."}
+{"id": "chat-023", "category": "chat", "input": "cake khordi?", "expected": "کیک خوردی؟", "alternatives": [], "notes": "English spelling of a loanword; letter by letter it was کاک."}
+{"id": "chat-024", "category": "chat", "input": "tu instagram didamesh", "expected": "تو اینستاگرام دیدمش", "alternatives": [], "notes": "One of the capped list of brands converted in chat; `instagram` was copied as English."}
+{"id": "chat-025", "category": "chat", "input": "google kon", "expected": "گوگل کن", "alternatives": [], "notes": "Listed brand, among Finglish words."}
+{"id": "chat-026", "category": "chat", "input": "download google chrome", "expected": "download google chrome", "alternatives": [], "notes": "A table word stays English among English words: `chrome` is English, so `google` is, and then `download`."}
+{"id": "chat-027", "category": "chat", "input": "laptope man kharabe", "expected": "لپتاپ من خرابه", "alternatives": ["لپتاپه من خرابه"], "notes": "Loanword plus the ezafe `e`: bare mid-phrase, لپتاپه only at a clause end."}
+{"id": "chat-028", "category": "chat", "input": "pizza sefaresh bedim?", "expected": "پیتزا سفارش بدیم؟", "alternatives": [], "notes": "`pizza` was in the English list and copied."}
+{"id": "chat-029", "category": "chat", "input": "linketo befrest", "expected": "لینکتو بفرست", "alternatives": [], "notes": "Loanword stem plus possessive and object marker."}

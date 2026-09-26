@@ -27,6 +27,12 @@
  * matters more than the average; and loanwords the rules would misspell
  * (`download` would become دونلد, `email` امیل), because a protected English
  * word beats a wrong Persian one.
+ *
+ * **The loanword table outranks this list** (`src/loan.ts`). A word in both —
+ * `email`, `download`, `pizza`, and a capped list of chat brands such as
+ * `instagram` and `google` — converts to the table's Persian, unless the
+ * words next to it are English (`open google chrome`), it is capitalized mid-
+ * sentence, or the caller protects it. Everything else here is copied as before.
  */
 export const ENGLISH_WORDS: ReadonlySet<string> = new Set(
   `the for are but not you all any can had her was one our out day get has him his how its may new now old see two who boy did she use way she

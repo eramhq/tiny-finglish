@@ -112,11 +112,25 @@ export function acceptedWordAccuracy(
 const FOLDED_MARKS = /[.,!?;:()[\]{}"'\-\u060C\u061B\u061F\u00AB\u00BB\u2014\u2013\u2026]/gu;
 
 /**
+ * Three or more of one Persian letter: a chat stretch, مرسیییی. No Persian
+ * word spells a letter three times running, so this never merges two words.
+ */
+const STRETCH = /(?=\p{Script=Arabic})(\p{L})\1{2,}/gu;
+
+/**
  * Split into comparable words, treating ZWNJ and punctuation as separators.
  *
  * Marks fold to a space rather than to nothing, so a glued `نه،میخام` splits
  * into the two words it represents instead of fusing into one that matches
  * neither.
+ *
+ * **A stretch folds to one letter**, on both sides: مرسیییی and مرسی are one
+ * word, emphasised. The engine writes the stretch back when the typist
+ * stretched (`src/stretch.ts`) and the chat references mostly drop it, so
+ * without the fold keeping the emphasis would cost a word. It is a metric
+ * correction and was measured as one, alone, on the engine before stretches
+ * were handled: 0.0 on dev and the fixtures, +0.2 to +0.3 on chat-dev
+ * (AI-typed), where the engines already wrote `merciii` as مرسییی.
  *
  * Exported so that anything defining a rule *about* the headline metric — the
  * CER threshold that quarantined `data/gold/gold-misaligned.jsonl`, say — can
@@ -126,6 +140,7 @@ export function splitWords(text: string): string[] {
   return text
     .replace(new RegExp(ZWNJ, "gu"), " ")
     .replace(FOLDED_MARKS, " ")
+    .replace(STRETCH, "$1")
     .split(/\s+/)
     .filter(Boolean);
 }

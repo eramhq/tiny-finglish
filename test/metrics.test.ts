@@ -43,6 +43,15 @@ describe("splitWords", () => {
     expect(splitWords("۱۲۳ تا")).toEqual(["۱۲۳", "تا"]);
     expect(splitWords("سال 1400")).toEqual(["سال", "1400"]);
   });
+
+  it("folds a chat stretch of three or more letters to one", () => {
+    expect(splitWords("مرسیییی عزیزم")).toEqual(["مرسی", "عزیزم"]);
+    expect(splitWords("هممم")).toEqual(["هم"]);
+    expect(wordAccuracy("مرسی", "مرسیییی")).toEqual({ correct: 1, total: 1 });
+    // A doubled letter is a spelling, and digits are not letters.
+    expect(splitWords("کجایی")).toEqual(["کجایی"]);
+    expect(splitWords("۱۰۰۰")).toEqual(["۱۰۰۰"]);
+  });
 });
 
 describe("wordAccuracy", () => {

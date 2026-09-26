@@ -6,8 +6,11 @@ Finglish input
       v
 [1] Tokenizer + protected-span detector        deterministic, no model
       |    URLs, emails, @mentions, #hashtags, numbers, code, likely-English
-      |    pass through untouched
+      |    pass through untouched; loanword-table words (pizza, laptopam)
+      |    convert unless their neighbours are English
       v
+    stretch collapsed (merciiii -> merci), loanword table first; per-word memo
+      |
 [2] Neural grapheme transducer                 the learned core
       |    per input character -> one label from the Persian grapheme set
       |    (includes the empty label for deletion, and multi-char outputs)
@@ -27,7 +30,10 @@ Best output + alternatives + confidence + source spans
 ```
 
 Steps [1] and [5], the rule baseline and the per-word memo live in
-`src/pipeline.ts`, which knows nothing about the model. `src/index.ts` extends
+`src/pipeline.ts`, which knows nothing about the model. So do the two things
+done to a word before any engine sees it: a stretch is collapsed and written
+back afterwards (`src/stretch.ts`), and a loanword-table hit is put first at
+probability 0.9 (`src/loan.ts`). Both sit in front of every tier. `src/index.ts` extends
 it and fills in one method; `src/rules-engine.ts` extends it and fills in
 nothing, which is the `tiny-finglish/rules` entry point. The split is what makes
 that entry 6.7 KiB Brotli against 9.1 for the full one — `index.ts` builds a

@@ -9,6 +9,8 @@
  */
 
 import { englishness, FINGLISH_HOMOGRAPHS } from "./english.ts";
+import { isLoanword } from "./loan.ts";
+import { unstretch } from "./stretch.ts";
 import type { CopyReason } from "./types.ts";
 
 export type TokenKind = "word" | "space" | "punct" | "protected";
@@ -20,6 +22,8 @@ export interface Token {
   end: number;
   /** Set when `kind === "protected"`. */
   reason?: CopyReason;
+  /** A loanword-table word (`loan.ts`), bare or with Persian endings. */
+  loanword?: boolean;
 }
 
 export interface TokenizeOptions {
@@ -108,6 +112,7 @@ export function tokenize(input: string, options: TokenizeOptions = {}): Token[] 
         atSentenceStart: isAtSentenceStart(tokens),
       });
       push(tokens, text, decision ? "protected" : "word", i, decision ?? undefined);
+      if (!decision && !forceSet.has(lower) && isLoanword(unstretch(lower).base)) tokens.at(-1)!.loanword = true;
       i += text.length;
       continue;
     }
@@ -132,7 +137,40 @@ export function tokenize(input: string, options: TokenizeOptions = {}): Token[] 
     i += cp.length;
   }
 
+  guardLoanwords(tokens);
   return tokens;
+}
+
+/**
+ * A loanword stays English among English words.
+ *
+ * The table overrides the English detector, which is right in `tu instagram
+ * pm bede` and wrong in `open google chrome` or `send the backup`: there the
+ * words around it say the whole phrase is English. So a table word next to a
+ * word the detector protects as English — across whitespace only — is
+ * protected again, and that repeats until nothing changes, so `download the
+ * backup file` stays English end to end. A word the caller asked to convert
+ * (`forceConvert`) is never flagged, so it is never reverted.
+ */
+function guardLoanwords(tokens: Token[]): void {
+  const english = (t: Token | undefined) => t?.kind === "protected" && t.reason === "english";
+  const neighbour = (i: number, step: 1 | -1): Token | undefined => {
+    for (let j = i + step; j >= 0 && j < tokens.length; j += step) {
+      if (tokens[j]!.kind !== "space") return tokens[j];
+    }
+    return undefined;
+  };
+  for (let changed = true; changed;) {
+    changed = false;
+    tokens.forEach((token, i) => {
+      if (!token.loanword || token.kind !== "word") return;
+      if (english(neighbour(i, -1)) || english(neighbour(i, 1))) {
+        token.kind = "protected";
+        token.reason = "english";
+        changed = true;
+      }
+    });
+  }
 }
 
 interface ClassifyContext {
@@ -141,19 +179,31 @@ interface ClassifyContext {
   atSentenceStart: boolean;
 }
 
-/** Returns a `CopyReason` to protect the word, or `null` to convert it. */
-function classifyWord(text: string, lower: string, ctx: ClassifyContext): CopyReason | null {
-  if (ctx.forceSet.has(lower)) return null;
-  if (ctx.protectSet.has(lower)) return "english";
+/**
+ * Returns a `CopyReason` to protect the word, or `null` to convert it.
+ *
+ * A loanword-table word (`loan.ts`) is converted even when the English list or
+ * `englishness` would protect it: `pizza`, `email` and `instagram` mean پیتزا,
+ * ایمیل and اینستاگرام in a Finglish message. `protect` and a mid-sentence
+ * capital still win, and `guardLoanwords` puts it back among English words.
+ * The detector reads a stretched word without its stretch (`stretch.ts`), so
+ * `pleaseee` is still English.
+ */
+function classifyWord(text: string, raw: string, ctx: ClassifyContext): CopyReason | null {
+  if (ctx.forceSet.has(raw)) return null;
+  if (ctx.protectSet.has(raw)) return "english";
+  const lower = unstretch(raw).base;
 
   // A capitalized token that is not sentence-initial is a proper noun far more
   // often than it is capitalized Finglish. This is what keeps `Muscat` intact
   // in `salam, man emrooz miram Muscat`. Known Finglish words override it,
-  // because plenty of people capitalize `Salam`.
+  // because plenty of people capitalize `Salam`. It also outranks the loanword
+  // table: `ba Google meeting daram` capitalized the brand on purpose.
   const isCapitalized = /^[A-Z][a-z]/.test(text);
   if (isCapitalized && !ctx.atSentenceStart && !FINGLISH_HOMOGRAPHS.has(lower)) {
     return "english";
   }
+  if (isLoanword(lower)) return null;
 
   return englishness(lower) >= ENGLISH_THRESHOLD ? "english" : null;
 }
