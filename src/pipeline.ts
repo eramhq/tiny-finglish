@@ -19,7 +19,7 @@
 import { RuleBaseline, SCORING, type ScoringParams } from "./baseline.ts";
 import { bigramScore, type BigramTable } from "./bigram.ts";
 import { type FrequencyTable } from "./frequency.ts";
-import { loanwordSpellings } from "./loan.ts";
+import { loanwordSpellings, POSSESSIVE_AFTER_CONSONANT, POSSESSIVE_AFTER_VOWEL } from "./loan.ts";
 import { normalize } from "./normalize.ts";
 import { restretch, unstretch } from "./stretch.ts";
 import { tokenize, type Token } from "./tokenize.ts";
@@ -310,9 +310,9 @@ export abstract class Pipeline {
     // the model and hybrid tiers get it too. The model tier is where it matters
     // most: v7 writes `salam` as سالم without it.
     const generated = this.convertWord(key, wide);
-    const candidates = withLoanword(key, this.vowels
+    const candidates = this.objectMarker(key, withLoanword(key, this.vowels
       ? vowelPass(key, generated, this.vowels, this.scoring.vowelAgreement)
-      : generated);
+      : generated), opts);
 
     if (this.cache.size >= this.cacheSize) {
       // Cheap FIFO eviction. A true LRU costs more bookkeeping than it saves at
@@ -322,6 +322,56 @@ export abstract class Pipeline {
     }
     this.cache.set(key, candidates);
     return candidates;
+  }
+
+  /**
+   * The colloquial object marker, `-o`: `dishabo` دیشبو, `benzino` بنزینو,
+   * `tavalodesho` تولدشو, `pulamo` پولمو.
+   *
+   * Every engine tended to lose it: the word is not in any table, the nearest
+   * table word is the bare stem, and the stem wins — `dishabo` came out as
+   * دیشب, which is the commonest single error left in chat-dev. A typed final
+   * `o` is written و in Persian, so when the best candidate does not end in و
+   * this reads the word as a stem, an optional possessive (`am`/`et`/`esh`…,
+   * or `m`/`t`/`sh`… after a vowel, as in `loan.ts`) and the `o`, converts the
+   * stem on its own, and puts stem + ending + و first when the stem converts to
+   * a frequency-table word. Of several readings, the one whose stem is the
+   * commonest word wins (`namato` is نام + ت + و, not نعمت + و).
+   *
+   * It needs the frequency table, so the no-data tier does without. A best
+   * candidate that already ends in و is left alone: the engine read the `o`,
+   * right or wrong, and a stem guess would only replace one spelling with
+   * another. So is one ending in ع, whose vowel a typed `o` often is: `tanavo`
+   * is تنوع, not تنوعو. What it cannot tell apart is a conjunction glued on —
+   * `resturano` for رستوران و, one of dev's two misfires.
+   */
+  private objectMarker(key: string, candidates: Candidate[], opts: TransliterateOptions): Candidate[] {
+    const frequency = this.frequency;
+    const top = candidates[0];
+    if (!frequency || !top || key.length < 4 || !/[^o]o$/.test(key)) return candidates;
+    if (top.reason === "loanword" || /[وع]$/u.test(top.output)) return candidates;
+    const body = key.slice(0, -1);
+    let best: { output: string; score: number; reason: string } | undefined;
+    const endings: Array<[string, string]> = [["", ""], ...Object.entries(POSSESSIVE_AFTER_CONSONANT),
+      ...Object.entries(POSSESSIVE_AFTER_VOWEL)];
+    for (const [typed, persian] of endings) {
+      if (!body.endsWith(typed)) continue;
+      const stem = body.slice(0, body.length - typed.length);
+      if (stem.length < 2) continue;
+      const vowelStem = /[aeiou]$/.test(stem);
+      if (typed && (typed in POSSESSIVE_AFTER_VOWEL) !== vowelStem) continue;
+      const reading = this.convertBase(stem, opts)[0];
+      const score = reading ? frequency.get(reading.output.replaceAll(ZWNJ, "")) ?? 0 : 0;
+      if (!reading || score === 0 || (best && best.score >= score)) continue;
+      best = { output: `${reading.output}${persian}و`, score, reason: `object marker on ${reading.output}` };
+    }
+    if (!best || top.output === best.output) return candidates;
+    const rest = candidates.filter((c) => c.output !== best!.output);
+    const total = rest.reduce((sum, c) => sum + c.probability, 0) || 1;
+    return [
+      { output: best.output, probability: OBJECT_MARKER_SHARE, reason: best.reason },
+      ...rest.map((c) => ({ ...c, probability: round4(((1 - OBJECT_MARKER_SHARE) * c.probability) / total) })),
+    ];
   }
 
   protected convertWithRules(word: string, opts: TransliterateOptions): Candidate[] {
@@ -583,6 +633,15 @@ export abstract class Pipeline {
     return out;
   }
 }
+
+/**
+ * The probability `objectMarker`'s reading takes; the engine's list shares the
+ * rest. It has to clear the lexicon tie-break, which swaps an unattested best
+ * candidate for an attested one within 0.25 — at 0.6 it put دیشب back over
+ * دیشبو. Swept on chat-dev and dev: 0.7, 0.8 and 0.9 score the same on every
+ * tier, and 0.8 is the middle.
+ */
+const OBJECT_MARKER_SHARE = 0.8;
 
 /**
  * The probability a loanword-table hit takes (`loan.ts`). The engine's own

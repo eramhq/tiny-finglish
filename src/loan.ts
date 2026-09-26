@@ -19,32 +19,42 @@
  *
  * Endings are only tried on a stem that is in the table, and the fewest
  * endings win (`laptopam` is لپتاپم, not لپتاپام).
+ *
+ * **Texting abbreviations** (`mrc` مرسی, `bgo` بگو) are a second table in the
+ * same module, built and guarded the same way, and matched exactly.
  */
 
-import { LOANWORDS } from "./loanwords.ts";
+import { ABBREVIATIONS, LOANWORDS } from "./loanwords.ts";
 
 let table: Map<string, string> | undefined;
+let abbreviations: Map<string, string> | undefined;
+
+function parse(pairs: string): Map<string, string> {
+  const out = new Map<string, string>();
+  for (const line of pairs.split("\n")) {
+    const space = line.indexOf(" ");
+    if (space > 0) out.set(line.slice(0, space), line.slice(space + 1));
+  }
+  return out;
+}
 
 function loanTable(): Map<string, string> {
-  if (!table) {
-    table = new Map();
-    for (const line of LOANWORDS.split("\n")) {
-      const space = line.indexOf(" ");
-      if (space > 0) table.set(line.slice(0, space), line.slice(space + 1));
-    }
-  }
-  return table;
+  return (table ??= parse(LOANWORDS));
 }
 
 const PLURAL: Readonly<Record<string, string>> = { a: "ا", ha: "ها" };
 
-/** Possessive endings after a consonant, then after a vowel, to their Persian. */
-const POSSESSIVE_AFTER_CONSONANT: Readonly<Record<string, string>> = {
+/**
+ * Possessive endings after a consonant, then after a vowel, to their Persian.
+ * Shared with `Pipeline.objectMarker`, which reads the same endings on native
+ * words.
+ */
+export const POSSESSIVE_AFTER_CONSONANT: Readonly<Record<string, string>> = {
   am: "م", at: "ت", et: "ت", ash: "ش", esh: "ش",
   amun: "مون", emun: "مون", atun: "تون", etun: "تون", ashun: "شون", eshun: "شون",
   amoon: "مون", emoon: "مون", atoon: "تون", etoon: "تون", ashoon: "شون", eshoon: "شون",
 };
-const POSSESSIVE_AFTER_VOWEL: Readonly<Record<string, string>> = {
+export const POSSESSIVE_AFTER_VOWEL: Readonly<Record<string, string>> = {
   m: "م", t: "ت", sh: "ش", mun: "مون", tun: "تون", shun: "شون", moon: "مون", toon: "تون", shoon: "شون",
 };
 
@@ -60,6 +70,10 @@ export function isLoanword(word: string): boolean {
  * `undefined` when it is not a table word with or without endings.
  */
 export function loanwordSpellings(word: string): string[] | undefined {
+  // Texting abbreviations (`mrc` مرسی) match exactly and take no endings: a
+  // skeleton plus an ending is too often an ordinary word.
+  const abbreviation = (abbreviations ??= parse(ABBREVIATIONS)).get(word);
+  if (abbreviation) return [abbreviation];
   const words = loanTable();
   const bare = words.get(word);
   if (bare) return [bare];

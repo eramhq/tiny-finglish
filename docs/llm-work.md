@@ -349,3 +349,24 @@ table is LLM output, reviewed the usual way, and recorded in
   table word of frequency ≥ 0.25 that is not the entry: 29 drops, among them
   `love` (لو) and `short` (شرط), and some real loanwords, `file` (فیل) and
   `delete` (دلت). 445 are built.
+
+## 10. Texting abbreviations — luna writes, both families review
+
+`mrc`, `slm`, `nmdnm`: 150 entries written by luna (gpt-5.6-luna, xhigh) with
+`abbreviations-write.md`. luna, not Claude, because the chat sets were typed
+by Claude and a Claude-written list could simply agree with that typist.
+Reviewed with `abbreviations-review.md` by a Claude subagent and by luna 6
+(gpt-6-luna, xhigh; a first luna 5.6 review was stopped and discarded when the
+user asked for luna 6). The families disagreed more than on any table so far:
+Claude accepted 77, luna 138, both 73. Claude's rejects were mostly
+ambiguity (`khst` خسته or خواست, `mshd` میشد or مشهد) and skeletons it had not
+seen typed (`mmnon`, `dltng`). Of the 73, 14 English abbreviations are not
+built because they translate (`idk` → نمیدونم), and the guard of §9, with
+the corpus-evidence rule, drops 4 more (`drm`, `msh`, `asln`, `bzar`). 55
+are built. Everything is in `data/lexicon/abbreviations.tsv` and
+`data/provenance/abbreviations.json`.
+
+The loanword guard (§9) was also changed this round: a collision now needs
+evidence from the LLM-typed corpus (the colliding word typed at least 10
+times, never with the loanword's spelling) before the loanword is kept. It
+brought back 11 loanwords; the review verdicts are unchanged.

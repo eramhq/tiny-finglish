@@ -9,6 +9,27 @@ as a result, and what remains genuinely open.
 
 ---
 
+## 0c. September 2026 — object marker, abbreviations, loanword guard
+
+Record in the README round section. Closed: 0b's item 1 in part (the guard
+now asks the LLM-typed corpus whether typists spell the colliding word that
+way; `file` still lacks evidence), the `-o` object marker on native words,
+and texting skeletons (`mrc`, `nmdnm`). Chat-dev +1.7 / +0.4 / +1.8, gold
++0.1, chat-test +0.9 / 0.0 / +0.9 (AI-typed).
+
+Still open:
+
+1. **The lexicon tie-break undoes the model's own object marker** (`ketabo`:
+   کتابو 0.48 against کتاب 0.37). The tie-break needs a notion of "the typed
+   letters say more than the attested word does".
+2. **Plural + object marker** (`kelidaro` کلیدارو) and a glued conjunction
+   (`resturano` رستوران و) are not read.
+3. **A missing copula ه mid-sentence** (`jadide`, `raygane`) is now the largest
+   chat-dev group after scattered vowel errors.
+4. **Evidence for the guard is thin**: the corpus has few typings of rare
+   colliding words, so `file`, `battery`, `off` stay dropped by default.
+5. Still: a human-typed chat set.
+
 ## 0b. September 2026 — stretched words and loanwords
 
 Full record in the README's round section and `data/provenance/loanwords.json`.

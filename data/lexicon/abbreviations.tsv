@@ -1,0 +1,151 @@
+en	fa	category	claude	luna	claude_reason	luna_reason
+slm	سلام	skeleton	accept	accept		
+khbi	خوبی	skeleton	accept	accept		
+mrc	مرسی	skeleton	accept	accept		
+mmnon	ممنون	skeleton	reject	reject	rarely typed; people write mamnoon or mrc	This exact shortening is uncommon; people usually type mamnoon or mn.
+bkhshd	ببخشید	skeleton	reject	accept	rare; drops the first ب and reads as بخشید	
+bkhsh	ببخش	skeleton	reject	accept	ambiguous with بخش (bakhsh)	
+ltfn	لطفا	skeleton	accept	accept		
+bl	بله	skeleton	reject	reject	not a real abbreviation; people type bale	This is not a common established shorthand for bale.
+ar	آره	skeleton	reject	reject	not typed for آره (people write are/arre); collides with English are	This is not a common established shorthand for are.
+ok	باشه	english	reject	reject	loanword written اوکی in Persian, not an abbreviation for باشه	OK is usually written as اوکی, not باشه.
+pm	پیام خصوصی	english	reject	accept	used as loan پی ام and also time p.m.; پیام خصوصی is not how it is written	
+dm	پیام مستقیم	english	reject	accept	rare in Persian chat, which says دایرکت	
+plz	لطفا	english	accept	accept		
+pls	لطفا	english	accept	accept		
+thx	ممنون	english	accept	accept		
+tnx	ممنون	english	accept	accept		
+ty	ممنون	english	reject	accept	rarely typed by Persian texters	
+np	قابلی نداشت	english	reject	reject	means مشکلی نیست; قابلی نداشت is wrong in most uses	This is not a common Persian chat shorthand for قابلی نداشت.
+sry	ببخشید	english	accept	accept		
+bgo	بگو	skeleton	accept	accept		
+bkn	بکن	skeleton	reject	accept	rarely typed; bokon is already short	
+nkn	نکن	skeleton	accept	accept		
+mikhm	میخوام	skeleton	accept	accept		
+nmikhm	نمیخوام	skeleton	reject	accept	odd half-skeleton form nobody really types	
+mirm	میرم	skeleton	accept	accept		
+nmrm	نمیرم	skeleton	reject	accept	rare; also reads as نمرم (my grade)	
+drm	دارم	skeleton	accept	accept		
+ndrm	ندارم	skeleton	accept	accept		
+nmdnm	نمیدونم	skeleton	accept	accept		
+mdnm	میدونم	skeleton	accept	accept		
+mgm	میگم	skeleton	accept	accept		
+mgi	میگی	skeleton	accept	accept		
+gftm	گفتم	skeleton	accept	accept		
+gfti	گفتی	skeleton	accept	accept		
+gft	گفت	skeleton	accept	accept		
+bkhb	بخواب	skeleton	reject	accept	rarely typed; people write bekhab	
+bmon	بمون	skeleton	accept	accept		
+brw	برو	skeleton	reject	accept	rarely typed; people write boro	
+bgrd	برگرد	skeleton	reject	accept	ambiguous with بگرد (begard)	
+bya	بیا	skeleton	accept	accept		
+msh	میشه	skeleton	accept	accept		
+nmsh	نمیشه	skeleton	accept	accept		
+mkn	میکنی	skeleton	reject	accept	ambiguous: میکنم/میکنی/میکنن/مکان	
+mknm	میکنم	skeleton	accept	accept		
+nmknm	نمیکنم	skeleton	accept	accept		
+mym	میام	skeleton	reject	accept	rarely typed; people write miam	
+mkhay	میخوای	skeleton	reject	accept	rarely typed; people write mikhay	
+mkhd	میخواد	skeleton	reject	accept	rarely typed; people write mikhad	
+nmkhd	نمیخواد	skeleton	reject	accept	rarely typed; people write nemikhad	
+dshtm	داشتم	skeleton	reject	accept	rarely typed	
+chtori	چطوری	skeleton	accept	reject		This is a full Finglish spelling, not an abbreviation.
+chkhbr	چه خبر	skeleton	reject	accept	rarely typed; people write che khabar	
+chnd	چند	skeleton	reject	accept	rarely typed; chand is already short	
+chra	چرا	skeleton	accept	accept		
+kjaei	کجایی	skeleton	accept	reject		This is not a common shorthand spelling; people usually type kojayi or kojaei.
+hmin	همین	skeleton	accept	accept		
+hch	هیچ	skeleton	accept	accept		
+hchvqt	هیچوقت	skeleton	reject	accept	rarely typed	
+aln	الان	skeleton	accept	accept		
+sbh	صبح	skeleton	accept	accept		
+shb	شب	skeleton	accept	accept		
+mshb	امشب	skeleton	reject	accept	rare; drops the initial vowel of emshab	
+fqt	فقط	skeleton	accept	accept		
+vqt	وقت	skeleton	accept	accept		
+agr	اگر	skeleton	accept	accept		
+yn	یعنی	skeleton	reject	accept	rare (people type yni); collides with y/n	
+vli	ولی	skeleton	accept	accept		
+vse	واسه	skeleton	reject	accept	rarely typed; people write vase	
+asln	اصلا	skeleton	accept	accept		
+btr	بهتر	skeleton	accept	accept		
+bshtr	بیشتر	skeleton	accept	accept		
+kmtr	کمتر	skeleton	accept	accept		
+drst	درست	skeleton	accept	accept		
+rst	راست	skeleton	reject	accept	rare; ambiguous with راستی and English reset/rest	
+drgh	دروغ	skeleton	reject	accept	rarely typed	
+khbr	خبر	skeleton	accept	accept		
+fhmdm	فهمیدم	skeleton	accept	accept		
+fhmdi	فهمیدی	skeleton	accept	accept		
+ydm	یادم	skeleton	reject	accept	rarely typed; yadam is already short	
+ydt	یادت	skeleton	reject	accept	rarely typed; yadet is already short	
+ydsh	یادش	skeleton	reject	accept	rarely typed	
+bzar	بذار	skeleton	accept	accept		
+bzn	بزن	skeleton	accept	accept		
+bkhnd	بخند	skeleton	reject	accept	rarely typed	
+gry	گریه	skeleton	reject	accept	rare; collides with English gray/grey	
+drd	درد	skeleton	reject	accept	ambiguous with دارد (darad)	
+khst	خسته	skeleton	reject	accept	ambiguous with خواست (khast) and خست	
+khstm	خستم	skeleton	reject	accept	ambiguous with خواستم (khastam)	
+khshalm	خوشحالم	skeleton	reject	accept	rarely typed	
+nrht	ناراحت	skeleton	accept	accept		
+nrhtm	ناراحتم	skeleton	accept	accept		
+gshnm	گشنمه	skeleton	reject	accept	letters give گشنم, not گشنمه; rare	
+tshnm	تشنمه	skeleton	reject	accept	letters give تشنم, not تشنمه; rare	
+dltng	دلتنگ	skeleton	reject	accept	rarely typed	
+dltngm	دلتنگم	skeleton	reject	accept	rarely typed	
+dlm	دلم	skeleton	accept	accept		
+rhtm	راحتم	skeleton	reject	accept	rarely typed	
+mshghl	مشغول	skeleton	reject	accept	rarely typed	
+mshghlm	مشغولم	skeleton	reject	accept	rarely typed	
+mshkl	مشکل	skeleton	accept	accept		
+bkhyr	بخیر	skeleton	reject	accept	rarely typed; people write bekheir	
+shbkhyr	شب بخیر	skeleton	reject	accept	rarely typed as one run	
+sbhkhyr	صبح بخیر	skeleton	reject	accept	rarely typed as one run	
+khdhfz	خداحافظ	skeleton	accept	accept		
+hnz	هنوز	skeleton	accept	accept		
+dgh	دیگه	skeleton	reject	accept	rare; people type dge or dg	
+hmchi	همه چی	skeleton	reject	accept	rarely typed	
+hme	همه	skeleton	accept	accept		
+bdn	بدون	skeleton	reject	accept	ambiguous with بدن (badan)	
+hchks	هیچکس	skeleton	reject	accept	rarely typed	
+qbl	قبل	skeleton	reject	accept	ambiguous with قبول (qabool)	
+qbln	قبلا	skeleton	accept	accept		
+jdi	جدی	skeleton	accept	accept		
+dqiq	دقیق	skeleton	reject	accept	rarely typed	
+bkhtr	بخاطر	skeleton	reject	accept	rarely typed	
+khd	خود	skeleton	reject	accept	ambiguous with خدا (khoda) and خودش	
+khdm	خودم	skeleton	accept	accept		
+khdt	خودت	skeleton	accept	accept		
+khdsh	خودش	skeleton	accept	accept		
+shm	شما	skeleton	reject	reject	ambiguous with شام (sham) and شم	This can mean شما or the common word شام.
+shdm	شدم	skeleton	accept	accept		
+shdi	شدی	skeleton	accept	accept		
+nshdm	نشدم	skeleton	accept	accept		
+nshd	نشد	skeleton	accept	reject		This can stand for نشد or نشده.
+mshd	میشد	skeleton	reject	reject	ambiguous with مشهد (Mashhad)	This can stand for میشد or میشده.
+shd	شد	skeleton	accept	reject		This can stand for شد or شده.
+shndi	شنیدی	skeleton	reject	accept	rarely typed	
+zd	زود	skeleton	reject	reject	ambiguous with زد (zad)	This can mean زود or زد.
+shyd	شاید	skeleton	accept	accept		
+lol	خنده	english	reject	accept	used as a reaction or written لول; خنده inserts a noun into the sentence	
+lmao	از خنده مردم	english	reject	accept	rarely typed by Persian texters	
+omg	وای	english	reject	accept	means وای خدای من; وای alone is too loose	
+idk	نمیدونم	english	accept	accept		
+btw	راستی	english	accept	accept		
+asap	هرچه زودتر	english	accept	accept		
+brb	الان برمیگردم	english	reject	accept	rarely typed by Persian texters	
+ttyl	بعدا حرف میزنیم	english	reject	accept	rarely typed by Persian texters	
+fyi	جهت اطلاع	english	accept	accept		
+hbd	تولدت مبارک	english	accept	accept		
+gm	صبح بخیر	english	reject	accept	rare in Persian chat; ambiguous (gram, gmail)	
+gn	شب بخیر	english	reject	accept	rarely typed by Persian texters	
+hf	خوش بگذره	english	reject	accept	rarely typed by Persian texters	
+gl	موفق باشی	english	reject	accept	rarely typed outside gaming	
+ily	دوستت دارم	english	reject	accept	rarely typed by Persian texters	
+imo	به نظر من	english	reject	accept	ambiguous with the imo messenger app, widely used in Iran	
+tbh	راستش	english	accept	accept		
+jk	شوخی کردم	english	accept	accept		
+yw	خواهش میکنم	english	reject	accept	rarely typed by Persian texters	
+nvm	بیخیال	english	accept	accept		
+lmk	خبرم کن	english	accept	accept		

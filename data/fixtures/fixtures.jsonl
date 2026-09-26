@@ -239,3 +239,7 @@
 {"id": "chat-027", "category": "chat", "input": "laptope man kharabe", "expected": "لپتاپ من خرابه", "alternatives": ["لپتاپه من خرابه"], "notes": "Loanword plus the ezafe `e`: bare mid-phrase, لپتاپه only at a clause end."}
 {"id": "chat-028", "category": "chat", "input": "pizza sefaresh bedim?", "expected": "پیتزا سفارش بدیم؟", "alternatives": [], "notes": "`pizza` was in the English list and copied."}
 {"id": "chat-029", "category": "chat", "input": "linketo befrest", "expected": "لینکتو بفرست", "alternatives": [], "notes": "Loanword stem plus possessive and object marker."}
+{"id": "chat-030", "category": "chat", "input": "ketabo bede", "expected": "کتابو بده", "alternatives": [], "notes": "The colloquial object marker on a native word: every engine dropped the و (کتاب). `Pipeline.objectMarker` puts stem + و first. The model tier still misses it: its own کتابو loses to the lexicon tie-break."}
+{"id": "chat-031", "category": "chat", "input": "gushimo nadidi?", "expected": "گوشیمو ندیدی؟", "alternatives": [], "notes": "Stem, possessive after a vowel (`m`) and the object marker."}
+{"id": "chat-032", "category": "chat", "input": "slm, chra nayomadi?", "expected": "سلام، چرا نیومدی؟", "alternatives": [], "notes": "Texting skeletons from the abbreviation table (`src/loan.ts`): `slm`, `chra`."}
+{"id": "chat-033", "category": "chat", "input": "nmdnm vqt nadaram", "expected": "نمیدونم وقت ندارم", "alternatives": [], "notes": "Texting skeletons: `nmdnm` was read letter by letter."}

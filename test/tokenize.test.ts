@@ -90,7 +90,7 @@ describe("tokenize", () => {
   });
 
   it("reads a stretched word without its stretch", () => {
-    expect(kinds("pleaseee")).toEqual(["protected:english"]);
+    expect(kinds("thanksss")).toEqual(["protected:english"]);
     expect(kinds("merciii")).toEqual(["word"]);
   });
 

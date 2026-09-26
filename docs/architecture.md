@@ -33,7 +33,10 @@ Steps [1] and [5], the rule baseline and the per-word memo live in
 `src/pipeline.ts`, which knows nothing about the model. So do the two things
 done to a word before any engine sees it: a stretch is collapsed and written
 back afterwards (`src/stretch.ts`), and a loanword-table hit is put first at
-probability 0.9 (`src/loan.ts`). Both sit in front of every tier. `src/index.ts` extends
+probability 0.9 (`src/loan.ts`, which also holds an exact-match table of
+texting skeletons such as `mrc`). After the engine, `Pipeline.objectMarker`
+reads a colloquial `-o` the engine dropped (`dishabo` دیشبو). All of it sits in
+front of or around every tier, never inside the model. `src/index.ts` extends
 it and fills in one method; `src/rules-engine.ts` extends it and fills in
 nothing, which is the `tiny-finglish/rules` entry point. The split is what makes
 that entry 6.7 KiB Brotli against 9.1 for the full one — `index.ts` builds a

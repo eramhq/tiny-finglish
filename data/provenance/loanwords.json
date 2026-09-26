@@ -5,7 +5,7 @@
   "workers": {
     "writers": "Claude Opus 5.5 in-session subagents, 2 shards of 5 categories each (loanwords-write.md, about 45 per category), blind to every evaluation set; write-w1.jsonl 245, write-w2.jsonl 249, 8 cross-shard duplicates dropped",
     "brands": "15 hand-picked chat brands added by the session author as a separate, capped section (category brand)",
-    "reviewers": "a separate Claude Opus 5.5 subagent and Codex CLI gpt-5.6-luna (reasoning xhigh, herdr pane) with loanwords-review.md; built only when both accept",
+    "reviewers": "a separate Claude Opus 5.5 subagent and Codex CLI gpt-5.6-luna (reasoning xhigh, herdr pane) with loanwords-review.md; built only when both accept (luna 5.6 here: later rounds use gpt-6-luna)",
     "brandReReview": "the first pass (review prompt sha256 83b92202dd2eaccf4159454171a34da53de2468cd3275e1bb06c3507417b0334) told reviewers to reject brands, and both rejected all 15; the prompt was amended with a brand section and both families re-reviewed only the brand rows, whose verdicts replace the first pass's"
   },
   "file": "data/lexicon/loanwords.tsv",
@@ -32,216 +32,266 @@
   },
   "guard": {
     "common": 0.25,
-    "dropped": 29,
+    "evidence": 10,
+    "dropped": 18,
     "drops": [
       {
         "en": "file",
         "fa": "فایل",
-        "reason": "finglish",
         "finglish": "فیل",
-        "frequency": 0.341
+        "frequency": 0.341,
+        "typed": 2,
+        "asEntry": 0,
+        "reason": "finglish"
       },
       {
         "en": "folder",
         "fa": "فولدر",
-        "reason": "finglish",
         "finglish": "فولدرو",
-        "frequency": 0.4
+        "frequency": 0.4,
+        "typed": 2,
+        "asEntry": 0,
+        "reason": "finglish"
       },
       {
         "en": "battery",
         "fa": "باتری",
-        "reason": "finglish",
         "finglish": "بطری",
-        "frequency": 0.455
-      },
-      {
-        "en": "delete",
-        "fa": "دیلیت",
-        "reason": "finglish",
-        "finglish": "دلت",
-        "frequency": 0.373
-      },
-      {
-        "en": "bio",
-        "fa": "بیو",
-        "reason": "finglish",
-        "finglish": "بی",
-        "frequency": 0.565
+        "frequency": 0.455,
+        "typed": 4,
+        "asEntry": 0,
+        "reason": "finglish"
       },
       {
         "en": "mocha",
         "fa": "موکا",
-        "reason": "finglish",
         "finglish": "مچ",
-        "frequency": 0.42
+        "frequency": 0.42,
+        "typed": 8,
+        "asEntry": 0,
+        "reason": "finglish"
       },
       {
         "en": "off",
         "fa": "آف",
-        "reason": "finglish",
         "finglish": "اف",
-        "frequency": 0.302
+        "frequency": 0.302,
+        "typed": 6,
+        "asEntry": 0,
+        "reason": "finglish"
       },
       {
         "en": "visa",
         "fa": "ویزا",
-        "reason": "finglish",
         "finglish": "ویس",
-        "frequency": 0.4
+        "frequency": 0.4,
+        "typed": 4,
+        "asEntry": 0,
+        "reason": "finglish"
       },
       {
         "en": "fake",
         "fa": "فیک",
-        "reason": "finglish",
         "finglish": "فک",
-        "frequency": 0.553
+        "frequency": 0.553,
+        "typed": 42,
+        "asEntry": 10,
+        "reason": "finglish"
       },
       {
         "en": "trade",
         "fa": "ترید",
-        "reason": "finglish",
         "finglish": "طرد",
-        "frequency": 0.263
-      },
-      {
-        "en": "jeans",
-        "fa": "جین",
-        "reason": "finglish",
-        "finglish": "جنس",
-        "frequency": 0.475
+        "frequency": 0.263,
+        "typed": 0,
+        "asEntry": 0,
+        "reason": "finglish"
       },
       {
         "en": "short",
         "fa": "شورت",
-        "reason": "finglish",
         "finglish": "شرط",
-        "frequency": 0.376
-      },
-      {
-        "en": "team",
-        "fa": "تیم",
-        "reason": "finglish",
-        "finglish": "طعم",
-        "frequency": 0.553
-      },
-      {
-        "en": "pass",
-        "fa": "پاس",
-        "reason": "finglish",
-        "finglish": "پس",
-        "frequency": 0.678
-      },
-      {
-        "en": "karate",
-        "fa": "کاراته",
-        "reason": "finglish",
-        "finglish": "کرات",
-        "frequency": 0.576
+        "frequency": 0.376,
+        "typed": 2,
+        "asEntry": 0,
+        "reason": "finglish"
       },
       {
         "en": "skate",
         "fa": "اسکیت",
-        "reason": "finglish",
         "finglish": "سکته",
-        "frequency": 0.31
-      },
-      {
-        "en": "resume",
-        "fa": "رزومه",
-        "reason": "finglish",
-        "finglish": "رسوم",
-        "frequency": 0.416
+        "frequency": 0.31,
+        "typed": 0,
+        "asEntry": 0,
+        "reason": "finglish"
       },
       {
         "en": "van",
         "fa": "ون",
-        "reason": "finglish",
         "finglish": "وان",
-        "frequency": 0.345
+        "frequency": 0.345,
+        "typed": 2,
+        "asEntry": 1,
+        "reason": "finglish"
       },
       {
         "en": "garage",
         "fa": "گاراژ",
-        "reason": "finglish",
         "finglish": "گرگ",
-        "frequency": 0.412
+        "frequency": 0.412,
+        "typed": 8,
+        "asEntry": 0,
+        "reason": "finglish"
       },
       {
         "en": "spray",
         "fa": "اسپری",
-        "reason": "finglish",
         "finglish": "سپری",
-        "frequency": 0.408
-      },
-      {
-        "en": "sorry",
-        "fa": "سوری",
-        "reason": "finglish",
-        "finglish": "سری",
-        "frequency": 0.6
-      },
-      {
-        "en": "bye",
-        "fa": "بای",
-        "reason": "finglish",
-        "finglish": "بی",
-        "frequency": 0.565
-      },
-      {
-        "en": "please",
-        "fa": "پلیز",
-        "reason": "finglish",
-        "finglish": "پلاس",
-        "frequency": 0.557
+        "frequency": 0.408,
+        "typed": 8,
+        "asEntry": 0,
+        "reason": "finglish"
       },
       {
         "en": "yes",
         "fa": "یس",
-        "reason": "finglish",
         "finglish": "ویس",
-        "frequency": 0.4
+        "frequency": 0.4,
+        "typed": 4,
+        "asEntry": 0,
+        "reason": "finglish"
       },
       {
         "en": "nice",
         "fa": "نایس",
-        "reason": "finglish",
         "finglish": "نیک",
-        "frequency": 0.431
+        "frequency": 0.431,
+        "typed": 4,
+        "asEntry": 0,
+        "reason": "finglish"
       },
       {
         "en": "mood",
         "fa": "مود",
-        "reason": "finglish",
         "finglish": "موعد",
-        "frequency": 0.314
+        "frequency": 0.314,
+        "typed": 0,
+        "asEntry": 0,
+        "reason": "finglish"
       },
       {
         "en": "love",
         "fa": "لاو",
-        "reason": "finglish",
         "finglish": "لو",
-        "frequency": 0.29
-      },
-      {
-        "en": "bravo",
-        "fa": "براوو",
-        "reason": "finglish",
-        "finglish": "برو",
-        "frequency": 0.541
+        "frequency": 0.29,
+        "typed": 0,
+        "asEntry": 0,
+        "reason": "finglish"
       },
       {
         "en": "ciao",
         "fa": "چائو",
-        "reason": "finglish",
         "finglish": "سیو",
-        "frequency": 0.4
+        "frequency": 0.4,
+        "typed": 2,
+        "asEntry": 0,
+        "reason": "finglish"
+      }
+    ],
+    "cleared": [
+      {
+        "en": "delete",
+        "fa": "دیلیت",
+        "finglish": "دلت",
+        "frequency": 0.373,
+        "typed": 12,
+        "asEntry": 0
+      },
+      {
+        "en": "bio",
+        "fa": "بیو",
+        "finglish": "بی",
+        "frequency": 0.565,
+        "typed": 46,
+        "asEntry": 0
+      },
+      {
+        "en": "jeans",
+        "fa": "جین",
+        "finglish": "جنس",
+        "frequency": 0.475,
+        "typed": 18,
+        "asEntry": 0
+      },
+      {
+        "en": "team",
+        "fa": "تیم",
+        "finglish": "طعم",
+        "frequency": 0.553,
+        "typed": 40,
+        "asEntry": 0
+      },
+      {
+        "en": "pass",
+        "fa": "پاس",
+        "finglish": "پس",
+        "frequency": 0.678,
+        "typed": 196,
+        "asEntry": 0
+      },
+      {
+        "en": "karate",
+        "fa": "کاراته",
+        "finglish": "کرات",
+        "frequency": 0.576,
+        "typed": 40,
+        "asEntry": 0
+      },
+      {
+        "en": "resume",
+        "fa": "رزومه",
+        "finglish": "رسوم",
+        "frequency": 0.416,
+        "typed": 10,
+        "asEntry": 0
+      },
+      {
+        "en": "sorry",
+        "fa": "سوری",
+        "finglish": "سری",
+        "frequency": 0.6,
+        "typed": 92,
+        "asEntry": 0
+      },
+      {
+        "en": "bye",
+        "fa": "بای",
+        "finglish": "بی",
+        "frequency": 0.565,
+        "typed": 46,
+        "asEntry": 0
+      },
+      {
+        "en": "please",
+        "fa": "پلیز",
+        "finglish": "پلاس",
+        "frequency": 0.557,
+        "typed": 78,
+        "asEntry": 0
+      },
+      {
+        "en": "bravo",
+        "fa": "براوو",
+        "finglish": "برو",
+        "frequency": 0.541,
+        "typed": 54,
+        "asEntry": 0
       }
     ]
   },
   "built": {
     "module": "src/loanwords.ts",
-    "entries": 445,
+    "entries": 456,
     "brands": [
       "instagram",
       "telegram",

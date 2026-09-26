@@ -187,7 +187,7 @@ interface ClassifyContext {
  * ایمیل and اینستاگرام in a Finglish message. `protect` and a mid-sentence
  * capital still win, and `guardLoanwords` puts it back among English words.
  * The detector reads a stretched word without its stretch (`stretch.ts`), so
- * `pleaseee` is still English.
+ * `thanksss` is still English.
  */
 function classifyWord(text: string, raw: string, ctx: ClassifyContext): CopyReason | null {
   if (ctx.forceSet.has(raw)) return null;

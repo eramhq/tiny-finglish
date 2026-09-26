@@ -44,15 +44,16 @@ const hybrid = hasWeights ? new Transliterator({ ...shared, model: loadModel()!,
  * and حله and خستم lose to commoner table words (حال, خسته). `ok bashe`
  * (chat-014) passes since the loanword table, which has `ok`. On the model
  * tier `bashee` is باشی: a run of two is not a stretch, so it reaches the model
- * as typed.
+ * as typed. The model tier misses chat-030 (`ketabo`, see the object-marker
+ * tests) and writes نیمدی for `nayomadi` in chat-032.
  */
 const EXACT = {
   rules: ["chat-001", "chat-004", "chat-005", "chat-006", "chat-007", "chat-008", "chat-010", "chat-011",
-    "chat-012", "chat-014", "chat-015", "chat-016", ...range(17, 29)],
+    "chat-012", "chat-014", "chat-015", "chat-016", ...range(17, 33)],
   hybrid: ["chat-001", "chat-004", "chat-005", "chat-007", "chat-008", "chat-010", "chat-011", "chat-012",
-    "chat-014", "chat-015", "chat-016", "chat-006", ...range(17, 29)],
+    "chat-014", "chat-015", "chat-016", "chat-006", ...range(17, 33)],
   model: ["chat-001", "chat-002", "chat-005", "chat-006", "chat-007", "chat-008", "chat-010", "chat-011",
-    "chat-012", "chat-013", "chat-014", "chat-016", "chat-017", ...range(19, 29)],
+    "chat-012", "chat-013", "chat-014", "chat-016", "chat-017", ...range(19, 29), "chat-031", "chat-033"],
 } as const;
 
 function range(from: number, to: number): string[] {
@@ -67,7 +68,7 @@ const SHIP_RULE = [["salam", "سلام"], ["merci", "مرسی"], ["kojaei", "ک�
 
 describe("chat fixtures", () => {
   it("has the chat fixtures to assert", () => {
-    expect(fixtures.size).toBe(29);
+    expect(fixtures.size).toBe(33);
   });
 
   for (const id of EXACT.rules) {
@@ -217,6 +218,77 @@ describe("loanwords", () => {
   it("still lets protect and forceConvert win", () => {
     expect(rules.transliterate("pizza", { protect: ["pizza"] }).text).toBe("pizza");
     expect(rules.transliterate("google chrome", { forceConvert: ["google"] }).text).toBe("گوگل chrome");
+  });
+});
+
+describe("the object marker on native words", () => {
+  it("writes the o the engines used to drop, with a possessive before it", () => {
+    for (const engine of [rules, ...(hybrid ? [hybrid] : [])]) {
+      for (const [input, expected] of [["dishabo", "دیشبو"], ["tavalodesho", "تولدشو"], ["pulamo", "پولمو"],
+        ["namato", "نامتو"], ["gushimo", "گوشیمو"]] as const) {
+        expect(engine.transliterate(input).text, input).toBe(expected);
+      }
+    }
+  });
+
+  it("leaves words that end in o, and a final ع, alone", () => {
+    for (const [input, expected] of [["boro", "برو"], ["khodro", "خودرو"], ["radio", "رادیو"], ["tanavo", "تنوع"]] as const) {
+      expect(rules.transliterate(input).text, input).toBe(expected);
+    }
+  });
+
+  it("needs the frequency table", () => {
+    expect(new RuleTransliterator().transliterate("dishabo").spans[0]!.candidates![0]!.reason).not.toMatch(/object/);
+  });
+
+  /**
+   * The model tier ranks کتابو first itself, and the lexicon tie-break swaps
+   * it for the attested کتاب (0.48 against 0.37, inside its 0.25 margin). The
+   * marker only steps in when the best candidate lacks the و, so it does not
+   * reach this. Pinned where it misses.
+   */
+  it.skipIf(!model)("ketabo is still the bare noun on the model tier", () => {
+    expect(model!.transliterate("ketabo").text).toBe("کتاب");
+  });
+});
+
+describe("the loanword guard's evidence", () => {
+  it("clears a loanword typists never spell the colliding word as", () => {
+    // سری is typed seri/sari 92 times in the LLM-typed corpus, never sorry.
+    for (const [input, expected] of [["sorry", "سوری"], ["team", "تیم"], ["delete", "دیلیت"], ["pass", "پاس"]] as const) {
+      expect(rules.transliterate(input).text, input).toBe(expected);
+    }
+  });
+
+  it("drops one they do, and one with too little evidence", () => {
+    // فک is typed `fake` 10 times in 42; فیل only twice in all.
+    expect(rules.transliterate("fake").text).toBe("فک");
+    expect(rules.transliterate("file").text).toBe("file");
+  });
+});
+
+describe("texting abbreviations", () => {
+  it("writes a reviewed skeleton as its word, on every tier", () => {
+    for (const engine of [rules, ...(model ? [model, hybrid!] : [])]) {
+      for (const [input, expected] of [["mrc", "مرسی"], ["slm", "سلام"], ["nmdnm", "نمیدونم"]] as const) {
+        expect(engine.transliterate(input).text, input).toBe(expected);
+      }
+    }
+  });
+
+  it("matches exactly: no endings on a skeleton", () => {
+    // `khdm` is خودم; `khdmo` is not خودمو from the table, it is whatever the engine reads.
+    expect(rules.transliterate("khdmo").spans[0]!.candidates![0]!.reason).not.toBe("loanword");
+  });
+
+  it("does not translate English abbreviations", () => {
+    for (const input of ["idk", "btw", "thx"]) {
+      expect(rules.transliterate(input).spans[0]!.candidates?.[0]?.reason, input).not.toBe("loanword");
+    }
+  });
+
+  it("leaves ok to the loanword table", () => {
+    expect(rules.transliterate("ok").text).toBe("اوکی");
   });
 });
 
