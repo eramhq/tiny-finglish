@@ -913,20 +913,17 @@ npm run playground            # http://localhost:5173
 
 Three panels, all running in the tab with no server:
 
-* **Try it** — one input, with every span, every candidate the decoder
-  considered, its probability and the reason it was chosen. Preset examples
-  cover the etymological homophones, ZWNJ, protected spans and vowel length.
-  The lexicon-snap tier (§4) is a toggle, so you can see what it would do.
-* **Fixture suite** — all 194 committed fixtures, or the 1,835 untouched gold
-  cases, run in-browser in ~130 ms. Per-category accuracy, copy-span
-  preservation, and **every failure expanded in full** with expected vs. got
-  and the candidate distribution that produced it. Toggling the model off runs
-  the rule baseline instead, so the two are directly comparable.
-* **Scaling curve** — the M2 result the shipped configuration was selected
-  from, and the same model measured against all three evaluation sets.
-
-It is built to show what the model gets wrong. The failure list is the point of
-the page, not an appendix to it.
+* **Convert**: type Finglish on the left, Persian appears on the right as you
+  type. Words the engine was unsure of are underlined; select one to see the
+  other spellings and how likely each is, and swap one in. Switch between
+  rules only, model only and both (the default), and see the conversion time
+  and the download each setup costs.
+* **How accurate is it?**: the three setups scored in the tab on the gold set
+  (typed by people), chat-dev (AI-typed) or the fixtures, with the same
+  scoring as `scripts/run-fixtures.ts`, so the numbers match this README. A
+  checkbox switches to the strict tier. Below, the mistakes one setup made, a
+  few at a time, with the wrong words marked.
+* **What's inside**: download sizes, the conversion steps and speed.
 
 ## Development
 

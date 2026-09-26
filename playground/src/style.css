@@ -1,151 +1,409 @@
+/*
+ * Ink on cool paper; saffron for words the engine is unsure of, pistachio for
+ * right, pomegranate for wrong. The converted Persian is the one large,
+ * calligraphic thing on the page (Noto Naskh Arabic); everything else is
+ * Vazirmatn, which carries both scripts.
+ */
 :root {
-  color-scheme: light dark;
-  --bg: #fbfbfa;
-  --fg: #1a1a18;
-  --muted: #6b6b66;
-  --line: #e2e2dd;
-  --card: #ffffff;
-  --convert: #2563eb;
-  --copy: #059669;
-  --punct: #a16207;
-  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --paper: #f4f6f8;
+  --surface: #ffffff;
+  --ink: #1b2430;
+  --ink-soft: #5a6573;
+  --line: #d9dee4;
+  --saffron: #b8860b;
+  --saffron-wash: #fbf1d8;
+  --pistachio: #5e7f2e;
+  --pomegranate: #a8324a;
+  --pomegranate-wash: #f8e3e7;
+  --focus: #2f6fb3;
+
+  --ui: "Vazirmatn", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --naskh: "Noto Naskh Arabic", "Geeza Pro", "Traditional Arabic", serif;
+  color-scheme: light;
 }
+
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #141413; --fg: #edecea; --muted: #9a9a93;
-    --line: #2c2c29; --card: #1c1c1a;
-    --convert: #7aa2f7; --copy: #4ade80; --punct: #fbbf24;
+    --paper: #141a22;
+    --surface: #1c242e;
+    --ink: #e8ecf1;
+    --ink-soft: #9aa5b3;
+    --line: #2e3945;
+    --saffron: #e0b04a;
+    --saffron-wash: #3a3020;
+    --pistachio: #9cc063;
+    --pomegranate: #e2728a;
+    --pomegranate-wash: #3d2229;
+    --focus: #7fb1e8;
+    color-scheme: dark;
   }
 }
+
 * { box-sizing: border-box; }
-body { margin: 0; background: var(--bg); color: var(--fg); font-size: 15px; line-height: 1.55; }
-main { max-width: 56rem; margin: 0 auto; padding: 2rem 1rem 4rem; }
-h1 { font-size: 1.5rem; margin: 0; letter-spacing: -0.01em; }
-h2 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 2rem 0 0.5rem; }
-.sub, .hint, footer p { color: var(--muted); font-size: 0.875rem; }
-.sub { margin: 0.25rem 0 0; }
-label { display: block; font-size: 0.8rem; color: var(--muted); margin-bottom: 0.25rem; }
-textarea, output {
-  display: block; width: 100%; padding: 0.75rem; border: 1px solid var(--line);
-  border-radius: 8px; background: var(--card); color: var(--fg);
-  font-size: 1.05rem; font-family: inherit; margin-bottom: 1rem;
-}
-textarea { resize: vertical; }
-output { min-height: 3.4rem; white-space: pre-wrap; }
-.meta { display: flex; gap: 1.25rem; font-size: 0.8rem; color: var(--muted); font-variant-numeric: tabular-nums; }
-.controls { display: flex; flex-wrap: wrap; gap: 1rem; margin: 1.5rem 0; font-size: 0.85rem; }
-.controls label { display: flex; align-items: center; gap: 0.4rem; margin: 0; color: var(--fg); }
-.controls input[type="number"] { width: 4rem; padding: 0.2rem 0.4rem; border: 1px solid var(--line); border-radius: 4px; background: var(--card); color: var(--fg); }
-ol { padding-left: 1.25rem; }
-#alternatives li { font-size: 1.05rem; padding: 0.15rem 0; }
-.span { border: 1px solid var(--line); border-radius: 8px; background: var(--card); padding: 0.6rem 0.75rem; margin-bottom: 0.5rem; }
-.span-head { display: flex; align-items: baseline; gap: 0.6rem; flex-wrap: wrap; }
-.tag { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; padding: 0.1rem 0.4rem; border-radius: 4px; border: 1px solid currentColor; }
-.tag.convert { color: var(--convert); }
-.tag.copy { color: var(--copy); }
-.tag.punct, .tag.space { color: var(--punct); }
-.src { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.9rem; }
-.dst { font-size: 1.05rem; }
-.cands { margin: 0.5rem 0 0; padding: 0; list-style: none; display: grid; gap: 0.15rem; }
-.cand { display: grid; grid-template-columns: 7rem 1fr auto; gap: 0.6rem; align-items: center; font-size: 0.85rem; }
-.cand .out { font-size: 1rem; }
-.bar { height: 6px; border-radius: 3px; background: color-mix(in srgb, var(--convert) 30%, transparent); }
-.reason { color: var(--muted); font-size: 0.78rem; }
-code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.85em; }
-footer { margin-top: 2.5rem; border-top: 1px solid var(--line); padding-top: 1rem; }
 
-/* ---------------------------------------------------------------- tabs */
-.badge {
-  display: inline-block; margin-left: 0.5rem; padding: 0.1rem 0.45rem;
-  border: 1px solid var(--line); border-radius: 999px;
-  font-size: 0.72rem; color: var(--muted); vertical-align: middle;
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 400 1rem/1.6 var(--ui);
 }
-.tabs { display: flex; gap: 0.25rem; margin: 1.5rem 0 1.25rem; border-bottom: 1px solid var(--line); }
-.tabs button {
-  appearance: none; background: none; border: 0; border-bottom: 2px solid transparent;
-  padding: 0.5rem 0.75rem; margin-bottom: -1px; cursor: pointer;
-  color: var(--muted); font: inherit; font-size: 0.9rem;
-}
-.tabs button:hover { color: var(--fg); }
-.tabs button.active { color: var(--fg); border-bottom-color: var(--convert); }
-.tab-panel h2:first-of-type { margin-top: 1.5rem; }
 
-/* ------------------------------------------------------------ examples */
-.examples { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 1rem; }
-.chip {
-  appearance: none; cursor: pointer; font: inherit; font-size: 0.78rem;
-  padding: 0.22rem 0.6rem; border-radius: 999px;
-  border: 1px solid var(--line); background: var(--card); color: var(--muted);
-}
-.chip:hover { color: var(--fg); border-color: var(--convert); }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 
-/* --------------------------------------------------------------- table */
-table.grid { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin: 0.75rem 0; }
-table.grid th {
-  text-align: right; font-weight: 500; color: var(--muted);
-  font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em;
-  padding: 0.35rem 0.5rem; border-bottom: 1px solid var(--line);
-}
-table.grid th:first-child, table.grid td:first-child { text-align: left; }
-table.grid td {
-  text-align: right; padding: 0.35rem 0.5rem;
-  border-bottom: 1px solid var(--line); font-variant-numeric: tabular-nums;
-}
-table.grid tr.total td { font-weight: 600; color: var(--fg); }
-table.grid tbody tr:hover td { background: color-mix(in srgb, var(--convert) 7%, transparent); }
+button, select, input, textarea { font: inherit; color: inherit; }
 
-/* ------------------------------------------------------------ failures */
-.fail {
-  border: 1px solid var(--line); border-left: 3px solid var(--bad, #dc2626);
-  border-radius: 6px; background: var(--card); padding: 0.5rem 0.7rem; margin-bottom: 0.4rem;
+.masthead, main {
+  max-width: 68rem;
+  margin: 0 auto;
+  padding: 0 1rem;
 }
-.fail summary { cursor: pointer; display: flex; gap: 0.6rem; align-items: baseline; flex-wrap: wrap; }
-.fail summary code { color: var(--muted); font-size: 0.78rem; }
-.fail-grid {
-  display: grid; grid-template-columns: 6.5rem 1fr; gap: 0.2rem 0.75rem;
-  align-items: baseline; margin: 0.5rem 0;
+
+/* ---------------------------------------------------------- masthead */
+
+.masthead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+  padding-top: 2rem;
+  padding-bottom: 1.25rem;
 }
-.mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.78rem; padding: 0.1rem 0; }
-.ok { color: var(--copy); }
-.bad { color: var(--bad, #dc2626); }
-.dst.ok { color: var(--copy); }
-.dst.bad { color: var(--bad, #dc2626); }
-.notes p { font-size: 0.85rem; color: var(--muted); margin: 0.5rem 0; }
-.notes p strong { color: var(--fg); }
-.notes p.bad, .notes p.bad strong { color: var(--bad, #dc2626); }
-select, button#fx-run, button#cmp-run, button#cmp-load-vendor {
-  font: inherit; font-size: 0.85rem; padding: 0.2rem 0.5rem;
-  border: 1px solid var(--line); border-radius: 4px;
-  background: var(--card); color: var(--fg); cursor: pointer;
+
+h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
 }
-:root { --bad: #dc2626; }
-@media (prefers-color-scheme: dark) { :root { --bad: #f87171; } }
 
-/* -------------------------------------------------------------- compare */
-button#cmp-load-vendor { border-style: dashed; }
-button:disabled { opacity: 0.6; cursor: default; }
+.tagline { margin: 0.125rem 0 0; color: var(--ink-soft); max-width: 36rem; }
 
-.tag.ours { color: var(--convert); }
-.tag.third-party { color: var(--punct); }
-.tag.baseline { color: var(--muted); }
-.tag.reference { color: var(--muted); font-style: italic; }
-.tag.live { color: var(--copy); }
-.tag.offline { color: var(--muted); }
+.tabs { display: flex; gap: 0.25rem; overflow-x: auto; }
 
-.cmp-row {
-  border: 1px solid var(--line); border-radius: 8px; background: var(--card);
-  padding: 0.6rem 0.75rem; margin-bottom: 0.5rem;
+.tabs [role="tab"] {
+  border: 0;
+  background: none;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  color: var(--ink-soft);
+  cursor: pointer;
+  white-space: nowrap;
 }
-/* The one we ship gets the accent border; the rest are neutral. */
-.cmp-row.ours { border-left: 3px solid var(--convert); }
-.cmp-row.third-party { border-left: 3px solid var(--punct); }
-.cmp-row.baseline { border-left: 3px solid var(--line); }
-.cmp-row-head { display: flex; align-items: baseline; gap: 0.6rem; flex-wrap: wrap; }
-.cmp-label { font-size: 0.9rem; }
-.cmp-out { font-size: 1.05rem; margin: 0.35rem 0 0.15rem; min-height: 1.4em; }
-.cmp-note { margin: 0.6rem 0; }
-.cmp-note strong { font-size: 0.85rem; }
-.cmp-note p { margin: 0.15rem 0 0; }
 
-/* A subject's one-line description, under its name in a table cell. */
-table.grid td .reason { text-align: left; font-weight: 400; margin-top: 0.1rem; }
+.tabs [role="tab"]:hover { color: var(--ink); }
+
+.tabs [role="tab"][aria-selected="true"] {
+  color: var(--ink);
+  background: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--line);
+  font-weight: 500;
+}
+
+main { padding-bottom: 4rem; }
+
+/* ------------------------------------------------------------ stage */
+
+/* Two sides facing each other: Latin reads right from the left edge, Persian
+   reads left from the right edge, and the seam between them is the conversion. */
+.stage {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 1rem;
+}
+
+.side { padding: 1.25rem 1.5rem 1.5rem; min-width: 0; }
+
+.side-persian { position: relative; }
+
+.side-latin { border-inline-end: 1px solid var(--line); }
+
+.side-label { display: block; font-size: 0.875rem; color: var(--ink-soft); margin-bottom: 0.5rem; }
+
+.side-head { display: flex; justify-content: space-between; align-items: baseline; }
+
+textarea {
+  width: 100%;
+  min-height: 9rem;
+  resize: vertical;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  font-size: 1.375rem;
+  line-height: 1.5;
+}
+
+textarea:focus-visible { outline: none; }
+
+.side-latin:focus-within { box-shadow: inset 3px 0 0 var(--focus); border-radius: 1rem 0 0 1rem; }
+
+.output {
+  min-height: 9rem;
+  font-family: var(--naskh);
+  font-size: 2rem;
+  line-height: 1.9;
+  overflow-wrap: anywhere;
+}
+
+.output .word {
+  font: inherit;
+  border: 0;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  border-radius: 0.25rem;
+}
+
+.output .word:hover { background: var(--saffron-wash); }
+
+.output .unsure {
+  text-decoration: underline dotted var(--saffron);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.35em;
+}
+
+.output .changed { color: var(--pistachio); }
+
+.output .kept { color: var(--ink-soft); font-family: var(--ui); font-size: 0.75em; }
+
+.placeholder { color: var(--ink-soft); font-family: var(--ui); font-size: 1rem; margin: 0; }
+
+.legend { margin: 1rem 0 0; font-size: 0.875rem; color: var(--ink-soft); }
+
+.legend-unsure { text-decoration: underline dotted var(--saffron); text-decoration-thickness: 2px; text-underline-offset: 0.25em; color: var(--ink); }
+
+.legend-kept { color: var(--ink); }
+
+.examples { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
+
+.chip, .quiet-button {
+  border: 1px solid var(--line);
+  background: var(--paper);
+  border-radius: 999px;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.chip:hover, .quiet-button:hover { border-color: var(--ink-soft); }
+
+/* ---------------------------------------------------------- popover */
+
+.popover {
+  position: absolute;
+  z-index: 10;
+  width: min(18rem, calc(100% - 2rem));
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+  padding: 0.75rem;
+  box-shadow: 0 12px 32px -12px rgb(27 36 48 / 0.35);
+}
+
+.popover-head { margin: 0 0 0.5rem; font-size: 0.875rem; color: var(--ink-soft); }
+
+.popover-head strong { color: var(--ink); font-weight: 500; }
+
+.popover-note { margin: 0.5rem 0 0; font-size: 0.75rem; color: var(--ink-soft); }
+
+.choices { display: grid; gap: 0.25rem; }
+
+.choice {
+  display: grid;
+  grid-template-columns: 1fr 5rem 2.75rem;
+  align-items: center;
+  gap: 0.5rem;
+  border: 0;
+  background: none;
+  border-radius: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  text-align: start;
+  cursor: pointer;
+}
+
+.choice:hover { background: var(--paper); }
+
+.choice.current { background: var(--saffron-wash); }
+
+.choice-word { font-family: var(--naskh); font-size: 1.375rem; direction: rtl; text-align: right; }
+
+.choice-bar {
+  height: 0.375rem;
+  border-radius: 999px;
+  background: linear-gradient(to right, var(--saffron) calc(var(--p) * 100%), var(--line) 0);
+}
+
+.choice-share { font-size: 0.8125rem; color: var(--ink-soft); text-align: end; font-variant-numeric: tabular-nums; }
+
+/* ------------------------------------------------------------ setup */
+
+.setup {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.5rem;
+  margin-top: 1rem;
+}
+
+.segmented {
+  display: inline-flex;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.25rem;
+  margin: 0;
+  background: var(--surface);
+}
+
+.segmented legend {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+
+.segmented label { position: relative; }
+
+.segmented input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+
+.segmented span {
+  display: block;
+  padding: 0.25rem 0.875rem;
+  border-radius: 999px;
+  font-size: 0.9375rem;
+  color: var(--ink-soft);
+}
+
+.segmented input:checked + span { background: var(--ink); color: var(--paper); }
+
+.segmented input:focus-visible + span { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+.segmented input:disabled + span { opacity: 0.4; }
+
+.toggle { display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.9375rem; }
+
+.toggle input { accent-color: var(--ink); width: 1rem; height: 1rem; }
+
+.facts { margin: 0; margin-inline-start: auto; display: flex; gap: 1.25rem; font-size: 0.875rem; color: var(--ink-soft); }
+
+.muted { color: var(--ink-soft); }
+
+.small { font-size: 0.875rem; }
+
+/* --------------------------------------------------------- accuracy */
+
+.prose { max-width: 40rem; }
+
+h2 { font-size: 1.375rem; margin: 1rem 0 0.5rem; }
+
+h3 { font-size: 1.0625rem; margin: 2rem 0 0.5rem; }
+
+.accuracy-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1.5rem; margin: 1.5rem 0 1rem; }
+
+select {
+  margin-inline-start: 0.5rem;
+  border: 1px solid var(--line);
+  border-radius: 0.5rem;
+  background: var(--surface);
+  padding: 0.25rem 0.5rem;
+}
+
+.progress { height: 0.25rem; background: var(--line); border-radius: 999px; overflow: hidden; margin-bottom: 1rem; max-width: 40rem; }
+
+.progress-bar { height: 100%; width: 0; background: var(--ink); transition: width 120ms linear; }
+
+.scores { display: grid; gap: 0.75rem; max-width: 40rem; }
+
+.score { display: grid; grid-template-columns: 11rem 1fr 4rem; align-items: center; gap: 1rem; }
+
+.score-name { font-size: 0.9375rem; }
+
+.score-track { height: 0.75rem; background: var(--line); border-radius: 999px; overflow: hidden; }
+
+/* The bars start at 50%: every setup is well above half, and a bar from 0
+   would hide the differences the panel exists to show. */
+.score-fill {
+  display: block;
+  height: 100%;
+  width: calc(max(var(--v) - 0.5, 0) * 200%);
+  background: var(--ink-soft);
+  border-radius: 999px;
+}
+
+.score.best .score-fill { background: var(--pistachio); }
+
+.score.best .score-name, .score.best .score-value { font-weight: 700; }
+
+.score-value { text-align: end; font-variant-numeric: tabular-nums; }
+
+.axis { margin-top: -0.5rem; }
+
+.axis-labels { display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--ink-soft); }
+
+.scores .muted { margin: 0.25rem 0 0; }
+
+.mistakes-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.5rem 1.5rem; margin-top: 2.5rem; }
+
+.mistakes-head h3 { margin: 0; }
+
+.mistakes { display: grid; gap: 0.75rem; margin: 1rem 0; max-width: 48rem; }
+
+.mistake { background: var(--surface); border: 1px solid var(--line); border-radius: 0.75rem; padding: 0.75rem 1rem; }
+
+.mistake-typed { margin: 0 0 0.5rem; color: var(--ink-soft); overflow-wrap: anywhere; }
+
+.mistake-line { display: grid; grid-template-columns: 7rem 1fr; gap: 0.75rem; align-items: baseline; }
+
+.mistake-label { font-size: 0.8125rem; color: var(--ink-soft); }
+
+.mistake-text { font-family: var(--naskh); font-size: 1.25rem; line-height: 1.8; }
+
+.mistake-text mark {
+  background: var(--pomegranate-wash);
+  color: var(--pomegranate);
+  border-radius: 0.25rem;
+  padding: 0 0.125rem;
+}
+
+/* ----------------------------------------------------------- inside */
+
+.sizes { border-collapse: collapse; width: 100%; max-width: 28rem; }
+
+.sizes td { padding: 0.375rem 0; border-bottom: 1px solid var(--line); }
+
+.sizes td + td { text-align: end; font-variant-numeric: tabular-nums; }
+
+.sizes .optional td { color: var(--ink-soft); }
+
+.steps { padding-inline-start: 1.25rem; }
+
+.steps li { margin-bottom: 0.375rem; }
+
+/* ---------------------------------------------------------- narrow */
+
+@media (max-width: 44rem) {
+  .stage { grid-template-columns: 1fr; }
+  .side-latin { border-inline-end: 0; border-bottom: 1px solid var(--line); }
+  .side-latin:focus-within { box-shadow: inset 0 3px 0 var(--focus); border-radius: 1rem 1rem 0 0; }
+  textarea, .output { min-height: 6rem; }
+  .output { font-size: 1.75rem; }
+  .masthead { padding-top: 1.25rem; }
+  .tabs { width: 100%; }
+  .tabs [role="tab"] { padding: 0.5rem 0.625rem; }
+  .segmented { display: grid; grid-template-columns: repeat(3, 1fr); width: 100%; }
+  .segmented span { text-align: center; padding: 0.25rem 0.5rem; }
+  .facts { margin-inline-start: 0; }
+  .score { grid-template-columns: 1fr 3.5rem; }
+  .score-track, .axis-labels { grid-column: 1 / -1; grid-row: 2; }
+  .mistake-line { grid-template-columns: 1fr; gap: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .progress-bar { transition: none; }
+}
+
+/* Persian examples inside English prose: never split one across lines. */
+.prose bdi { white-space: nowrap; }

@@ -4,166 +4,145 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>tiny-finglish playground</title>
+    <meta name="description" content="Type Finglish, get Persian script. Runs entirely in your browser." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;600&family=Vazirmatn:wght@400;500;700&display=swap"
+    />
+    <link rel="icon" href="data:," />
     <link rel="stylesheet" href="./src/style.css" />
   </head>
   <body>
-    <main>
-      <header>
+    <header class="masthead">
+      <div class="brand">
         <h1>tiny-finglish</h1>
-        <p class="sub">
-          Finglish &rarr; Persian, entirely in this tab. No server, no API key.
-          <span id="badge" class="badge"></span>
-        </p>
-      </header>
-
-      <nav class="tabs" role="tablist">
-        <button role="tab" data-tab="try" class="active">Try it</button>
-        <button role="tab" data-tab="fixtures">Fixture suite</button>
-        <button role="tab" data-tab="scaling">Scaling curve</button>
-        <button role="tab" data-tab="compare">Compare</button>
+        <p class="tagline">Type Persian in Latin letters, get Persian script. Nothing you type leaves this tab.</p>
+      </div>
+      <nav class="tabs" role="tablist" aria-label="Sections">
+        <button role="tab" id="tab-convert" aria-controls="panel-convert" aria-selected="true">Convert</button>
+        <button role="tab" id="tab-accuracy" aria-controls="panel-accuracy" aria-selected="false" tabindex="-1">How accurate is it?</button>
+        <button role="tab" id="tab-inside" aria-controls="panel-inside" aria-selected="false" tabindex="-1">What's inside</button>
       </nav>
+    </header>
 
-      <!-- ------------------------------------------------------ try it -->
-      <section id="tab-try" class="tab-panel">
-        <div class="examples" id="examples"></div>
+    <main>
+      <!-- Convert -->
+      <section id="panel-convert" role="tabpanel" aria-labelledby="tab-convert">
+        <div class="stage">
+          <div class="side side-latin">
+            <label for="input" class="side-label">Finglish</label>
+            <textarea id="input" rows="4" spellcheck="false" autocapitalize="off" autocorrect="off"
+              autocomplete="off" placeholder="Type here, e.g. salam, chetori?">salam, man emrooz miram Muscat</textarea>
+            <div class="examples" id="examples" aria-label="Examples to try"></div>
+          </div>
 
-        <label for="input">Finglish</label>
-        <textarea id="input" rows="2" spellcheck="false"
-          autocapitalize="off" autocorrect="off">salam, man emrooz miram Muscat</textarea>
-
-        <label for="output">Persian</label>
-        <output id="output" dir="rtl" lang="fa"></output>
-
-        <div class="meta">
-          <span id="confidence"></span>
-          <span id="timing"></span>
-          <span id="engine"></span>
+          <div class="side side-persian">
+            <div class="side-head">
+              <span class="side-label" lang="fa" dir="rtl">فارسی</span>
+              <button id="copy" class="quiet-button" type="button">Copy</button>
+            </div>
+            <div id="output" class="output" dir="rtl" lang="fa" aria-live="polite"></div>
+            <div id="popover" class="popover" role="dialog" aria-label="Other spellings" hidden></div>
+            <p class="legend" id="legend-unsure" hidden>
+              <span class="legend-unsure">Dotted words</span> are ones the engine wasn't sure about. Select one to see
+              other spellings.
+            </p>
+            <p class="legend" id="legend-kept" hidden>
+              <span class="legend-kept">Grey text</span> was kept as typed: links, English, numbers.
+            </p>
+          </div>
         </div>
 
-        <div class="controls">
-          <label><input type="checkbox" id="use-model" checked /> learned model</label>
-          <label><input type="checkbox" id="use-lexicon" checked /> lexicon + frequency</label>
-          <label><input type="checkbox" id="use-bigram" /> sentence context (+73.6 KiB)</label>
-          <label><input type="checkbox" id="use-snap" /> lexicon snap (tier 4)</label>
-          <label>beam <input type="number" id="beam" value="8" min="1" max="32" /></label>
+        <div class="setup">
+          <fieldset class="segmented">
+            <legend>Setup</legend>
+            <label><input type="radio" name="setup" value="rules" /> <span>Rules only</span></label>
+            <label><input type="radio" name="setup" value="model" /> <span>Model only</span></label>
+            <label><input type="radio" name="setup" value="hybrid" checked /> <span>Both (best)</span></label>
+          </fieldset>
+          <label class="toggle"><input type="checkbox" id="context" /> Sentence context <span class="muted">(+73.6 KiB)</span></label>
+          <p class="facts" id="facts"></p>
         </div>
-
-        <h2>Alternatives</h2>
-        <ol id="alternatives" dir="rtl" lang="fa"></ol>
-
-        <h2>Spans</h2>
-        <p class="hint">
-          Every span shows what happened to it and why. Converted spans list each
-          candidate the decoder considered with its probability.
-        </p>
-        <div id="spans"></div>
       </section>
 
-      <!-- --------------------------------------------------- fixtures -->
-      <section id="tab-fixtures" class="tab-panel" hidden>
-        <p class="hint">
-          Committed evaluation sets, run in this tab against the current engine
-          settings. Failures are listed in full &mdash; this page is for seeing
-          what the model gets wrong, not for looking good. <strong>Word
-          accuracy is the headline</strong>; sentence exact-match collapses to a
-          few percent on real sentences and stops discriminating.
-        </p>
-        <div class="controls">
-          <label><input type="checkbox" id="fx-model" checked /> learned model</label>
-          <label><input type="checkbox" id="fx-lexicon" checked /> lexicon + frequency</label>
-          <label><input type="checkbox" id="fx-bigram" /> sentence context (--bigram)</label>
-          <label>
-            set
-            <select id="fx-set">
-              <option value="fixtures">fixtures (dev, 175)</option>
-              <option value="gold">gold — real human Finglish (1,835)</option>
-              <option value="authored">gold — author-written (71)</option>
+      <!-- Accuracy -->
+      <section id="panel-accuracy" role="tabpanel" aria-labelledby="tab-accuracy" hidden>
+        <div class="prose">
+          <h2>How accurate is it?</h2>
+          <p>
+            Each setup converts a set of real sentences, and we count how many words come out the way a person wrote
+            them. Spellings Persian writers disagree on count as right: <bdi lang="fa">می‌کنم</bdi>,
+            <bdi lang="fa">میکنم</bdi> and <bdi lang="fa">می کنم</bdi> are the same word.
+          </p>
+        </div>
+
+        <div class="accuracy-controls">
+          <label>Test sentences
+            <select id="set">
+              <option value="gold">Typed by people (1,669 sentences)</option>
+              <option value="chat">Chat messages, typed by AI (200)</option>
+              <option value="fixtures">Hand-picked hard cases (245)</option>
             </select>
           </label>
-          <button id="fx-run">Run</button>
+          <label class="toggle"><input type="checkbox" id="strict" /> Count spelling-convention differences as mistakes</label>
         </div>
-        <div id="fx-summary"></div>
-        <h2>Failures</h2>
-        <div id="fx-failures"></div>
-      </section>
 
-      <!-- ---------------------------------------------------- scaling -->
-      <section id="tab-scaling" class="tab-panel" hidden>
-        <p class="hint">
-          M2: the same architecture at three sizes, evaluated on held-out
-          <em>words</em> &mdash; the split is by Persian word before Finglish
-          variants are generated, so no test word appears in training under any
-          spelling.
-        </p>
-        <div id="curve"></div>
-      </section>
+        <div id="progress" class="progress" hidden><div class="progress-bar"></div></div>
+        <div id="scores" class="scores"></div>
+        <p id="set-note" class="muted small"></p>
 
-      <!-- ---------------------------------------------------- compare -->
-      <section id="tab-compare" class="tab-panel" hidden>
-        <p class="hint">
-          <strong>No npm package converts Finglish to Persian.</strong> Every
-          package whose name says <code>finglish</code> or <code>pinglish</code>
-          goes the other way &mdash; Persian to Latin, for URL slugs. Worldwide
-          there are a handful of real implementations and exactly one other is
-          JavaScript. So this is less &ldquo;us versus the competition&rdquo;
-          than a survey of what exists and why almost none of it runs in a
-          browser.
-        </p>
-        <div id="cmp-headline"></div>
-
-        <h2>Type once, see every engine</h2>
-        <label for="cmp-input">Finglish</label>
-        <textarea id="cmp-input" rows="2" spellcheck="false"
-          autocapitalize="off" autocorrect="off">salam, man emrooz miram Muscat</textarea>
-        <div class="examples" id="cmp-examples"></div>
-        <div id="cmp-live"></div>
-
-        <h2>The landscape</h2>
-        <p class="hint">
-          Data payload is what each implementation must load before it can rank
-          a candidate. Gzip &minus;9 throughout, applied to every subject's
-          uncompressed bytes, so the column is like-for-like.
-        </p>
-        <div id="cmp-landscape"></div>
-
-        <h2>Accuracy</h2>
-        <p class="hint">
-          Live subjects are run <em>in this tab</em>, right now, scored with the
-          same <code>wordAccuracy</code> as
-          <code>scripts/run-fixtures.ts</code>. Subjects that cannot run in a
-          browser are read from <code>data/results/comparison.json</code> and
-          marked <span class="tag offline">offline</span>.
-        </p>
-        <div class="controls">
-          <label>
-            set
-            <select id="cmp-set">
-              <option value="gold">gold — real human Finglish (1,835)</option>
-              <option value="fixtures">fixtures (dev, 175)</option>
-              <option value="authored">gold — author-written (71)</option>
+        <div class="mistakes-head">
+          <h3>Some mistakes</h3>
+          <label>from
+            <select id="mistakes-of">
+              <option value="hybrid">Both (best)</option>
+              <option value="model">Model only</option>
+              <option value="rules">Rules only</option>
             </select>
           </label>
-          <button id="cmp-run">Run in this tab</button>
-          <button id="cmp-load-vendor">Load NeveshtYar (3.6 MiB)</button>
         </div>
-        <div id="cmp-accuracy"></div>
-
-        <h2>Size</h2>
-        <div id="cmp-size"></div>
-
-        <h2>Not benchmarked, and why</h2>
-        <div id="cmp-context"></div>
+        <div id="mistakes" class="mistakes"></div>
+        <button id="more" class="quiet-button" type="button" hidden>Show more mistakes</button>
       </section>
 
-      <footer>
-        <p>
-          Confidence is the length-normalized likelihood of the best path, so a
-          long word is not penalized for being long. Protected spans &mdash;
-          URLs, emails, <code>@mentions</code>, numbers, code, English &mdash;
-          pass through byte-identical and are never scored.
-        </p>
-      </footer>
+      <!-- Inside -->
+      <section id="panel-inside" role="tabpanel" aria-labelledby="tab-inside" hidden>
+        <div class="prose">
+          <h2>What's inside</h2>
+          <p>A small character-level network and a rule engine, both running in plain JavaScript in this tab. No server,
+            no API key.</p>
+
+          <h3>What you download</h3>
+          <table class="sizes">
+            <tbody>
+              <tr><td>Code: rules, tokenizer, decoder</td><td>19.5 KiB</td></tr>
+              <tr><td>Word frequencies and vowels</td><td>63.6 KiB</td></tr>
+              <tr><td>The model's weights</td><td>84.4 KiB</td></tr>
+              <tr class="optional"><td>Sentence context (optional)</td><td>73.6 KiB</td></tr>
+            </tbody>
+          </table>
+          <p class="muted small">Compressed sizes. The best setup, both engines together, is 167 KiB, about the size
+            of one photo.</p>
+
+          <h3>How a sentence is converted</h3>
+          <ol class="steps">
+            <li>Links, emails, numbers, code and English words are set aside and kept exactly as typed.</li>
+            <li>Each remaining word gets a handful of possible Persian spellings, from the rules and from the model.</li>
+            <li>The spellings are ranked by how well they fit what was typed and how common they are.</li>
+            <li>A last pass looks at position: a word that ends a sentence may take the ه of <bdi lang="fa">خوبه</bdi>.</li>
+          </ol>
+
+          <h3>Speed</h3>
+          <p>A keystroke re-converts only the word being typed, in well under a millisecond. A whole new sentence
+            takes about 35 ms the first time.</p>
+
+          <p class="muted small">Source, measurements and known limits are in the project README.</p>
+        </div>
+      </section>
     </main>
+
     <script type="module" src="./src/main.ts"></script>
   </body>
 </html>
