@@ -200,6 +200,11 @@ rows and bootstraps over sentences (`docs/benchmarks.md`).
 * **A retrain moves by about a point on its own.** v8's recipe at two other
   seeds lands within about a point of v8 on dev and chat-dev. A model gain that
   small needs a second seed before it counts.
+* **Where the hybrid's dev errors are** (`scripts/error-groups.ts`): 21% are
+  a reference that is not what was typed, 19% compound spacing (زمانیکه
+  against زمانی که), 14% long vowels, 1% each a final ه and homophone
+  letters, 43% other. The first fix from it: `na` is نه, not نا, on every
+  tier (+0.27 on dev, a real gain; no row worse on any set).
 
 ### September 2026: the object marker, abbreviations and a better loanword guard
 

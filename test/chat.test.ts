@@ -307,3 +307,22 @@ describe("the chat sets", () => {
     });
   }
 });
+
+/**
+ * `na` is نه, "no", on every tier. The rules read a final `a` as ا and wrote
+ * نا for all 14 on dev and chat-dev until `WORD_EXCEPTIONS` in
+ * `src/pipeline.ts`; the model already wrote نه.
+ */
+describe("na", () => {
+  const tiers = [["rules", rules], ["model", model], ["hybrid", hybrid]] as const;
+  for (const [name, engine] of tiers) {
+    it.skipIf(!engine)(`is نه on the ${name} tier, alone, mid-sentence and before punctuation`, () => {
+      expect(engine!.transliterate("na").text).toBe("نه");
+      expect(engine!.transliterate("na mikham").text.split(" ")[0]).toBe("نه");
+      expect(engine!.transliterate("na, bebakhshid").text.startsWith("نه،")).toBe(true);
+    });
+  }
+  it("leaves words that only contain it alone", () => {
+    expect(rules.transliterate("naameh").text).toBe("نامه");
+  });
+});

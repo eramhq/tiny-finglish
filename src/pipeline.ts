@@ -678,18 +678,32 @@ const OBJECT_MARKER_SHARE = 0.8;
 const LOANWORD_SHARE = 0.9;
 
 /**
- * Put the table's Persian first when `word` is a loanword-table word. A final
- * `e` gives two spellings, bare and with ه (`laptope`), and `finalHePass`
- * chooses between them by position, so the bare one leads.
+ * Whole words the channel reads wrong on every tier that uses it, typed alone
+ * and matched exactly. Hand-written, one entry per measured miss, and applied
+ * like a loanword-table hit.
+ *
+ * `na` is نه, "no". The channel reads a final `a` as ا, which is right for
+ * almost every word, and نا is in the frequency table as the prefix of
+ * نا‌امید, so the rules and the hybrid wrote نا for all 14 `na` on dev and
+ * chat-dev. The model alone wrote نه for all 14.
+ */
+const WORD_EXCEPTIONS: ReadonlyMap<string, string> = new Map([["na", "نه"]]);
+
+/**
+ * Put the table's Persian first when `word` is a loanword-table word, or one of
+ * `WORD_EXCEPTIONS`. A final `e` gives two spellings, bare and with ه
+ * (`laptope`), and `finalHePass` chooses between them by position, so the bare
+ * one leads.
  */
 function withLoanword(word: string, engine: Candidate[]): Candidate[] {
-  const spellings = loanwordSpellings(word);
+  const exception = WORD_EXCEPTIONS.get(word);
+  const spellings = exception ? [exception] : loanwordSpellings(word);
   if (!spellings) return engine;
   const shares = spellings.length === 1 ? [1] : [0.6, 0.4];
   const loan = spellings.map((output, i) => ({
     output,
     probability: round4(LOANWORD_SHARE * shares[i]!),
-    reason: "loanword",
+    reason: exception ? "word exception" : "loanword",
   }));
   const rest = engine.filter((c) => !spellings.includes(c.output));
   const total = rest.reduce((sum, c) => sum + c.probability, 0) || 1;

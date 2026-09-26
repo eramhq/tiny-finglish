@@ -100,6 +100,17 @@ Full record in `docs/llm-work.md` §8 and `data/chat/README.md`.
   11 fixture rows would see it. Not worth a round until there is an
   evaluation set that writes the half-space.
 
+**Where the dev errors are** (`scripts/error-groups.ts`, the hybrid, the
+orthographic tier, 35.6% of words charged): a reference that is not what was
+typed 21%, compound spacing 19% (زمانیکه/زمانی که, راهحل/راه حل; the
+references join what a ZWNJ once separated), long vowels 14%, a final ه 1%,
+homophone letters 1%, digits against number words 1%, other 43% (more
+spacing with a letter changed, بعنوان/به عنوان; colloquial against formal
+forms; wrong words). `na` → نا was the one cheap engine bug in it and is
+fixed (`WORD_EXCEPTIONS` in `src/pipeline.ts`). Next, in order: decide
+whether compound spacing is a convention the headline should forgive, then
+the long vowels.
+
 Still open, from the chat-dev errors that remain:
 
 1. **English-spelled loanwords**: `cake`, `backup`, `message`, `offside`,
