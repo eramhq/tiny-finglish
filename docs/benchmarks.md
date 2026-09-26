@@ -54,6 +54,25 @@ wants the rules alone pays 6.7 KiB via `tiny-finglish/rules`.
 
 ### Accuracy per byte, which is what decides what ships
 
+On the orthographic headline, gold scored once (September 2026, fair-grading
+round; gains are paired, with 95% CIs from `scripts/ab.ts`):
+
+| artifact | Brotli | gold gain | KiB per point |
+|---|---:|---:|---:|
+| word frequency + vowels | 63.6 KiB | +10.2 over no data | **6.2** |
+| model weights + runtime, as the hybrid (default) | 87.0 KiB | +1.1 (+0.8 to +1.4) over rules | **79** |
+| model weights + runtime, deciding alone | 87.0 KiB | +0.6 (+0.1 to +1.1) over rules | 145 |
+| word bigrams, on the rules | 73.6 KiB | +0.6 (+0.4 to +0.8) | 123 |
+| word bigrams, on the hybrid | 73.6 KiB | +0.3 (+0.1 to +0.4) | 245 |
+
+The model is no longer negative: that was the strict tier charging it for the
+half-space. It is still thirteen times the cost per point of the frequency
+table, which is why its weights are a separate, optional fetch. The bigrams
+cost more per point than the model, and less again once the model is there,
+so they stay opt-in.
+
+Before that round, on strict, as measured when each was decided:
+
 | artifact | Brotli | gold gain, rules | KiB per point |
 |---|---:|---:|---:|
 | word frequency | 54.2 KiB | +6.1 | **8.9** |

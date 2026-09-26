@@ -121,9 +121,10 @@ the headline: +1.1 points over the rules on gold (95% CI +0.8 to +1.4, better on
 half-space. On the strict tier the rules lead by 1.4, which is the half-space
 convention, not better words.
 
-**The bigram row is opt-in**, because 73.6 KiB for +0.9 points is 82 KiB per
-point against 8.9 for the frequency table — the worst accuracy-per-byte
-artifact here. It is built, committed, measured and documented; it is not in
+**The bigram row is opt-in**, because 73.6 KiB for +0.6 points on the
+headline is 123 KiB per point, against 6 for the frequency table and 79 for the
+model as the hybrid — the worst accuracy-per-byte artifact here, and worth
+only +0.3 once the model is loaded. It is built, committed, measured and documented; it is not in
 the default download and not in the headline. Turn it on with
 `new Transliterator({ bigram })` or `node scripts/run-fixtures.ts --bigram`.
 
