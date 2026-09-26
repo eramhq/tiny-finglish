@@ -1,15 +1,15 @@
 {
   "lines": {
     "file": "data/chat/chat-lines.jsonl",
-    "rows": 1019,
+    "rows": 1505,
     "review": {
-      "both": 1019,
-      "claudeOnly": 7,
+      "both": 1505,
+      "claudeOnly": 14,
       "lunaOnly": 2,
       "neither": 1,
-      "duplicate": 11
+      "duplicate": 18
     },
-    "sha256": "628115216f38a148e790947e2dfa744dc4758bebb28bceb5d906a885fa17c640"
+    "sha256": "72b71076067cb743b4148e12711e80afcdb467691b858f7330f28dd5d7df55fa"
   },
   "test": {
     "review": {

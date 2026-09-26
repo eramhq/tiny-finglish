@@ -11,8 +11,8 @@ Persian grapheme set that includes an empty label and multi-character labels.
 | Task | monotonic transliteration, Latin → Perso-Arabic |
 | Architecture | embedding → 5-wide neighbourhood → bidirectional affine scans → per-position softmax |
 | Sizes trained | 27,660 / 102,348 / 541,516 / ~2M parameters |
-| **Shipped** | **110,018 parameters, int6, 97.8 KiB Brotli with runtime** (same 100k architecture; the label set grew) |
-| Shipped data | 54.1 KiB word frequency and 8.1 KiB vowels, fetched separately — 160.0 KiB all in |
+| **Shipped** | **111,058 parameters (v8), int6, 98.2 KiB Brotli with runtime** (same 100k architecture; the label set grew) |
+| Shipped data | 55.3 KiB word frequency and 8.3 KiB vowels, fetched separately — 161.8 KiB all in |
 | Optional data | 73.6 KiB word bigrams, 98.3 KiB lexicon; measured, not shipped |
 | Quantization | per-row symmetric int8 or int6 |
 | Runtime | hand-written JavaScript, CPU, no WASM/WebGPU/ONNX |
@@ -31,7 +31,37 @@ Not a translator, not a chatbot, not a general LLM. Not intended for
 unsupervised bulk rewriting of documents — the plan lists "silent rewriting of
 long documents" as an explicit non-goal, and the accuracy figures below are why.
 
-## The shipped model, as of September 2026 (v7)
+## The shipped model, as of September 2026 (v8)
+
+**v8 is v7's recipe with a chat round added and one change to the mix.**
+1,701 chat sentences (700 HomoRich lines containing a chat word, 1,001
+LLM-written chat lines reviewed by two families), typed by luna with the same
+personas, take the corpus to 14,660 sentences and 224,876 aligned examples.
+LLM examples are now assigned to train/dev/test by sentence id rather than by
+Persian word (`mix --llm-split sentence`): the per-word split had been holding
+every typed example of خوبی and چطوره out of training. `docs/llm-work.md` §8.
+
+| set | v7 | **v8, shipped** |
+|---|---:|---:|
+| dev set, strict | 57.1% | **58.0%** |
+| dev set, against `faithful` | 67.9% | **68.9%** |
+| hand-authored fixtures (227, with 16 chat rows) | 90.2% | **92.2%** |
+| chat-dev, closest accepted spelling (200, **AI-typed**) | 84.1% | **87.0%** |
+| **gold, scored once (1,669 audited rows)** | 71.1% | **72.4%** |
+| gold, orthographic tier | 75.9% | **77.0%** |
+| chat-test, strict (100, **AI-typed**, scored once) | 75.4% | **79.0%** |
+
+Both columns use the same shipped scoring (this round's engine), so they differ
+only in the weights. Parity with the PyTorch checkpoint: 1.8e-5 against 2e-3.
+
+**Known misses it ships with.** `ketabe` alone is written کتاب, not کتابه: the
+model prefers the ezafe reading 81/19 after the clause-final tilt. The round's
+ship rule required کتابه on every tier; it ships without it by decision, and a
+follow-up copula round (v8b) that moved it to 60/40 was not shipped because it
+started writing دانشجوهه and lost dev accuracy. v8 is also weaker than v7 on
+the ZWNJ fixtures (77.8% vs 92.6%) and the ambiguous ones (88.9% vs 94.4%).
+
+## v7, as of the vowel-agreement round
 
 Same architecture and recipe as the 100k model below, retrained on a new mix.
 The rest of this card below this section is the record of how earlier models
@@ -51,17 +81,11 @@ were chosen and measured, kept as it was measured.
   sentences were excluded before sampling. See `docs/llm-work.md` §6 and
   `data/provenance/distill.json`.
 
-**v8 was trained and held back.** A chat typing round (1,701 more
-sentences, `docs/llm-work.md` §8) produced weights that beat v7 on dev, the
-fixtures, chat-dev and, scored once, gold (72.4 vs 71.1 on the model tier).
-They are not shipped because the model tier writes `ketabe` as کتاب, which the
-round's ship rule forbids. The table below is still v7.
-
 **Evaluation.** Parity with the PyTorch checkpoint holds at 1.9e-5 against a
 2e-3 tolerance. Both columns use the scoring shipped with v7 — frequency, the
 vowel-agreement term and `heBorrow` (since removed) — so they differ only in the weights:
 
-| set | v6 (10,049 sentences) | **v7, shipped (12,971)** |
+| set | v6 (10,049 sentences) | **v7 (12,971)** |
 |---|---:|---:|
 | dev set, strict (304 real rows, the tuning surface) | 56.4% | **57.0%** |
 | dev set, against `faithful` | 67.4% | **67.8%** |

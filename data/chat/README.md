@@ -16,7 +16,7 @@ engines or settings, never as "how well it handles chat". Each row carries
 |---|---:|---|
 | `chat-dev.jsonl` | 200 | the chat tuning surface: `run-fixtures --chat`, the `chat-dev` column in `sweep.ts` |
 | `chat-test.jsonl` | 100 | scored once, at the end, like gold: `run-fixtures --chat-test`. Never tune on it |
-| `chat-lines.jsonl` | 1,019 | training text: Persian chat lines, typed later by luna (shards 143–149) |
+| `chat-lines.jsonl` | 1,505 | training text: Persian chat lines typed by luna — the chat lines (shards 143–149, in v8) and the copula lines (shards 150–152, in v8b, not shipped) |
 | `chat-words.txt` | 116 | the chat markers (and `!` written-register markers) behind `build_distill --targeted-predicate chat-word` |
 
 Rebuild: `python -m tiny_finglish_training.build_chat --select | --assemble | --lines`.

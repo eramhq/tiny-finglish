@@ -118,7 +118,7 @@ def reference(row: dict) -> tuple[str, list[str]]:
 def select(shards: int) -> None:
     """Pick the `SIZE` messages by hash order and write them out for the typists."""
     kept, tally = accepted("cd")
-    lines = {leak_key(r["text"]) for r in accepted("ab")[0]}
+    lines = {leak_key(r["text"]) for r in accepted("ab")[0]}  # the test set predates the copula lines
     ordered = sorted(kept, key=message_hash)
     chosen = ordered[:SIZE]
     rows = [{"id": r["id"], "text": reference(r)[0]} for r in chosen]
@@ -163,9 +163,14 @@ def assemble() -> None:
     print(f"chat-dev {len(dev)}  chat-test {len(test)}")
 
 
+#: Review shards holding training lines: the chat round's (a, b) and the
+#: copula round's (e, `chat-copula-write.md`).
+TRAINING_LETTERS = "abe"
+
+
 def lines() -> None:
     """Reviewed training lines -> data/chat/chat-lines.jsonl."""
-    kept, tally = accepted("ab")
+    kept, tally = accepted(TRAINING_LETTERS)
     rows = [{"id": r["id"], "topic": r.get("topic", ""), "text": r["text"].strip()} for r in kept]
     write_jsonl(CHAT / "chat-lines.jsonl", rows)
     record("lines", {"file": "data/chat/chat-lines.jsonl", "rows": len(rows), "review": tally,
@@ -184,7 +189,7 @@ WORKERS = {
     "trainingTypists": "Codex CLI gpt-5.6-luna (reasoning xhigh), the everyday/careful personas of "
                        "distill-generate.md v2, shards 138-149 of runs/llm/distill",
 }
-PROMPT_FILES = ("chat-write.md", "chat-test-write.md", "chat-review.md", "chat-typing.md")
+PROMPT_FILES = ("chat-write.md", "chat-test-write.md", "chat-review.md", "chat-typing.md", "chat-copula-write.md")
 
 
 def record(section: str, data: dict) -> None:

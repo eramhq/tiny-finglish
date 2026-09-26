@@ -1017,3 +1017,489 @@
 {"id": "w4-258", "topic": "loanwords", "text": "کنترل تلویزیون کجاست؟"}
 {"id": "w4-259", "topic": "loanwords", "text": "کولرو خاموش کن"}
 {"id": "w4-260", "topic": "loanwords", "text": "باشه فعلا بای"}
+{"id": "c1-001", "topic": "copula", "text": "این لپتاپه؟"}
+{"id": "c1-002", "topic": "copula", "text": "آره، لپتاپ داداشمه"}
+{"id": "c1-004", "topic": "copula", "text": "این شارژره؟"}
+{"id": "c1-005", "topic": "copula", "text": "نه بابا، هندزفریه"}
+{"id": "c1-006", "topic": "copula", "text": "کفشت خیلی قشنگه"}
+{"id": "c1-007", "topic": "copula", "text": "این پیرهنه؟"}
+{"id": "c1-008", "topic": "copula", "text": "چایی سرده"}
+{"id": "c1-009", "topic": "copula", "text": "غذا آماده‌س"}
+{"id": "c1-010", "topic": "copula", "text": "این ساعته؟"}
+{"id": "c1-011", "topic": "copula", "text": "ساعتش کادوی تولده"}
+{"id": "c1-012", "topic": "copula", "text": "کیفم تو ماشینه"}
+{"id": "c1-013", "topic": "copula", "text": "اون بلیط قطاره"}
+{"id": "c1-014", "topic": "copula", "text": "مال کیه؟"}
+{"id": "c1-015", "topic": "copula", "text": "این ژاکت خواهرمه"}
+{"id": "c1-016", "topic": "copula", "text": "نونش تازه‌س"}
+{"id": "c1-017", "topic": "copula", "text": "اینجا نونواییه؟"}
+{"id": "c1-018", "topic": "copula", "text": "نه، قنادیه"}
+{"id": "c1-019", "topic": "copula", "text": "این دوچرخه‌ی همسایه‌س"}
+{"id": "c1-020", "topic": "copula", "text": "تلویزیون خرابه"}
+{"id": "c1-021", "topic": "copula", "text": "کنترلش زیر بالشه"}
+{"id": "c1-022", "topic": "copula", "text": "این عینکه؟"}
+{"id": "c1-023", "topic": "copula", "text": "این شلوار جینه"}
+{"id": "c1-024", "topic": "copula", "text": "مانتوش بلنده"}
+{"id": "c1-025", "topic": "copula", "text": "این فرودگاهه؟"}
+{"id": "c1-026", "topic": "copula", "text": "این کوچه‌ی ماست"}
+{"id": "c1-027", "topic": "copula", "text": "این پنیره؟"}
+{"id": "c1-028", "topic": "copula", "text": "این گوشت گوساله‌س"}
+{"id": "c1-029", "topic": "copula", "text": "این برنج هاشمیه"}
+{"id": "c1-030", "topic": "copula", "text": "ناهار کبابه؟"}
+{"id": "c1-031", "topic": "copula", "text": "قاشقه"}
+{"id": "c1-032", "topic": "copula", "text": "چنگال تو کشوئه"}
+{"id": "c1-033", "topic": "copula", "text": "بشقابا تو سینکه"}
+{"id": "c1-034", "topic": "copula", "text": "لیوانت پره"}
+{"id": "c1-036", "topic": "copula", "text": "این شیر کاکائوئه"}
+{"id": "c1-037", "topic": "copula", "text": "این موبایل سامسونگه؟"}
+{"id": "c1-038", "topic": "copula", "text": "سیمکارتش ایرانسله"}
+{"id": "c1-040", "topic": "copula", "text": "مودم تو اتاقه"}
+{"id": "c1-041", "topic": "copula", "text": "این کاپشنه؟"}
+{"id": "c1-042", "topic": "copula", "text": "کلاهم تو کمده"}
+{"id": "c1-043", "topic": "copula", "text": "جورابش سوراخه"}
+{"id": "c1-044", "topic": "copula", "text": "این دستکش چرمه"}
+{"id": "c1-045", "topic": "copula", "text": "کمربندش مال باباشه"}
+{"id": "c1-046", "topic": "copula", "text": "این کتونی نایکه"}
+{"id": "c1-047", "topic": "copula", "text": "دمپایی دم دره"}
+{"id": "c1-048", "topic": "copula", "text": "این مغازه لباس‌فروشیه"}
+{"id": "c1-049", "topic": "copula", "text": "پاساژ شلوغه"}
+{"id": "c1-050", "topic": "copula", "text": "سینما بازه؟"}
+{"id": "c1-051", "topic": "copula", "text": "بانک تعطیله"}
+{"id": "c1-052", "topic": "copula", "text": "داروخونه کنار بانکه"}
+{"id": "c1-053", "topic": "copula", "text": "این خیابون ولیعصره"}
+{"id": "c1-054", "topic": "copula", "text": "ماشین تو پارکینگه"}
+{"id": "c1-055", "topic": "copula", "text": "مترو نزدیکه"}
+{"id": "c1-056", "topic": "copula", "text": "ایستگاه اتوبوس اونوره"}
+{"id": "c1-057", "topic": "copula", "text": "این تاکسی زرده"}
+{"id": "c1-058", "topic": "copula", "text": "کافه‌ش دنجه"}
+{"id": "c1-059", "topic": "copula", "text": "قهوه‌ش تلخه"}
+{"id": "c1-060", "topic": "copula", "text": "دسرش کیکه"}
+{"id": "c1-061", "topic": "copula", "text": "این بستنیه؟"}
+{"id": "c1-062", "topic": "copula", "text": "نه، فالوده‌س"}
+{"id": "c1-063", "topic": "copula", "text": "شام سالاد الویه‌س"}
+{"id": "c1-064", "topic": "copula", "text": "این ساندویچ فلافله"}
+{"id": "c1-065", "topic": "copula", "text": "پیتزاش پپرونیه"}
+{"id": "c1-066", "topic": "copula", "text": "شام سوپه"}
+{"id": "c1-067", "topic": "copula", "text": "این آش رشته‌س"}
+{"id": "c1-068", "topic": "copula", "text": "خورشت قیمه‌س؟"}
+{"id": "c1-069", "topic": "copula", "text": "نه، قورمه‌سبزیه"}
+{"id": "c1-070", "topic": "copula", "text": "این پرتقاله؟"}
+{"id": "c1-071", "topic": "copula", "text": "سیبش ترشه"}
+{"id": "c1-072", "topic": "copula", "text": "هندونه رسیده‌س؟"}
+{"id": "c1-073", "topic": "copula", "text": "این گوجه‌س؟"}
+{"id": "c1-074", "topic": "copula", "text": "خیاره"}
+{"id": "c1-075", "topic": "copula", "text": "این سیره؟"}
+{"id": "c1-076", "topic": "copula", "text": "کیسه‌ی خرید تو صندوقه"}
+{"id": "c1-077", "topic": "copula", "text": "این قبض برقه"}
+{"id": "c1-078", "topic": "copula", "text": "اون قبض گازه"}
+{"id": "c1-079", "topic": "copula", "text": "کارت بانکیم تو جیبمه"}
+{"id": "c1-080", "topic": "copula", "text": "این کیف پوله؟"}
+{"id": "c1-081", "topic": "copula", "text": "این هارده؟"}
+{"id": "c1-082", "topic": "copula", "text": "فلش مال منه"}
+{"id": "c1-083", "topic": "copula", "text": "این کیبورد لاجیتکه"}
+{"id": "c1-084", "topic": "copula", "text": "ماوس کنار کیبورده"}
+{"id": "c1-085", "topic": "copula", "text": "این مانیتوره؟"}
+{"id": "c1-086", "topic": "copula", "text": "این پرینتره؟"}
+{"id": "c1-087", "topic": "copula", "text": "این کارتریجه"}
+{"id": "c1-088", "topic": "copula", "text": "این اسپیکره"}
+{"id": "c1-089", "topic": "copula", "text": "هدفونش سونیه"}
+{"id": "c1-090", "topic": "copula", "text": "اون کابل شارژه"}
+{"id": "c1-091", "topic": "copula", "text": "این آداپتوره"}
+{"id": "c1-092", "topic": "copula", "text": "پاوربانک تو کیفمه"}
+{"id": "c1-093", "topic": "copula", "text": "این تبلته؟"}
+{"id": "c1-094", "topic": "copula", "text": "گوشیش آیفونه"}
+{"id": "c1-095", "topic": "copula", "text": "این قاب گوشیه"}
+{"id": "c1-096", "topic": "copula", "text": "صفحه‌ش شکسته‌س"}
+{"id": "c1-097", "topic": "copula", "text": "باتریش ضعیفه"}
+{"id": "c1-098", "topic": "copula", "text": "این اپ رایگانه"}
+{"id": "c1-099", "topic": "copula", "text": "این فایل پی‌دی‌افه"}
+{"id": "c1-100", "topic": "copula", "text": "این عکس پروفایلشه"}
+{"id": "c1-101", "topic": "copula", "text": "این دوربین باباجونمه"}
+{"id": "c1-102", "topic": "copula", "text": "این لنز کانونه"}
+{"id": "c1-103", "topic": "copula", "text": "رادیو روشنه"}
+{"id": "c1-104", "topic": "copula", "text": "چراغ خاموشه"}
+{"id": "c1-105", "topic": "copula", "text": "این لامپ سوخته‌س"}
+{"id": "c1-106", "topic": "copula", "text": "کولرش اسپلیته"}
+{"id": "c1-107", "topic": "copula", "text": "بخاری گازیه"}
+{"id": "c1-108", "topic": "copula", "text": "این پنکه‌س؟"}
+{"id": "c1-109", "topic": "copula", "text": "لباسشویی ال‌جیه"}
+{"id": "c1-110", "topic": "copula", "text": "جاروبرقی تو انباریه"}
+{"id": "c1-111", "topic": "copula", "text": "این اتوئه؟"}
+{"id": "c1-112", "topic": "copula", "text": "این قابلمه مال مامانمه"}
+{"id": "c1-113", "topic": "copula", "text": "این ماهیتابه‌س"}
+{"id": "c1-115", "topic": "copula", "text": "قوری چینیه"}
+{"id": "c1-116", "topic": "copula", "text": "استکانه"}
+{"id": "c1-117", "topic": "copula", "text": "این فنجون مال مهموناست"}
+{"id": "c1-119", "topic": "copula", "text": "این شکره؟"}
+{"id": "c1-120", "topic": "copula", "text": "نه، نمکه"}
+{"id": "c1-121", "topic": "copula", "text": "این رستورانه؟"}
+{"id": "c1-122", "topic": "copula", "text": "آره، ولی گرونه"}
+{"id": "c1-123", "topic": "copula", "text": "هتلش پنج‌ستاره‌س"}
+{"id": "c1-124", "topic": "copula", "text": "بیمارستان کجاست؟"}
+{"id": "c1-125", "topic": "copula", "text": "مدرسه‌ش پشت پارکه"}
+{"id": "c1-126", "topic": "copula", "text": "دانشگاهش تهرانه"}
+{"id": "c1-127", "topic": "copula", "text": "این کتابخونه‌س"}
+{"id": "c1-128", "topic": "copula", "text": "باشگاه تا ده بازه"}
+{"id": "c1-129", "topic": "copula", "text": "این استخره؟"}
+{"id": "c1-130", "topic": "copula", "text": "این مسجده؟"}
+{"id": "c1-131", "topic": "copula", "text": "نه، حسینیه‌س"}
+{"id": "c1-132", "topic": "copula", "text": "بازار بزرگ همین‌جاست"}
+{"id": "c1-133", "topic": "copula", "text": "قرارمون تو میدونه"}
+{"id": "c1-134", "topic": "copula", "text": "دستشویی ته راهروئه"}
+{"id": "c1-135", "topic": "copula", "text": "آسانسور خرابه"}
+{"id": "c1-136", "topic": "copula", "text": "طبقه‌ی سومه"}
+{"id": "c1-137", "topic": "copula", "text": "واحدش دو خوابه"}
+{"id": "c1-138", "topic": "copula", "text": "آپارتمانش نقلیه"}
+{"id": "c1-139", "topic": "copula", "text": "این حیاط خونه‌ی عمومه"}
+{"id": "c1-140", "topic": "copula", "text": "این ویلای شماله"}
+{"id": "c1-141", "topic": "copula", "text": "ساحل نزدیکه"}
+{"id": "c1-142", "topic": "copula", "text": "این جنگله؟"}
+{"id": "c1-143", "topic": "copula", "text": "این کوه دماونده"}
+{"id": "c1-144", "topic": "copula", "text": "اون رودخونه‌س"}
+{"id": "c1-145", "topic": "copula", "text": "اینجا روستاست؟"}
+{"id": "c1-146", "topic": "copula", "text": "شهرش کوچیکه"}
+{"id": "c1-147", "topic": "copula", "text": "این جاده چالوسه"}
+{"id": "c1-148", "topic": "copula", "text": "پمپ بنزین اون‌طرفه"}
+{"id": "c1-149", "topic": "copula", "text": "کارواش تعطیله"}
+{"id": "c1-150", "topic": "copula", "text": "تعمیرگاه ته کوچه‌س"}
+{"id": "c1-151", "topic": "copula", "text": "این آرایشگاهه؟"}
+{"id": "c1-152", "topic": "copula", "text": "خیاطی طبقه‌ی بالاست"}
+{"id": "c1-153", "topic": "copula", "text": "اینجا عکاسیه"}
+{"id": "c1-154", "topic": "copula", "text": "این سوپرمارکته"}
+{"id": "c1-155", "topic": "copula", "text": "میوه‌فروشی سر کوچه‌س"}
+{"id": "c1-156", "topic": "copula", "text": "قصابی بسته‌س"}
+{"id": "c1-157", "topic": "copula", "text": "این نونوایی سنگکیه"}
+{"id": "c1-158", "topic": "copula", "text": "بربریش برشته‌س"}
+{"id": "c1-159", "topic": "copula", "text": "این لواشه"}
+{"id": "c1-160", "topic": "copula", "text": "این تافتونه"}
+{"id": "c1-161", "topic": "copula", "text": "این کت مال عروسیه"}
+{"id": "c1-162", "topic": "copula", "text": "کراوات تو کمد باباست"}
+{"id": "c1-164", "topic": "copula", "text": "این بلوزه؟"}
+{"id": "c1-165", "topic": "copula", "text": "شالت خوشگله"}
+{"id": "c1-166", "topic": "copula", "text": "این روسری سوغاتیه"}
+{"id": "c1-167", "topic": "copula", "text": "این چادر مامان‌بزرگمه"}
+{"id": "c1-168", "topic": "copula", "text": "این پالتوئه؟"}
+{"id": "c1-169", "topic": "copula", "text": "این هودیه؟"}
+{"id": "c1-170", "topic": "copula", "text": "تیشرتش سفیده"}
+{"id": "c1-171", "topic": "copula", "text": "شلوارک تو چمدونه"}
+{"id": "c1-172", "topic": "copula", "text": "این چمدون سنگینه"}
+{"id": "c1-173", "topic": "copula", "text": "کوله‌پشتیم تو صندوق عقبه"}
+{"id": "c1-174", "topic": "copula", "text": "گردنبندش طلاست"}
+{"id": "c1-175", "topic": "copula", "text": "این انگشتر نقره‌س"}
+{"id": "c1-176", "topic": "copula", "text": "گوشواره‌ش بدلیه"}
+{"id": "c1-177", "topic": "copula", "text": "این دستبند یادگاریه"}
+{"id": "c1-178", "topic": "copula", "text": "این عطر شنله"}
+{"id": "c1-179", "topic": "copula", "text": "ادکلنش تقلبیه"}
+{"id": "c1-180", "topic": "copula", "text": "شامپوئه؟"}
+{"id": "c1-181", "topic": "copula", "text": "صابون تو حمومه"}
+{"id": "c1-182", "topic": "copula", "text": "این مسواک مال بچه‌هاست"}
+{"id": "c1-183", "topic": "copula", "text": "این خمیردندونه"}
+{"id": "c1-184", "topic": "copula", "text": "حوله خیسه"}
+{"id": "c1-185", "topic": "copula", "text": "این شونه‌ی منه"}
+{"id": "c1-187", "topic": "copula", "text": "این پتو مال مهمونه"}
+{"id": "c1-188", "topic": "copula", "text": "بالش نرمه"}
+{"id": "c1-189", "topic": "copula", "text": "ملافه‌ها تو ساکه"}
+{"id": "c1-190", "topic": "copula", "text": "این فرش کاشونه"}
+{"id": "c1-191", "topic": "copula", "text": "مبل راحته"}
+{"id": "c1-192", "topic": "copula", "text": "صندلی کنار پنجره‌س"}
+{"id": "c1-193", "topic": "copula", "text": "میز ناهارخوری شیشه‌ایه"}
+{"id": "c1-194", "topic": "copula", "text": "این کمد لباسه"}
+{"id": "c1-195", "topic": "copula", "text": "آینه بالای روشوییه"}
+{"id": "c1-196", "topic": "copula", "text": "این پرده مخمله"}
+{"id": "c1-197", "topic": "copula", "text": "این گلدون کار دسته"}
+{"id": "c1-198", "topic": "copula", "text": "این گل مصنوعیه؟"}
+{"id": "c1-199", "topic": "copula", "text": "نه، طبیعیه"}
+{"id": "c1-200", "topic": "copula", "text": "این ساعت دیواری آشپزخونه‌س"}
+{"id": "c1-201", "topic": "copula", "text": "خودکاره؟"}
+{"id": "c1-202", "topic": "copula", "text": "نه، مداده"}
+{"id": "c1-203", "topic": "copula", "text": "پاکن تو جامدادیه"}
+{"id": "c1-204", "topic": "copula", "text": "این دفتر مشقه"}
+{"id": "c1-205", "topic": "copula", "text": "خط‌کش تو کیفشه"}
+{"id": "c1-206", "topic": "copula", "text": "این ماشین‌حسابه"}
+{"id": "c1-208", "topic": "copula", "text": "قیچی تیزه"}
+{"id": "c1-209", "topic": "copula", "text": "این پاکت نامه‌س"}
+{"id": "c1-210", "topic": "copula", "text": "بسته‌ت پیش نگهبانه"}
+{"id": "c1-211", "topic": "copula", "text": "این کادوئه؟"}
+{"id": "c1-212", "topic": "copula", "text": "کادوش عروسکه"}
+{"id": "c1-213", "topic": "copula", "text": "این اسباب‌بازی بچه‌مه"}
+{"id": "c1-214", "topic": "copula", "text": "توپ بادش کمه"}
+{"id": "c1-215", "topic": "copula", "text": "دوچرخه‌ش تو حیاطه"}
+{"id": "c1-216", "topic": "copula", "text": "موتورش هونداست"}
+{"id": "c1-217", "topic": "copula", "text": "ماشینش پژوئه"}
+{"id": "c1-218", "topic": "copula", "text": "این پرایده؟"}
+{"id": "c1-219", "topic": "copula", "text": "لاستیکش پنچره"}
+{"id": "c1-220", "topic": "copula", "text": "باکش نصفه‌س"}
+{"id": "c1-221", "topic": "copula", "text": "گواهینامه‌ش پایه‌یکه"}
+{"id": "c1-222", "topic": "copula", "text": "این بلیط سینماست"}
+{"id": "c1-223", "topic": "copula", "text": "صندلیمون ردیف اوله"}
+{"id": "c1-224", "topic": "copula", "text": "پروازش ساعت هشته"}
+{"id": "c1-225", "topic": "copula", "text": "این گذرنامه‌ی منه"}
+{"id": "c1-226", "topic": "copula", "text": "ویزاش توریستیه"}
+{"id": "c1-227", "topic": "copula", "text": "هتل نزدیک حرمه"}
+{"id": "c1-228", "topic": "copula", "text": "چمدونت اضافه‌باره"}
+{"id": "c1-229", "topic": "copula", "text": "این تاکسی اینترنتیه"}
+{"id": "c1-230", "topic": "copula", "text": "راننده‌ش خانمه"}
+{"id": "c1-231", "topic": "copula", "text": "همبرگرش دوبله"}
+{"id": "c1-232", "topic": "copula", "text": "این نوشابه‌س؟"}
+{"id": "c1-233", "topic": "copula", "text": "دوغش گازداره"}
+{"id": "c1-234", "topic": "copula", "text": "این ماست موسیره؟"}
+{"id": "c1-235", "topic": "copula", "text": "اون کره‌ی بادوم‌زمینیه"}
+{"id": "c1-236", "topic": "copula", "text": "عسلش سبلانه"}
+{"id": "c1-237", "topic": "copula", "text": "این خرماست؟"}
+{"id": "c1-238", "topic": "copula", "text": "پسته‌ش اکبریه"}
+{"id": "c1-239", "topic": "copula", "text": "این گردوئه؟"}
+{"id": "c1-240", "topic": "copula", "text": "این زعفرونه؟"}
+{"id": "c1-241", "topic": "copula", "text": "چاییش لاهیجانه"}
+{"id": "c1-242", "topic": "copula", "text": "این نسکافه‌س"}
+{"id": "c1-243", "topic": "copula", "text": "این آب معدنیه"}
+{"id": "c1-244", "topic": "copula", "text": "یخه؟"}
+{"id": "c1-245", "topic": "copula", "text": "کیک تولد تو یخچاله"}
+{"id": "c1-246", "topic": "copula", "text": "شمعش رنگیه"}
+{"id": "c1-247", "topic": "copula", "text": "بادکنکا تو کمده"}
+{"id": "c1-248", "topic": "copula", "text": "این ژله‌س؟"}
+{"id": "c1-249", "topic": "copula", "text": "نه، فرنیه"}
+{"id": "c1-250", "topic": "copula", "text": "شیربرنجش بی‌نظیره"}
+{"id": "c2-001", "topic": "copula", "text": "داداشمه"}
+{"id": "c2-002", "topic": "copula", "text": "اون پسره دوستمه"}
+{"id": "c2-003", "topic": "copula", "text": "این عکس آبجیمه"}
+{"id": "c2-004", "topic": "copula", "text": "این آقا باباشه"}
+{"id": "c2-005", "topic": "copula", "text": "اون آقاهه عمومه"}
+{"id": "c2-006", "topic": "copula", "text": "این خانم مادربزرگمه"}
+{"id": "c2-007", "topic": "copula", "text": "پدربزرگشه؟"}
+{"id": "c2-008", "topic": "copula", "text": "همکارمه"}
+{"id": "c2-009", "topic": "copula", "text": "اون خانمه رئیسمونه"}
+{"id": "c2-010", "topic": "copula", "text": "مدیر مدرسه‌مونه"}
+{"id": "c2-011", "topic": "copula", "text": "این آقا دکتره؟"}
+{"id": "c2-013", "topic": "copula", "text": "معلم ریاضیمونه"}
+{"id": "c2-014", "topic": "copula", "text": "پسرخالمه"}
+{"id": "c2-015", "topic": "copula", "text": "دخترعموشه"}
+{"id": "c2-016", "topic": "copula", "text": "نامزدشه"}
+{"id": "c2-017", "topic": "copula", "text": "شوهرشه؟"}
+{"id": "c2-018", "topic": "copula", "text": "اون خانمه زنشه"}
+{"id": "c2-019", "topic": "copula", "text": "همسایه‌ی جدیدمونه"}
+{"id": "c2-020", "topic": "copula", "text": "شاگرد اوله"}
+{"id": "c2-021", "topic": "copula", "text": "داییمه"}
+{"id": "c2-022", "topic": "copula", "text": "رفیق قدیمیمه"}
+{"id": "c2-023", "topic": "copula", "text": "مهمونه"}
+{"id": "c2-024", "topic": "copula", "text": "این آقا پلیسه"}
+{"id": "c2-025", "topic": "copula", "text": "نگهبان ساختمونه"}
+{"id": "c2-026", "topic": "copula", "text": "آشپز رستورانه"}
+{"id": "c2-027", "topic": "copula", "text": "بابام خیاطه"}
+{"id": "c2-028", "topic": "copula", "text": "داداشش مهندسه"}
+{"id": "c2-029", "topic": "copula", "text": "خواهرش پرستاره"}
+{"id": "c2-030", "topic": "copula", "text": "اون آقا وکیله"}
+{"id": "c2-031", "topic": "copula", "text": "اون آقاهه مکانیکه"}
+{"id": "c2-032", "topic": "copula", "text": "کی؟ همکلاسیمه"}
+{"id": "c2-033", "topic": "copula", "text": "فامیلمونه"}
+{"id": "c2-034", "topic": "copula", "text": "نمیشناسمش، غریبه‌س"}
+{"id": "c2-035", "topic": "copula", "text": "عمه‌مه"}
+{"id": "c2-036", "topic": "copula", "text": "اون بچه نوه‌شه"}
+{"id": "c2-037", "topic": "copula", "text": "باباش خلبانه"}
+{"id": "c2-038", "topic": "copula", "text": "داداشش بازیگره"}
+{"id": "c2-039", "topic": "copula", "text": "کارگر کارخونه‌س"}
+{"id": "c2-040", "topic": "copula", "text": "هنوز دانشجوئه"}
+{"id": "c2-041", "topic": "copula", "text": "سگه؟"}
+{"id": "c2-042", "topic": "copula", "text": "این گربه مال همسایه‌س"}
+{"id": "c2-043", "topic": "copula", "text": "اسبه"}
+{"id": "c2-044", "topic": "copula", "text": "اون حیوونه خرگوشه"}
+{"id": "c2-045", "topic": "copula", "text": "این پرنده کبوتره"}
+{"id": "c2-046", "topic": "copula", "text": "طوطی خودمونه"}
+{"id": "c2-047", "topic": "copula", "text": "این سگ خیلی مهربونه"}
+{"id": "c2-048", "topic": "copula", "text": "ببره یا پلنگه؟"}
+{"id": "c2-049", "topic": "copula", "text": "وای خرسه!"}
+{"id": "c2-050", "topic": "copula", "text": "اون گاوه مال عموئه"}
+{"id": "c2-051", "topic": "copula", "text": "موش نیست، همستره"}
+{"id": "c2-052", "topic": "copula", "text": "گنجشکه"}
+{"id": "c2-053", "topic": "copula", "text": "این مار خطرناکه"}
+{"id": "c2-054", "topic": "copula", "text": "عقابه یا شاهینه؟"}
+{"id": "c2-055", "topic": "copula", "text": "جغده"}
+{"id": "c2-056", "topic": "copula", "text": "صداش مال کلاغه"}
+{"id": "c2-057", "topic": "copula", "text": "نگاه کن نهنگه"}
+{"id": "c2-058", "topic": "copula", "text": "کوسه نیست، دلفینه"}
+{"id": "c2-059", "topic": "copula", "text": "فیله؟"}
+{"id": "c2-060", "topic": "copula", "text": "اون میمونه خیلی شیطونه"}
+{"id": "c2-061", "topic": "copula", "text": "جیغ نزن، سوسکه!"}
+{"id": "c2-062", "topic": "copula", "text": "عنکبوته"}
+{"id": "c2-063", "topic": "copula", "text": "این زنبور عسله"}
+{"id": "c2-064", "topic": "copula", "text": "لاک‌پشته"}
+{"id": "c2-065", "topic": "copula", "text": "شتره"}
+{"id": "c2-066", "topic": "copula", "text": "الاغه"}
+{"id": "c2-067", "topic": "copula", "text": "اردکه یا غازه؟"}
+{"id": "c2-068", "topic": "copula", "text": "خروس همسایه‌س"}
+{"id": "c2-069", "topic": "copula", "text": "این گوسفند مال ماست"}
+{"id": "c2-070", "topic": "copula", "text": "گرگه"}
+{"id": "c2-071", "topic": "copula", "text": "روباهه"}
+{"id": "c2-072", "topic": "copula", "text": "شیر نره"}
+{"id": "c2-073", "topic": "copula", "text": "حلزونه"}
+{"id": "c2-074", "topic": "copula", "text": "سگشون خیلی وحشیه"}
+{"id": "c2-075", "topic": "copula", "text": "این گربه خیلی چاقه"}
+{"id": "c2-076", "topic": "copula", "text": "اسبش خیلی سریعه"}
+{"id": "c2-077", "topic": "copula", "text": "جوجه‌ش خیلی کوچیکه"}
+{"id": "c2-078", "topic": "copula", "text": "این سگه اهلیه؟"}
+{"id": "c2-079", "topic": "copula", "text": "پشمش خیلی نرمه"}
+{"id": "c2-080", "topic": "copula", "text": "مرغه یا خروسه؟"}
+{"id": "c2-081", "topic": "copula", "text": "الان کلاسه"}
+{"id": "c2-082", "topic": "copula", "text": "فردا امتحانه"}
+{"id": "c2-083", "topic": "copula", "text": "این تکلیف ریاضیه"}
+{"id": "c2-084", "topic": "copula", "text": "مشقه؟"}
+{"id": "c2-085", "topic": "copula", "text": "این دفتر منه"}
+{"id": "c2-086", "topic": "copula", "text": "نه، مال توئه"}
+{"id": "c2-087", "topic": "copula", "text": "این مداد مال کیه؟"}
+{"id": "c2-088", "topic": "copula", "text": "خودکارش آبیه"}
+{"id": "c2-089", "topic": "copula", "text": "پاک‌کنه"}
+{"id": "c2-090", "topic": "copula", "text": "اینجا کتابخونه‌س"}
+{"id": "c2-091", "topic": "copula", "text": "سلف دانشگاهه"}
+{"id": "c2-092", "topic": "copula", "text": "اون ساختمون خوابگاهه"}
+{"id": "c2-093", "topic": "copula", "text": "آزمایشگاه شیمیه"}
+{"id": "c2-094", "topic": "copula", "text": "امتحان فیزیکه"}
+{"id": "c2-095", "topic": "copula", "text": "وای فردا کنکوره"}
+{"id": "c2-096", "topic": "copula", "text": "نمره‌ش بیسته"}
+{"id": "c2-097", "topic": "copula", "text": "زنگ تفریحه"}
+{"id": "c2-098", "topic": "copula", "text": "ترم آخره"}
+{"id": "c2-099", "topic": "copula", "text": "این جزوه‌ی استاده"}
+{"id": "c2-100", "topic": "copula", "text": "کلاس زبانه"}
+{"id": "c2-101", "topic": "copula", "text": "الان ساعت ورزشه"}
+{"id": "c2-102", "topic": "copula", "text": "این درس خیلی سخته"}
+{"id": "c2-103", "topic": "copula", "text": "امتحانش آسونه"}
+{"id": "c2-104", "topic": "copula", "text": "معلممون خیلی مهربونه"}
+{"id": "c2-105", "topic": "copula", "text": "شرکتشون بزرگه"}
+{"id": "c2-106", "topic": "copula", "text": "جلسه‌ی امروز طولانیه"}
+{"id": "c2-107", "topic": "copula", "text": "اینجا دفتر کارمه"}
+{"id": "c2-108", "topic": "copula", "text": "حقوقش کمه"}
+{"id": "c2-109", "topic": "copula", "text": "این هفته شیفت شبه"}
+{"id": "c2-110", "topic": "copula", "text": "قراردادش موقته"}
+{"id": "c2-111", "topic": "copula", "text": "این ایمیل رئیسه"}
+{"id": "c2-112", "topic": "copula", "text": "گزارشه؟"}
+{"id": "c2-113", "topic": "copula", "text": "کارت پرسنلیمه"}
+{"id": "c2-114", "topic": "copula", "text": "میزش همینجاست"}
+{"id": "c2-115", "topic": "copula", "text": "این صندلی منه"}
+{"id": "c2-116", "topic": "copula", "text": "ماژیکه"}
+{"id": "c2-117", "topic": "copula", "text": "تخته سیاهه"}
+{"id": "c2-118", "topic": "copula", "text": "اینا برگه‌ی امتحانه؟"}
+{"id": "c2-119", "topic": "copula", "text": "تمرینش زیاده"}
+{"id": "c2-120", "topic": "copula", "text": "امشب اضافه‌کاره"}
+{"id": "c2-121", "topic": "copula", "text": "ماشینه"}
+{"id": "c2-122", "topic": "copula", "text": "ماشین باباشه"}
+{"id": "c2-123", "topic": "copula", "text": "این موتور مال کیه؟"}
+{"id": "c2-124", "topic": "copula", "text": "اتوبوسه"}
+{"id": "c2-125", "topic": "copula", "text": "مترو شلوغه"}
+{"id": "c2-126", "topic": "copula", "text": "تاکسیه؟"}
+{"id": "c2-127", "topic": "copula", "text": "اون ماشین سفیده اسنپه"}
+{"id": "c2-128", "topic": "copula", "text": "قطار ساعت چنده؟"}
+{"id": "c2-129", "topic": "copula", "text": "پروازمون دیره"}
+{"id": "c2-130", "topic": "copula", "text": "اون کشتیه؟"}
+{"id": "c2-131", "topic": "copula", "text": "قایق ماهیگیریه"}
+{"id": "c2-132", "topic": "copula", "text": "جلومون کامیونه"}
+{"id": "c2-133", "topic": "copula", "text": "وانت میوه‌فروشه"}
+{"id": "c2-134", "topic": "copula", "text": "ماشینش پرایده"}
+{"id": "c2-136", "topic": "copula", "text": "سمنده یا پارسه؟"}
+{"id": "c2-137", "topic": "copula", "text": "تراکتور عموئه"}
+{"id": "c2-138", "topic": "copula", "text": "برو کنار آمبولانسه"}
+{"id": "c2-139", "topic": "copula", "text": "اسکوترش نوئه"}
+{"id": "c2-140", "topic": "copula", "text": "ماشینشون ونه"}
+{"id": "c2-141", "topic": "copula", "text": "سرویس مدرسه مینی‌بوسه"}
+{"id": "c2-142", "topic": "copula", "text": "ماشین داییم جیپه"}
+{"id": "c2-143", "topic": "copula", "text": "بنزش مشکیه"}
+{"id": "c2-144", "topic": "copula", "text": "پشت سرمون تریلیه"}
+{"id": "c2-145", "topic": "copula", "text": "صدای هلیکوپتره!"}
+{"id": "c2-146", "topic": "copula", "text": "ایستگاه بعدیه"}
+{"id": "c2-147", "topic": "copula", "text": "ترمینال غربه"}
+{"id": "c2-148", "topic": "copula", "text": "پمپ‌بنزین بسته‌س"}
+{"id": "c2-150", "topic": "copula", "text": "این پلاک تهرانه"}
+{"id": "c2-151", "topic": "copula", "text": "این بلیط قطاره"}
+{"id": "c2-152", "topic": "copula", "text": "ماشینش خیلی گرونه"}
+{"id": "c2-153", "topic": "copula", "text": "موتورش خیلی سریعه"}
+{"id": "c2-154", "topic": "copula", "text": "این اتوبوس خیلی کنده"}
+{"id": "c2-155", "topic": "copula", "text": "ماشین جدیدش سفیده"}
+{"id": "c2-156", "topic": "copula", "text": "دوچرخه‌ش قرمزه"}
+{"id": "c2-157", "topic": "copula", "text": "ماشینم خرابه"}
+{"id": "c2-158", "topic": "copula", "text": "اون تاکسی خالیه"}
+{"id": "c2-159", "topic": "copula", "text": "ایستگاه مترو نزدیکه"}
+{"id": "c2-160", "topic": "copula", "text": "فرودگاه خیلی دوره"}
+{"id": "c2-161", "topic": "copula", "text": "هوا سرده"}
+{"id": "c2-162", "topic": "copula", "text": "امروز خیلی گرمه"}
+{"id": "c2-163", "topic": "copula", "text": "بیرون بارونه"}
+{"id": "c2-164", "topic": "copula", "text": "اونجا برفه؟"}
+{"id": "c2-165", "topic": "copula", "text": "آسمون ابریه"}
+{"id": "c2-166", "topic": "copula", "text": "هوا آفتابیه"}
+{"id": "c2-167", "topic": "copula", "text": "باد خیلی شدیده"}
+{"id": "c2-168", "topic": "copula", "text": "بیرون نرو، طوفانه"}
+{"id": "c2-169", "topic": "copula", "text": "تگرگه!"}
+{"id": "c2-170", "topic": "copula", "text": "اینجا خیلی شرجیه"}
+{"id": "c2-171", "topic": "copula", "text": "هوا خنکه"}
+{"id": "c2-172", "topic": "copula", "text": "آب خیلی داغه"}
+{"id": "c2-173", "topic": "copula", "text": "جاده یخبندونه"}
+{"id": "c2-174", "topic": "copula", "text": "دیگه دیره"}
+{"id": "c2-175", "topic": "copula", "text": "هنوز زوده"}
+{"id": "c2-176", "topic": "copula", "text": "پاشو صبحه"}
+{"id": "c2-177", "topic": "copula", "text": "ظهره"}
+{"id": "c2-178", "topic": "copula", "text": "الان عصره"}
+{"id": "c2-179", "topic": "copula", "text": "الان ساعت خوابه"}
+{"id": "c2-180", "topic": "copula", "text": "نصف شبه"}
+{"id": "c2-182", "topic": "copula", "text": "امروز تولدشه"}
+{"id": "c2-183", "topic": "copula", "text": "فردا عیده"}
+{"id": "c2-184", "topic": "copula", "text": "یه هفته دیگه نوروزه"}
+{"id": "c2-185", "topic": "copula", "text": "تابستونه دیگه"}
+{"id": "c2-186", "topic": "copula", "text": "دیگه زمستونه"}
+{"id": "c2-187", "topic": "copula", "text": "بهاره"}
+{"id": "c2-188", "topic": "copula", "text": "پاییزه"}
+{"id": "c2-189", "topic": "copula", "text": "نزدیک غروبه"}
+{"id": "c2-190", "topic": "copula", "text": "وقت ناهاره"}
+{"id": "c2-191", "topic": "copula", "text": "بیاید وقت شامه"}
+{"id": "c2-192", "topic": "copula", "text": "فردا اول ماهه"}
+{"id": "c2-193", "topic": "copula", "text": "آخر ماهه"}
+{"id": "c2-194", "topic": "copula", "text": "امروز دوشنبه‌س"}
+{"id": "c2-195", "topic": "copula", "text": "کلاس فرداست"}
+{"id": "c2-197", "topic": "copula", "text": "جشن امشبه"}
+{"id": "c2-198", "topic": "copula", "text": "هوا تاریکه"}
+{"id": "c2-199", "topic": "copula", "text": "اتاق روشنه"}
+{"id": "c2-200", "topic": "copula", "text": "زمین خیسه"}
+{"id": "c2-201", "topic": "copula", "text": "داداشم خیلی زرنگه"}
+{"id": "c2-202", "topic": "copula", "text": "پسرش تنبله"}
+{"id": "c2-203", "topic": "copula", "text": "دخترش باهوشه"}
+{"id": "c2-204", "topic": "copula", "text": "باباش بداخلاقه"}
+{"id": "c2-205", "topic": "copula", "text": "مامانش خوش‌اخلاقه"}
+{"id": "c2-206", "topic": "copula", "text": "رئیسمون خیلی جدیه"}
+{"id": "c2-207", "topic": "copula", "text": "همکارم خسیسه"}
+{"id": "c2-208", "topic": "copula", "text": "عموش پولداره"}
+{"id": "c2-209", "topic": "copula", "text": "دوستش خوش‌تیپه"}
+{"id": "c2-210", "topic": "copula", "text": "خواهرم قدبلنده"}
+{"id": "c2-211", "topic": "copula", "text": "سگمون پیره"}
+{"id": "c2-212", "topic": "copula", "text": "معلم جدید جوونه"}
+{"id": "c2-213", "topic": "copula", "text": "داداشش مجرده؟"}
+{"id": "c2-214", "topic": "copula", "text": "همسایه‌مون مودبه"}
+{"id": "c2-215", "topic": "copula", "text": "بچه‌شون خیلی شیطونه"}
+{"id": "c2-216", "topic": "copula", "text": "شاگردش ساکته"}
+{"id": "c2-217", "topic": "copula", "text": "اون آقا مشهوره؟"}
+{"id": "c2-218", "topic": "copula", "text": "این بازیکن قویه"}
+{"id": "c2-219", "topic": "copula", "text": "پرستاره خسته‌س"}
+{"id": "c2-220", "topic": "copula", "text": "استاد ناراحته"}
+{"id": "c2-221", "topic": "copula", "text": "آبجیم خوشحاله"}
+{"id": "c2-223", "topic": "copula", "text": "سگه گشنه‌س"}
+{"id": "c2-224", "topic": "copula", "text": "گربه‌ش سالمه"}
+{"id": "c2-225", "topic": "copula", "text": "این اسب خیلی آرومه"}
+{"id": "c2-226", "topic": "copula", "text": "کیف مدرسه‌ش سبکه"}
+{"id": "c2-227", "topic": "copula", "text": "کلاس پره"}
+{"id": "c2-228", "topic": "copula", "text": "کلاس خالیه"}
+{"id": "c2-229", "topic": "copula", "text": "کتابه؟"}
+{"id": "c2-230", "topic": "copula", "text": "این لپتاپ داداشمه"}
+{"id": "c2-231", "topic": "copula", "text": "کلیده؟"}
+{"id": "c2-232", "topic": "copula", "text": "این کفش پسرمه"}
+{"id": "c2-233", "topic": "copula", "text": "این بلیط اتوبوسه"}
+{"id": "c2-234", "topic": "copula", "text": "خونه‌ی مادربزرگه"}
+{"id": "c2-235", "topic": "copula", "text": "اینجا رستورانه؟"}
+{"id": "c2-236", "topic": "copula", "text": "روبروش پارکه"}
+{"id": "c2-237", "topic": "copula", "text": "اون ساختمون بیمارستانه"}
+{"id": "c2-238", "topic": "copula", "text": "کارخونه‌ی باباست"}
+{"id": "c2-239", "topic": "copula", "text": "طبقه‌ی دوم مطب دکتره"}
+{"id": "c2-240", "topic": "copula", "text": "اون ساختمون دانشکده‌س"}
+{"id": "c2-241", "topic": "copula", "text": "قلاده‌ی سگمه"}
+{"id": "c2-242", "topic": "copula", "text": "لونه‌ی گنجشکه"}
+{"id": "c2-243", "topic": "copula", "text": "پیشی من سفیده"}
+{"id": "c2-244", "topic": "copula", "text": "این جوجه زرده"}
+{"id": "c2-245", "topic": "copula", "text": "مهمونی خیلی شلوغه"}
+{"id": "c2-246", "topic": "copula", "text": "کوچه خلوته"}
+{"id": "c2-247", "topic": "copula", "text": "راننده‌ش جوونه"}
+{"id": "c2-248", "topic": "copula", "text": "ماشین همکارمه"}
+{"id": "c2-249", "topic": "copula", "text": "موتور پیکه"}
+{"id": "c2-250", "topic": "copula", "text": "صبحونه حاضره"}

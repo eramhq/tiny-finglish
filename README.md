@@ -92,8 +92,8 @@ the accuracy you choose:
 | nothing | 11.3 KiB | 64.6% |
 | **frequency + vowels** | **74.9 KiB** | **74.3%** |
 | frequency + vowels + bigrams (opt-in) | 148.5 KiB | 74.7% |
-| frequency + vowels and the model (`"."`) | 161.3 KiB | 71.1% |
-| ...model and rules ranked jointly (`hybrid: true`) | 161.3 KiB | 72.2% (77.0% orthographic) |
+| frequency + vowels and the model (`"."`) | 161.8 KiB | 72.4% |
+| ...model and rules ranked jointly (`hybrid: true`) | 161.8 KiB | 72.8% (77.5% orthographic) |
 
 Measured on the 1,669-row audited gold set, September 2026. The previous
 figures (62.3% for rules + frequency, 51.2% for the model) were on the
@@ -106,7 +106,7 @@ The vowel table (8.3 KiB) is fetched with it and only used with it: it carries
 the vowels of the 3,667 table words a typed `a` cannot tell apart, which is how `salam` is سلام and not سالم. See
 [the vowel-agreement round](#september-2026-vowel-agreement-and-the-v7-model).
 
-**The model is still behind the rules on real input**, by 3.1 points, down from
+**The model is still behind the rules on real input**, by 1.9 points, down from
 11. It earns its bytes on ZWNJ, adversarial input and mixed English, and it
 adds orthographic accuracy when ranked jointly with the rules.
 
@@ -186,29 +186,36 @@ Engine changes, each measured on its own against dev, the fixtures and chat-dev:
 * **`heBorrow` is removed.** With کتابه in the table it bought nothing on any
   tier, and off gives `bekhatere` back as بخاطر on the model tier.
 
+**v8 ships**, trained on 1,701 chat sentences (700 HomoRich lines with a chat
+word, 1,001 of the reviewed LLM chat lines) typed by five luna agents, which
+took the corpus to 14,660 sentences. Of two arms, the one that splits LLM
+examples by sentence rather than by word won, so خوبی now trains instead of
+landing in the held-out split. It writes `merci` and `kojaei` on the model tier,
+which v7 never did.
+
 Scored once, at the end (strict; chat-test also against the closest accepted
-spelling):
+spelling). The model rows are v7 → v8, engine changes included:
 
 | tier | gold before → after | chat-test before → after (AI-typed) |
 |---|---:|---:|
 | rules + frequency | 74.3 → **74.3** | 83.7 → **85.6** |
-| model + frequency (v7) | 71.2 → **71.1** | 75.4 → **75.4** (accepted 83.9) |
-| hybrid | 72.1 → **72.2** | 75.0 → **76.9** (accepted 85.4) |
+| model + frequency | 71.2 → **72.4** | 75.4 → **79.0** (accepted 87.9) |
+| hybrid | 72.1 → **72.8** | 75.0 → **78.2** (accepted 87.1) |
 
-Dev is unchanged within 0.2 on every tier; fixtures (now 227, with 16 `chat`
-rows) rules 85.9 → 87.6, hybrid 90.5 → 92.2, model 90.2 → 90.2.
+Dev strict / faithful: rules 58.8 / 69.8 → 58.8 / 70.0, model 57.0 / 67.8 →
+58.0 / 68.9, hybrid 58.2 / 69.3 → 58.2 / 69.2. Fixtures (now 227, with 16
+`chat` rows): rules 85.9 → 87.6, model 90.2 → 92.2, hybrid 90.5 → 92.0.
 
-**v8 is trained and held back, over one word.** 1,701 chat sentences (700
-HomoRich lines with a chat word, 1,001 of the reviewed LLM chat lines) typed by
-five luna agents took the corpus to 14,660 sentences. The better of two arms
-(LLM examples split by sentence rather than by word, so خوبی trains instead of
-landing in test) beats v7 everywhere: dev strict 57.1 → 58.0, fixtures 90.2 →
-92.2, chat-dev 84.1 → 87.0, and — scored once, for the record — gold 71.1 →
-72.4 and chat-test 75.4 → 79.0. It writes `merci` and `kojaei` on the model tier,
-which v7 never did. But the ship rule also requires `ketabe` → کتابه on every
-tier, and v8's model tier writes کتاب: it prefers the bare noun 81/19 even after
-the clause-final tilt, and closing that takes `finalHe` 3.5, a setting where the
-model tier starts losing fixtures. So v7 stays.
+**It ships with one known miss, by decision.** The round's ship rule required
+`ketabe` → کتابه on every tier, and v8's model tier writes کتاب: it prefers the
+ezafe reading (`ketabe man`) 81/19 even after the clause-final tilt. Closing
+that with `finalHe` takes 3.5, where the model tier starts losing fixtures. A
+follow-up round typed 489 chat lines ending in the copula (v8b); it moved
+`ketabe` to 60/40, started writing `daneshjooha` as دانشجوهه, and lost 0.3 on
+dev, so it was not shipped either. The rules and hybrid tiers write کتابه, and
+`test/chat.test.ts` pins the model tier's miss. v8 also loses ground on the ZWNJ
+fixtures (92.6 → 77.8) and the ambiguous ones (94.4 → 88.9) while gaining on
+`chat`, `informal` and `ordinary`.
 
 ### September 2026: vowel agreement, and the v7 model
 
@@ -365,9 +372,9 @@ after Brotli at 500k, for no measurable accuracy cost — which is what makes th
 | keystroke, incremental word | < 0.01 ms | 16 ms |
 | keystroke, end of sentence (warm) | 0.03 ms | 16 ms |
 | sentence, cold | ~40 ms | 100 ms |
-| shipped bundle, Brotli | **161.3 KiB** | ~250 KiB soft cap |
+| shipped bundle, Brotli | **161.8 KiB** | ~250 KiB soft cap |
 
-The bundle is 13.8 KiB of code, 84.0 KiB of weights, 55.3 KiB of frequency and
+The bundle is 13.8 KiB of code, 84.4 KiB of weights, 55.3 KiB of frequency and
 8.3 KiB of vowels; the last two are separate fetches, never bundled, so a
 consumer who wants only the rules pays 11.3 KiB. The 73.6 KiB bigram and the 98.3 KiB lexicon are built and
 measured but not counted — see the accuracy-per-byte table below. Both budgets
@@ -386,28 +393,29 @@ adversarial and ambiguous cases. With the shipped 100k model:
 | category | n | word acc | sentence | top-3 |
 |---|---:|---:|---:|---:|
 | protected | 13 | 100.0% | 100.0% | 100.0% |
-| sentence | 25 | 97.5% | 92.0% | 96.0% |
+| sentence | 25 | 98.7% | 96.0% | 100.0% |
 | mixed | 8 | 97.3% | 87.5% | 87.5% |
-| ambiguous | 36 | 94.4% | 97.2% | 100.0% |
-| ordinary | 74 | 93.2% | 93.2% | 97.3% |
-| zwnj | 18 | 92.6% | 94.4% | 94.4% |
+| ordinary | 74 | 94.6% | 94.6% | 98.6% |
 | adversarial | 10 | 90.0% | 90.0% | 100.0% |
+| ambiguous | 36 | 88.9% | 94.4% | 100.0% |
+| informal | 22 | 87.5% | 86.4% | 100.0% |
+| chat | 16 | 82.8% | 68.8% | 93.8% |
 | ezafe | 5 | 81.8% | 60.0% | 80.0% |
-| informal | 22 | 79.2% | 77.3% | 95.5% |
-| chat | 16 | 51.7% | 25.0% | 68.8% |
-| **all** | 227 | **90.2%** | **86.8%** | **94.7%** |
+| zwnj | 18 | 77.8% | 83.3% | 88.9% |
+| **all** | 227 | **92.2%** | **90.3%** | **97.4%** |
 
 `chat` is new this round: the chat failures the round targeted, in different
-words from the chat test set. v7 writes most of them wrong; the rules tier gets
-11 of 16 and the hybrid 10 (`test/chat.test.ts`). `ezafe` is five minimal pairs
-for the word-final ه. `in ketaabe` passes on the rules and hybrid tiers; the
-model tier writes کتاب again since `heBorrow` went, and its other miss is
-`dare khune baaze`, where it writes the detached ezafe as داره. The one adversarial miss is `aaaaaaa`, one ا
+words from the chat test set. v7 got 4 of 16; v8 gets 11, the rules tier 11 and
+the hybrid 10 (`test/chat.test.ts`). `ezafe` is five minimal pairs for the
+word-final ه. `in ketaabe` passes on the rules and hybrid tiers; the model tier
+writes کتاب (see the chat round above), and its other miss is `dare khune
+baaze`, where it writes the detached ezafe as داره. The ZWNJ bucket fell with
+v8, from 92.6 to 77.8. The one adversarial miss is `aaaaaaa`, one ا
 short. See `SCORING.finalHe` in `src/baseline.ts`.
 
 **The gap between the synthetic test set and this one is the honest number for
 data this project did not generate** — and the gap to the gold set below, data it
-did not *write*, is larger still: 90.2% here against 57.1% on the dev set. It is the
+did not *write*, is larger still: 92.2% here against 58.0% on the dev set. It is the
 synthetic-data bias the plan's risk register predicted, and it is why the
 hand-authored set exists.
 

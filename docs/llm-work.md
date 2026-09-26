@@ -294,10 +294,28 @@ accepted spelling):
 The sentence split wins, which says the word split was costing more than chat
 words: a word held out of training is held out of every sentence it occurs in.
 v8-sentence also writes `merci` and `kojaei` on the model tier, which v7 never
-did. It is **held back** by the ship rule, which also requires `ketabe` →
-کتابه on every tier. The model prefers کتاب 81/19 after the clause-final tilt,
-because in its data `ketabe` is far more often the ezafe (`ketabe man`) than the
-copula. Re-sweeping `finalHe` for v8 is flat over 2-3 on all three tiers; the
-model tier reaches کتابه only at 3.5, by 0.03 nats, where it starts losing
-fixtures. Scored once, for the record: gold 71.1 → 72.4 on the model tier,
-72.2 → 72.8 hybrid; chat-test 75.4 → 79.0 and 76.9 → 78.2.
+did. It failed the round's ship rule on one word: the rule also required
+`ketabe` → کتابه on every tier, and the model prefers کتاب 81/19 after the
+clause-final tilt, because in its data `ketabe` is far more often the ezafe
+(`ketabe man`) than the copula. Re-sweeping `finalHe` for v8 is flat over 2-3
+on all three tiers; the model tier reaches کتابه only at 3.5, by 0.03 nats,
+where it starts losing fixtures.
+
+**The follow-up, aimed at that word, did not work.** Claude wrote 500 short
+chat lines ending in the copula (`chat-copula-write.md`, mostly nouns:
+ماشینه، گوشیه، دوستمه); Claude accepted all 500 and luna rejected 7, six of
+them for the colloquial رو in place of روی. Three luna agents typed the 489
+that cleared the leakage guard (identical pairs 12.5%, 0 of 3 files out of
+band). Retrained the same way (v8b, 15,141 sentences), the model moved
+`ketabe` from 81/19 to 60/40, still the wrong side, started writing
+`daneshjooha` as دانشجوهه, and lost 0.3 dev strict and 0.5 fixtures while
+gaining 1.8 on chat-dev. A few hundred targeted lines shift a word-level prior,
+but the word-level model cannot see that `ketabe` ends a clause, so it
+over-applies the ه instead of learning the position.
+
+**v8-sentence ships, with `ketabe` as a known miss on the model tier**, by the
+user's decision: it is better than v7 on every surface this project measures,
+and the rules and hybrid tiers write کتابه. Scored once: gold 71.1 → 72.4 on
+the model tier and 72.2 → 72.8 hybrid; chat-test (AI-typed) 75.4 → 79.0 and
+76.9 → 78.2. The copula lines stay in the corpus artifact for a later round;
+v8 was trained on the 14,660 sentences before them.

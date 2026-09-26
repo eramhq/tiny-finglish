@@ -21,10 +21,13 @@ Full record in `docs/llm-work.md` §8 and `data/chat/README.md`.
   that undid table words the stem lexicon lacks. Fixing them, plus 566 chat
   words added to the frequency table, moved chat-test +1.9 on rules and hybrid
   with gold flat. `heBorrow` is gone.
-* **v8 is trained and held back over `ketabe` on the model tier.** It beats v7
-  on every surface, held-out ones included. Shipping it means relaxing the ship
-  rule for that one word, or teaching the model the copula (a small typing
-  round of clause-final noun + ه chat lines is the obvious try).
+* **v8 ships with one known miss**: `ketabe` → کتاب on the model tier. It
+  beats v7 on every surface, held-out ones included. A 489-line copula typing
+  round moved that word 81/19 → 60/40 and broke دانشجوها, so it did not ship.
+  The model is word-level and cannot see clause position; the fix is more
+  likely a position feature or a scoring term than more data.
+* **v8 lost ground on ZWNJ** (fixtures 92.6 → 77.8): chat lines are typed and
+  written without the half-space, and the sentence split lets them train.
 
 Still open, from the chat-dev errors that remain:
 
