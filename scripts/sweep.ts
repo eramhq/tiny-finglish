@@ -21,7 +21,7 @@ import { SCORING, type ScoringParams } from "../src/baseline.ts";
 import { lenientSplitWords, wordAccuracy } from "../src/metrics.ts";
 import { normalize } from "../src/normalize.ts";
 import { Transliterator } from "../src/index.ts";
-import { loadFixtures, loadFrequency, loadLexicon, loadModel } from "./_load.ts";
+import { loadFixtures, loadFrequency, loadLexicon, loadModel, loadVowels } from "./_load.ts";
 
 const argv = process.argv.slice(2);
 const gridAt = argv.indexOf("--grid");
@@ -50,6 +50,8 @@ function* combinations(i = 0, acc: Partial<ScoringParams> = {}): Generator<Parti
 
 const frequency = loadFrequency();
 const lexicon = loadLexicon();
+// Always loaded: `vowelAgreement=0` is the same engine as no table at all.
+const vowels = loadVowels();
 const model = !useModel
   ? undefined
   : weightsAt >= 0
@@ -66,6 +68,7 @@ for (const scoring of combinations()) {
   const engine = new Transliterator({
     ...(frequency ? { frequency } : {}),
     ...(lexicon ? { lexicon } : {}),
+    ...(vowels ? { vowels } : {}),
     ...(model ? { model, hybrid: engineName === "hybrid" } : {}),
     scoring: fitted ? { ...scoring, fitted } : scoring,
   });

@@ -42,6 +42,7 @@ export { tokenize } from "./tokenize.ts";
 export { decodeFrontCoded, encodeFrontCoded } from "./frontcode.ts";
 export { decodeFrequencyTable, type FrequencyTable } from "./frequency.ts";
 export { decodeBigramTable, type BigramTable } from "./bigram.ts";
+export { decodeVowelTable, type VowelTable } from "./vowels.ts";
 export { RuleBaseline, matchKeySet } from "./baseline.ts";
 
 /** The rule baseline behind the full span pipeline. No weights, no runtime. */

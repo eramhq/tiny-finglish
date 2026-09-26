@@ -51,14 +51,16 @@ SHORT_VOWELS = "aeo"
 _PUNCT = re.compile(r"[^\w‌؀-ۿ]")
 
 
-def build(source: Path, out: Path, gold: Path) -> dict:
-    import pyarrow.parquet as pq
+def count_pronunciations(
+    source: Path, gold_keys: set[str], strip=None,
+) -> tuple[dict[str, collections.Counter], int, int]:
+    """Word -> Counter of phoneme strings, over HomoRich rows not in `gold_keys`.
 
-    gold_keys = {
-        fold_for_match(json.loads(line)["expected"])
-        for line in gold.read_text(encoding="utf-8").splitlines()
-        if line
-    }
+    Shared with `build_vowels.py`, which passes a wider set of evaluation keys
+    and a `strip` hook that removes the ezafe HomoRich transcribes in context.
+    Returns the counts and how many rows were excluded and used.
+    """
+    import pyarrow.parquet as pq
 
     table = pq.read_table(source, columns=["Grapheme", "Phoneme"])
     graphemes = table.column("Grapheme").to_pylist()
@@ -81,8 +83,20 @@ def build(source: Path, out: Path, gold: Path) -> dict:
         for word, sound in zip(words, sounds):
             word = normalize(_PUNCT.sub("", word))
             sound = sound.strip()
+            if strip and word and sound:
+                sound = strip(word, sound)
             if word and sound:
                 counts[word][sound] += 1
+    return counts, excluded, used
+
+
+def build(source: Path, out: Path, gold: Path) -> dict:
+    gold_keys = {
+        fold_for_match(json.loads(line)["expected"])
+        for line in gold.read_text(encoding="utf-8").splitlines()
+        if line
+    }
+    counts, excluded, used = count_pronunciations(source, gold_keys)
 
     # Keep the most frequent pronunciation per word. Persian homographs exist
     # (کرم is kerm, karam or krem) and this silently picks one; the transducer

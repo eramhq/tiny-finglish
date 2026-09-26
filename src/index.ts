@@ -40,6 +40,7 @@ export { tokenize } from "./tokenize.ts";
 export { decodeFrontCoded, encodeFrontCoded } from "./frontcode.ts";
 export { decodeFrequencyTable, type FrequencyTable } from "./frequency.ts";
 export { decodeBigramTable, type BigramTable } from "./bigram.ts";
+export { decodeVowelTable, type VowelTable } from "./vowels.ts";
 export { RuleTransliterator } from "./rules-engine.ts";
 export type { PipelineOptions } from "./pipeline.ts";
 export type { WeightArtifact } from "./quant.ts";

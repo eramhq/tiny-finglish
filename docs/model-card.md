@@ -11,8 +11,8 @@ Persian grapheme set that includes an empty label and multi-character labels.
 | Task | monotonic transliteration, Latin → Perso-Arabic |
 | Architecture | embedding → 5-wide neighbourhood → bidirectional affine scans → per-position softmax |
 | Sizes trained | 27,660 / 102,348 / 541,516 / ~2M parameters |
-| **Shipped** | **110,018 parameters, int6, 96.6 KiB Brotli with runtime** (same 100k architecture; the label set grew) |
-| Shipped data | 54.1 KiB word frequency, fetched separately — 150.7 KiB all in |
+| **Shipped** | **110,018 parameters, int6, 97.8 KiB Brotli with runtime** (same 100k architecture; the label set grew) |
+| Shipped data | 54.1 KiB word frequency and 8.1 KiB vowels, fetched separately — 160.0 KiB all in |
 | Optional data | 73.6 KiB word bigrams, 98.3 KiB lexicon; measured, not shipped |
 | Quantization | per-row symmetric int8 or int6 |
 | Runtime | hand-written JavaScript, CPU, no WASM/WebGPU/ONNX |
@@ -31,53 +31,56 @@ Not a translator, not a chatbot, not a general LLM. Not intended for
 unsupervised bulk rewriting of documents — the plan lists "silent rewriting of
 long documents" as an explicit non-goal, and the accuracy figures below are why.
 
-## The shipped model, as of September 2026
+## The shipped model, as of September 2026 (v7)
 
 Same architecture and recipe as the 100k model below, retrained on a new mix.
-The rest of this card below this section is the record of how the previous
-model was chosen and measured, kept as it was measured.
+The rest of this card below this section is the record of how earlier models
+were chosen and measured, kept as it was measured.
 
 **Training data: half synthetic, half LLM-typed.**
 
 * The synthetic corpus below, regenerated after fixing a generator bug. The bug
   wrote the Persian letters ع ئ ء ؤ into the Latin side of 21,008 of 425,590
   examples: 428,721 train examples, corpus hash `fd659baf6593debb`.
-* 164,990 word-level examples from 10,049 HomoRich sentences (CC0), each typed
-  in Finglish by two calibrated LLM "typist" personas: Claude Opus 5 subagents
-  (5,400 variants) and Codex GPT-5.6 luna (14,744). They were aligned to
-  character labels by the rule engine's noisy channel and repeated to equal the
-  synthetic count. Gold and dev sentences were excluded before sampling. See
-  `docs/llm-work.md` §6 and `data/provenance/distill.json`.
+* 207,899 word-level examples from 12,971 HomoRich sentences (CC0), each typed
+  in Finglish by calibrated LLM "typist" personas (Claude Opus 5 subagents and
+  Codex GPT-5.6 luna), aligned to character labels by the rule engine's noisy
+  channel and repeated to equal the synthetic count (`upsample 0.5`). 2,922 of
+  the sentences are a targeted draw that ends in a ه word, because written
+  Persian spells the copula است and people type it as a ه. Gold and dev
+  sentences were excluded before sampling. See `docs/llm-work.md` §6 and
+  `data/provenance/distill.json`.
 
-**Evaluation.** Parity with the PyTorch checkpoint holds at 1.8e-5 against a
-2e-3 tolerance.
+**Evaluation.** Parity with the PyTorch checkpoint holds at 1.9e-5 against a
+2e-3 tolerance. Both columns use the same shipped scoring — frequency, the
+vowel-agreement term and `heBorrow` — so they differ only in the weights:
 
-| set | 3,000-sentence model | **shipped (10,049 sentences)** |
+| set | v6 (10,049 sentences) | **v7, shipped (12,971)** |
 |---|---:|---:|
-| dev set, strict (304 real rows, the tuning surface) | 55.6% | **56.2%** |
-| dev set, against `faithful` | 66.3% | **67.1%** |
-| hand-authored fixtures (205) | 89.0% | **92.2%** |
-| **real human Finglish, gold (1,669 audited rows)** | 69.2% | **70.3%** |
-| gold, orthographic tier | 73.9% | **75.2%** |
-| ZWNJ placement, fixtures | 41% | **56.3%** |
+| dev set, strict (304 real rows, the tuning surface) | 56.4% | **57.0%** |
+| dev set, against `faithful` | 67.4% | **67.8%** |
+| hand-authored fixtures (211) | 91.2% | **93.7%** |
+| **real human Finglish, gold (1,669 audited rows)** | 70.6% | **71.2%** |
+| gold, orthographic tier | 75.5% | **75.9%** |
 
-Both columns are the same 110k architecture, recipe and audited 1,669 gold
-rows; the only change is the size of the LLM-typed half, 3,000 sentences to
-10,049. The 102k model this replaced scored 43.7 / 53.1 / 80.4 / 55.0 / 59.1.
+**v7 was held back one round over one word.** Without the vowel term it wrote
+`salam` as سالم ("healthy") in every context: the LLM corpus never contains the
+string `salam` — سلام is typed `salaam` every time — so the model generalized
+from `salem`/`saalem`. The vowel table (`src/vowels.ts`) fixes that by ranking,
+without retraining, and `test/vowels.test.ts` now pins `salam` on every tier.
+The one adversarial fixture it still misses is `aaaaaaa`, one ا short.
 
-**It still trails the rule engine on real input**, 70.3% to 73.5% strict on
-gold. It leads on the fixtures (92.2% against 83.8%) and on ZWNJ. Ranked
-jointly with the rules (`hybrid: true`), it gives the best orthographic-tier
-score in the project, 76.5% on gold.
+**It still trails the rule engine on real input**, 71.2% to 74.3% strict on
+gold. It leads on the fixtures (93.7% against 87.8%) and on ZWNJ (10 of 15
+against 0 of 11). Ranked jointly with the rules (`hybrid: true`), it gives the
+best orthographic-tier score in the project, 76.9% on gold — though on hybrid
+gold strict v6 would score 72.2% to v7's 72.1%.
 
-**The learning curve has not flattened, but the mix is what limits it.** On
-pure LLM data, dev strict still rises about +1.9 points per doubling of
-sentences typed (52.7 at 3,000, 56.0 at 10,049). The shipped 50% mix gained
-only +0.6 over the same range, because `mix()` upsamples the LLM half to match
-the synthetic count — tripling the sentences cut repetition from ~8.6x to
-~2.6x, buying diversity at constant exposure rather than more training signal.
-More LLM data should still pay; how the two corpora are combined is now the
-tighter constraint. `docs/llm-work.md` §6 has the full curve and its noise.
+**Dataset size is no longer the lever it looked like.** `mix()` upsamples the
+LLM half to match the synthetic count, so the training set is ~857k examples
+whatever the corpus size, and uniform data only buys less repetition. Targeted
+data is what moved v7: +9.1 on the fixtures' ezafe bucket and +11.1 on ZWNJ.
+`docs/llm-work.md` §6 has the curve and its noise.
 
 ## Training data
 

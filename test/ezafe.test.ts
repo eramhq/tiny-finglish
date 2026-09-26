@@ -59,18 +59,21 @@ describe("word-final ه", () => {
   });
 
   /**
-   * ezafe-002 is the documented miss, and this pins *where* it misses. کتابه is
-   * generated and ranked; it is not chosen, because it is absent from the
-   * frequency table and starts ~5.5 nats behind کتاب. If a later change closes
-   * that gap this test fails and the fixture starts passing, which is the
-   * outcome we want to be told about.
+   * ezafe-002 was the documented miss for two rounds, and this test pinned
+   * where it missed: کتابه was generated and ranked but ~5.5 nats behind کتاب,
+   * because it is absent from the frequency table. `SCORING.heBorrow` closed
+   * that gap, so the pin was flipped on purpose — it now asserts the fixture
+   * passes, and that the borrowed credit stays at the clause end.
    */
-  it("proposes the noun-plus-copula reading it cannot yet rank first", () => {
+  it("writes noun-plus-copula at a clause end, and only there", () => {
     const row = fixtures.get("ezafe-002")!;
-    const result = rules.transliterate(row.input, { candidatesPerSpan: 8 });
-    const last = result.spans.filter((s) => s.action === "convert").at(-1)!;
-    expect(last.candidates!.map((c) => c.output)).toContain("کتابه");
-    expect(result.text).not.toBe(row.expected);
+    expect(rules.transliterate(row.input).text).toBe(row.expected);
+    expect(rules.transliterate("ketaabe man").text).toBe("کتاب من");
+  });
+
+  it.skipIf(!hasWeights)("writes noun-plus-copula on the shipped model tier", () => {
+    const model = new Transliterator({ ...shared, model: loadModel()! });
+    expect(model.transliterate(fixtures.get("ezafe-002")!.input).text).toBe("این کتابه");
   });
 
   it("writes the clitic ه only at a clause end", () => {

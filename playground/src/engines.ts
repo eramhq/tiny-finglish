@@ -19,6 +19,7 @@
 import { Transliterator } from "../../src/index.ts";
 import type { BigramTable } from "../../src/bigram.ts";
 import type { FrequencyTable } from "../../src/frequency.ts";
+import type { VowelTable } from "../../src/vowels.ts";
 import type { WeightArtifact } from "../../src/quant.ts";
 import type { TransliterationResult } from "../../src/types.ts";
 import { naiveTransliterate } from "../../src/naive.ts";
@@ -43,6 +44,8 @@ export interface OurAssets {
   lexicon?: ReadonlySet<string> | undefined;
   frequency?: FrequencyTable | undefined;
   bigram?: BigramTable | undefined;
+  /** Rides with `frequency`, as in `buildTransliterator`. */
+  vowels?: VowelTable | undefined;
 }
 
 // ------------------------------------------------------- URL preservation
@@ -116,6 +119,7 @@ export function buildOurEngines(
       ...(flags.model && assets.weights ? { model: assets.weights } : {}),
       ...(withLexicon && assets.lexicon ? { lexicon: assets.lexicon } : {}),
       ...(flags.frequency && assets.frequency ? { frequency: assets.frequency } : {}),
+      ...(flags.frequency && assets.frequency && assets.vowels ? { vowels: assets.vowels } : {}),
       ...(withBigram && assets.bigram ? { bigram: assets.bigram } : {}),
     });
 

@@ -8,6 +8,7 @@ const repoRoot = fileURLToPath(new URL("..", import.meta.url));
 const LEXICON_ROUTE = "/lexicon.bin";
 const FREQUENCY_ROUTE = "/frequency.bin";
 const BIGRAM_ROUTE = "/bigram.bin";
+const VOWELS_ROUTE = "/vowels.bin";
 const NEVESHTYAR_ROUTE = "/vendor/neveshtyar.js";
 
 /**
@@ -28,6 +29,8 @@ function lexiconPlugin(): Plugin {
     brotliDecompressSync(readFileSync(new URL("../data/lexicon/fa-frequency.bin", import.meta.url)));
   const loadBigram = () =>
     brotliDecompressSync(readFileSync(new URL("../data/lexicon/fa-bigram.bin", import.meta.url)));
+  const loadVowels = () =>
+    brotliDecompressSync(readFileSync(new URL("../data/lexicon/fa-vowels.bin", import.meta.url)));
 
   return {
     name: "tiny-finglish-lexicon",
@@ -36,6 +39,7 @@ function lexiconPlugin(): Plugin {
         [LEXICON_ROUTE, load],
         [FREQUENCY_ROUTE, loadFrequency],
         [BIGRAM_ROUTE, loadBigram],
+        [VOWELS_ROUTE, loadVowels],
       ] as const) {
         server.middlewares.use(route, (_request, response) => {
           response.setHeader("Content-Type", "application/octet-stream");
@@ -48,6 +52,7 @@ function lexiconPlugin(): Plugin {
       this.emitFile({ type: "asset", fileName: "lexicon.bin", source: load() });
       this.emitFile({ type: "asset", fileName: "frequency.bin", source: loadFrequency() });
       this.emitFile({ type: "asset", fileName: "bigram.bin", source: loadBigram() });
+      this.emitFile({ type: "asset", fileName: "vowels.bin", source: loadVowels() });
     },
   };
 }

@@ -21,6 +21,7 @@ import { bigramScore, type BigramTable } from "./bigram.ts";
 import { type FrequencyTable } from "./frequency.ts";
 import { normalize } from "./normalize.ts";
 import { tokenize, type Token } from "./tokenize.ts";
+import { vowelPass, type VowelTable } from "./vowels.ts";
 import type {
   Candidate,
   Span,
@@ -45,6 +46,12 @@ export interface PipelineOptions {
    * separate fetch, like the frequency table.
    */
   bigram?: BigramTable;
+  /**
+   * Vowels of the words a typed `a` cannot tell apart, from
+   * `decodeVowelTable`. Reorders سلام against سالم for `salam`, on every tier.
+   * Optional and a separate fetch, like the frequency table.
+   */
+  vowels?: VowelTable;
   /** Words cached on the incremental typing path. */
   cacheSize?: number;
   /**
@@ -105,7 +112,11 @@ export abstract class Pipeline {
   protected readonly lexicon: ReadonlySet<string> | undefined;
   protected readonly frequency: FrequencyTable | undefined;
   protected readonly bigram: BigramTable | undefined;
-  /** The same constants the baseline ranks with; `finalHePass` is the one term applied here. */
+  protected readonly vowels: VowelTable | undefined;
+  /**
+   * The same constants the baseline ranks with; `vowelAgreement` and `finalHe`
+   * are the terms applied here, after whichever engine generated the list.
+   */
   protected readonly scoring: ScoringParams;
   /**
    * Word-level memo. This is what keeps the typing path inside a 16 ms frame:
@@ -118,6 +129,7 @@ export abstract class Pipeline {
     this.lexicon = options.lexicon;
     this.frequency = options.frequency;
     this.bigram = options.bigram;
+    this.vowels = options.vowels;
     this.cacheSize = options.cacheSize ?? 2048;
     this.scoring = { ...SCORING, ...options.scoring };
     this.baseline = new RuleBaseline({
@@ -277,7 +289,14 @@ export abstract class Pipeline {
     const wide = this.bigram
       ? { ...opts, candidatesPerSpan: Math.max(opts.candidatesPerSpan ?? 3, CONTEXT_CANDIDATES) }
       : opts;
-    const candidates = this.convertWord(key, wide);
+    // Vowel agreement is context-free, so it is applied before the memo and
+    // cached with the list — and applied here rather than in the baseline so
+    // the model and hybrid tiers get it too. The model tier is where it matters
+    // most: v7 writes `salam` as سالم without it.
+    const generated = this.convertWord(key, wide);
+    const candidates = this.vowels
+      ? vowelPass(key, generated, this.vowels, this.scoring.vowelAgreement)
+      : generated;
 
     if (this.cache.size >= this.cacheSize) {
       // Cheap FIFO eviction. A true LRU costs more bookkeeping than it saves at
@@ -378,6 +397,15 @@ export abstract class Pipeline {
    * A list that is all ه-final, or none, is skipped: uniform scaling would not
    * reorder anything.
    *
+   * On top of the class-wide tilt, an out-of-table ه candidate whose bare form
+   * is in the frequency table borrows that form's credit, less
+   * `scoring.heBorrow` (`SCORING` has the sweep). That is what writes کتابه:
+   * without it, کتابه forfeits کتاب's frequency entirely and starts ~5.5 nats
+   * behind, which no safe `finalHe` reaches. It is per-candidate, not
+   * class-wide, and so it can reorder two ه spellings — which is why it is
+   * clamped at zero, tuned to the only cost no tier loses at, and limited to
+   * this position.
+   *
    * **The mirror half of that is not here, because it does not work.** Charging
    * a clitic ه mid-sentence is the obvious other half and it loses steadily —
    * the sweep is in `SCORING`. Medial is where خانه and پرنده live, the engine
@@ -404,6 +432,13 @@ export abstract class Pipeline {
     const weight = this.scoring.finalHe;
     if (!weight) return;
     const gain = Math.exp(weight);
+    const borrow = (output: string): number => {
+      const frequency = this.frequency;
+      if (!frequency || !Number.isFinite(this.scoring.heBorrow) || frequency.has(output)) return 0;
+      const bare = frequency.get(output.slice(0, -1));
+      if (!bare) return 0;
+      return Math.max(0, this.scoring.frequency * bare - this.scoring.outOfTable - this.scoring.heBorrow);
+    };
     for (let i = 0; i < spans.length; i++) {
       const span = spans[i]!;
       const list = span.candidates;
@@ -415,7 +450,7 @@ export abstract class Pipeline {
       }));
       if (scaled.every((s) => s.he) || !scaled.some((s) => s.he)) continue;
       const weights = scaled.map(({ candidate, he }) =>
-        Math.max(candidate.probability, 1e-6) * (he ? gain : 1));
+        Math.max(candidate.probability, 1e-6) * (he ? gain * Math.exp(borrow(candidate.output)) : 1));
       const total = weights.reduce((a, b) => a + b, 0);
       const ranked = scaled
         .map(({ candidate, he }, k) => ({ candidate, he, weight: weights[k]! }))

@@ -64,6 +64,17 @@ the frequency table does not settle. A per-typist convention (a typist who
 writes `aa` for ا means nothing by a bare `a`) was measured: +0.4 at best. Too
 small to carry per-sentence state in the word memo, so it is not built.
 
+*Later, September 2026:* the word's own vowels were built, and shipped. An
+oracle allowed to flip only ا-placement among the candidates already offered
+put the ceiling at +1.7 dev / +4.0 fixtures for rules and +2.3 / +2.5 for the
+model. `SCORING.vowelAgreement` (`src/vowels.ts`) scores each candidate against
+its HomoRich vowels (سلام *salām* against سالم *sālem*) and bought +0.3
+dev-faithful and +3.2 fixtures on rules, +0.4 on gold. Most of the ceiling it
+does not reach is words outside the 25k frequency table (حامله, ناگهان), and a
+typed `a` that fits both spellings (`chap`: چاپ or چپ). A position prior (ا on
+the last `a` rather than the first) was measured first, at 52% / 48%, and is
+not built.
+
 **The model's errors are lexical, and the rules' are not.** Long vowel, ع,
 homophone letters and ezafe make up 53% of the model's errors against 28% of
 the rules'. Frequency reranking cannot fix that, because the right word is

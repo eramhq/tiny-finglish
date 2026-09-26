@@ -63,6 +63,17 @@ if (existsSync(frequencyPath)) {
   });
 }
 
+// Counted as shipped with the frequency table it indexes: 8.1 KiB, and the term
+// it drives is worth +3.2 fixture points to the rule baseline and fixes `salam`.
+const vowelsPath = new URL("data/lexicon/fa-vowels.bin", root);
+if (existsSync(vowelsPath)) {
+  const vowels = readFileSync(vowelsPath);
+  rows.push({
+    component: "vowels of confusable words (3.6k words, pre-Brotli on disk)",
+    raw: vowels.length, gzip: vowels.length, brotli: vowels.length,
+  });
+}
+
 const lexiconPath = new URL("data/lexicon/fa-stems.bin", root);
 let lexiconRow: Row | null = null;
 if (existsSync(lexiconPath)) {

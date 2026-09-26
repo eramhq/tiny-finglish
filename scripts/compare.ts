@@ -28,7 +28,7 @@ import { createHash } from "node:crypto";
 import { brotliCompressSync, brotliDecompressSync, constants as zlibConstants, gzipSync } from "node:zlib";
 import { normalize } from "../src/normalize.ts";
 import { characterErrorRate, wordAccuracy } from "../src/metrics.ts";
-import { loadBigram, loadFixtures, loadFrequency, loadLexicon, loadModel, type Fixture } from "./_load.ts";
+import { loadBigram, loadFixtures, loadFrequency, loadLexicon, loadModel, loadVowels, type Fixture } from "./_load.ts";
 import {
   buildOurEngines,
   createNeveshtYarEngine,
@@ -216,6 +216,7 @@ const assets = {
   lexicon: loadLexicon(),
   frequency: loadFrequency(),
   bigram: loadBigram(),
+  vowels: loadVowels(),
 };
 
 const ourEngines = buildOurEngines(assets);
@@ -258,11 +259,13 @@ const naiveBundle = await bundleBytes("src/naive.ts");
 const weightsFile = fileBytes("data/fixtures/weights.json");
 const frequencyFile = fileBytes("data/lexicon/fa-frequency.bin");
 const bigramFile = fileBytes("data/lexicon/fa-bigram.bin");
+const vowelsFile = fileBytes("data/lexicon/fa-vowels.bin");
 // The committed frequency artifact is already Brotli on disk. Gzipping it as-is
 // would compare a compressed file against other subjects' raw ones, so it is
 // expanded first and the same gzip -9 applied to everything.
 const frequencyRaw = frequencyFile ? brotliDecompressSync(frequencyFile) : null;
 const bigramRaw = bigramFile ? brotliDecompressSync(bigramFile) : null;
+const vowelsRaw = vowelsFile ? brotliDecompressSync(vowelsFile) : null;
 
 function ourSize(withModel: boolean, withFrequency: boolean): SubjectSize {
   const breakdown = [
@@ -287,6 +290,15 @@ function ourSize(withModel: boolean, withFrequency: boolean): SubjectSize {
       raw: frequencyRaw.length,
       gzip: gzip(frequencyRaw),
       brotli: brotli(frequencyRaw),
+    });
+  }
+  // Loaded wherever frequency is (`buildOurEngines`), so counted with it.
+  if (withFrequency && vowelsRaw) {
+    breakdown.push({
+      component: "vowels of confusable words (3.6k words)",
+      raw: vowelsRaw.length,
+      gzip: gzip(vowelsRaw),
+      brotli: brotli(vowelsRaw),
     });
   }
   return {

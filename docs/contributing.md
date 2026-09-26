@@ -49,9 +49,9 @@ the constant.
 * Write a `notes` line saying *why* the case is interesting. A fixture without a
   reason is a fixture nobody can maintain.
 
-A fixture is allowed to fail, and `ezafe-002` does on purpose — the reference is
-right and the engine cannot reach it yet, so the row states the size of the gap
-in its `notes`. What is *not* allowed is a phenomenon whose only guard is a
+A fixture is allowed to fail, as long as the row states the size of the gap in
+its `notes` — `ezafe-002` did, for two rounds, until `SCORING.heBorrow` closed
+it, and its test was flipped on purpose when it did. What is *not* allowed is a phenomenon whose only guard is a
 corpus-wide threshold: `ezafe` is five rows out of 211, so breaking all five
 moves `all` by two points and fails nothing. When a fixture group encodes a
 specific behaviour, assert the rows in `test/` as well —

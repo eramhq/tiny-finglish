@@ -73,14 +73,14 @@ Four entry points, measured with `node scripts/size.ts --tiers`:
 
 | entry | contents | gzip | Brotli |
 |---|---|---:|---:|
-| `tiny-finglish` | tokenizer, rules, dictionary, beam, model runtime, sentence pass | 14.8 KiB | **13.0 KiB** |
-| `tiny-finglish/rules` | the same, without the model runtime | 11.8 KiB | **10.4 KiB** |
+| `tiny-finglish` | tokenizer, rules, dictionary, beam, model runtime, sentence pass | 15.6 KiB | **13.8 KiB** |
+| `tiny-finglish/rules` | the same, without the model runtime | 12.8 KiB | **11.3 KiB** |
 | `tiny-finglish/normalize` | Persian text normalization alone | 0.9 KiB | **0.8 KiB** |
 | `tiny-finglish/metrics` | word accuracy and CER, to score it yourself | 0.5 KiB | **0.4 KiB** |
 
 `./rules` is not a reduced reimplementation — `RuleTransliterator` extends the
 same `Pipeline` as `Transliterator` and overrides nothing, and the two produce
-byte-identical output on all 2,029 committed inputs. The 2.4 KiB it saves is
+byte-identical output on all 2,029 committed inputs. The 2.5 KiB it saves is
 the neural runtime, which `"."` imports unconditionally because its constructor
 builds a `Transducer`; `"sideEffects": false` cannot help a bundler there.
 
@@ -89,18 +89,23 @@ the accuracy you choose:
 
 | + data | Brotli | gold word accuracy |
 |---|---:|---:|
-| nothing | 10.4 KiB | 64.5% |
-| **frequency** | **64.5 KiB** | **73.5%** |
-| frequency + bigrams (opt-in) | 138.1 KiB | 74.1% |
-| ...and the model (`"."`) | 150.7 KiB | 69.2% |
-| ...model and rules ranked jointly (`hybrid: true`) | 150.7 KiB | 71.4% (76.3% orthographic) |
+| nothing | 11.3 KiB | 64.5% |
+| **frequency + vowels** | **73.5 KiB** | **74.3%** |
+| frequency + vowels + bigrams (opt-in) | 147.1 KiB | 74.7% |
+| frequency + vowels and the model (`"."`) | 160.0 KiB | 71.2% |
+| ...model and rules ranked jointly (`hybrid: true`) | 160.0 KiB | 72.1% (76.9% orthographic) |
 
 Measured on the 1,669-row audited gold set, September 2026. The previous
 figures (62.3% for rules + frequency, 51.2% for the model) were on the
 1,835-row set before its audit; see
 [the September 2026 round](#september-2026-dictionary-decoding-llm-distillation-llm-measurement).
 
-**The model is still behind the rules on real input**, by 4.3 points, down from
+The vowel table (8.1 KiB) is fetched with the frequency table and only used
+with it: it carries the vowels of the 3,615 table words a typed `a` cannot tell
+apart, which is how `salam` is سلام and not سالم. See
+[the vowel-agreement round](#september-2026-vowel-agreement-and-the-v7-model).
+
+**The model is still behind the rules on real input**, by 3.1 points, down from
 11. It earns its bytes on ZWNJ, adversarial input and mixed English, and it
 adds orthographic accuracy when ranked jointly with the rules.
 
@@ -152,6 +157,48 @@ of 504 candidates per word and a p99 of ~92,000.
 Full detail in [`docs/architecture.md`](docs/architecture.md).
 
 ## Measured results
+
+### September 2026: vowel agreement, and the v7 model
+
+`salam` came out سالم ("healthy") instead of سلام ("hello") on every tier. The
+channel scores the two identically — each has one ا and one unwritten vowel —
+so frequency decided, and in written Persian سالم is the commoner word. What
+separates them is the vowel neither spelling writes: سالم is *sālem*, and a
+typed `salam` has an `a` where it has an `e`.
+
+`data/lexicon/fa-vowels.bin` carries exactly that: the vowels of the 3,615
+frequency-table words that collide with another once ا/آ is removed, from
+HomoRich (CC0) through the gold/dev exclusion, 8.1 KiB. `SCORING.vowelAgreement`
+charges a candidate for each typed vowel its own vowels contradict, against its
+groupmates only (`src/vowels.ts`). It is the same mechanism as the largest error
+category, long vowels, and it is what let the retrained model ship. Gold, strict
+/ orthographic, scored once at the end:
+
+| tier | before | after | what changed |
+|---|---:|---:|---|
+| rules + frequency | 73.8 / 76.0 | **74.3 / 76.4** | vowels +0.4, `heBorrow` +0.1 |
+| model + frequency | 70.5 / 75.4 | **71.2 / 75.9** | v6 → v7, plus both terms |
+| hybrid | 72.1 / 76.8 | **72.1 / 76.9** | v6 → v7, plus both terms |
+
+On dev (the tuning surface), strict / faithful: rules 58.4 / 69.5 → 58.8 /
+69.8, model 56.2 / 67.2 → 57.0 / 67.8, hybrid 57.7 / 68.7 → 58.2 / 69.3.
+Fixtures: 84.3 → 87.8, 91.5 → 93.7, 92.8 → 93.4.
+
+* **v7 ships.** It was trained last round on 3,000 more LLM-typed sentences aimed
+  at the word-final ه, and held back only because it wrote `salam` as سالم. With
+  the vowel term it beats v6 on dev strict (57.0 vs 56.4) and the fixtures (93.7
+  vs 91.2) under the same scoring, and `salam` is pinned on all three tiers in
+  `test/vowels.test.ts`. On hybrid gold, v6 with the same terms would score 72.2
+  to v7's 72.1.
+* **`in ketaabe` → این کتابه**, the documented ezafe-002 miss, via
+  `SCORING.heBorrow`: at a clause end only, an out-of-table ه form borrows its
+  bare form's frequency. It is tuned to the one cost at which no tier loses, not
+  to a flat region, and it costs `bekhatere` typed alone on the model tier.
+* **Two things the plan assumed that measurement changed.** Scoring a vowel-count
+  mismatch as "no evidence" made the term worth nothing on dev; charging a typed
+  vowel the word does not have (`saham` against سهم) is what makes it pay. And
+  moving probability *between* groupmates lifted غلات over غلط, a word the term
+  knows nothing about; the shipped term only ever charges.
 
 ### September 2026: dictionary decoding, LLM distillation, LLM measurement
 
@@ -246,7 +293,7 @@ The shipped default is the **100k model at int6**, chosen from the curve:
 | model | quant | weights | + JS | + frequency | vs 250 KiB cap |
 |---|---|---:|---:|---:|---|
 | 30k | int8 | 31.6 KiB | 40.7 KiB | 94.9 KiB | ok (38%) |
-| **100k** | **int6** | **76.0 KiB** | **85.1 KiB** | **139.3 KiB** | **ok (56%)** |
+| **100k** | **int6** | **84.0 KiB** | **97.8 KiB** | **151.9 KiB** | **ok (61%)** |
 | 100k | int8 | 106.5 KiB | 115.6 KiB | 169.8 KiB | ok (68%) |
 | 500k | int6 | 368.3 KiB | 377.4 KiB | 431.6 KiB | **over** |
 | 500k | int8 | 538.6 KiB | 547.7 KiB | 601.9 KiB | **over** |
@@ -264,12 +311,12 @@ after Brotli at 500k, for no measurable accuracy cost — which is what makes th
 |---|---:|---:|
 | keystroke, incremental word | < 0.01 ms | 16 ms |
 | keystroke, end of sentence (warm) | 0.03 ms | 16 ms |
-| sentence, cold | ~36 ms | 100 ms |
-| shipped bundle, Brotli | **150.7 KiB** | ~250 KiB soft cap |
+| sentence, cold | ~40 ms | 100 ms |
+| shipped bundle, Brotli | **160.0 KiB** | ~250 KiB soft cap |
 
-The bundle is 9.1 KiB of code, 76.0 KiB of weights and 54.2 KiB of frequency;
-the last is a separate fetch, never bundled, so a consumer who wants only the
-rules pays 6.7 KiB. The 73.6 KiB bigram and the 98.3 KiB lexicon are built and
+The bundle is 13.8 KiB of code, 84.0 KiB of weights, 54.1 KiB of frequency and
+8.1 KiB of vowels; the last two are separate fetches, never bundled, so a
+consumer who wants only the rules pays 11.3 KiB. The 73.6 KiB bigram and the 98.3 KiB lexicon are built and
 measured but not counted — see the accuracy-per-byte table below. Both budgets
 are enforced in CI.
 
@@ -286,23 +333,25 @@ adversarial and ambiguous cases. With the shipped 100k model:
 | category | n | word acc | sentence | top-3 |
 |---|---:|---:|---:|---:|
 | protected | 13 | 100.0% | 100.0% | 100.0% |
-| adversarial | 10 | 100.0% | 100.0% | 100.0% |
 | sentence | 25 | 97.5% | 92.0% | 96.0% |
 | mixed | 8 | 97.3% | 87.5% | 87.5% |
-| ordinary | 74 | 90.5% | 90.5% | 97.3% |
-| ambiguous | 36 | 86.1% | 88.9% | 97.2% |
-| informal | 22 | 83.3% | 81.8% | 95.5% |
-| zwnj | 18 | 81.5% | 83.3% | 83.3% |
-| ezafe | 5 | 72.7% | 40.0% | 80.0% |
-| **all** | 211 | **91.5%** | **88.6%** | **95.3%** |
+| ambiguous | 36 | 94.4% | 97.2% | 100.0% |
+| ordinary | 74 | 93.2% | 93.2% | 97.3% |
+| zwnj | 18 | 92.6% | 94.4% | 94.4% |
+| adversarial | 10 | 90.0% | 90.0% | 100.0% |
+| ezafe | 5 | 81.8% | 60.0% | 80.0% |
+| informal | 22 | 79.2% | 77.3% | 95.5% |
+| **all** | 211 | **93.7%** | **91.5%** | **96.7%** |
 
-`ezafe` is the newest and weakest bucket, and deliberately so: five minimal
-pairs for the word-final ه, one of which (`in ketaabe`) is a documented miss the
-frequency table cannot yet reach. See `SCORING.finalHe` in `src/baseline.ts`.
+`ezafe` is five minimal pairs for the word-final ه. `in ketaabe`, a documented
+miss for two rounds, now passes on the rules and model tiers
+(`SCORING.heBorrow`); the model's remaining miss is `dare khune baaze`, where it
+writes the detached ezafe as داره. The one adversarial miss is `aaaaaaa`, one ا
+short. See `SCORING.finalHe` in `src/baseline.ts`.
 
 **The gap between the synthetic test set and this one is the honest number for
 data this project did not generate** — and the gap to the gold set below, data it
-did not *write*, is larger still: 91.5% here against 56.2%. It is the
+did not *write*, is larger still: 93.7% here against 57.0% on the dev set. It is the
 synthetic-data bias the plan's risk register predicted, and it is why the
 hand-authored set exists.
 
@@ -312,16 +361,16 @@ The M1 rule baseline is the floor the model has to beat. On the same fixtures:
 
 | metric | rule baseline | model (100k) |
 |---|---:|---:|
-| word accuracy | 84.3% | **91.5%** |
-| sentence exact | 82.5% | **88.6%** |
-| top-3 | 91.5% | **95.3%** |
-| CER | 0.059 | **0.029** |
-| mixed-English | 83.8% | **97.3%** |
-| ambiguous | 80.6% | **86.1%** |
-| sentence | 94.9% | **97.5%** |
-| ezafe | **90.9%** | 72.7% |
-| adversarial | 50.0% | **100.0%** |
-| **ZWNJ placement** | **0.0%** (0/11) | **56.3%** (9/16) |
+| word accuracy | 87.8% | **93.7%** |
+| sentence exact | 87.2% | **91.5%** |
+| top-3 | 91.9% | **96.7%** |
+| CER | 0.045 | **0.021** |
+| mixed-English | 86.5% | **97.3%** |
+| ambiguous | 83.3% | **94.4%** |
+| sentence | 96.2% | **97.5%** |
+| ezafe | **100.0%** | 81.8% |
+| adversarial | 80.0% | **90.0%** |
+| **ZWNJ placement** | **0.0%** (0/11) | **66.7%** (10/15) |
 
 (Both with the frequency table, which is the shipped configuration.)
 
@@ -333,8 +382,8 @@ wrong. Treating ZWNJ as an ordinary output label fixes that by construction.
 The rule baseline still wins where its candidate list is wider: it takes the
 `ezafe` bucket, because the word-final ه tilt (`SCORING.finalHe`) needs the two
 readings close together to move between them, and the model's distribution is
-far more peaked — `khoobe` is 0.58/0.42 for the rules and 0.95/0.05 for the
-model. Worth remembering if you use `alternatives` rather than `text`.
+more peaked. v7, trained on 3,000 sentences typed to end in a ه word, narrowed
+that gap from 72.7% to 81.8%. Worth remembering if you use `alternatives` rather than `text`.
 
 ### The untouched gold set — real human Finglish
 
@@ -544,8 +593,12 @@ hides:
 | artifact | Brotli | gold gain, rules | KiB per point |
 |---|---:|---:|---:|
 | word frequency | 54.2 KiB | +6.1 | **8.9** |
+| vowels of confusable words | 8.1 KiB | +0.4 | **20.3** |
 | word bigrams | 73.6 KiB | +0.9 | **81.8** |
 | model weights | 76.0 KiB | −11.1 | negative |
+
+(The vowel row was measured in a later round, against rules + frequency at
+73.8%; the others are as first measured.)
 
 The bigram is the worst accuracy-per-byte artifact in this repository by a
 factor of nine, so the default download does not include it and the headline
@@ -724,7 +777,7 @@ src/            tokenize, normalize, rules, pipeline, runtime, decode, quant, in
 training/       Python: corpus generation, PyTorch, eval, quantized export
 data/fixtures/  hand-authored fixtures, normalization + parity fixtures, weights
 data/gold/      untouched evaluation set, plus the quarantined misaligned rows
-data/lexicon/   committed front-coded artifacts (stems, frequency, bigrams)
+data/lexicon/   committed front-coded artifacts (stems, frequency, vowels, bigrams)
                 + upstream provenance
 scripts/        the harness: run-fixtures, oracle, compare, bench, size, parity
 playground/     Vite app showing every candidate and its reason

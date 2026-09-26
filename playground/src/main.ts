@@ -15,6 +15,7 @@
 import { Transliterator, decodeFrontCoded, normalize } from "../../src/index.ts";
 import { decodeBigramTable, type BigramTable } from "../../src/bigram.ts";
 import { decodeFrequencyTable, type FrequencyTable } from "../../src/frequency.ts";
+import { decodeVowelTable, type VowelTable } from "../../src/vowels.ts";
 import { wordAccuracy } from "../../src/metrics.ts";
 import type { Span } from "../../src/index.ts";
 import type { WeightArtifact } from "../../src/quant.ts";
@@ -34,6 +35,7 @@ import {
 const LEXICON_URL = "/lexicon.bin";
 const FREQUENCY_URL = "/frequency.bin";
 const BIGRAM_URL = "/bigram.bin";
+const VOWELS_URL = "/vowels.bin";
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
 
 interface Fixture {
@@ -56,6 +58,7 @@ let weights: WeightArtifact | undefined;
 let lexicon: Set<string> | undefined;
 let frequency: FrequencyTable | undefined;
 let bigram: BigramTable | undefined;
+let vowels: VowelTable | undefined;
 let engine: Transliterator;
 
 // ---------------------------------------------------------------- loading
@@ -92,6 +95,14 @@ async function loadAssets(): Promise<void> {
   }
 
   try {
+    const response = await fetch(VOWELS_URL);
+    if (!response.ok) throw new Error(String(response.status));
+    vowels = decodeVowelTable(new Uint8Array(await response.arrayBuffer()));
+  } catch {
+    vowels = undefined;
+  }
+
+  try {
     const response = await fetch(BIGRAM_URL);
     if (!response.ok) throw new Error(String(response.status));
     bigram = decodeBigramTable(new Uint8Array(await response.arrayBuffer()));
@@ -118,6 +129,7 @@ function build(model: boolean, lex: boolean, ctx = false, snap = false): Transli
     ...(model && weights ? { model: weights } : {}),
     ...(lex && lexicon ? { lexicon } : {}),
     ...(lex && frequency ? { frequency } : {}),
+    ...(lex && frequency && vowels ? { vowels } : {}),
     ...(ctx && bigram ? { bigram } : {}),
     useLexiconSnap: snap,
   });
@@ -480,7 +492,7 @@ function cmpInit(): void {
   cmpEngines = [
     // No bigram: the comparison table prints a size next to every accuracy, and
     // the bigram is not in that size. `CMP.bigramGain` says what it would add.
-    ...buildOurEngines({ weights, lexicon, frequency, bigram }, { bigram: false }),
+    ...buildOurEngines({ weights, lexicon, frequency, bigram, vowels }, { bigram: false }),
     naiveEngine(),
     createNeveshtYarEngine(null),
   ];

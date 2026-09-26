@@ -101,6 +101,7 @@ export function buildFixtureReport(options: {
   useFrequency?: boolean;
   useBigram?: boolean;
   useHybrid?: boolean;
+  useVowels?: boolean;
   file?: string;
   onlyId?: string | undefined;
 }): Report {
@@ -109,6 +110,7 @@ export function buildFixtureReport(options: {
     frequency: options.useFrequency !== false,
     bigram: options.useBigram === true,
     hybrid: options.useHybrid === true,
+    vowels: options.useVowels !== false,
   });
   let fixtures = loadFixtures(options.file);
   if (options.onlyId) fixtures = fixtures.filter((f) => f.id === options.onlyId);

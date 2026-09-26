@@ -159,6 +159,18 @@ export interface ScoringParams {
    */
   finalHe: number;
   /**
+   * Nats charged per typed vowel a candidate's own vowels contradict, among
+   * candidates that differ only by ا/آ. Needs the vowel table; applied by
+   * `Pipeline.convert` through `vowelPass` in `vowels.ts`.
+   */
+  vowelAgreement: number;
+  /**
+   * Cost, in nats, charged to a clause-final ه candidate that is absent from
+   * the frequency table but whose bare form is in it, against the bare form's
+   * frequency credit it borrows. `Infinity` is off. See `Pipeline.finalHePass`.
+   */
+  heBorrow: number;
+  /**
    * Channel distributions re-estimated from data (`scripts/fit-channel.ts`),
    * replacing the ones derived from `src/rules.ts`. Unset: the table's.
    */
@@ -215,9 +227,45 @@ export interface ScoringParams {
  * `خوبه`, `چطوره` and `بازه` are all in the frequency table, 1.2 to 1.7 nats
  * behind their bare spellings, and 2.0 nats reaches them. `کتابه` is *not* in
  * the table, so it pays `outOfTable` and forfeits کتاب's 0.69 — about 5.5 nats,
- * which nothing safe reaches. Noun-plus-copula is therefore still wrong
- * (`data/fixtures` ezafe-002, deliberately left failing), and fixing that class
- * is a frequency-table or morphology job, not a ranking one.
+ * which `finalHe` alone cannot safely reach.
+ *
+ * `heBorrow` reaches it, narrowly. At a clause end only, a ه candidate that is
+ * out of the table but whose bare form is in it is scored as if it were in the
+ * table at the bare form's frequency, less `heBorrow` nats — so کتابه borrows
+ * کتاب's 0.69. This is the stem back-off `frequency.ts` rejects, cut down to the
+ * one suffix and the one position where the evidence says the suffix is really
+ * there. Swept on dev-faithful / fixtures, model and hybrid on v7:
+ *
+ *     heBorrow   off          4            3            2.5          2            1            0
+ *     rules      69.8 / 87.5  69.8 / 87.5  69.8 / 87.5  69.8 / 87.5  69.8 / 87.8  69.8 / 87.8  69.8 / 87.5
+ *     model      67.8 / 93.7  67.8 / 93.7  67.8 / 93.7  67.8 / 93.7  67.8 / 93.7  67.8 / 93.4  67.8 / 93.1
+ *     hybrid     69.2 / 93.4  69.2 / 93.4  69.3 / 93.4  69.3 / 93.4  69.3 / 93.4  69.3 / 93.7  69.3 / 93.7
+ *
+ * **2.0 is not the middle of a flat region; it is the only point where no tier
+ * loses**, and it is chosen knowing that. The rules tier reaches ezafe-002 only
+ * at 2 and below, and the model tier starts writing ه where it does not belong
+ * below 2 — `daneshjooha` becomes دانشجوه at 1. What it buys at 2 is ezafe-002
+ * on rules and model, and two real copulas on dev (جیبشه, تمومه). What it costs
+ * is `bekhatere` typed alone, which the model tier now writes بخاطره: a word
+ * that in running text is almost never clause-final. No tier's dev-faithful
+ * moves down at any setting.
+ *
+ * `vowelAgreement` is applied by `Pipeline.convert` through `vowelPass`
+ * (`vowels.ts`), and only when the vowel table is loaded. Swept on dev-faithful
+ * / fixtures, v7 weights on the model and hybrid tiers:
+ *
+ *     vowelAgreement  0            0.5          1            2            3            4
+ *     rules           69.5 / 84.3  69.7 / 87.5  69.7 / 87.5  69.8 / 87.5  69.8 / 87.5  69.8 / 87.5
+ *     model           67.6 / 90.9  67.7 / 90.9  67.7 / 93.7  67.8 / 93.7  67.8 / 93.7  67.8 / 93.7
+ *     hybrid          69.1 / 90.9  69.2 / 93.4  69.2 / 93.4  69.2 / 93.4  69.2 / 93.4  69.3 / 93.4
+ *
+ * 3.0 is the interior of 2-4, the region flat on all three. The model tier is
+ * the one that needs a full nat before the fixtures move: v7 puts سالم 0.47
+ * against سلام 0.27 on `salam`, and one contradicted vowel has to cover that.
+ * The dev gain is small because the dev set holds few ا-choices the table can
+ * see — most of the long-vowel errors there are words outside the 25k table, or
+ * a typed `a` that agrees with both spellings (`chap`: چاپ or چپ). The fixture
+ * gain is `salam`, six times over, plus `baradar`, `ghatar` and `bashe`.
  */
 export const SCORING: ScoringParams = {
   mode: "channel",
@@ -231,6 +279,8 @@ export const SCORING: ScoringParams = {
   affix: -Infinity,
   stemBucket: 8,
   finalHe: 2.0,
+  vowelAgreement: 3.0,
+  heBorrow: 2.0,
   fitted: FITTED_CHANNEL,
 };
 
