@@ -83,6 +83,10 @@ Full record in `docs/llm-work.md` §8 and `data/chat/README.md`.
   plumbing is in place (`clauseMarker`). The next option is to also unfreeze
   the head, which gives up the guarantee that non-final words are unchanged,
   so it would be judged on `scripts/ab.ts` alone.
+  **Trained in from scratch (v9-eos), the marker gets `ketabe` right** without
+  the over-applied ه, but it costs 1.6 dev and 2.6 chat-dev, beyond seed
+  noise: the model learned "no marker, no final ه" and wrote طبقه as طبق
+  mid-sentence. Next to try is marker dropout (`docs/llm-work.md` §8).
 * **v8 lost ground on ZWNJ** (fixtures 92.6 → 77.8): chat lines are typed and
   written without the half-space, and the sentence split lets them train.
 

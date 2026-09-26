@@ -191,8 +191,10 @@ def main() -> None:
               f"final only: {evaluate(model, final_dev, inputs, outputs, device)}")
     else:
         optimizer = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
-    # Recorded in the checkpoint so the export can tell the runtime to send the marker.
-    extra = {"clause_marker": True, "surgery_from": str(args.surgery_from)} if surgery else {}
+    # Recorded in the checkpoint so the export can tell the runtime to send the
+    # marker: any model that trained on `final` examples has learned to read it.
+    extra = {"clause_marker": True, "surgery_from": str(args.surgery_from)} if surgery \
+        else {"clause_marker": True} if any(e.final for e in train_examples) else {}
 
     start_epoch = 0
     checkpoint_path = args.out / "last.pt"

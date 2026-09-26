@@ -362,6 +362,34 @@ stays; old weights are unaffected because they lack the header flag. The next
 step, if any, is to unfreeze the head as well, and it would be judged on
 `ab.ts` alone.
 
+**v9-eos: the marker trained in from scratch.** Same recipe as v8 (12 epochs,
+seed 0), on v8's data with the `final` flags (v9-eos) and on v8b's (v9b-eos).
+On the words the marker was for, it does what one row could not: `ketabe` →
+کتابه at 0.998 while `ketabe man` stays کتاب من, `in mashine` → این ماشینه,
+and روستا, بچها, دانشجوها and هواپیما are untouched. It is still worse overall
+(`ab.ts`, model tier, strict):
+
+| comparison | dev | chat-dev |
+|---|---:|---:|
+| v8 → v9-eos | −1.6 (−2.4 to −0.9) | −2.6 (−4.4 to −0.8) |
+| v8 → v9b-eos | −1.6 (−2.4 to −0.9) | −2.4 (−4.1 to −0.6) |
+| v9-eos, marker off → on | +0.4 (−0.1 to +0.8) | +2.1 (+0.7 to +3.6) |
+
+This is not training noise. v8's recipe retrained at seeds 1 and 2, with no
+marker, lands within about a point of v8 (dev 57.9 and 57.6 against 58.2,
+chat-dev 86.0 and 86.7 against 85.4), and v9-eos (56.5, 82.8) loses to every
+seed, with CIs below 0 on dev and chat-dev. The losses are mostly
+mid-sentence words that lose a ه of their own: طبقه → طبق, دقیقه → دقیق,
+معلومه → معلوم, and نه → نا. The model learned a shortcut. Among typed
+words, a final ه nearly always comes with the marker, so no marker came to
+mean no ه. That is right for `ketabe man` and wrong for every word whose ه
+is part of the stem.
+
+Not shipped. The marker has to stop being a proxy for the ه. The likely fix
+is marker dropout: mark some unmarked synthetic words (they are isolated, and
+an isolated word is clause-final at runtime), and leave some final LLM words
+unmarked.
+
 ## 9. The loanword table — both families, 501 entries
 
 `src/loan.ts` converts loanwords typed the English way (`backup` → بکاپ). Its

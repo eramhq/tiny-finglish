@@ -142,6 +142,14 @@ node scripts/ab.ts --chat --tier accepted --a "weights=training/runs/v8-sentence
 node scripts/ab.ts --gold --a rules --b hybrid
 ```
 
+**What `ab.ts` does not measure: training luck.** It resamples the test rows,
+not the training run. v8's recipe retrained at seeds 1 and 2 moves dev by
+−0.3 and −0.6, chat-dev by +0.6 and +1.3, and fixtures by +0.8 and +0.3, all
+"within noise" but not zero. So a single retrain's gain of about a point, such
+as v7 → v8's +1.0 on dev, is within what a different seed alone produces. v8's
++3.3 on chat-dev is not. Before shipping a retrain on a gain of a point or so,
+train a second seed.
+
 `run-fixtures.ts` also prints the strict headline's own 95% CI. On dev (304
 rows) it is about ±2.6 points wide, so two single-engine numbers that differ by
 less than that say nothing without the paired test.
