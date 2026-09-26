@@ -142,7 +142,8 @@ describe("fixture suite gates", () => {
  * The hybrid path — both engines' candidates ranked in one score.
  *
  * Off by default, because neither real evaluation set writes ZWNJ and the
- * headline metric therefore charges the model for placing one correctly. What
+ * strict tier therefore charges the model for placing one correctly; on the
+ * orthographic headline it is the most accurate setup (`README.md`). What
  * is pinned here is the contract, not today's weights: the hybrid places ZWNJ
  * where the model does, and it never invents a word neither engine proposed.
  */

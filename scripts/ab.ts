@@ -14,9 +14,10 @@
  * Both sides score the same rows; the paired bootstrap in `scripts/_stats.ts`
  * resamples rows once per iteration for both, so only the difference the
  * engines make is left in the interval. "real" means the 95% CI excludes 0.
- * `--tier accepted` scores each row against the closest of `expected` and its
- * `alternatives` (how chat-dev is quoted) instead of strict against `expected`;
- * `--tier orthographic` forgives ZWNJ and joining (`lenientSplitWords`).
+ * `--tier` picks the word-accuracy tier. The default is `orthographic`, the
+ * headline, which forgives ZWNJ and joining (`lenientSplitWords`); `strict`
+ * compares against `expected` exactly; `accepted` against the closest of
+ * `expected` and the row's `alternatives` (how chat-dev is quoted).
  * `--quiet` drops the per-row listing.
  */
 import { buildFixtureReport, type CaseResult } from "./_report.ts";
@@ -36,7 +37,7 @@ const file = flag("chat") ? "data/chat/chat-dev.jsonl"
     ? (value("gold-set") === "authored" ? "data/gold/authored.jsonl" : "data/gold/gold.jsonl")
     : "data/fixtures/fixtures.jsonl";
 
-const tier = value("tier") ?? "strict";
+const tier = value("tier") ?? "orthographic";
 if (tier !== "strict" && tier !== "accepted" && tier !== "orthographic") {
   throw new Error(`--tier is strict, accepted or orthographic, not ${tier}`);
 }

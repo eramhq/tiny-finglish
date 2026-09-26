@@ -35,10 +35,12 @@ export interface CaseResult {
 }
 
 /**
- * Word accuracy at three strictnesses. Only `strict` is the headline; the other
- * two say how much of the remaining gap is orthography, and how much an LLM
- * judge pair accepts as a legitimate rendering. See `src/metrics.ts` and
- * `scripts/judge.ts`.
+ * Word accuracy at several strictnesses. `orthographic` is the headline: no
+ * evaluation reference writes ZWNJ, so `strict` charges a correct می‌کنم, and
+ * only the orthographic tier compares an engine that writes the half-space
+ * fairly with one that cannot. `strict` is reported beside it; `judged` says
+ * how much an LLM judge pair accepts as a legitimate rendering. See
+ * `src/metrics.ts` and `scripts/judge.ts`.
  */
 export interface Tiers {
   strict: number;
@@ -310,12 +312,18 @@ export function formatReport(report: Report, options: { verbose?: boolean } = {}
   lines.push(`word accuracy tiers     vs expected${t.faithfulRows ? "    vs faithful" : ""}`);
   const faithfulCol = (n: number, d = w.faithfulTotal) => (t.faithfulRows ? `    ${pct(n, d).padStart(11)}` : "");
   // Rows, not words, are resampled: see `scripts/_stats.ts`.
-  const ci = bootstrapCI(report.cases.map((c) => ({ correct: c.wordsCorrect, total: c.wordsTotal })));
   const one = (x: number) => (x * 100).toFixed(1);
-  lines.push(`  strict (headline)     ${pct(w.strict, w.total).padStart(11)}${faithfulCol(w.faithfulStrict)}`);
-  if (w.total) lines.push(`    95% CI              ${`${one(ci.lo)}–${one(ci.hi)}`.padStart(11)}    (${t.count} rows resampled)`);
-  lines.push(`  orthographic          ${pct(w.orthographic, w.orthographicTotal).padStart(11)}` +
+  const ciLine = (rows: Array<{ correct: number; total: number }>) => {
+    const ci = bootstrapCI(rows);
+    return `    95% CI              ${`${one(ci.lo)}–${one(ci.hi)}`.padStart(11)}    (${t.count} rows resampled)`;
+  };
+  lines.push(`  orthographic (headline) ${pct(w.orthographic, w.orthographicTotal).padStart(9)}` +
     faithfulCol(w.faithfulOrthographic, w.faithfulOrthographicTotal));
+  if (w.orthographicTotal) {
+    lines.push(ciLine(report.cases.map((c) => ({ correct: c.tiers.orthographic, total: c.tiers.orthographicTotal }))));
+  }
+  lines.push(`  strict                ${pct(w.strict, w.total).padStart(11)}${faithfulCol(w.faithfulStrict)}`);
+  if (w.total) lines.push(ciLine(report.cases.map((c) => ({ correct: c.wordsCorrect, total: c.wordsTotal }))));
   if (w.accepted !== w.strict) {
     lines.push(`  accepted spellings    ${pct(w.accepted, w.total).padStart(11)}`);
   }

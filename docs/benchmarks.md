@@ -129,10 +129,12 @@ What this changes:
   is the only real movement, and its lower bound is +0.1. v8b was held back for
   `ketabe` and for writing دانشجوهه, which are real defects; the dev and
   fixture drops were never evidence against it.
-* **The gold ranking is real.** On the 1,669 scored gold rows the rules tier
-  (with frequency and vowels) beats both the model and the hybrid by more than
-  the noise. The model is shipped for the categories the average hides
-  (above), not for the average.
+* **The gold ranking is real, and it is the half-space.** On strict, the rules
+  (with frequency and vowels) beat both the model and the hybrid by more than
+  the noise. On the orthographic tier, which forgives the half-space no gold
+  reference writes, the order reverses and is just as real: hybrid − rules
+  +1.1 (+0.8 to +1.4), model − rules +0.6 (+0.1 to +1.1). The headline is now
+  the orthographic tier (`README.md`, "fair grading").
 
 Reproduce any row with, for example:
 
@@ -150,7 +152,7 @@ as v7 → v8's +1.0 on dev, is within what a different seed alone produces. v8's
 +3.3 on chat-dev is not. Before shipping a retrain on a gain of a point or so,
 train a second seed.
 
-`run-fixtures.ts` also prints the strict headline's own 95% CI. On dev (304
+`run-fixtures.ts` also prints a 95% CI under the orthographic headline and under strict. On dev (304
 rows) it is about ±2.6 points wide, so two single-engine numbers that differ by
 less than that say nothing without the paired test.
 

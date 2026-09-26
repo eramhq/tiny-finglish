@@ -121,8 +121,9 @@ Ship decisions quote `scripts/ab.ts`, not two numbers side by side:
 node scripts/ab.ts --dev --a "weights=training/runs/<old>/weights.json" --b "weights=training/runs/<new>/weights.json"
 ```
 
-It scores both configs on the same rows and runs a paired bootstrap over
-sentences. A difference is real only when its 95% CI excludes 0. Dev is 304
+It scores both configs on the same rows, on the orthographic headline tier
+unless `--tier strict` or `--tier accepted` is given, and runs a paired
+bootstrap over sentences. A difference is real only when its 95% CI excludes 0. Dev is 304
 rows, so a few words either way is noise: v8b's −0.3 on dev was about ten
 words net, inside a CI of −0.9 to +0.3. A candidate fails a "no regression"
 rule only when a CI lies wholly below 0. `docs/benchmarks.md` has the past
@@ -134,10 +135,11 @@ decisions re-read this way.
   letter prior. Frequency fixes most cases of this class; this particular one
   survives it. See `docs/open-items.md`.
 * **The model scores lower than the rules on gold while placing ZWNJ better.**
-  Both are true. The gold's Persian side contains no ZWNJ at all, and the
-  headline metric folds ZWNJ to a space, so a correct `می‌کنم` scores as two
-  words against a reference that spells `میکنم` solid. Measured cost: 3.0
-  points. `src/metrics.ts` documents it.
+  Both are true on the strict tier. The gold's Persian side contains no ZWNJ
+  at all, and strict folds ZWNJ to a space, so a correct `می‌کنم` scores as
+  two words against a reference that spells `میکنم` solid. That is why the
+  headline is the orthographic tier, where the model is ahead of the rules
+  and the hybrid further ahead (`README.md`, "fair grading").
 * **Short-vowel quality varies in generated Finglish.** `ketab` and `kotab` are
   both reachable from کتاب. There is no redistributable Persian pronunciation
   dictionary; the generator samples. The syllable *structure* is engineered and

@@ -81,7 +81,7 @@ export function wordAccuracy(
  *
  * The chat sets list, per message, the other spellings of the same words that
  * are equally correct in chat — آره/اره, میخوام/می‌خوام. The strict metric
- * scores against `references[0]` alone and stays the headline; this is the
+ * scores against `references[0]` alone; this is the
  * tier that stops a legitimate variant from costing a word. Errors are counted
  * against each reference, the fewest win, and the total is the first
  * reference's, so the two tiers share a denominator.
@@ -165,9 +165,10 @@ function foldOrthography(word: string): string {
  * The *orthographic* tier's split: `splitWords`, then fold the spelling
  * conventions Persian writers genuinely disagree on.
  *
- * The strict metric stays the headline. This one exists to say how much of the
- * gap between the two is orthography rather than wrong words, and it is
- * deliberately narrow: آ/ا (`آن`/`ان` is a convention, not a different word to a
+ * This is the headline tier. No evaluation reference writes ZWNJ, so the strict
+ * tier charges an engine for writing می‌کنم correctly, and only this one
+ * compares such an engine fairly with one that cannot write the half-space.
+ * It is deliberately narrow: آ/ا (`آن`/`ان` is a convention, not a different word to a
  * reader), digits of any script, and the verbal prefixes and suffixes that are
  * written solid, spaced or ZWNJ-joined interchangeably — `میکنم`, `می کنم` and
  * `می‌کنم` are one word three ways, and so are `کتابها` and `کتاب ها`.

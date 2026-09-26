@@ -61,9 +61,10 @@ transliterate("salam");
 import weights from "tiny-finglish/weights.json" with { type: "json" };
 configure({ model: weights });
 
-// Or an explicit instance. `frequency` and `bigram` are separate fetches —
+// Or an explicit instance: the most accurate setup is the model and the rules
+// ranked jointly (`hybrid`). `frequency` and `bigram` are separate fetches —
 // see `decodeFrequencyTable` and `decodeBigramTable`.
-const engine = new Transliterator({ model: weights, lexicon, frequency, bigram });
+const engine = new Transliterator({ model: weights, hybrid: true, lexicon, frequency, bigram });
 engine.transliterate("man emrooz miram daneshgah");
 ```
 
@@ -87,18 +88,26 @@ builds a `Transducer`; `"sideEffects": false` cannot help a bundler there.
 Data is always a separate fetch, never bundled, so the accuracy you pay for is
 the accuracy you choose:
 
-| + data | Brotli | gold word accuracy |
-|---|---:|---:|
-| nothing | 16.8 KiB | 64.7% |
-| **frequency + vowels** | **80.4 KiB** | **74.4%** |
-| frequency + vowels + bigrams (opt-in) | 154.0 KiB | 74.9% |
-| frequency + vowels and the model (`"."`) | 167.3 KiB | 72.5% |
-| ...model and rules ranked jointly (`hybrid: true`) | 167.3 KiB | 73.0% (77.6% orthographic) |
+| + data | Brotli | gold, orthographic (headline) | gold, strict |
+|---|---:|---:|---:|
+| nothing | 16.8 KiB | 68.1% | 64.7% |
+| frequency + vowels | 80.4 KiB | 78.3% | **74.4%** |
+| frequency + vowels + bigrams (opt-in) | 154.0 KiB | 78.9% | 74.9% |
+| frequency + vowels and the model (`"."`) | 167.3 KiB | 78.9% | 72.5% |
+| **...model and rules ranked jointly (`hybrid: true`)** | **167.3 KiB** | **79.4%** | 73.0% |
 
 Measured on the 1,669-row audited gold set, September 2026. The previous
 figures (62.3% for rules + frequency, 51.2% for the model) were on the
 1,835-row set before its audit; see
 [the September 2026 round](#september-2026-dictionary-decoding-llm-distillation-llm-measurement).
+
+**The headline is the orthographic tier**, which forgives only what Persian
+writers genuinely disagree on: می‌کنم, میکنم and می کنم are one word, as are
+کتاب‌ها and کتابها, آ and ا, and digits in any script. No gold, dev or chat
+reference writes the half-space (ZWNJ), so the strict tier marks a correct
+می‌کنم wrong. That penalizes the engines that write proper Persian, which are
+the model and the hybrid. Strict stays in the table. See
+[fair grading](#september-2026-fair-grading).
 
 The frequency table is HomoRich's top 25,000 words plus 566 chat words it
 lacked (کجایی, کتابه, حوصلم — see [the chat round](#september-2026-chat)).
@@ -106,9 +115,11 @@ The vowel table (8.3 KiB) is fetched with it and only used with it: it carries
 the vowels of the 3,667 table words a typed `a` cannot tell apart, which is how `salam` is سلام and not سالم. See
 [the vowel-agreement round](#september-2026-vowel-agreement-and-the-v7-model).
 
-**The model is still behind the rules on real input**, by 1.9 points, down from
-11. It earns its bytes on ZWNJ, adversarial input and mixed English, and it
-adds orthographic accuracy when ranked jointly with the rules.
+**Use the hybrid if you ship the model.** It is the most accurate setup on the
+headline: +1.1 points over the rules on gold (95% CI +0.8 to +1.4, better on
+202 sentences, worse on 69) and +0.5 over the model alone, and it writes the
+half-space. On the strict tier the rules lead by 1.4, which is the half-space
+convention, not better words.
 
 **The bigram row is opt-in**, because 73.6 KiB for +0.9 points is 82 KiB per
 point against 8.9 for the frequency table — the worst accuracy-per-byte
@@ -164,6 +175,30 @@ of 504 candidates per word and a p99 of ~92,000.
 Full detail in [`docs/architecture.md`](docs/architecture.md).
 
 ## Measured results
+
+### September 2026: fair grading
+
+Three findings, all from `scripts/ab.ts`, which pairs two setups on the same
+rows and bootstraps over sentences (`docs/benchmarks.md`).
+
+* **The strict tier penalizes the half-space.** No reference in gold, dev or
+  the chat sets writes ZWNJ, so the rules, which never write it, lead on strict
+  and trail on everything else. With the half-space forgiven, the hybrid leads
+  on every set, and the gap is real on gold and dev:
+
+  | hybrid − rules, orthographic | gold | dev | chat-dev | fixtures |
+  |---|---:|---:|---:|---:|
+  | points (95% CI) | **+1.1** (+0.8 to +1.4) | **+0.7** (+0.1 to +1.2) | +1.4 (0.0 to +2.6) | +1.1 (−0.6 to +2.9) |
+
+  The headline is now the orthographic tier, with strict beside it.
+* **The orthographic tier was wrong until now.** It counted correct words after
+  joining (می کنم is one word) but divided by the unjoined count, so a perfect
+  می کنم scored 50%. Every orthographic figure before this round, including the
+  77.6% the table above used to show for the hybrid, is about two points low.
+  The sections below keep the figures they were published with.
+* **A retrain moves by about a point on its own.** v8's recipe at two other
+  seeds lands within about a point of v8 on dev and chat-dev. A model gain that
+  small needs a second seed before it counts.
 
 ### September 2026: the object marker, abbreviations and a better loanword guard
 
