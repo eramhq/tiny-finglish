@@ -335,11 +335,14 @@ def mix(pairs: Path, base: Path, share: float, out_dir: Path, seed: int,
     llm: dict[str, list[str]] = {"train": [], "dev": [], "test": []}
     for line in pairs.read_text(encoding="utf-8").splitlines():
         row = json.loads(line)
-        # `final` only when set, so a corpus rebuilt from pairs without it is
-        # byte-identical to one built before the flag existed.
+        # `final` is true or false for an LLM word, whose place in its line is
+        # known, and absent for a synthetic one, which has no line: that is how
+        # `train.py --marker-add` tells an isolated word from a mid-line one.
+        # Pairs without the flag give a corpus byte-identical to one built
+        # before it existed.
         example = {"latin": row["latin"], "labels": row["labels"], "persian": row["persian"]}
-        if row.get("final"):
-            example["final"] = True
+        if "final" in row:
+            example["final"] = bool(row["final"])
         llm[llm_split_of(row, llm_split)].append(json.dumps(example, ensure_ascii=False))
     out_dir.mkdir(parents=True, exist_ok=True)
     counts = {}

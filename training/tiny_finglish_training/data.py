@@ -17,6 +17,7 @@ def encode_batch(
     outputs: Vocab,
     *,
     device: torch.device | str = "cpu",
+    marked: list[bool] | None = None,
 ) -> tuple[torch.Tensor, torch.Tensor]:
     """Pad to the longest example in the batch and return (ids, targets).
 
@@ -32,8 +33,13 @@ def encode_batch(
     before `man` is the ezafe). The marker's own position is IGNORE_INDEX: the
     runtime decodes only the word's characters, so what the model predicts at
     `<eos>` is never read, and training it would only spend capacity.
+
+    `marked` overrides which examples get the marker (`train.py`'s marker
+    dropout); by default it is exactly the `final` ones.
     """
-    width = max(len(e.latin) + (1 if e.final else 0) for e in examples)
+    if marked is None:
+        marked = [bool(e.final) for e in examples]
+    width = max(len(e.latin) + (1 if m else 0) for e, m in zip(examples, marked))
     unk = inputs.encode("<unk>")
     eos = inputs.encode(EOS)
     ids = torch.full((len(examples), width), inputs.encode(PAD), dtype=torch.long)
@@ -42,7 +48,7 @@ def encode_batch(
     for row, example in enumerate(examples):
         for col, ch in enumerate(example.latin):
             ids[row, col] = inputs.encode(ch, unk)
-        if example.final:
+        if marked[row]:
             ids[row, len(example.latin)] = eos
         for col, label in enumerate(example.labels):
             targets[row, col] = outputs.encode(label, 0)

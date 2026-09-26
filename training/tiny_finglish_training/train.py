@@ -15,6 +15,15 @@ can change, by construction. The run keeps the source's vocabularies, drops
 train examples with a label outside them, and trains on the `final` examples
 alone, since no other example reaches the row. It checks before saving that
 nothing but that row moved; ``scripts/verify-surgery.ts`` checks the export.
+
+**Marker dropout.** Trained with every clause-final LLM word marked and nothing
+else, v9-eos learned that no marker means no final ه, and wrote طبقه as طبق
+mid-sentence (`docs/llm-work.md` §8). ``--marker-drop p`` leaves each
+clause-final example unmarked with probability p, and ``--marker-add q`` marks
+each synthetic example (an isolated word, `final` None) with probability q, as
+the runtime marks a word typed on its own. Drawn afresh every batch; a
+mid-line LLM word (`final` False) is never marked. Dev is always scored with
+the marker exactly on the `final` examples.
 """
 
 from __future__ import annotations
@@ -127,6 +136,10 @@ def main() -> None:
     parser.add_argument("--surgery-from", type=Path, default=None,
                         help="start from this checkpoint and train only --train-only; see the module docstring")
     parser.add_argument("--train-only", choices=["eos-row"], default=None)
+    parser.add_argument("--marker-drop", type=float, default=0.0,
+                        help="leave a clause-final example unmarked with this probability")
+    parser.add_argument("--marker-add", type=float, default=0.0,
+                        help="mark a synthetic (isolated) example with this probability")
     args = parser.parse_args()
     surgery = args.surgery_from is not None
     if surgery != (args.train_only is not None):
@@ -224,7 +237,14 @@ def main() -> None:
         started = time.perf_counter()
         running = 0.0
         for batch in batches:
-            ids, targets = encode_batch(batch, inputs, outputs, device=device)
+            # `and` short-circuits, so with both flags at 0 no draw is made and
+            # a run without dropout keeps the random stream it always had.
+            marked = [
+                not (args.marker_drop and random.random() < args.marker_drop) if e.final
+                else bool(e.final is None and args.marker_add and random.random() < args.marker_add)
+                for e in batch
+            ]
+            ids, targets = encode_batch(batch, inputs, outputs, device=device, marked=marked)
             logits = model(ids)
             loss = F.cross_entropy(
                 logits.reshape(-1, logits.shape[-1]), targets.reshape(-1),

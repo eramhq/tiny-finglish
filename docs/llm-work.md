@@ -385,10 +385,29 @@ words, a final ه nearly always comes with the marker, so no marker came to
 mean no ه. That is right for `ketabe man` and wrong for every word whose ه
 is part of the stem.
 
-Not shipped. The marker has to stop being a proxy for the ه. The likely fix
-is marker dropout: mark some unmarked synthetic words (they are isolated, and
-an isolated word is clause-final at runtime), and leave some final LLM words
-unmarked.
+Not shipped. The marker had to stop being a proxy for the ه.
+
+**v9d: marker dropout, the last try.** The stop rule was fixed before the run:
+ship only if `ketabe` flips with no ه added or lost elsewhere, there is no
+real loss against v8 on dev, fixtures or chat-dev, and a second seed agrees.
+Otherwise the item closes. `align-pairs.ts` now writes `final: false` on
+mid-line words, so a synthetic word (no `final`) can be told apart. Training
+left 25% of clause-final words unmarked and marked 50% of synthetic words,
+drawn afresh every batch (`train.py --marker-drop 0.25 --marker-add 0.5`),
+on v8's data at seeds 0 and 1:
+
+| v8 → | dev | fixtures | chat-dev | chat-dev, accepted |
+|---|---:|---:|---:|---:|
+| v9d seed 0 | −1.7 (−2.5 to −0.9) | +0.5 | −2.2 (−4.4 to −0.1) | −3.6 (−5.4 to −1.8) |
+| v9d seed 1 | −2.7 (−3.6 to −1.8) | +0.3 | −3.6 (−5.9 to −1.2) | −3.9 (−6.0 to −1.9) |
+
+Dropout brought back نه and دقیقه mid-sentence, but not طبقه, معلومه or
+دفعه, and both seeds now write بعد as بد, which is not a ه at all. `ketabe`
+is right in every marker model; the rest costs 2 to 3 points each time.
+**Closed.** `ketabe` stays a known miss on the model tier, written correctly
+by the rules and the hybrid. The marker code stays, off unless the weights
+ask for it. Why marking about 6% of the training words moves unmarked
+mid-sentence words this much is not understood.
 
 ## 9. The loanword table — both families, 501 entries
 

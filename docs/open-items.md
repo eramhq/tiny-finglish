@@ -86,7 +86,9 @@ Full record in `docs/llm-work.md` §8 and `data/chat/README.md`.
   **Trained in from scratch (v9-eos), the marker gets `ketabe` right** without
   the over-applied ه, but it costs 1.6 dev and 2.6 chat-dev, beyond seed
   noise: the model learned "no marker, no final ه" and wrote طبقه as طبق
-  mid-sentence. Next to try is marker dropout (`docs/llm-work.md` §8).
+  mid-sentence. Marker dropout (v9d) did not fix it: −1.7 to −2.7 dev and
+  −2.2 to −3.6 chat-dev over two seeds. **Closed as a known miss**, by a stop
+  rule set before that run (`docs/llm-work.md` §8).
 * **v8 lost ground on ZWNJ** (fixtures 92.6 → 77.8): chat lines are typed and
   written without the half-space, and the sentence split lets them train.
 

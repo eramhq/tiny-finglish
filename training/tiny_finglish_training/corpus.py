@@ -28,13 +28,14 @@ class Example:
     labels: list[str]
     persian: str
     #: The word ends a clause in its typed line, and is encoded with a trailing
-    #: `<eos>` (`data.encode_batch`). Only LLM-typed lines record it.
-    final: bool = False
+    #: `<eos>` (`data.encode_batch`). True or False for an LLM-typed word; None
+    #: for a synthetic one, which is an isolated word with no line.
+    final: bool | None = None
 
     def to_json(self) -> dict:
         payload = {"latin": self.latin, "labels": self.labels, "persian": self.persian}
-        if self.final:
-            payload["final"] = True
+        if self.final is not None:
+            payload["final"] = self.final
         return payload
 
 
@@ -125,5 +126,5 @@ def read(path: Path) -> list[Example]:
         for line in f:
             payload = json.loads(line)
             out.append(Example(payload["latin"], payload["labels"], payload["persian"],
-                               bool(payload.get("final", False))))
+                               payload.get("final")))
     return out

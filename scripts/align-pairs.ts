@@ -20,8 +20,8 @@
  * failure is either a typo the channel has no path for or a mistyped word, and
  * neither is a label worth learning.
  *
- * The last word of each typed line carries `final: true`: the clause-final
- * position `endsClause` in `src/pipeline.ts` marks at runtime, where the model
+ * Every word carries `final`, true on the last word of its typed line: the
+ * clause-final position `endsClause` in `src/pipeline.ts` marks at runtime, where the model
  * sees an `<eos>` after the word (`training/.../data.py`). The artifact's words
  * had their punctuation stripped when they were sampled (`words_of` in
  * `build_distill.py`), so the end of the line is the only clause end it still
@@ -105,7 +105,7 @@ for (const line of text.split("\n")) {
       failed++;
       return;
     }
-    lines.push(JSON.stringify({ latin, labels: withZwnj, persian, ...(k === last ? { final: true } : {}),
+    lines.push(JSON.stringify({ latin, labels: withZwnj, persian, final: k === last,
       persona: row.persona, worker: row.worker, id: row.id }));
     if (k === last) finals++;
   });
