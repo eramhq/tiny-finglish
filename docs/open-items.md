@@ -89,8 +89,16 @@ Full record in `docs/llm-work.md` §8 and `data/chat/README.md`.
   mid-sentence. Marker dropout (v9d) did not fix it: −1.7 to −2.7 dev and
   −2.2 to −3.6 chat-dev over two seeds. **Closed as a known miss**, by a stop
   rule set before that run (`docs/llm-work.md` §8).
-* **v8 lost ground on ZWNJ** (fixtures 92.6 → 77.8): chat lines are typed and
-  written without the half-space, and the sentence split lets them train.
+* **v8's ZWNJ "loss" is two words**: fixtures 92.6 → 77.8 is 25/27 → 21/27
+  words over 18 rows, all of it بچه‌ها → بچها and بزرگ‌تر → بزرگتر. The second
+  comes and goes with the training seed (v8 retrained at seeds 1 and 2 writes
+  it both ways); only بچها is consistent. Every v8 seed writes می‌روم, نمی‌کنم,
+  می‌توانم, کتاب‌ها and بی‌نظیر with the half-space. The suspected cause is
+  small: the chat lines, written without ZWNJ, are 3% of the LLM-typed words,
+  and the rest writes 85% of its می verbs with it. Nothing measures a fix
+  either: gold, dev and both chat sets have no ZWNJ in any reference, so only
+  11 fixture rows would see it. Not worth a round until there is an
+  evaluation set that writes the half-space.
 
 Still open, from the chat-dev errors that remain:
 

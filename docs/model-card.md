@@ -61,8 +61,10 @@ follow-up copula round (v8b) that moved it to 60/40 was not shipped because it
 started writing دانشجوهه. Its dev loss (−0.3) was noise, as `scripts/ab.ts`
 later showed (`docs/benchmarks.md`). A clause-end marker trained into v8's
 `<eos>` row alone (v8-eos) flips `ketabe` but writes بچهه and روسته, so it
-was not shipped either (`docs/llm-work.md` §8). v8 is also weaker than v7 on
-the ZWNJ fixtures (77.8% vs 92.6%) and the ambiguous ones (88.9% vs 94.4%).
+was not shipped either (`docs/llm-work.md` §8). v8 scores lower than v7 on
+the ZWNJ fixtures (77.8% vs 92.6%) and the ambiguous ones (88.9% vs 94.4%),
+but these are 18-row categories. The ZWNJ gap is two words, one of which
+changes with the training seed (`docs/open-items.md`).
 
 ## v7, as of the vowel-agreement round
 
