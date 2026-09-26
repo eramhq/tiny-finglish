@@ -15,7 +15,7 @@
  * resamples rows once per iteration for both, so only the difference the
  * engines make is left in the interval. "real" means the 95% CI excludes 0.
  * `--tier` picks the word-accuracy tier. The default is `orthographic`, the
- * headline, which forgives ZWNJ and joining (`lenientSplitWords`); `strict`
+ * headline, which forgives ZWNJ and compound spacing (`orthographicWordAccuracy`); `strict`
  * compares against `expected` exactly; `accepted` against the closest of
  * `expected` and the row's `alternatives` (how chat-dev is quoted).
  * `--quiet` drops the per-row listing.

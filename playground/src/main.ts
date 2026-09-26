@@ -14,7 +14,7 @@ import { Transliterator, decodeFrontCoded, normalize } from "../../src/index.ts"
 import { decodeBigramTable, type BigramTable } from "../../src/bigram.ts";
 import { decodeFrequencyTable, type FrequencyTable } from "../../src/frequency.ts";
 import { decodeVowelTable, type VowelTable } from "../../src/vowels.ts";
-import { lenientSplitWords, splitWords, wordAccuracy } from "../../src/metrics.ts";
+import { lenientSplitWords, orthographicWordAccuracy, splitWords, wordAccuracy } from "../../src/metrics.ts";
 import type { Span } from "../../src/index.ts";
 import type { WeightArtifact } from "../../src/quant.ts";
 import goldRaw from "../../data/gold/gold.jsonl?raw";
@@ -334,7 +334,7 @@ async function runAccuracy(): Promise<void> {
         const got = normalize(engine.transliterate(row.input).text);
         const expected = normalize(row.expected!);
         // The same calls as `scripts/_report.ts`, so the numbers match the README's.
-        scored.push({ row, got, fair: wordAccuracy(expected, got, lenientSplitWords), strict: wordAccuracy(expected, got) });
+        scored.push({ row, got, fair: orthographicWordAccuracy(expected, got), strict: wordAccuracy(expected, got) });
         if (++done % 40 === 0) {
           bar.style.width = `${(100 * done) / steps}%`;
           await new Promise((resolve) => setTimeout(resolve, 0));

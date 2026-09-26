@@ -25,7 +25,7 @@
  */
 import { existsSync, readFileSync } from "node:fs";
 import { SCORING, type ScoringParams } from "../src/baseline.ts";
-import { acceptedWordAccuracy, lenientSplitWords, wordAccuracy } from "../src/metrics.ts";
+import { acceptedWordAccuracy, orthographicWordAccuracy, wordAccuracy } from "../src/metrics.ts";
 import { normalize } from "../src/normalize.ts";
 import { Transliterator } from "../src/index.ts";
 import { brotliDecompressSync } from "node:zlib";
@@ -99,7 +99,7 @@ for (const scoring of combinations()) {
     const f = wordAccuracy(normalize(row.faithful!), got);
     faithful += f.correct;
     faithfulTotal += f.total;
-    const o = wordAccuracy(normalize(row.faithful!), got, lenientSplitWords);
+    const o = orthographicWordAccuracy(normalize(row.faithful!), got);
     ortho += o.correct;
     orthoTotal += o.total;
   }

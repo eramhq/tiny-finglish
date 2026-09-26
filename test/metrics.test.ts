@@ -10,6 +10,7 @@ import { describe, expect, it } from "vitest";
 import {
   characterErrorRate,
   lenientSplitWords,
+  orthographicWordAccuracy,
   splitWords,
   wordAccuracy,
   wordMismatches,
@@ -147,5 +148,26 @@ describe("characterErrorRate", () => {
   it("is 0 for an exact match and 1 against an empty hypothesis", () => {
     expect(characterErrorRate("سلام", "سلام")).toBe(0);
     expect(characterErrorRate("سلام", "")).toBe(1);
+  });
+});
+
+describe("orthographicWordAccuracy", () => {
+  it("forgives compound spacing in either direction", () => {
+    expect(orthographicWordAccuracy("زمانیکه رفتم", "زمانی که رفتم")).toEqual({ correct: 2, total: 2 });
+    expect(orthographicWordAccuracy("زمانی که رفتم", "زمانیکه رفتم")).toEqual({ correct: 3, total: 3 });
+    expect(orthographicWordAccuracy("راهحلهای خوب", `راه${ZWNJ}حل${ZWNJ}های خوب`)).toEqual({ correct: 2, total: 2 });
+  });
+
+  it("still charges a real mistake next to a spacing difference", () => {
+    expect(orthographicWordAccuracy("زمانیکه رفتم", "زمانی که رفت")).toEqual({ correct: 1, total: 2 });
+  });
+
+  it("never matches different letters", () => {
+    expect(orthographicWordAccuracy("زمانیکه", "زمان که")).toEqual({ correct: 0, total: 1 });
+  });
+
+  it("keeps the folds of the orthographic split", () => {
+    expect(orthographicWordAccuracy("میکنم", `می${ZWNJ}کنم`)).toEqual({ correct: 1, total: 1 });
+    expect(orthographicWordAccuracy("آن", "ان")).toEqual({ correct: 1, total: 1 });
   });
 });

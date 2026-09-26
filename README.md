@@ -90,11 +90,11 @@ the accuracy you choose:
 
 | + data | Brotli | gold, orthographic (headline) | gold, strict |
 |---|---:|---:|---:|
-| nothing | 16.8 KiB | 68.1% | 64.7% |
-| frequency + vowels | 80.4 KiB | 78.3% | **74.4%** |
-| frequency + vowels + bigrams (opt-in) | 154.0 KiB | 78.9% | 74.9% |
-| ...and the model deciding alone (`hybrid: false`) | 167.3 KiB | 78.9% | 72.5% |
-| **...and the model, ranked jointly with the rules (`"."` default)** | **167.3 KiB** | **79.4%** | 73.0% |
+| nothing | 16.8 KiB | 69.9% | 65.0% |
+| frequency + vowels | 80.4 KiB | 81.0% | **74.7%** |
+| frequency + vowels + bigrams (opt-in) | 154.0 KiB | 81.5% | 75.2% |
+| ...and the model deciding alone (`hybrid: false`) | 167.3 KiB | 81.5% | 72.5% |
+| **...and the model, ranked jointly with the rules (`"."` default)** | **167.3 KiB** | **82.4%** | 73.3% |
 
 Measured on the 1,669-row audited gold set, September 2026. The previous
 figures (62.3% for rules + frequency, 51.2% for the model) were on the
@@ -103,7 +103,8 @@ figures (62.3% for rules + frequency, 51.2% for the model) were on the
 
 **The headline is the orthographic tier**, which forgives only what Persian
 writers genuinely disagree on: می‌کنم, میکنم and می کنم are one word, as are
-کتاب‌ها and کتابها, آ and ا, and digits in any script. No gold, dev or chat
+کتاب‌ها and کتابها, زمانیکه and زمانی که (compound spacing), آ and ا, and
+digits in any script. No gold, dev or chat
 reference writes the half-space (ZWNJ), so the strict tier marks a correct
 می‌کنم wrong. That penalizes the engines that write proper Persian, which are
 the model and the hybrid. Strict stays in the table. See
@@ -116,13 +117,13 @@ the vowels of the 3,667 table words a typed `a` cannot tell apart, which is how 
 [the vowel-agreement round](#september-2026-vowel-agreement-and-the-v7-model).
 
 **With a model, the hybrid is the default.** It is the most accurate setup on
-the headline: +1.1 points over the rules on gold (95% CI +0.8 to +1.4, better on
-202 sentences, worse on 69) and +0.5 over the model alone, and it writes the
+the headline: +1.5 points over the rules on gold (95% CI +1.2 to +1.7, better on
+205 sentences, worse on 44) and +0.9 over the model alone, and it writes the
 half-space. On the strict tier the rules lead by 1.4, which is the half-space
 convention, not better words.
 
 **The bigram row is opt-in**, because 73.6 KiB for +0.6 points on the
-headline is 123 KiB per point, against 6 for the frequency table and 79 for the
+headline is 123 KiB per point, against 6 for the frequency table and 58 for the
 model as the hybrid — the worst accuracy-per-byte artifact here, and worth
 only +0.3 once the model is loaded. It is built, committed, measured and documented; it is not in
 the default download and not in the headline. Turn it on with
@@ -205,6 +206,15 @@ rows and bootstraps over sentences (`docs/benchmarks.md`).
   against زمانی که), 14% long vowels, 1% each a final ه and homophone
   letters, 43% other. The first fix from it: `na` is نه, not نا, on every
   tier (+0.27 on dev, a real gain; no row worse on any set).
+* **Compound spacing is forgiven too.** The orthographic tier now matches one
+  word against two or three on the other side whose letters, joined, are that
+  word (`orthographicWordAccuracy`). The references join what a ZWNJ once
+  separated, so راه‌حل and زمانی که were charged against راهحل and زمانیکه.
+  Gold: rules 78.6 → 81.0, model 78.9 → 81.5, hybrid 79.7 → 82.4; dev about
+  +8.5 for each. Checked by hand on all 105 spans it forgave on dev: about 95%
+  are conventions or typos in the reference (پدرو for پدر و), and about 5% are
+  debatable, where spacing changes the meaning (عملکرد and عمل کرد, درآمد and در
+  آمد) or hides a real error (رستورانو for رستوران و).
 
 ### September 2026: the object marker, abbreviations and a better loanword guard
 

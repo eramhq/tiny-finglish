@@ -53,8 +53,8 @@ export interface TransliteratorOptions extends PipelineOptions {
    * of letting the model decide alone. Requires `model`; ignored without it.
    *
    * On by default whenever a model is given: it is the most accurate setup on
-   * the orthographic headline, gold scored once (rules 78.3, model alone 78.9,
-   * hybrid 79.4), and it writes the half-space. `false` lets the model decide
+   * the orthographic headline, gold scored once (rules 81.0, model alone 81.5,
+   * hybrid 82.4), and it writes the half-space. `false` lets the model decide
    * alone. The strict tier ranks it below the rules only because no evaluation
    * reference writes ZWNJ. See `convertJoint` and `src/metrics.ts`.
    */

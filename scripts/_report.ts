@@ -13,7 +13,7 @@ import { buildTransliterator, DEFAULT_WEIGHTS, loadFixtures, type Fixture } from
 import { bootstrapCI } from "./_stats.ts";
 import { normalize } from "../src/normalize.ts";
 import { PUNCTUATION_FOLDS } from "../src/unicode.ts";
-import { acceptedWordAccuracy, characterErrorRate, lenientSplitWords, wordAccuracy } from "../src/metrics.ts";
+import { acceptedWordAccuracy, characterErrorRate, orthographicWordAccuracy, wordAccuracy } from "../src/metrics.ts";
 import { loadJudgments, mismatchTriples } from "./_judgments.ts";
 import type { TransliterationResult } from "../src/types.ts";
 
@@ -230,7 +230,7 @@ function scoreTiers(
   const tiers = emptyTiers();
   tiers.total = strict.total;
   tiers.strict = strict.correct;
-  const orthographic = wordAccuracy(expected, got, lenientSplitWords);
+  const orthographic = orthographicWordAccuracy(expected, got);
   tiers.orthographic = orthographic.correct;
   tiers.orthographicTotal = orthographic.total;
   tiers.accepted = acceptedWordAccuracy(accepted, got).correct;
@@ -252,7 +252,7 @@ function scoreTiers(
     const faithful = normalize(fixture.faithful);
     tiers.faithfulTotal = wordAccuracy(faithful, got).total;
     tiers.faithfulStrict = wordAccuracy(faithful, got).correct;
-    const faithfulOrthographic = wordAccuracy(faithful, got, lenientSplitWords);
+    const faithfulOrthographic = orthographicWordAccuracy(faithful, got);
     tiers.faithfulOrthographic = faithfulOrthographic.correct;
     tiers.faithfulOrthographicTotal = faithfulOrthographic.total;
   }

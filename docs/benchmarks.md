@@ -59,14 +59,14 @@ round; gains are paired, with 95% CIs from `scripts/ab.ts`):
 
 | artifact | Brotli | gold gain | KiB per point |
 |---|---:|---:|---:|
-| word frequency + vowels | 63.6 KiB | +10.2 over no data | **6.2** |
-| model weights + runtime, as the hybrid (default) | 87.0 KiB | +1.1 (+0.8 to +1.4) over rules | **79** |
+| word frequency + vowels | 63.6 KiB | +11.1 over no data | **5.7** |
+| model weights + runtime, as the hybrid (default) | 87.0 KiB | +1.5 (+1.2 to +1.7) over rules | **58** |
 | model weights + runtime, deciding alone | 87.0 KiB | +0.6 (+0.1 to +1.1) over rules | 145 |
 | word bigrams, on the rules | 73.6 KiB | +0.6 (+0.4 to +0.8) | 123 |
-| word bigrams, on the hybrid | 73.6 KiB | +0.3 (+0.1 to +0.4) | 245 |
+| word bigrams, on the hybrid | 73.6 KiB | +0.3 (+0.1 to +0.5) | 245 |
 
 The model is no longer negative: that was the strict tier charging it for the
-half-space. It is still thirteen times the cost per point of the frequency
+half-space. It is still ten times the cost per point of the frequency
 table, which is why its weights are a separate, optional fetch. The bigrams
 cost more per point than the model, and less again once the model is there,
 so they stay opt-in.
@@ -152,7 +152,8 @@ What this changes:
   (with frequency and vowels) beat both the model and the hybrid by more than
   the noise. On the orthographic tier, which forgives the half-space no gold
   reference writes, the order reverses and is just as real: hybrid − rules
-  +1.1 (+0.8 to +1.4), model − rules +0.6 (+0.1 to +1.1). The headline is now
+  +1.5 (+1.2 to +1.7), model − rules +0.6 (+0.1 to +1.1), with compound
+  spacing forgiven as well. The headline is now
   the orthographic tier (`README.md`, "fair grading").
 
 Reproduce any row with, for example:

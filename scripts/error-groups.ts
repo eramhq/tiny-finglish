@@ -17,12 +17,15 @@
  *     test asked for a word nobody typed.
  *   * then the engine's own errors, by the smallest edit that explains them:
  *     a final ه added or dropped, homophone letters (س/ص/ث, ز/ذ/ض/ظ, ت/ط,
- *     ق/غ, ه/ح, ا/ع), long vowels (ا, و, ی added or dropped), spacing (the
- *     same letters, split or joined differently), a number written in digits
- *     against one in words, and everything else.
+ *     ق/غ, ه/ح, ا/ع), long vowels (ا, و, ی added or dropped), a number
+ *     written in digits against one in words, and everything else.
  *
- * Counts are in words, the unit the metric charges, and add up to the tier's
- * errors.
+ * A run whose letters are the same, split or joined differently (زمانیکه,
+ * زمانی که), is compound spacing, which the headline forgives
+ * (`orthographicWordAccuracy`); it is counted on its own line and not charged.
+ * Counts are in words, the unit the metric charges. They follow the runs of
+ * the plain alignment, so the charged total can differ from the tier's by a
+ * few words where a spacing difference sits inside a longer run.
  */
 import { buildFixtureReport } from "./_report.ts";
 import { lenientSplitWords, wordMismatches } from "../src/metrics.ts";
@@ -42,7 +45,6 @@ const GROUPS = [
   ["he", "a final ه added or dropped"],
   ["homophone", "homophone letters (س/ص/ث, ز/ذ/ض/ظ, ت/ط, ق/غ, ه/ح, ا/ع)"],
   ["vowel", "long vowels: ا, و or ی added or dropped"],
-  ["spacing", "same letters, split or joined differently"],
   ["number", "digits against a number in words"],
   ["other", "other: a different word or form"],
 ] as const;
@@ -58,7 +60,6 @@ const solid = (s: string) => s.replace(/\s+/gu, "");
 function engineError(ref: string, hyp: string): Exclude<Group, "typed"> {
   if (/\d/u.test(ref) !== /\d/u.test(hyp)) return "number";
   if (ref && hyp && ref.replace(/ه$/u, "") === hyp.replace(/ه$/u, "")) return "he";
-  if (solid(ref) === solid(hyp) && ref !== hyp) return "spacing";
   if (ref && hyp && fold(solid(ref)) === fold(solid(hyp))) return "homophone";
   if (ref && hyp && noVowels(fold(solid(ref))) === noVowels(fold(solid(hyp)))) return "vowel";
   return "other";
@@ -71,6 +72,7 @@ const report = buildFixtureReport({
 });
 
 const counts = new Map<Group, number>(GROUPS.map(([g]) => [g, 0]));
+let forgiven = 0;
 const examples = new Map<Group, string[]>(GROUPS.map(([g]) => [g, []]));
 let charged = 0;
 let words = 0;
@@ -93,6 +95,10 @@ for (const c of report.cases) {
   for (const span of wordMismatches(expected, got)) {
     const ref = expected.slice(span.refStart, span.refEnd).join(" ");
     const hyp = got.slice(span.hypStart, span.hypEnd).join(" ");
+    if (solid(ref) === solid(hyp)) {
+      forgiven += span.cost;
+      continue;
+    }
     let touches = false;
     for (let k = span.hypStart; k <= span.hypEnd && !touches; k++) {
       if (k < span.hypEnd || span.hypStart === span.hypEnd) touches = wrongVsTyped.has(k);
@@ -106,7 +112,7 @@ for (const c of report.cases) {
 }
 
 console.log(`engine=${engine}  dev, orthographic tier  words=${words}  charged=${charged} ` +
-  `(${((100 * (words - charged)) / words).toFixed(1)}% right)\n`);
+  `(${((100 * (words - charged)) / words).toFixed(1)}% right)  compound spacing forgiven: ${forgiven}\n`);
 console.log("| group | words | share of errors | of all words |");
 console.log("|---|---:|---:|---:|");
 for (const [g, label] of GROUPS) {

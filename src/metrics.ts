@@ -200,6 +200,52 @@ export function lenientSplitWords(text: string): string[] {
   return out;
 }
 
+/** How many words, at most, one written-solid word may stand for on the other side. */
+const MAX_JOIN = 3;
+
+/**
+ * The headline tier: `lenientSplitWords` on both sides, and compound spacing
+ * forgiven.
+ *
+ * Persian writes many compounds solid, spaced or with a ZWNJ: زمانیکه, زمانی
+ * که and زمانی‌که; راهحل and راه حل; کارافرین and کار افرین. The evaluation
+ * references join what a ZWNJ once separated (their Persian had its ZWNJ
+ * stripped), so an engine that writes the standard spaced or half-spaced
+ * form loses a word, or two, to a spacing convention. Here the alignment may
+ * match one word against two or three consecutive words on the other side
+ * whose letters, joined, are that word, at no cost. Everything else is charged
+ * exactly as `wordAccuracy` charges it, so a sentence with a spacing
+ * difference next to a real mistake still pays for the mistake.
+ *
+ * It never matches different letters: the join is exact, after the folds
+ * `lenientSplitWords` already makes. Measured on dev before it became the
+ * headline, as the `spacing` group of `scripts/error-groups.ts`.
+ */
+export function orthographicWordAccuracy(reference: string, hypothesis: string): { correct: number; total: number } {
+  const ref = lenientSplitWords(reference);
+  const hyp = lenientSplitWords(hypothesis);
+  if (ref.length === 0) return { correct: 0, total: hyp.length };
+  const d: number[][] = Array.from({ length: ref.length + 1 }, (_, i) =>
+    Array.from({ length: hyp.length + 1 }, (_, j) => (i === 0 ? j : j === 0 ? i : 0)),
+  );
+  for (let i = 1; i <= ref.length; i++) {
+    for (let j = 1; j <= hyp.length; j++) {
+      let best = Math.min(
+        d[i - 1]![j]! + 1,
+        d[i]![j - 1]! + 1,
+        d[i - 1]![j - 1]! + (ref[i - 1] === hyp[j - 1] ? 0 : 1),
+      );
+      for (let k = 2; k <= MAX_JOIN; k++) {
+        if (j >= k && ref[i - 1] === hyp.slice(j - k, j).join("")) best = Math.min(best, d[i - 1]![j - k]!);
+        if (i >= k && hyp[j - 1] === ref.slice(i - k, i).join("")) best = Math.min(best, d[i - k]![j - 1]!);
+      }
+      d[i]![j] = best;
+    }
+  }
+  const errors = Math.min(d[ref.length]![hyp.length]!, ref.length);
+  return { correct: ref.length - errors, total: ref.length };
+}
+
 /** One contiguous run of non-matching words in the minimum word alignment. */
 export interface MismatchSpan {
   /** Reference words `[refStart, refEnd)`. */
