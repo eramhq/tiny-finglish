@@ -187,14 +187,17 @@ function convert(): void {
   const size = DOWNLOAD_KIB[setup] + (context ? BIGRAM_KIB : 0);
   $("facts").replaceChildren(
     fact(`${elapsed < 1 ? elapsed.toFixed(2) : elapsed.toFixed(0)} ms to convert`),
-    fact(`${Math.round(size)} KiB to download for this setup`),
+    fact(`${Math.round(size)} KiB to download${setup === "rules" ? "" : " (model only and both use the same files)"}`),
   );
 }
 
 function renderSpan(span: Span, index: number): Node {
   if (span.action === "space") return document.createTextNode(span.output);
   if (span.action !== "convert") {
-    const kept = document.createElement("span");
+    // A link or an English word is left-to-right inside a right-to-left line.
+    // <bdi> isolates it, so it cannot pull the Persian words beside it into
+    // its direction.
+    const kept = document.createElement(span.action === "copy" ? "bdi" : "span");
     kept.className = span.action === "copy" ? "kept" : "mark";
     kept.textContent = span.output;
     if (span.action === "copy") kept.title = "Kept as typed";
@@ -206,14 +209,23 @@ function renderSpan(span: Span, index: number): Node {
   const unsure = !choice && span.confidence < UNSURE_BELOW && alternatives.length > 0;
   if (!span.output) return document.createTextNode("");
 
-  const button = document.createElement("button");
-  button.type = "button";
+  // A <span> with a button role, not a <button>: a <button> is an atomic
+  // inline, which the bidi algorithm treats as a neutral, so two Persian words
+  // between a link and an email came out left-to-right (به و for و به).
+  const button = document.createElement("span");
+  button.setAttribute("role", "button");
+  button.tabIndex = 0;
   button.className = `word${unsure ? " unsure" : ""}${choice ? " changed" : ""}`;
   button.textContent = word;
   button.dataset.index = String(index);
   button.setAttribute("aria-haspopup", "dialog");
   button.setAttribute("aria-label", `${word}, typed as ${span.input}${unsure ? ", unsure" : ""}`);
   button.addEventListener("click", () => openPopover(button, span));
+  button.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    openPopover(button, span);
+  });
   return button;
 }
 

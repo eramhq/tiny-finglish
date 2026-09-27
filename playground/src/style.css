@@ -149,10 +149,6 @@ textarea:focus-visible { outline: none; }
 }
 
 .output .word {
-  font: inherit;
-  border: 0;
-  background: none;
-  padding: 0;
   cursor: pointer;
   border-radius: 0.25rem;
 }
@@ -167,7 +163,7 @@ textarea:focus-visible { outline: none; }
 
 .output .changed { color: var(--pistachio); }
 
-.output .kept { color: var(--ink-soft); font-family: var(--ui); font-size: 0.75em; }
+.output .kept { color: var(--ink-soft); font-family: var(--ui); font-size: 0.75em; unicode-bidi: isolate; direction: ltr; }
 
 .placeholder { color: var(--ink-soft); font-family: var(--ui); font-size: 1rem; margin: 0; }
 
