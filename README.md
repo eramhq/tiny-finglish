@@ -224,6 +224,12 @@ rows and bootstraps over sentences (`docs/benchmarks.md`).
   hybrid (noise). It costs دم → دوم and ول → ولع on dev, where the table's
   most common pronunciation is not the one typed. Adding ی as well (25.9 KiB)
   changed no output on any set, so it is not shipped.
+* **Two more word exceptions, 0 KiB.** `baad` is بعد, not باد (all 4 on dev),
+  and a stretched `naaa` is نههه: the stretch used to collapse to `naa`, which
+  is the prefix نا. Dev +0.12 on rules and hybrid, no row worse; gold
+  unchanged at one decimal. A vowel table that keeps a word's second
+  pronunciation (دم *dam*/*dom*) was tried and not shipped: about +0.1, within
+  noise (`docs/open-items.md`).
 
 ### September 2026: the object marker, abbreviations and a better loanword guard
 
