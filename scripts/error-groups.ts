@@ -8,27 +8,35 @@
  *
  * Dev only: gold is scored once and never read for what to fix next.
  *
- * Every word run the headline (orthographic) tier charges against `expected`
- * is sorted into one group, first match wins:
+ * The engine's own errors are the word runs charged against the row's
+ * `faithful` reference, which is `expected` edited to what the typist actually
+ * wrote (`میشه` typed as `mishavad`). Each is sorted by the smallest edit that
+ * explains it, first match wins: a final ه added or dropped, homophone letters
+ * (س/ص/ث, ز/ذ/ض/ظ, ت/ط, ق/غ, ه/ح, ا/ع), long vowels (ا, و, ی added or dropped),
+ * a number written in digits against one in words, and everything else.
  *
- *   * **reference is not what was typed**: the run is right against the row's
- *     `faithful` reference, which is `expected` edited to what the typist
- *     actually wrote (`میشه` typed as `mishavad`). The engine did its job; the
- *     test asked for a word nobody typed.
- *   * then the engine's own errors, by the smallest edit that explains them:
- *     a final ه added or dropped, homophone letters (س/ص/ث, ز/ذ/ض/ظ, ت/ط,
- *     ق/غ, ه/ح, ا/ع), long vowels (ا, و, ی added or dropped), a number
- *     written in digits against one in words, and everything else.
+ * **Reference is not what was typed** is the rest of what the headline
+ * (orthographic) tier charges against `expected`: the words the test asked for
+ * that nobody typed. It is a net count — the headline charge less the engine's
+ * own — because a row can also lose a word against `faithful` that `expected`
+ * forgives.
+ *
+ * Until September 2026 the groups were read off the runs charged against
+ * `expected`, and a run went to the engine whole if any word in it was wrong
+ * against `faithful`. A formal sentence against a colloquial reference is one
+ * long run, so one real mistake inside it charged the engine for the register
+ * too: 237 of the 467 words the hybrid's "other" group held on dev.
  *
  * A run whose letters are the same, split or joined differently (زمانیکه,
- * زمانی که), is compound spacing, which the headline forgives
- * (`orthographicWordAccuracy`); it is counted on its own line and not charged.
- * Counts are in words, the unit the metric charges. They follow the runs of
- * the plain alignment, so the charged total can differ from the tier's by a
- * few words where a spacing difference sits inside a longer run.
+ * زمانی که, and بدست, به دست — `writtenAsOne`), is compound spacing, which
+ * the headline forgives (`orthographicWordAccuracy`); it is counted on its own
+ * line and not charged. Counts are in words, the unit the metric charges. They
+ * follow the runs of the plain alignment, so the charged total can differ from
+ * the tier's by a few words where a spacing difference sits inside a longer
+ * run.
  */
 import { buildFixtureReport } from "./_report.ts";
-import { lenientSplitWords, wordMismatches } from "../src/metrics.ts";
+import { lenientSplitWords, wordMismatches, writtenAsOne } from "../src/metrics.ts";
 import { normalize } from "../src/normalize.ts";
 
 const argv = process.argv.slice(2);
@@ -77,38 +85,66 @@ const examples = new Map<Group, string[]>(GROUPS.map(([g]) => [g, []]));
 let charged = 0;
 let words = 0;
 
+/**
+ * A run's words on each side are one spelling, split or joined differently:
+ * each word on one side is one to three words on the other (`writtenAsOne`),
+ * in order, as the headline's alignment allows.
+ */
+function sameWriting(ref: readonly string[], hyp: readonly string[]): boolean {
+  if (solid(ref.join(" ")) === solid(hyp.join(" "))) return true;
+  const pair = (i: number, j: number): boolean => {
+    if (i === ref.length || j === hyp.length) return i === ref.length && j === hyp.length;
+    if (ref[i] === hyp[j] && pair(i + 1, j + 1)) return true;
+    for (let k = 2; k <= 3; k++) {
+      if (j + k <= hyp.length && writtenAsOne(ref[i]!, hyp.slice(j, j + k)) && pair(i + 1, j + k)) return true;
+      if (i + k <= ref.length && writtenAsOne(hyp[j]!, ref.slice(i, i + k)) && pair(i + k, j + 1)) return true;
+    }
+    return false;
+  };
+  return pair(0, 0);
+}
+
+/** The runs the headline charges against `reference`, compound spacing forgiven. */
+function* chargedRuns(reference: readonly string[], got: readonly string[], onForgiven?: (cost: number) => void) {
+  for (const span of wordMismatches(reference, got)) {
+    const ref = reference.slice(span.refStart, span.refEnd);
+    const hyp = got.slice(span.hypStart, span.hypEnd);
+    if (sameWriting(ref, hyp)) {
+      onForgiven?.(span.cost);
+      continue;
+    }
+    yield { ref: ref.join(" "), hyp: hyp.join(" "), cost: span.cost, hypStart: span.hypStart, hypEnd: span.hypEnd };
+  }
+}
+
 for (const c of report.cases) {
   if (c.fixture.expected === null) continue;
   const expected = lenientSplitWords(normalize(c.fixture.expected));
   const got = lenientSplitWords(normalize(c.result.text));
   words += expected.length;
-  const faithful = c.fixture.faithful === undefined ? undefined : lenientSplitWords(normalize(c.fixture.faithful));
-  // Hypothesis words the faithful reference also charges. A run against
-  // `expected` that touches none of them is right against what was typed.
-  const wrongVsTyped = new Set<number>();
-  if (faithful) {
-    for (const span of wordMismatches(faithful, got)) {
-      for (let k = span.hypStart; k < span.hypEnd; k++) wrongVsTyped.add(k);
-      if (span.hypStart === span.hypEnd) wrongVsTyped.add(span.hypStart);
-    }
-  }
-  for (const span of wordMismatches(expected, got)) {
-    const ref = expected.slice(span.refStart, span.refEnd).join(" ");
-    const hyp = got.slice(span.hypStart, span.hypEnd).join(" ");
-    if (solid(ref) === solid(hyp)) {
-      forgiven += span.cost;
-      continue;
-    }
-    let touches = false;
-    for (let k = span.hypStart; k <= span.hypEnd && !touches; k++) {
-      if (k < span.hypEnd || span.hypStart === span.hypEnd) touches = wrongVsTyped.has(k);
-    }
-    const group: Group = faithful && !touches ? "typed" : engineError(ref, hyp);
-    counts.set(group, counts.get(group)! + span.cost);
-    charged += span.cost;
+  const faithful = c.fixture.faithful === undefined ? expected : lenientSplitWords(normalize(c.fixture.faithful));
+  let own = 0;
+  // Hypothesis words the faithful reference charges; an `expected` run that
+  // touches none of them is an example of a word nobody typed.
+  const wrong = new Set<number>();
+  for (const run of chargedRuns(faithful, got)) {
+    const group = engineError(run.ref, run.hyp);
+    counts.set(group, counts.get(group)! + run.cost);
+    own += run.cost;
+    for (let k = run.hypStart; k <= Math.max(run.hypEnd - 1, run.hypStart); k++) wrong.add(k);
     const list = examples.get(group)!;
-    if (list.length < perGroup) list.push(`${c.fixture.input.slice(0, 60)}\n      want ${ref || "(nothing)"}   got ${hyp || "(nothing)"}`);
+    if (list.length < perGroup) list.push(`${c.fixture.input.slice(0, 60)}\n      want ${run.ref || "(nothing)"}   got ${run.hyp || "(nothing)"}`);
   }
+  let headline = 0;
+  for (const run of chargedRuns(expected, got, (cost) => (forgiven += cost))) {
+    headline += run.cost;
+    let touches = false;
+    for (let k = run.hypStart; k <= Math.max(run.hypEnd - 1, run.hypStart); k++) touches ||= wrong.has(k);
+    const list = examples.get("typed")!;
+    if (!touches && list.length < perGroup) list.push(`${c.fixture.input.slice(0, 60)}\n      want ${run.ref || "(nothing)"}   got ${run.hyp || "(nothing)"}`);
+  }
+  counts.set("typed", counts.get("typed")! + headline - own);
+  charged += headline;
 }
 
 console.log(`engine=${engine}  dev, orthographic tier  words=${words}  charged=${charged} ` +

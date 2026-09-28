@@ -90,25 +90,25 @@ the accuracy you choose:
 
 | + data | Brotli | gold, orthographic (headline) | gold, strict |
 |---|---:|---:|---:|
-| nothing | 18.0 KiB | 70.0% | 65.0% |
-| frequency + vowels | 86.6 KiB | 82.0% | **75.6%** |
-| frequency + vowels + bigrams (opt-in) | 160.2 KiB | 82.4% | 76.0% |
-| ...and the model deciding alone (`hybrid: false`) | 173.6 KiB | 82.1% | 73.1% |
-| **...and the model, ranked jointly with the rules (`"."` default)** | **173.6 KiB** | **83.1%** | 73.9% |
+| nothing | 18.0 KiB | 70.2% | 65.0% |
+| frequency + vowels | 86.6 KiB | 82.3% | **75.6%** |
+| frequency + vowels + bigrams (opt-in) | 160.2 KiB | 82.7% | 76.0% |
+| ...and the model deciding alone (`hybrid: false`) | 173.6 KiB | 82.4% | 73.1% |
+| **...and the model, ranked jointly with the rules (`"."` default)** | **173.6 KiB** | **83.4%** | 73.9% |
 
 Measured on the 1,669-row audited gold set, September 2026. The previous
 figures (62.3% for rules + frequency, 51.2% for the model) were on the
 1,835-row set before its audit; see
 [the September 2026 round](#september-2026-dictionary-decoding-llm-distillation-llm-measurement).
 Against a reference edited to what was actually typed, frequency + vowels,
-the model alone and the hybrid score 89.4%, 89.6% and 90.7%; the difference is
+the model alone and the hybrid score 89.8%, 89.9% and 91.0%; the difference is
 register, not transliteration
 ([gold scored against what was typed](#september-2026-gold-scored-against-what-was-typed)).
 
 **The headline is the orthographic tier**, which forgives only what Persian
 writers genuinely disagree on: می‌کنم, میکنم and می کنم are one word, as are
-کتاب‌ها and کتابها, زمانیکه and زمانی که (compound spacing), آ and ا, and
-digits in any script. No gold, dev or chat
+کتاب‌ها and کتابها, زمانیکه and زمانی که (compound spacing), بدست and به دست,
+چقدر and چه قدر, آ and ا, and digits in any script. No gold, dev or chat
 reference writes the half-space (ZWNJ), so the strict tier marks a correct
 می‌کنم wrong. That penalizes the engines that write proper Persian, which are
 the model and the hybrid. Strict stays in the table. See
@@ -182,6 +182,38 @@ of 504 candidates per word and a p99 of ~92,000.
 Full detail in [`docs/architecture.md`](docs/architecture.md).
 
 ## Measured results
+
+### September 2026: به and چه, joined or apart
+
+A scoring change, not an accuracy change: no engine code changed, 0 KiB.
+
+Persian writes به دست and بدست, چه قدر and چقدر, به عنوان and بعنوان; the solid
+form drops the ه. The engines write the standard spaced form, typists type it
+spaced (`be dast`, `che ghadr`), and both real references mostly join it, so
+the headline charged two words for a spelling habit. It was the largest single
+cause among the engine's remaining errors on dev: 47 of the hybrid's 230 words
+that were not vowels, ه or homophones. The headline now forgives it, as it
+already forgave زمانیکه against زمانی که. Nothing else is forgiven: the ه
+drops only from a به or چه that starts the joined word, so بهار still matches
+به ار, and خانهدار still does not match خان دار.
+
+| headline | dev | chat-dev, fixtures | gold |
+|---|---|---|---|
+| rules | +1.01 (17 rows) | no change | +0.29 (18 rows) |
+| model | +1.07 (18 rows) | no change | +0.27 (17 rows) |
+| hybrid | +1.07 (18 rows) | no change | +0.29 (18 rows) |
+
+The hybrid's lead over the rules is unchanged, since every engine writes the
+spaced form.
+
+`scripts/error-groups.ts` changed with it. It used to put a whole mismatched
+run on the engine if any single word in it was wrong against the faithful
+reference. A formal sentence against a colloquial reference is one long run,
+so one real mistake in it billed the engine for the register too. That was
+237 of the 467 words in the hybrid's "other" group on dev. The engine's
+groups are now read against the faithful reference, and "reference is not
+what was typed" is the rest of the headline charge. On dev the hybrid's own
+"other" is 186 words, not 467, and the headline charges 870 words, not 910.
 
 ### September 2026: long vowels — the parts rules can fix
 

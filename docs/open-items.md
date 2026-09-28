@@ -9,6 +9,33 @@ as a result, and what remains genuinely open.
 
 ---
 
+## 0f. September 2026 — what "other" was
+
+Record in the README round section. `error-groups.ts` put 467 of the hybrid's
+dev words in "other". Read against the faithful reference, the engine's own
+"other" was 230, and the rest was register sharing a run with one real
+mistake. Of the 230: 47 were به/چه joined or apart, now forgiven by the
+headline. The remaining 186 break down like this:
+
+1. **A silent ه lost before a suffix**, about 20 words: `edei` → ادی for
+   عده‌ای, `shodeand` → شدند for شده‌اند, `saakhteam` → ساختم, `khaneshan` →
+   خنشن. It is the same family as the glued ezafe. The guard is the hard part,
+   because the same letters are often an epenthetic vowel: `dastetan` is
+   دست‌تان, not دسته‌تان, and `vaaghei` is واقعی, not واقعه‌ای.
+2. **`-an` adverbs**, about 13: `masalan` → مسالن for مثلا, `zaheran`,
+   `vaaghean`, `taghriban`. It is a closed class, so a small table would do.
+   `badan` (بدن or بعدا) and `felan` (فلان or فعلا) collide with real words.
+3. **Detached clitics**, about 12: `vijegi hayeh` misses `DETACHED_SUFFIX`
+   by its final h; `sale ash` and `lenge ash` stay two words.
+4. **`na omid`** → نه امید for ناامید, about 7: the `na` exception fires on
+   the prefix.
+5. **The rest**, about 120, has no cause above three words. It is typos in
+   the input (`tahir`, `khneh`), reference errors (قصر for `ghatl`), proper
+   nouns (KGB, UNICEF), `telephon` → تلپهون, and wrong words. It is not
+   rule-shaped; the corpus work is what reaches it.
+
+Items 1 to 4 are one engine round, about +0.6 to +1.0 on dev.
+
 ## 0e. September 2026 — long vowels
 
 Record in the README round section. Closed: the rule-fixable part of the

@@ -204,6 +204,17 @@ export function lenientSplitWords(text: string): string[] {
 const MAX_JOIN = 3;
 
 /**
+ * True when `solid` is `words` written as one: their letters joined, or with
+ * the ه of a leading به or چه dropped, as Persian drops it when it writes them
+ * solid — به دست and بدست, چه قدر and چقدر, به عنوان and بعنوان.
+ */
+export function writtenAsOne(solid: string, words: readonly string[]): boolean {
+  const joined = words.join("");
+  if (solid === joined) return true;
+  return words.length > 1 && (words[0] === "به" || words[0] === "چه") && solid === words[0][0] + joined.slice(2);
+}
+
+/**
  * The headline tier: `lenientSplitWords` on both sides, and compound spacing
  * forgiven.
  *
@@ -220,6 +231,13 @@ const MAX_JOIN = 3;
  * It never matches different letters: the join is exact, after the folds
  * `lenientSplitWords` already makes. Measured on dev before it became the
  * headline, as the `spacing` group of `scripts/error-groups.ts`.
+ *
+ * The one exception is the ه of a leading به or چه (`writtenAsOne`): Persian
+ * writes بدست and به دست, چقدر and چه قدر, and both real references use the
+ * solid forms where typists typed them apart. It was 47 of the hybrid's 230
+ * engine errors on dev that were not vowels, ه or homophones, and forgiving
+ * it moved the dev headline +0.9 (rules) and +1.0 (hybrid), chat-dev and the
+ * fixtures not at all.
  */
 export function orthographicWordAccuracy(reference: string, hypothesis: string): { correct: number; total: number } {
   const ref = lenientSplitWords(reference);
@@ -236,8 +254,8 @@ export function orthographicWordAccuracy(reference: string, hypothesis: string):
         d[i - 1]![j - 1]! + (ref[i - 1] === hyp[j - 1] ? 0 : 1),
       );
       for (let k = 2; k <= MAX_JOIN; k++) {
-        if (j >= k && ref[i - 1] === hyp.slice(j - k, j).join("")) best = Math.min(best, d[i - 1]![j - k]!);
-        if (i >= k && hyp[j - 1] === ref.slice(i - k, i).join("")) best = Math.min(best, d[i - k]![j - 1]!);
+        if (j >= k && writtenAsOne(ref[i - 1]!, hyp.slice(j - k, j))) best = Math.min(best, d[i - 1]![j - k]!);
+        if (i >= k && writtenAsOne(hyp[j - 1]!, ref.slice(i - k, i))) best = Math.min(best, d[i - k]![j - 1]!);
       }
       d[i]![j] = best;
     }

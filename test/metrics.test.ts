@@ -162,8 +162,19 @@ describe("orthographicWordAccuracy", () => {
     expect(orthographicWordAccuracy("زمانیکه رفتم", "زمانی که رفت")).toEqual({ correct: 1, total: 2 });
   });
 
-  it("never matches different letters", () => {
+  it("forgives the ه of a leading به or چه written solid, either way", () => {
+    expect(orthographicWordAccuracy("بدست آورد", "به دست آورد")).toEqual({ correct: 2, total: 2 });
+    expect(orthographicWordAccuracy("چه قدر", "چقدر")).toEqual({ correct: 2, total: 2 });
+    expect(orthographicWordAccuracy("بعنوان مثال", "به عنوان مثال")).toEqual({ correct: 2, total: 2 });
+  });
+
+  it("never matches other different letters", () => {
     expect(orthographicWordAccuracy("زمانیکه", "زمان که")).toEqual({ correct: 0, total: 1 });
+    // Only a leading به or چه may lose its ه, and the plain join still counts.
+    expect(orthographicWordAccuracy("بهار", "به ار")).toEqual({ correct: 1, total: 1 });
+    expect(orthographicWordAccuracy("بار", "به ار")).toEqual({ correct: 1, total: 1 });
+    expect(orthographicWordAccuracy("خانهدار", "خان دار")).toEqual({ correct: 0, total: 1 });
+    expect(orthographicWordAccuracy("ب", "به")).toEqual({ correct: 0, total: 1 });
   });
 
   it("keeps the folds of the orthographic split", () => {
