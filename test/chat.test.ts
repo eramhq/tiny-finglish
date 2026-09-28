@@ -326,3 +326,19 @@ describe("na", () => {
     expect(rules.transliterate("naameh").text).toBe("نامه");
   });
 });
+
+/**
+ * The other `WORD_EXCEPTIONS` entry, and the stretch: a stretched exception
+ * word is found before `unstretch` collapses it, and an unstretched `naa` is
+ * still the prefix نا.
+ */
+describe("word exceptions, stretched and not", () => {
+  const tiers = [["rules", rules], ["model", model], ["hybrid", hybrid]] as const;
+  for (const [name, engine] of tiers) {
+    it.skipIf(!engine)(`on the ${name} tier`, () => {
+      expect(engine!.transliterate("naaa").text).toBe("نههه");
+      expect(engine!.transliterate("naa omidi").text.startsWith("نا ")).toBe(true);
+      expect(engine!.transliterate("hafte baad").text).toBe("هفته بعد");
+    });
+  }
+});

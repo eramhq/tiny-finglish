@@ -306,10 +306,19 @@ export abstract class Pipeline {
    * Candidates for one word, stretch included. A stretched word is converted
    * without its stretch, under the collapsed memo key, and a word-final stretch
    * is put back on every candidate afterwards (`stretch.ts`).
+   *
+   * A stretched `WORD_EXCEPTIONS` word is converted as that word: `naaa` is a
+   * stretched `na`, but `unstretch` keeps a vowel run at two (`naa`), and an
+   * unstretched `naa` is the prefix نا (`naa omidi`), so the exception has to be
+   * found before that collapse. Only a real stretch, three letters or more,
+   * reaches it.
    */
   protected convert(word: string, opts: TransliterateOptions, clauseFinal = false): Candidate[] {
-    const { base, final } = unstretch(word.toLowerCase());
-    const candidates = this.convertBase(base, opts, clauseFinal);
+    const lower = word.toLowerCase();
+    const { base, final } = unstretch(lower);
+    const single = final ? lower.slice(0, -final.length) + final.letter : undefined;
+    const key = single && WORD_EXCEPTIONS.has(single) ? single : base;
+    const candidates = this.convertBase(key, opts, clauseFinal);
     if (!final) return candidates;
     return candidates.map((c) => {
       const output = restretch(c.output, final);
@@ -686,8 +695,12 @@ const LOANWORD_SHARE = 0.9;
  * almost every word, and نا is in the frequency table as the prefix of
  * نا‌امید, so the rules and the hybrid wrote نا for all 14 `na` on dev and
  * chat-dev. The model alone wrote نه for all 14.
+ *
+ * `baad` is بعد, "after". The channel reads `aa` as ا and ranks باد ("wind")
+ * first; all 4 `baad` on dev mean بعد, none باد, and the model alone puts
+ * بعد at 0.87. باد stays in the list, one choice away.
  */
-const WORD_EXCEPTIONS: ReadonlyMap<string, string> = new Map([["na", "نه"]]);
+const WORD_EXCEPTIONS: ReadonlyMap<string, string> = new Map([["na", "نه"], ["baad", "بعد"]]);
 
 /**
  * Put the table's Persian first when `word` is a loanword-table word, or one of
