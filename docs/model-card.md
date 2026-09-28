@@ -12,7 +12,7 @@ Persian grapheme set that includes an empty label and multi-character labels.
 | Architecture | embedding → 5-wide neighbourhood → bidirectional affine scans → per-position softmax |
 | Sizes trained | 27,660 / 102,348 / 541,516 / ~2M parameters |
 | **Shipped** | **111,058 parameters (v8), int6, 98.2 KiB Brotli with runtime** (same 100k architecture; the label set grew) |
-| Shipped data | 55.3 KiB word frequency and 13.3 KiB vowels, fetched separately — 173.3 KiB all in |
+| Shipped data | 55.3 KiB word frequency and 13.3 KiB vowels, fetched separately — 173.6 KiB all in |
 | Optional data | 73.6 KiB word bigrams, 98.3 KiB lexicon; measured, not shipped |
 | Quantization | per-row symmetric int8 or int6 |
 | Runtime | hand-written JavaScript, CPU, no WASM/WebGPU/ONNX |

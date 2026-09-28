@@ -380,10 +380,15 @@ export abstract class Pipeline {
     // the model and hybrid tiers get it too. The model tier is where it matters
     // most: v7 writes `salam` as سالم without it.
     const generated = this.convertWord(word, wide, marked);
-    const candidates = this.copulaCandidate(word, this.pluralObjectMarker(word, this.objectMarker(word,
-      withLoanword(word, this.vowels
-        ? vowelPass(word, generated, this.vowels, this.scoring.vowelAgreement)
-        : generated), opts), opts), opts);
+    let candidates = withLoanword(word, this.vowels
+      ? vowelPass(word, generated, this.vowels, this.scoring.vowelAgreement)
+      : generated);
+    candidates = this.hiatusYe(word, candidates);
+    candidates = this.shortVowelVav(word, candidates);
+    candidates = this.gluedEzafe(word, candidates, opts);
+    candidates = this.objectMarker(word, candidates, opts);
+    candidates = this.pluralObjectMarker(word, candidates, opts);
+    candidates = this.copulaCandidate(word, candidates, opts);
 
     if (this.cache.size >= this.cacheSize) {
       // Cheap FIFO eviction. A true LRU costs more bookkeeping than it saves at
@@ -393,6 +398,106 @@ export abstract class Pipeline {
     }
     this.cache.set(key, candidates);
     return candidates;
+  }
+
+  /**
+   * The glide of a hiatus, written: `begouim` بگوییم, `taeid` تایید, `kojain`
+   * کجایین.
+   *
+   * Persian writes an *i* after a long vowel as یی — one ی for the glide, one
+   * for the vowel — and typists type only the vowel. Letter by letter `i` is
+   * one ی, so every engine wrote بگویم ("I say") for `begouim` ("we say"), and
+   * the doubled spelling was never in the list. `rules.ts` covers the
+   * word-final case (`kojai` کجایی) with a channel variant; inside the word
+   * the typed context is two letters wide, which the channel cannot condition
+   * on, so it is done here.
+   *
+   * When the typed word has a vowel then `i` or `ee` before a consonant, each
+   * candidate in turn has a ی after ا or و doubled, and the first spelling that
+   * is a frequency-table word goes first. The table is the guard: `mailam`
+   * stays مایلم and `email` ایمیل, because ماییلم and اییمیل are not words. A
+   * final ی is left to the channel variant, or `tooie` could reach تویی ("you
+   * are") from توی.
+   */
+  private hiatusYe(key: string, candidates: Candidate[]): Candidate[] {
+    const frequency = this.frequency;
+    const top = candidates[0];
+    if (!frequency || !top || top.reason === "loanword" || !/[aou]e?(i|ee)[^aeiou]/.test(key)) return candidates;
+    for (const candidate of candidates) {
+      const word = candidate.output;
+      for (const match of word.matchAll(/[او]ی(?=.)/gu)) {
+        const at = match.index + 2;
+        const output = this.tableForm(`${word.slice(0, at)}ی${word.slice(at)}`);
+        if (!output) continue;
+        if (top.output === output) return candidates;
+        return promote(candidates, output, `hiatus یی in ${word}`);
+      }
+    }
+    return candidates;
+  }
+
+  /**
+   * `ou` or `oo` typed for a short *o*: `kounam` کنم, `doroost` درست,
+   * `tashakour` تشکر.
+   *
+   * Both spellings are read as the long vowel و, which is right for `rouz` روز
+   * and `dour` دور, and so every engine wrote کونم, دروست, تشکور. When the
+   * typed word has `ou` or `oo` between consonants and the best candidate is
+   * not a frequency-table word, that candidate has one و after its first
+   * letter dropped, and the first spelling that is a table word goes first.
+   * The guard is the engine's own answer: روز is a word, so `rouz` is never
+   * touched. Only the best candidate, because lower ones reach words the typing
+   * does not: `roozaayi` روزایی has روضایی below it, and without its و that is
+   * رضایی.
+   */
+  private shortVowelVav(key: string, candidates: Candidate[]): Candidate[] {
+    const frequency = this.frequency;
+    const top = candidates[0];
+    if (!frequency || !top || top.reason === "loanword" || !/[^aeiou](ou|oo)[^aeiou]/.test(key)) return candidates;
+    const word = top.output;
+    if (this.tableForm(word)) return candidates;
+    for (let at = word.indexOf("و", 1); at > 0; at = word.indexOf("و", at + 1)) {
+      const output = this.tableForm(word.slice(0, at) + word.slice(at + 1));
+      if (output) return promote(candidates, output, `short o in ${word}`);
+    }
+    return candidates;
+  }
+
+  /**
+   * The ezafe glued to a word in silent ه: `darbaareye` درباره, `shiveye`
+   * شیوه, `bahreye` بهره.
+   *
+   * Read letter by letter the ezafe `ye` is ی, and the engines wrote درباریه
+   * and شیویه. Persian writes this ezafe as a hamza or ی on the ه (دربارهٔ,
+   * درباره‌ی), and both real evaluation sets write neither: خانه, as
+   * `detachedEzafe` already does for the detached `khaane ye`. So when the
+   * typed word is a consonant, `e` and `ye` or `yeh`, and the word less its
+   * `ye` has a ه-final frequency-table word among its candidates, that word
+   * goes first.
+   */
+  private gluedEzafe(key: string, candidates: Candidate[], opts: TransliterateOptions): Candidate[] {
+    const top = candidates[0];
+    const stem = /^(.+[^aeiou]e)yeh?$/.exec(key)?.[1];
+    if (!this.frequency || !top || top.reason === "loanword" || !stem || stem.length < 4) return candidates;
+    for (const reading of this.convertBase(stem, opts)) {
+      const output = reading.output.endsWith("ه") ? this.tableForm(reading.output) : undefined;
+      if (!output) continue;
+      return top.output === output ? candidates : promote(candidates, output, `glued ezafe on ${output}`);
+    }
+    return candidates;
+  }
+
+  /**
+   * `word` as the frequency table spells it: with the candidate's ZWNJ when the
+   * table has that form (می‌کند), else solid (کجایین, not the candidate's
+   * کج‌ایین); `undefined` when it has neither.
+   */
+  private tableForm(word: string): string | undefined {
+    const frequency = this.frequency;
+    if (!frequency) return undefined;
+    if (frequency.get(word)) return word;
+    const solid = word.replaceAll(ZWNJ, "");
+    return frequency.get(solid) ? solid : undefined;
   }
 
   /**
@@ -437,12 +542,7 @@ export abstract class Pipeline {
       best = { output: `${reading.output}${persian}و`, score, reason: `object marker on ${reading.output}` };
     }
     if (!best || top.output === best.output) return candidates;
-    const rest = candidates.filter((c) => c.output !== best!.output);
-    const total = rest.reduce((sum, c) => sum + c.probability, 0) || 1;
-    return [
-      { output: best.output, probability: OBJECT_MARKER_SHARE, reason: best.reason },
-      ...rest.map((c) => ({ ...c, probability: round4(((1 - OBJECT_MARKER_SHARE) * c.probability) / total) })),
-    ];
+    return promote(candidates, best.output, best.reason);
   }
 
   /**
@@ -478,12 +578,7 @@ export abstract class Pipeline {
       if (!stem || !frequency.get(stem)) continue;
       const output = `${stem}${plural}رو`;
       if (top.output === output) return candidates;
-      const rest = candidates.filter((c) => c.output !== output);
-      const total = rest.reduce((sum, c) => sum + c.probability, 0) || 1;
-      return [
-        { output, probability: OBJECT_MARKER_SHARE, reason: `plural and object marker on ${stem}` },
-        ...rest.map((c) => ({ ...c, probability: round4(((1 - OBJECT_MARKER_SHARE) * c.probability) / total) })),
-      ];
+      return promote(candidates, output, `plural and object marker on ${stem}`);
     }
     return candidates;
   }
@@ -809,20 +904,6 @@ const OBJECT_MARKER_SHARE = 0.8;
 const LOANWORD_SHARE = 0.9;
 
 /**
- * Whole words the channel reads wrong on every tier that uses it, typed alone
- * and matched exactly. Hand-written, one entry per measured miss, and applied
- * like a loanword-table hit.
- *
- * `na` is نه, "no". The channel reads a final `a` as ا, which is right for
- * almost every word, and نا is in the frequency table as the prefix of
- * نا‌امید, so the rules and the hybrid wrote نا for all 14 `na` on dev and
- * chat-dev. The model alone wrote نه for all 14.
- *
- * `baad` is بعد, "after". The channel reads `aa` as ا and ranks باد ("wind")
- * first; all 4 `baad` on dev mean بعد, none باد, and the model alone puts
- * بعد at 0.87. باد stays in the list, one choice away.
- */
-/**
  * Words whose typed final `e` is the ezafe of a phrase that goes on, not the
  * copula: `bekhatere` بخاطرِ, `zire` زیرِ. `copulaCandidate` leaves them alone.
  * نزدیک and پیش are not here: `nazdike` and `pishe` are copulas in chat-dev.
@@ -841,7 +922,27 @@ const NUMBER_WORDS: ReadonlySet<string> = new Set([
   "هزار", "میلیون", "میلیارد",
 ]);
 
-const WORD_EXCEPTIONS: ReadonlyMap<string, string> = new Map([["na", "نه"], ["baad", "بعد"]]);
+/**
+ * Whole words the channel reads wrong on every tier that uses it, typed alone
+ * and matched exactly. Hand-written, one entry per measured miss, and applied
+ * like a loanword-table hit.
+ *
+ * `na` is نه, "no". The channel reads a final `a` as ا, which is right for
+ * almost every word, and نا is in the frequency table as the prefix of
+ * نا‌امید, so the rules and the hybrid wrote نا for all 14 `na` on dev and
+ * chat-dev. The model alone wrote نه for all 14.
+ *
+ * `baad` is بعد, "after". The channel reads `aa` as ا and ranks باد ("wind")
+ * first; all 4 `baad` on dev mean بعد, none باد, and the model alone puts
+ * بعد at 0.87. باد stays in the list, one choice away.
+ *
+ * `hata`, `hatta` and `hataa` are حتی, "even", spelled with a final ی read
+ * as ا. Every engine wrote the reformed spelling حتا, which one of the five on
+ * dev uses; the other four are حتی.
+ */
+const WORD_EXCEPTIONS: ReadonlyMap<string, string> = new Map([
+  ["na", "نه"], ["baad", "بعد"], ["hata", "حتی"], ["hatta", "حتی"], ["hataa", "حتی"],
+]);
 
 /**
  * Put the table's Persian first when `word` is a loanword-table word, or one of
@@ -862,6 +963,19 @@ function withLoanword(word: string, engine: Candidate[]): Candidate[] {
   const rest = engine.filter((c) => !spellings.includes(c.output));
   const total = rest.reduce((sum, c) => sum + c.probability, 0) || 1;
   return [...loan, ...rest.map((c) => ({ ...c, probability: round4(((1 - LOANWORD_SHARE) * c.probability) / total) }))];
+}
+
+/**
+ * Put `output` first with `OBJECT_MARKER_SHARE`, the engine's other candidates
+ * sharing the rest in their own proportions.
+ */
+function promote(candidates: readonly Candidate[], output: string, reason: string): Candidate[] {
+  const rest = candidates.filter((c) => c.output !== output);
+  const total = rest.reduce((sum, c) => sum + c.probability, 0) || 1;
+  return [
+    { output, probability: OBJECT_MARKER_SHARE, reason },
+    ...rest.map((c) => ({ ...c, probability: round4(((1 - OBJECT_MARKER_SHARE) * c.probability) / total) })),
+  ];
 }
 
 export function round4(value: number): number {

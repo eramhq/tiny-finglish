@@ -9,6 +9,34 @@ as a result, and what remains genuinely open.
 
 ---
 
+## 0e. September 2026 — long vowels
+
+Record in the README round section. Closed: the rule-fixable part of the
+long-vowel group, which is the hiatus یی (`begouim` بگوییم), `ou` for a short
+o (`kounam` کنم), the ezafe glued to a silent ه (`darbaareye` درباره) and
+`hata` حتی.
+
+Still open:
+
+1. **A single `a` for ا** (`hamele` حمله/حامله, `ashegh` عشق/عاشق, `hal`
+   حل/حال): 43 of the hybrid's 118 vowel-only word errors on dev and
+   chat-dev, measured before this round, and the largest part of the group. Both spellings are words, so no rule can
+   choose. It needs context or the model's training data. `hal` is right on
+   the rules and wrong on the hybrid, which follows the model (see "Repeated
+   one-word mistakes" below).
+2. **Short-o misfires on a colloquial long `oo`.** Gold, scored once, shows
+   `khaanoomesh` → خانمش (the reference keeps خانومش), `moosho` → مشو on the
+   model tier, and the surname `pour` → پر. Most of the dev wins are `ou`
+   (`kounam`, `tashakour`, `mikounad`). Restricting the rule to `ou` would
+   probably avoid these, but only dev or chat-dev evidence can justify that
+   change, not gold.
+3. **Doubled ی the table lacks.** `tooit` توییت is not a table word, so the
+   hiatus pass cannot reach it. `taghir` تغییر is typed with no vowel before
+   the `i`, so it is lexical. `reise` and `tazeen` want رییس/تزیین where the
+   table has رئیس/تزئین, which is a spelling convention, not a vowel error.
+4. **`kojain` on the rules tier.** کجاین is fourth in a three-wide list, so
+   there is nothing to double. The hybrid gets it.
+
 ## 0d. September 2026 — glued endings
 
 Record in the README round section. Closed: 0c's item 2 in part (plural +

@@ -380,3 +380,63 @@ describe("glued و on numbers, plural + ro, clause-final copula", () => {
     });
   }
 });
+
+/**
+ * Long vowels the typing gives and the letter-by-letter reading lost: the
+ * glide of a hiatus (`hiatusYe`), `ou`/`oo` for a short o (`shortVowelVav`),
+ * the ezafe glued to a silent ه (`gluedEzafe`) and حتی (`WORD_EXCEPTIONS`) —
+ * with the look-alikes each one must leave alone.
+ */
+describe("long vowels: hiatus یی, short o, glued ezafe, حتی", () => {
+  const tiers = [["rules", rules], ["model", model], ["hybrid", hybrid]] as const;
+  for (const [name, engine] of tiers) {
+    it.skipIf(!engine)(`on the ${name} tier`, () => {
+      const text = (input: string) => engine!.transliterate(input).text.replaceAll("‌", "");
+      expect(text("begouim")).toBe("بگوییم");
+      expect(text("begooid")).toBe("بگویید");
+      // No doubled spelling is a word: ماییلم, رییس (the table has رئیس), اییمیل.
+      expect(text("raeis")).toBe("رئیس");
+      expect(text("email")).toBe("ایمیل");
+
+      expect(text("kounam")).toBe("کنم");
+      expect(text("doroost")).toBe("درست");
+      expect(text("tashakour")).toBe("تشکر");
+      expect(text("mikounad")).toBe("میکند");
+      // The engine's answer is a word, so the و stays.
+      expect(text("rouz")).toBe("روز");
+      expect(text("dour")).toBe("دور");
+      expect(text("shood")).toBe("شود");
+
+      expect(text("darbaareye man")).toBe("درباره من");
+      expect(text("shiveye")).toBe("شیوه");
+      expect(text("bahreye")).toBe("بهره");
+      expect(text("khaane ye bozorg")).toBe("خانه بزرگ");
+      // A vowel before the ye is not a glued ezafe.
+      expect(text("ghaziye")).toBe("قضیه");
+      expect(text("hediye")).toBe("هدیه");
+
+      expect(text("hata man")).toBe("حتی من");
+      expect(text("hatta")).toBe("حتی");
+      expect(text("hataa")).toBe("حتی");
+    });
+  }
+  for (const [name, engine] of [["rules", rules], ["hybrid", hybrid]] as const) {
+    it.skipIf(!engine)(`taeid and mailam on the ${name} tier`, () => {
+      expect(engine!.transliterate("taeid").text).toBe("تایید");
+      expect(engine!.transliterate("mailam").text).toBe("مایلم");
+    });
+  }
+  /**
+   * The rules list for `kojain` is three wide, the default without the bigram
+   * table, and کجاین is fourth, so there is nothing to double; the hybrid
+   * ranks it higher.
+   */
+  it.skipIf(!hybrid)("kojain on the hybrid tier", () => {
+    expect(hybrid!.transliterate("saal tahvil kojain?").text).toBe("سال تحویل کجایین؟");
+  });
+  it("needs the frequency table", () => {
+    const bare = new RuleTransliterator();
+    expect(bare.transliterate("begouim").text).not.toBe("بگوییم");
+    expect(bare.transliterate("shiveye").text).not.toBe("شیوه");
+  });
+});

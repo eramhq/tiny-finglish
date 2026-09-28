@@ -16,18 +16,18 @@
   },
   "lexiconGain": {
     "ours-model-frequency": {
-      "withLexicon": 0.7339686011091151,
-      "withoutLexicon": 0.7332656408654221,
+      "withLexicon": 0.7389674295087089,
+      "withoutLexicon": 0.738264469265016,
       "points": 0.0703
     },
     "ours-rules-frequency": {
-      "withLexicon": 0.7515426072014372,
-      "withoutLexicon": 0.7512301804264625,
+      "withLexicon": 0.7562290088260564,
+      "withoutLexicon": 0.7559165820510818,
       "points": 0.0312
     },
     "ours-rules": {
-      "withLexicon": 0.6496914785597125,
-      "withoutLexicon": 0.5486995235491682,
+      "withLexicon": 0.6498476919471998,
+      "withoutLexicon": 0.5488557369366555,
       "points": 10.0992
     }
   },
@@ -39,18 +39,18 @@
   },
   "bigramGain": {
     "ours-model-frequency": {
-      "shipped": 0.7339686011091151,
-      "withBigram": 0.735765055065219,
+      "shipped": 0.7389674295087089,
+      "withBigram": 0.7407638834648129,
       "points": 0.1796
     },
     "ours-rules-frequency": {
-      "shipped": 0.7515426072014372,
-      "withBigram": 0.7554479418886199,
+      "shipped": 0.7562290088260564,
+      "withBigram": 0.760134343513239,
       "points": 0.3905
     },
     "ours-rules": {
-      "shipped": 0.6496914785597125,
-      "withBigram": 0.6700773256268062,
+      "shipped": 0.6498476919471998,
+      "withBigram": 0.6702335390142935,
       "points": 2.0386
     }
   },
@@ -93,11 +93,11 @@
       "accuracy": {
         "gold": {
           "n": 1669,
-          "wordsCorrect": 9397,
+          "wordsCorrect": 9461,
           "wordsTotal": 12803,
-          "wordAcc": 0.7339686011091151,
-          "sentence": 0.14379868184541642,
-          "cer": 0.0898
+          "wordAcc": 0.7389674295087089,
+          "sentence": 0.15038945476333135,
+          "cer": 0.0887
         },
         "fixtures": {
           "n": 244,
@@ -109,25 +109,25 @@
         },
         "authored": {
           "n": 71,
-          "wordsCorrect": 87,
+          "wordsCorrect": 89,
           "wordsTotal": 105,
-          "wordAcc": 0.8285714285714286,
-          "sentence": 0.8450704225352113,
-          "cer": 0.0359
+          "wordAcc": 0.8476190476190476,
+          "sentence": 0.8732394366197183,
+          "cer": 0.0275
         }
       },
-      "latencyMsPerSentence": 3.2105,
+      "latencyMsPerSentence": 3.3852,
       "preservesProtectedSpans": true,
       "size": {
-        "raw": 374612,
-        "gzip": 194108,
-        "brotli": 177499,
+        "raw": 375727,
+        "gzip": 194452,
+        "brotli": 177817,
         "breakdown": [
           {
             "component": "runtime + rules + tokenizer (JS)",
-            "raw": 71631,
-            "gzip": 23872,
-            "brotli": 20792
+            "raw": 72746,
+            "gzip": 24216,
+            "brotli": 21110
           },
           {
             "component": "model weights (int6)",
@@ -163,11 +163,11 @@
       "accuracy": {
         "gold": {
           "n": 1669,
-          "wordsCorrect": 9622,
+          "wordsCorrect": 9682,
           "wordsTotal": 12803,
-          "wordAcc": 0.7515426072014372,
-          "sentence": 0.15877771120431397,
-          "cer": 0.0879
+          "wordAcc": 0.7562290088260564,
+          "sentence": 0.1671659676452966,
+          "cer": 0.0867
         },
         "fixtures": {
           "n": 244,
@@ -179,25 +179,25 @@
         },
         "authored": {
           "n": 71,
-          "wordsCorrect": 98,
+          "wordsCorrect": 100,
           "wordsTotal": 105,
-          "wordAcc": 0.9333333333333333,
-          "sentence": 0.9014084507042254,
-          "cer": 0.0347
+          "wordAcc": 0.9523809523809523,
+          "sentence": 0.9295774647887324,
+          "cer": 0.0235
         }
       },
-      "latencyMsPerSentence": 0.4938,
+      "latencyMsPerSentence": 0.5075,
       "preservesProtectedSpans": true,
       "size": {
-        "raw": 239053,
-        "gzip": 102056,
-        "brotli": 91027,
+        "raw": 240168,
+        "gzip": 102400,
+        "brotli": 91345,
         "breakdown": [
           {
             "component": "runtime + rules + tokenizer (JS)",
-            "raw": 71631,
-            "gzip": 23872,
-            "brotli": 20792
+            "raw": 72746,
+            "gzip": 24216,
+            "brotli": 21110
           },
           {
             "component": "word frequency (25k words)",
@@ -227,11 +227,11 @@
       "accuracy": {
         "gold": {
           "n": 1669,
-          "wordsCorrect": 8318,
+          "wordsCorrect": 8320,
           "wordsTotal": 12803,
-          "wordAcc": 0.6496914785597125,
-          "sentence": 0.07968843618933494,
-          "cer": 0.1223
+          "wordAcc": 0.6498476919471998,
+          "sentence": 0.08028759736369083,
+          "cer": 0.1222
         },
         "fixtures": {
           "n": 244,
@@ -250,18 +250,18 @@
           "cer": 0.1387
         }
       },
-      "latencyMsPerSentence": 0.3194,
+      "latencyMsPerSentence": 0.3286,
       "preservesProtectedSpans": true,
       "size": {
-        "raw": 71631,
-        "gzip": 23872,
-        "brotli": 20792,
+        "raw": 72746,
+        "gzip": 24216,
+        "brotli": 21110,
         "breakdown": [
           {
             "component": "runtime + rules + tokenizer (JS)",
-            "raw": 71631,
-            "gzip": 23872,
-            "brotli": 20792
+            "raw": 72746,
+            "gzip": 24216,
+            "brotli": 21110
           }
         ],
         "note": "Excludes the lexicon, which is not shipped by default — see `optionalLexicon` and `lexiconGain`, which measure exactly what leaving it out costs."
@@ -302,7 +302,7 @@
           "cer": 0.1932
         }
       },
-      "latencyMsPerSentence": 0.0075,
+      "latencyMsPerSentence": 0.006,
       "preservesProtectedSpans": false,
       "size": {
         "raw": 4524,
@@ -345,7 +345,7 @@
           "cer": 0.8073
         }
       },
-      "latencyMsPerSentence": 4.7207,
+      "latencyMsPerSentence": 5.008,
       "preservesProtectedSpans": false,
       "size": {
         "raw": 3775810,
@@ -440,7 +440,7 @@
           "cer": 0.0536
         }
       },
-      "latencyMsPerSentence": 3.6324,
+      "latencyMsPerSentence": 3.3961,
       "preservesProtectedSpans": false,
       "size": {
         "raw": 7132019,
