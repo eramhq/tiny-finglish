@@ -1,41 +1,41 @@
-{"id":"gold-0009","input":"4 you have to call","expected":"چهارم، توزیع مجدد ثروت","alternatives":[],"reason":"audit","cer":0.857}
-{"id":"gold-0011","input":"a lot more of space is being used version for this","expected":"و برای شانس تلاش و مبارزه فراخوان میدهند تا دنیایی بهتر بسازند","alternatives":[],"reason":"audit","cer":0.758}
+{"id":"gold-0009","input":"4 you have to call","expected":"چهارم، توزیع مجدد ثروت","alternatives":[],"reason":"audit","cer":0.81}
+{"id":"gold-0011","input":"a lot more of space is being used version for this","expected":"و برای شانس تلاش و مبارزه فراخوان میدهند تا دنیایی بهتر بسازند","alternatives":[],"reason":"audit","cer":0.79}
 {"id":"gold-0056","input":"afrade malool janbazan hame afrad bal","expected":"نه می خوام ریختت رو ببینم","alternatives":[],"reason":"cer","cer":1.12}
 {"id":"gold-0057","input":"ag tebqe qanoon pish brim","expected":"تا توجهش به من جلب بشه","alternatives":[],"reason":"audit","cer":0.727}
-{"id":"gold-0067","input":"agar tavaanmadieman baraye tahaghogh","expected":"!قوزک پای من خپل نیست","alternatives":[],"reason":"cer","cer":1}
-{"id":"gold-0068","input":"agar tavanmandihayeman baraye tahagho","expected":"من حرف مفت زیاد میزنم","alternatives":[],"reason":"cer","cer":1.095}
-{"id":"gold-0080","input":"age qati beshn chi mishan ?","expected":"ورود و خروج از آن غیرممکن است","alternatives":[],"reason":"audit","cer":0.759}
+{"id":"gold-0067","input":"agar tavaanmadieman baraye tahaghogh","expected":"!قوزک پای من خپل نیست","alternatives":[],"reason":"audit","cer":0.9}
+{"id":"gold-0068","input":"agar tavanmandihayeman baraye tahagho","expected":"من حرف مفت زیاد میزنم","alternatives":[],"reason":"cer","cer":1}
+{"id":"gold-0080","input":"age qati beshn chi mishan ?","expected":"ورود و خروج از آن غیرممکن است","alternatives":[],"reason":"audit","cer":0.724}
 {"id":"gold-0092","input":"aknon, fekr mikonam vaght an ast ke y","expected":"یا مهارتهای مناسب کار یا در پیدا کردن شغل","alternatives":[],"reason":"audit","cer":0.78}
-{"id":"gold-0110","input":"albate nazare javoon tara mohem tare","expected":"این زیستگاه طبیعی من نبود","alternatives":[],"reason":"cer","cer":0.92}
+{"id":"gold-0110","input":"albate nazare javoon tara mohem tare","expected":"این زیستگاه طبیعی من نبود","alternatives":[],"reason":"audit","cer":0.88}
 {"id":"gold-0112","input":"ama baiad faratar az in brim","expected":"فکر کنم حوصلش سر رفته","alternatives":[],"reason":"cer","cer":1.048}
 {"id":"gold-0114","input":"ama gala ba iman hastm","expected":"یه دقیقه صبر کن ، فیبی","alternatives":[],"reason":"audit","cer":0.85}
-{"id":"gold-0131","input":"amma in ham mesle baghiyeye medad hai","expected":"زیبا خانوم می گه خوابه کجان بقیه؟","alternatives":[],"reason":"audit","cer":0.719}
+{"id":"gold-0131","input":"amma in ham mesle baghiyeye medad hai","expected":"زیبا خانوم می گه خوابه کجان بقیه؟","alternatives":[],"reason":"audit","cer":0.625}
 {"id":"gold-0134","input":"an mard negonbakht miraft","expected":"اون به من گفت خداحافظ","alternatives":[],"reason":"audit","cer":0.762}
-{"id":"gold-0140","input":"are adam sadei bood","expected":"پول بلیط در جیبم ماند","alternatives":[],"reason":"audit","cer":0.81}
+{"id":"gold-0140","input":"are adam sadei bood","expected":"پول بلیط در جیبم ماند","alternatives":[],"reason":"audit","cer":0.762}
 {"id":"gold-0148","input":"asase har rabete salemi:","expected":"من فردا با کشتیم میرم","alternatives":[],"reason":"audit","cer":0.81}
-{"id":"gold-0151","input":"aslan dust ndaram asbabe mozahematetun beshim","expected":". تو میدونی من دارم","alternatives":[],"reason":"cer","cer":1.647}
+{"id":"gold-0151","input":"aslan dust ndaram asbabe mozahematetun beshim","expected":". تو میدونی من دارم","alternatives":[],"reason":"cer","cer":1.588}
 {"id":"gold-0162","input":"avayel lora hioz motevajeh shod ke man kami dar in mohit sardargom shodam","expected":"وفتی که روی بازسازی و تکامل سیستم بررسی نظیر به نظیر کار میکردیم","alternatives":[],"reason":"audit","cer":0.75}
-{"id":"gold-0163","input":"avl in y hedye hst","expected":"من به کیوی آلرژی دارم","alternatives":[],"reason":"audit","cer":0.762}
+{"id":"gold-0163","input":"avl in y hedye hst","expected":"من به کیوی آلرژی دارم","alternatives":[],"reason":"audit","cer":0.81}
 {"id":"gold-0164","input":"aya ma ham hamin jurim","expected":"تمام زیرش پر چسب هستش","alternatives":[],"reason":"audit","cer":0.857}
 {"id":"gold-0174","input":"az bank vam begiran pool ro b khodros","expected":"و آنها را توانمند ساخت تا دارای صدا شوند","alternatives":[],"reason":"audit","cer":0.775}
 {"id":"gold-0182","input":"az dast man kheili narahate","expected":"براش عطسه سرو می کردم","alternatives":[],"reason":"audit","cer":0.81}
-{"id":"gold-0196","input":"az saye khodash tarsid","expected":"اون خیلی اعتماد می کرد","alternatives":[],"reason":"audit","cer":0.773}
+{"id":"gold-0196","input":"az saye khodash tarsid","expected":"اون خیلی اعتماد می کرد","alternatives":[],"reason":"audit","cer":0.727}
 {"id":"gold-0205","input":"ba ayfon baham harf bezan","expected":"بهش جواب منفی دادی نه؟","alternatives":[],"reason":"audit","cer":0.857}
 {"id":"gold-0209","input":"ba ersal mohtava v mohtavaye mortabet ba tasavir","expected":"اون اقاهه بهم اجازه داده اینو با خودم ببرم","alternatives":[],"reason":"audit","cer":0.786}
-{"id":"gold-0210","input":"ba ersal mohtava va mohtvaye mortabet shode ba tasvir","expected":"و زنگ خطر را برای آیندهشان به صدا میآورند","alternatives":[],"reason":"audit","cer":0.878}
+{"id":"gold-0210","input":"ba ersal mohtava va mohtvaye mortabet shode ba tasvir","expected":"و زنگ خطر را برای آیندهشان به صدا میآورند","alternatives":[],"reason":"audit","cer":0.854}
 {"id":"gold-0217","input":"ba in tasmim kaghaz o galam be dast g","expected":"و چیزی که ما فهمیدیم واقعا غافلگیرکننده بود","alternatives":[],"reason":"audit","cer":0.767}
 {"id":"gold-0220","input":"ba oon farar mikard","expected":"کارت عالی بود دوست من","alternatives":[],"reason":"audit","cer":0.81}
 {"id":"gold-0274","input":"baghiye daran chikar mikonan","expected":"باشه,خوبه. میدونی چیه؟","alternatives":[],"reason":"audit","cer":0.75}
-{"id":"gold-0277","input":"bahhosho salem o varzeshkare","expected":"میخام ولی بعد از ظهرها","alternatives":[],"reason":"audit","cer":0.818}
+{"id":"gold-0277","input":"bahhosho salem o varzeshkare","expected":"میخام ولی بعد از ظهرها","alternatives":[],"reason":"audit","cer":0.773}
 {"id":"gold-0278","input":"bahoosh o salem o varzeshkar w","expected":"ایا ما هم همین جوریم؟","alternatives":[],"reason":"cer","cer":0.95}
 {"id":"gold-0281","input":"baladi mi khad ameneh jan","expected":"چیزی رو مستثنی میکنی؟","alternatives":[],"reason":"audit","cer":0.8}
 {"id":"gold-0288","input":"balke etefaghi","expected":"امیدوارم که اتفاقی","alternatives":[],"reason":"audit","cer":0.5}
-{"id":"gold-0293","input":"bar dige babat negahdari tashakor mik","expected":"من با این یارو همکارم","alternatives":[],"reason":"cer","cer":1}
-{"id":"gold-0313","input":"barkhi az barnamehaye marouf donya barnamehaye doustyabi ast","expected":"زنی نزدیک شدواجناس او را بررسی کرد","alternatives":[],"reason":"cer","cer":1.176}
-{"id":"gold-0317","input":"basat aroosi ro khoda joor mikone","expected":".قبول می کنم؟ نمی تونم","alternatives":[],"reason":"cer","cer":1.1}
-{"id":"gold-0318","input":"basate aroosi ro khoda joor mikone","expected":"بهم دوای میوه کال دادش","alternatives":[],"reason":"audit","cer":0.864}
+{"id":"gold-0293","input":"bar dige babat negahdari tashakor mik","expected":"من با این یارو همکارم","alternatives":[],"reason":"cer","cer":0.952}
+{"id":"gold-0313","input":"barkhi az barnamehaye marouf donya barnamehaye doustyabi ast","expected":"زنی نزدیک شدواجناس او را بررسی کرد","alternatives":[],"reason":"cer","cer":1.059}
+{"id":"gold-0317","input":"basat aroosi ro khoda joor mikone","expected":".قبول می کنم؟ نمی تونم","alternatives":[],"reason":"cer","cer":1}
+{"id":"gold-0318","input":"basate aroosi ro khoda joor mikone","expected":"بهم دوای میوه کال دادش","alternatives":[],"reason":"cer","cer":0.909}
 {"id":"gold-0320","input":"bash khodamo khonk knm","expected":"می دونی چیه؟ یادم اومد","alternatives":[],"reason":"audit","cer":0.81}
-{"id":"gold-0322","input":"bashe nemikhad javab bedi","expected":"شبیه عطسه بود یا بهتر؟","alternatives":[],"reason":"audit","cer":0.714}
+{"id":"gold-0322","input":"bashe nemikhad javab bedi","expected":"شبیه عطسه بود یا بهتر؟","alternatives":[],"reason":"audit","cer":0.762}
 {"id":"gold-0329","input":"bayad be yeki zang bezanim","expected":"تا لاس وگاس باهاش بریم","alternatives":[],"reason":"audit","cer":0.773}
 {"id":"gold-0332","input":"bayad chizi tu khunesh bashe","expected":"من همه جا دنبالت گشتم","alternatives":[],"reason":"cer","cer":0.952}
 {"id":"gold-0340","input":"bazi vaghtha nime shab","expected":"قبلا نتونستم پیدات کنم","alternatives":[],"reason":"audit","cer":0.727}
@@ -45,17 +45,17 @@
 {"id":"gold-0378","input":"bebin , khodet ke midooni","expected":"فیبی ، یه دقیقه صبر کن","alternatives":[],"reason":"audit","cer":0.75}
 {"id":"gold-0383","input":"bebin tou eshtebah nemikoni","expected":"خب میدونی چیه در حقیقت","alternatives":[],"reason":"audit","cer":0.818}
 {"id":"gold-0388","input":"bedoon hich chizi daroon aan?","expected":"اون تمام شب تو رو داشت","alternatives":[],"reason":"audit","cer":0.773}
-{"id":"gold-0389","input":"bedoon inke ghablan dore rasmi modiri","expected":"تو از کجا می دونی نگفتن؟","alternatives":[],"reason":"cer","cer":0.957}
-{"id":"gold-0398","input":"behem nagofte boodan inghadr","expected":"!بده به من! بزار برم","alternatives":[],"reason":"audit","cer":0.889}
-{"id":"gold-0412","input":"beranko gofte ghahraman asiya shim si","expected":"وای،اینجوری خونه تون هدایت می کنین؟","alternatives":[],"reason":"audit","cer":0.765}
-{"id":"gold-0417","input":"besyari az anha niz be shah bad va bi","expected":"و آنها را توانمند ساخت تا دارای صدا شوند","alternatives":[],"reason":"audit","cer":0.775}
+{"id":"gold-0389","input":"bedoon inke ghablan dore rasmi modiri","expected":"تو از کجا می دونی نگفتن؟","alternatives":[],"reason":"cer","cer":0.913}
+{"id":"gold-0398","input":"behem nagofte boodan inghadr","expected":"!بده به من! بزار برم","alternatives":[],"reason":"cer","cer":0.944}
+{"id":"gold-0412","input":"beranko gofte ghahraman asiya shim si","expected":"وای،اینجوری خونه تون هدایت می کنین؟","alternatives":[],"reason":"audit","cer":0.735}
+{"id":"gold-0417","input":"besyari az anha niz be shah bad va bi","expected":"و آنها را توانمند ساخت تا دارای صدا شوند","alternatives":[],"reason":"audit","cer":0.8}
 {"id":"gold-0436","input":"borj haye moraghebati dar parking vojod dasht","expected":"حتما میگی کجا می خوام زندگی کنم،ها؟","alternatives":[],"reason":"audit","cer":0.824}
 {"id":"gold-0444","input":"chandler kheily ba mohabbat bood","expected":"ایا اسبی در ان جا بود؟","alternatives":[],"reason":"audit","cer":0.714}
-{"id":"gold-0446","input":"che balaee sar bechat omade","expected":"!این خونه خارق العادست","alternatives":[],"reason":"audit","cer":0.81}
+{"id":"gold-0446","input":"che balaee sar bechat omade","expected":"!این خونه خارق العادست","alternatives":[],"reason":"audit","cer":0.762}
 {"id":"gold-0455","input":"chera charand migi? halet khosh nist ha","expected":"من نمی خوام الان جوابمو بدین.","alternatives":[],"reason":"audit","cer":0.857}
 {"id":"gold-0458","input":"chera ma fekr mikonim har kari amrika","expected":"اون سویت شرت من نیست ؟","alternatives":[],"reason":"cer","cer":1.25}
 {"id":"gold-0459","input":"chera ma fekr mikonim har kari ke  am","expected":"پرسید :ماجرای کارهای خودمان را می نویسید؟","alternatives":[],"reason":"audit","cer":0.718}
-{"id":"gold-0481","input":"chi inghadr boye bad mide ?","expected":"نه مسئله بی حرمتی نیست","alternatives":[],"reason":"audit","cer":0.727}
+{"id":"gold-0481","input":"chi inghadr boye bad mide ?","expected":"نه مسئله بی حرمتی نیست","alternatives":[],"reason":"audit","cer":0.773}
 {"id":"gold-0499","input":"chon be ma migoyad ke anha negaranand","expected":"که هیچ وقت این رو نگین","alternatives":[],"reason":"cer","cer":1.045}
 {"id":"gold-0524","input":"daghighan che vaght va dar kodam tari","expected":"هیچ وقت به اونجا نمی رسیم","alternatives":[],"reason":"audit","cer":0.76}
 {"id":"gold-0530","input":"dar arjantin barname hast","expected":"بله، معلومه که میتونم","alternatives":[],"reason":"cer","cer":1}
@@ -63,19 +63,19 @@
 {"id":"gold-0539","input":"dar haghighat, sayyare'i paydar pishn","expected":"اون از شکلات خوشش میاد","alternatives":[],"reason":"cer","cer":1.045}
 {"id":"gold-0540","input":"dar halike khanevade biazar shoma dar","expected":"ایا ما هم همین جوریم؟","alternatives":[],"reason":"cer","cer":1.15}
 {"id":"gold-0541","input":"dar har resane-i dar haale haazer shenakhte shode ya dar aayande ijad shode","expected":"وقت آنست که این را تغییر دهید اگر متعهد به درونگیری و گوناگونی هستید","alternatives":[],"reason":"audit","cer":0.765}
-{"id":"gold-0547","input":"dar marakeze eidz, dar campe panahand","expected":"پس اون فقط یه مرد خوبه","alternatives":[],"reason":"cer","cer":0.955}
-{"id":"gold-0556","input":"dar vietnam, barnameist ke karafarina","expected":"یک بعد مدرن به آن بیفزاییم","alternatives":[],"reason":"audit","cer":0.885}
+{"id":"gold-0547","input":"dar marakeze eidz, dar campe panahand","expected":"پس اون فقط یه مرد خوبه","alternatives":[],"reason":"cer","cer":0.909}
+{"id":"gold-0556","input":"dar vietnam, barnameist ke karafarina","expected":"یک بعد مدرن به آن بیفزاییم","alternatives":[],"reason":"audit","cer":0.808}
 {"id":"gold-0558","input":"daram miram too telvision","expected":"هنوز روز دوم شروع نشده","alternatives":[],"reason":"audit","cer":0.818}
-{"id":"gold-0560","input":"daran donbale in migardan","expected":"اون که اصلا اینجا نیست","alternatives":[],"reason":"audit","cer":0.682}
+{"id":"gold-0560","input":"daran donbale in migardan","expected":"اون که اصلا اینجا نیست","alternatives":[],"reason":"audit","cer":0.636}
 {"id":"gold-0565","input":"darm miram to televizion","expected":"آهان ، این وضعیت حادیه","alternatives":[],"reason":"audit","cer":0.85}
 {"id":"gold-0570","input":"dashtim nahar mikhordim","expected":"طفلک مادربزرگم","alternatives":[],"reason":"cer","cer":1.143}
-{"id":"gold-0593","input":"do metr zaboon dashte bashe","expected":"یه جای استراحت اونجاست","alternatives":[],"reason":"audit","cer":0.864}
+{"id":"gold-0593","input":"do metr zaboon dashte bashe","expected":"یه جای استراحت اونجاست","alternatives":[],"reason":"cer","cer":0.909}
 {"id":"gold-0603","input":"dor otagh donbalesh mikoni","expected":"اون نشسته روی پای ریچل","alternatives":[],"reason":"audit","cer":0.864}
 {"id":"gold-0609","input":"dorost mesle avalin ghararemoon","expected":"اینجوری شهر هم زیباتر میشه","alternatives":[],"reason":"audit","cer":0.846}
 {"id":"gold-0612","input":"doroste man tamame shabo hastam","expected":"خوب، حالا نوبت تو هست","alternatives":[],"reason":"audit","cer":0.75}
-{"id":"gold-0613","input":"dost dari ba ki bekhabi","expected":"کفش های اون حصیری بودن","alternatives":[],"reason":"audit","cer":0.727}
+{"id":"gold-0613","input":"dost dari ba ki bekhabi","expected":"کفش های اون حصیری بودن","alternatives":[],"reason":"audit","cer":0.773}
 {"id":"gold-0622","input":"dr mrkz edz dr kmp panahandegan hmche","expected":"حالا این سگا رو چیکارشون کنیم؟","alternatives":[],"reason":"cer","cer":0.931}
-{"id":"gold-0644","input":"ertebatemoon ro be ham zadim","expected":"اون تمیزشون نکرده بود","alternatives":[],"reason":"audit","cer":0.81}
+{"id":"gold-0644","input":"ertebatemoon ro be ham zadim","expected":"اون تمیزشون نکرده بود","alternatives":[],"reason":"audit","cer":0.762}
 {"id":"gold-0645","input":"ertebatemun ro beham zadim","expected":"کی داره از اینجا میره؟","alternatives":[],"reason":"cer","cer":0.905}
 {"id":"gold-0647","input":"esmam to daftare telephone hast","expected":"پس سعی کن بیخیالش بشی","alternatives":[],"reason":"cer","cer":0.952}
 {"id":"gold-0675","input":"fekr konam hosele ash sar rafte","expected":"چه بلایی سر بچت اومده؟","alternatives":[],"reason":"cer","cer":1}
@@ -84,55 +84,55 @@
 {"id":"gold-0683","input":"fibz, boshghabet ro bardar","expected":"بسکتبال چطور پیش میره؟","alternatives":[],"reason":"cer","cer":0.905}
 {"id":"gold-0687","input":"forooshande goft: man honarmandam","expected":"غذا و نوشیدنی رو میزه","alternatives":[],"reason":"cer","cer":0.905}
 {"id":"gold-0694","input":"ghabl az inke parvaz koni","expected":"خوب می دونی ، شاید آره","alternatives":[],"reason":"audit","cer":0.85}
-{"id":"gold-0697","input":"ghablan natoonestam peydat konam","expected":"مسلما وقتی همدیگه رو داریم","alternatives":[],"reason":"audit","cer":0.846}
+{"id":"gold-0697","input":"ghablan natoonestam peydat konam","expected":"مسلما وقتی همدیگه رو داریم","alternatives":[],"reason":"audit","cer":0.808}
 {"id":"gold-0720","input":"goozak paye man khepel nist!","expected":"بعضیا شون بیشتر بلدن،لو نمی دن","alternatives":[],"reason":"audit","cer":0.767}
 {"id":"gold-0721","input":"gostareye daghdaghehayeman ziad shodeh ast","expected":"و کنار آبشار زندگی کنه","alternatives":[],"reason":"cer","cer":1.045}
 {"id":"gold-0742","input":"hala doo barabaresh konid","expected":"دلم واسه زهرا تنگ شدم","alternatives":[],"reason":"audit","cer":0.762}
 {"id":"gold-0751","input":"hamash migoftam khob az in daghayegh","expected":"این زنگ اجاق گاز هست؟","alternatives":[],"reason":"cer","cer":1}
 {"id":"gold-0752","input":"hame be ham ba shak va tardid negah m","expected":"اما این هم مثل بقیه مدادهایی است که دیده ام","alternatives":[],"reason":"audit","cer":0.674}
 {"id":"gold-0761","input":"hameroz ro kar mikonam","expected":"شارژ گوشی شما تمام میشود","alternatives":[],"reason":"audit","cer":0.667}
-{"id":"gold-0766","input":"hamle mooshali sepah be terorist haye","expected":"خب چی شد که بوسیدیش ؟","alternatives":[],"reason":"cer","cer":1.211}
+{"id":"gold-0766","input":"hamle mooshali sepah be terorist haye","expected":"خب چی شد که بوسیدیش ؟","alternatives":[],"reason":"cer","cer":1.105}
 {"id":"gold-0774","input":"hanozam ono dost dari","expected":"الان تا حدودی می دونه","alternatives":[],"reason":"audit","cer":0.762}
-{"id":"gold-0776","input":"har kari bekhaii mikonam","expected":"من وزنم رو بالا بردم؟","alternatives":[],"reason":"audit","cer":0.85}
-{"id":"gold-0777","input":"har loghati kar rah bendaze","expected":"علت ترقی روز افزونش هم همینه","alternatives":[],"reason":"audit","cer":0.821}
+{"id":"gold-0776","input":"har kari bekhaii mikonam","expected":"من وزنم رو بالا بردم؟","alternatives":[],"reason":"audit","cer":0.75}
+{"id":"gold-0777","input":"har loghati kar rah bendaze","expected":"علت ترقی روز افزونش هم همینه","alternatives":[],"reason":"audit","cer":0.786}
 {"id":"gold-0806","input":"hichki ham nist baghalesh konam","expected":"عزیزم ، منم دوستت دارم","alternatives":[],"reason":"audit","cer":0.85}
-{"id":"gold-0807","input":"hme ina mitonn forsathaye bishtr ya k","expected":"واز جاده به دور افتاده است.","alternatives":[],"reason":"cer","cer":1.115}
-{"id":"gold-0812","input":"in adade sarsam avari ast","expected":"اگه قاطی بشن چی میشه؟","alternatives":[],"reason":"cer","cer":0.95}
+{"id":"gold-0807","input":"hme ina mitonn forsathaye bishtr ya k","expected":"واز جاده به دور افتاده است.","alternatives":[],"reason":"cer","cer":1.231}
+{"id":"gold-0812","input":"in adade sarsam avari ast","expected":"اگه قاطی بشن چی میشه؟","alternatives":[],"reason":"audit","cer":0.85}
 {"id":"gold-0815","input":"in ast eghtesad mosharekati jadid","expected":"سلام ، چندلر اینجاست؟","alternatives":[],"reason":"cer","cer":1.167}
 {"id":"gold-0816","input":"in ast eqtesade mosharekatie jadid","expected":"ان مرد نگونبخت میرفت","alternatives":[],"reason":"cer","cer":1}
 {"id":"gold-0819","input":"in bakhshi kharegholade az kar ast","expected":"چطور از آن استفاده کند؟","alternatives":[],"reason":"cer","cer":1}
-{"id":"gold-0820","input":"in bar yeki entekhab kone","expected":"بار دیگه بابت نگهداری تشکر میکنم","alternatives":[],"reason":"audit","cer":0.656}
+{"id":"gold-0820","input":"in bar yeki entekhab kone","expected":"بار دیگه بابت نگهداری تشکر میکنم","alternatives":[],"reason":"audit","cer":0.688}
 {"id":"gold-0831","input":"in chuzi nist ke goftam","expected":"دومتر زبون داشته باشه","alternatives":[],"reason":"audit","cer":0.81}
 {"id":"gold-0839","input":"in gheir ghable bavar ast","expected":"خدای من! اینو نگاه کن","alternatives":[],"reason":"cer","cer":0.95}
-{"id":"gold-0853","input":"in kochik tarin raghamesh hast","expected":"و بعد اونارو بتکونیم ؟","alternatives":[],"reason":"cer","cer":1.05}
+{"id":"gold-0853","input":"in kochik tarin raghamesh hast","expected":"و بعد اونارو بتکونیم ؟","alternatives":[],"reason":"cer","cer":1}
 {"id":"gold-0866","input":"in too namayeshname nist","expected":"مدام احساس خستگی میکنید؟","alternatives":[],"reason":"audit","cer":0.87}
 {"id":"gold-0867","input":"in vaghean dardnak bood","expected":"این کوچکترین رقمش هست","alternatives":[],"reason":"audit","cer":0.667}
 {"id":"gold-0885","input":"injuri shahr ham zibatar mishe","expected":"(خنده) مردهای ترسناکی هستند","alternatives":[],"reason":"audit","cer":0.88}
 {"id":"gold-0902","input":"jazabtarin khordad ro tajrobe kardam","expected":"با جولی قطع رابطه کرد","alternatives":[],"reason":"cer","cer":0.905}
-{"id":"gold-0916","input":"kafshhaye oon hasiri boodan","expected":"منم اینطور فکر می کنم","alternatives":[],"reason":"audit","cer":0.81}
-{"id":"gold-0919","input":"karet ali bod doste man","expected":"آره ، رقاص لختی دزدیدش","alternatives":[],"reason":"audit","cer":0.8}
+{"id":"gold-0916","input":"kafshhaye oon hasiri boodan","expected":"منم اینطور فکر می کنم","alternatives":[],"reason":"audit","cer":0.762}
+{"id":"gold-0919","input":"karet ali bod doste man","expected":"آره ، رقاص لختی دزدیدش","alternatives":[],"reason":"audit","cer":0.85}
 {"id":"gold-0922","input":"karkonan bishtar az har chizi az rahbaraneshan che chizi mikhahand?","expected":"زیرا سیستم زمین را از نقاط حساس فراتر میبریم","alternatives":[],"reason":"audit","cer":0.841}
 {"id":"gold-0929","input":"ke bar tavanaii haft mantaghe bana sh","expected":"ایا اسبی در ان جا بود؟","alternatives":[],"reason":"cer","cer":1.048}
-{"id":"gold-0935","input":"ke dar saye ye abshar ba shokoh behesht penhan shode","expected":"چون نگرانند که مهارتهای لازم برای امرارمعاش را به دست نیاورند","alternatives":[],"reason":"audit","cer":0.721}
+{"id":"gold-0935","input":"ke dar saye ye abshar ba shokoh behesht penhan shode","expected":"چون نگرانند که مهارتهای لازم برای امرارمعاش را به دست نیاورند","alternatives":[],"reason":"audit","cer":0.705}
 {"id":"gold-0938","input":"ke hich vaqt in ro nagin","expected":"ببین ، خودت که میدونی","alternatives":[],"reason":"audit","cer":0.842}
-{"id":"gold-0949","input":"keyli ham chize mohemmi nist","expected":"حالا دو برابرش کنید","alternatives":[],"reason":"cer","cer":1}
-{"id":"gold-1001","input":"khodaye man! shoma ha salemin","expected":"من پیش دانشگاهی بودم","alternatives":[],"reason":"audit","cer":0.8}
-{"id":"gold-1004","input":"khodpasandi va qoror balahaye besiar miavarad","expected":"خوب ، خانمها و آقایان","alternatives":[],"reason":"cer","cer":1.474}
-{"id":"gold-1040","input":"ma be tafakori radikali niazmandim","expected":"بدون هیچ چیزی درون آن؟","alternatives":[],"reason":"cer","cer":1.19}
+{"id":"gold-0949","input":"keyli ham chize mohemmi nist","expected":"حالا دو برابرش کنید","alternatives":[],"reason":"audit","cer":0.842}
+{"id":"gold-1001","input":"khodaye man! shoma ha salemin","expected":"من پیش دانشگاهی بودم","alternatives":[],"reason":"audit","cer":0.75}
+{"id":"gold-1004","input":"khodpasandi va qoror balahaye besiar miavarad","expected":"خوب ، خانمها و آقایان","alternatives":[],"reason":"cer","cer":1.421}
+{"id":"gold-1040","input":"ma be tafakori radikali niazmandim","expected":"بدون هیچ چیزی درون آن؟","alternatives":[],"reason":"cer","cer":1}
 {"id":"gold-1042","input":"ma controle zendegieman ra az dast dade im","expected":"ولی این فرصت، این سهم جوانی، اعطا نشده است","alternatives":[],"reason":"audit","cer":0.725}
 {"id":"gold-1067","input":"mahale!, bezar man beram","expected":"دوست داری با کی بخوابی","alternatives":[],"reason":"audit","cer":0.773}
 {"id":"gold-1076","input":"mamnoon, behtarin doost","expected":".اونا آخر درست حسابین","alternatives":[],"reason":"audit","cer":0.85}
 {"id":"gold-1081","input":"man az biganegan hargez nanalam","expected":"مانند پرخاشگری و خشونت","alternatives":[],"reason":"audit","cer":0.864}
 {"id":"gold-1086","input":"man ba in yaroo hamkaram","expected":"او چطور این کار را کرد؟","alternatives":[],"reason":"audit","cer":0.591}
 {"id":"gold-1098","input":"man be kivi alerji daram","expected":"تو فروشگاه جا گذاشتید؟","alternatives":[],"reason":"cer","cer":0.905}
-{"id":"gold-1110","input":"man didham ke in barnameha chetor tag","expected":"باشه ! خیلی خب , باشه","alternatives":[],"reason":"cer","cer":1.529}
-{"id":"gold-1124","input":"man goftam moraghebeshoon bashi","expected":"فکر کنم مجبوریم بخوریم","alternatives":[],"reason":"audit","cer":0.773}
+{"id":"gold-1110","input":"man didham ke in barnameha chetor tag","expected":"باشه ! خیلی خب , باشه","alternatives":[],"reason":"cer","cer":1.471}
+{"id":"gold-1124","input":"man goftam moraghebeshoon bashi","expected":"فکر کنم مجبوریم بخوریم","alternatives":[],"reason":"audit","cer":0.727}
 {"id":"gold-1128","input":"man hame ja donbalet gashtam","expected":"باید چیزی تو خونش باشه","alternatives":[],"reason":"cer","cer":0.909}
-{"id":"gold-1130","input":"man harf moft ziyad mizanam","expected":"بلدی می خواد امنه جان.","alternatives":[],"reason":"audit","cer":0.762}
+{"id":"gold-1130","input":"man harf moft ziyad mizanam","expected":"بلدی می خواد امنه جان.","alternatives":[],"reason":"audit","cer":0.81}
 {"id":"gold-1136","input":"man k roshanfekr tar az baghie hastam","expected":"خیر نبینی چه جوری برداشتی که من ندیدم؟","alternatives":[],"reason":"audit","cer":0.784}
-{"id":"gold-1137","input":"man k roshanfekr tar az baqieh hastam","expected":"تو نمی خوای بازی کنی ؟","alternatives":[],"reason":"cer","cer":1.1}
-{"id":"gold-1144","input":"man konjkav budm, banabarin dar in mo","expected":"خب ، این یکی یکم گرونه","alternatives":[],"reason":"cer","cer":1.4}
-{"id":"gold-1147","input":"man mashinaye abi mishmordam oon mash","expected":".بریم کلبش ، اسکی کنیم","alternatives":[],"reason":"cer","cer":1.211}
+{"id":"gold-1137","input":"man k roshanfekr tar az baqieh hastam","expected":"تو نمی خوای بازی کنی ؟","alternatives":[],"reason":"cer","cer":1.05}
+{"id":"gold-1144","input":"man konjkav budm, banabarin dar in mo","expected":"خب ، این یکی یکم گرونه","alternatives":[],"reason":"cer","cer":1.25}
+{"id":"gold-1147","input":"man mashinaye abi mishmordam oon mash","expected":".بریم کلبش ، اسکی کنیم","alternatives":[],"reason":"cer","cer":1.263}
 {"id":"gold-1149","input":"man midonam hagh ba mane","expected":"پشت نقاب ناشناس، چنین کنیم","alternatives":[],"reason":"audit","cer":0.8}
 {"id":"gold-1161","input":"man nahar sa'at 11 khordam","expected":"باید از هم جداشون کنیم","alternatives":[],"reason":"cer","cer":0.909}
 {"id":"gold-1162","input":"man nemikhaham alan javabemo bedin","expected":"از دست من خیلی ناراحته","alternatives":[],"reason":"cer","cer":1.091}
@@ -140,98 +140,98 @@
 {"id":"gold-1169","input":"man pishdaneshgahi boodam","expected":".قایم موشک بازها هستین","alternatives":[],"reason":"audit","cer":0.857}
 {"id":"gold-1172","input":"man shomaharo davat kardam shad bashi","expected":"ما به تفکری رادیکال نیازمندیم","alternatives":[],"reason":"audit","cer":0.793}
 {"id":"gold-1178","input":"man vaznam ro bala bordam?","expected":"پول رو نگرفتی ، درسته؟","alternatives":[],"reason":"audit","cer":0.842}
-{"id":"gold-1186","input":"manam goftam kheyli khob basheh","expected":"می خوام بذارم یه چیزی ببینی","alternatives":[],"reason":"audit","cer":0.741}
+{"id":"gold-1186","input":"manam goftam kheyli khob basheh","expected":"می خوام بذارم یه چیزی ببینی","alternatives":[],"reason":"audit","cer":0.704}
 {"id":"gold-1188","input":"manam intor fekr minkonam","expected":"قول میدم که خرابش نکنم","alternatives":[],"reason":"audit","cer":0.682}
-{"id":"gold-1196","input":"mardi dar namayeshgahi goldan miforukht","expected":"! یه ماشین واقعی بگیر","alternatives":[],"reason":"cer","cer":1.263}
-{"id":"gold-1201","input":"marge ye dust dokhtar dare","expected":"ما در انقلاب صنعتی چهارمیم","alternatives":[],"reason":"audit","cer":0.769}
+{"id":"gold-1196","input":"mardi dar namayeshgahi goldan miforukht","expected":"! یه ماشین واقعی بگیر","alternatives":[],"reason":"cer","cer":1.211}
+{"id":"gold-1201","input":"marge ye dust dokhtar dare","expected":"ما در انقلاب صنعتی چهارمیم","alternatives":[],"reason":"audit","cer":0.731}
 {"id":"gold-1209","input":"mesl in nist ke rooz bad modiriat az","expected":"رییس پیشین FBI در اتومبیل خود مینشست","alternatives":[],"reason":"audit","cer":0.75}
-{"id":"gold-1211","input":"mesle marg va rooze ghiyamat","expected":"پس تو اینجا کار میکنی","alternatives":[],"reason":"audit","cer":0.81}
-{"id":"gold-1219","input":"mibaram migardonamesh, jasho tamiz mikonam","expected":"جویی جونم رو نجات بده","alternatives":[],"reason":"cer","cer":1.143}
-{"id":"gold-1220","input":"mibaram migardunamesh, jasho tamiz mikonam","expected":"هی ریچل ، برو عطر بیار","alternatives":[],"reason":"cer","cer":1.3}
-{"id":"gold-1224","input":"midoni chie? ydm okd","expected":"زن قیمت گلدانها را پرسید","alternatives":[],"reason":"audit","cer":0.792}
+{"id":"gold-1211","input":"mesle marg va rooze ghiyamat","expected":"پس تو اینجا کار میکنی","alternatives":[],"reason":"audit","cer":0.762}
+{"id":"gold-1219","input":"mibaram migardonamesh, jasho tamiz mikonam","expected":"جویی جونم رو نجات بده","alternatives":[],"reason":"cer","cer":1.095}
+{"id":"gold-1220","input":"mibaram migardunamesh, jasho tamiz mikonam","expected":"هی ریچل ، برو عطر بیار","alternatives":[],"reason":"cer","cer":1.15}
+{"id":"gold-1224","input":"midoni chie? ydm okd","expected":"زن قیمت گلدانها را پرسید","alternatives":[],"reason":"audit","cer":0.833}
 {"id":"gold-1233","input":"migam javad gamoonam chizish shide","expected":"البته نظر جوون ترا مهم تره","alternatives":[],"reason":"audit","cer":0.846}
 {"id":"gold-1246","input":"mikham emshab ekhrajet konam","expected":"با آیفون باهام حرف بزن","alternatives":[],"reason":"audit","cer":0.864}
-{"id":"gold-1247","input":"mikham vali baad az zohr ha","expected":"خدا خیرت بده مادر دستت درد نکنه.","alternatives":[],"reason":"audit","cer":0.742}
+{"id":"gold-1247","input":"mikham vali baad az zohr ha","expected":"خدا خیرت بده مادر دستت درد نکنه.","alternatives":[],"reason":"audit","cer":0.806}
 {"id":"gold-1251","input":"mikhay berim livan rangi?","expected":"هر لغتی کار راه بندازه","alternatives":[],"reason":"audit","cer":0.864}
 {"id":"gold-1252","input":"mikhay yho bri soraqesh?","expected":"ببین ، خودت که میدونی","alternatives":[],"reason":"audit","cer":0.789}
 {"id":"gold-1253","input":"mikoshamet motad . mikoshamet mofangi","expected":"اونها همدیگه رو دارن.","alternatives":[],"reason":"cer","cer":1.1}
 {"id":"gold-1266","input":"mishe zipe mano bedi bala?","expected":"چیکار دارین می کنین ؟","alternatives":[],"reason":"audit","cer":0.895}
 {"id":"gold-1281","input":"mitoonim koochek taresh konim?","expected":"من ناهار ساعت 11 خوردم","alternatives":[],"reason":"audit","cer":0.818}
-{"id":"gold-1282","input":"mituni bahash tanha bashi","expected":"مارج یه دوست دختر داره","alternatives":[],"reason":"audit","cer":0.727}
+{"id":"gold-1282","input":"mituni bahash tanha bashi","expected":"مارج یه دوست دختر داره","alternatives":[],"reason":"audit","cer":0.773}
 {"id":"gold-1283","input":"mn ba phoebe brnme drm","expected":"میگم جواد،گمونم چیزیش شده","alternatives":[],"reason":"audit","cer":0.76}
-{"id":"gold-1284","input":"mn goftm mraghbshon bashi","expected":"امشب ولی فعلا هیچی نگو","alternatives":[],"reason":"audit","cer":0.864}
+{"id":"gold-1284","input":"mn goftm mraghbshon bashi","expected":"امشب ولی فعلا هیچی نگو","alternatives":[],"reason":"cer","cer":0.909}
 {"id":"gold-1290","input":"mosalaman vaghti hamdigaro darim","expected":"ارتباطمون رو بهم زدیم","alternatives":[],"reason":"cer","cer":0.905}
 {"id":"gold-1291","input":"mosalaman vaghti hamdige ro darim","expected":"با تهیه کننده صحبت کنم ؟","alternatives":[],"reason":"cer","cer":0.955}
 {"id":"gold-1294","input":"moteasefam be man negah kon","expected":"پاهای خیلی خوشگلی داری","alternatives":[],"reason":"audit","cer":0.864}
 {"id":"gold-1295","input":"mote’asefam, be man negah kon","expected":"در چارچوب اهداف زیست محیطی جهانی","alternatives":[],"reason":"audit","cer":0.781}
 {"id":"gold-1296","input":"motma'enm ke rqas nistm","expected":"سعید من یه سوال دارم.","alternatives":[],"reason":"audit","cer":0.75}
-{"id":"gold-1297","input":"motmaenam ke raghas nistam","expected":"تا حالا اینقدرشو ساختم","alternatives":[],"reason":"audit","cer":0.773}
-{"id":"gold-1300","input":"motor haye jostojoo dar javad dadan b","expected":"افراد معلول، جانبازان، همه افراد بالای ۳۵ سال","alternatives":[],"reason":"audit","cer":0.767}
-{"id":"gold-1304","input":"na agha,hich chiz faghat yek risman p","expected":"حالا، نقطهای که آنجا میبینید ۱۹۸۰ است","alternatives":[],"reason":"audit","cer":0.778}
-{"id":"gold-1313","input":"na man mikham rikhtet ro bebinam","expected":"بازم می کوبمت به زمین","alternatives":[],"reason":"audit","cer":0.762}
+{"id":"gold-1297","input":"motmaenam ke raghas nistam","expected":"تا حالا اینقدرشو ساختم","alternatives":[],"reason":"audit","cer":0.818}
+{"id":"gold-1300","input":"motor haye jostojoo dar javad dadan b","expected":"افراد معلول، جانبازان، همه افراد بالای ۳۵ سال","alternatives":[],"reason":"audit","cer":0.791}
+{"id":"gold-1304","input":"na agha,hich chiz faghat yek risman p","expected":"حالا، نقطهای که آنجا میبینید ۱۹۸۰ است","alternatives":[],"reason":"audit","cer":0.806}
+{"id":"gold-1313","input":"na man mikham rikhtet ro bebinam","expected":"بازم می کوبمت به زمین","alternatives":[],"reason":"audit","cer":0.81}
 {"id":"gold-1336","input":"nazdik va samimi va","expected":"از خودم در نمیآورم","alternatives":[],"reason":"audit","cer":0.722}
-{"id":"gold-1355","input":"nemito ne srsho bndaze payiib","expected":".من داشتم جیغ می زدم","alternatives":[],"reason":"cer","cer":1.105}
-{"id":"gold-1377","input":"oh doroste besyar khob","expected":"می خواستم برم حاضر شم","alternatives":[],"reason":"audit","cer":0.667}
-{"id":"gold-1383","input":"oh, bacheha unjayid","expected":"دلیل اول استرس است","alternatives":[],"reason":"audit","cer":0.889}
-{"id":"gold-1386","input":"omad jelo goft khaste nabashid","expected":"خوب میشه نفری 28 هزار تومن","alternatives":[],"reason":"audit","cer":0.885}
+{"id":"gold-1355","input":"nemito ne srsho bndaze payiib","expected":".من داشتم جیغ می زدم","alternatives":[],"reason":"cer","cer":1}
+{"id":"gold-1377","input":"oh doroste besyar khob","expected":"می خواستم برم حاضر شم","alternatives":[],"reason":"audit","cer":0.619}
+{"id":"gold-1383","input":"oh, bacheha unjayid","expected":"دلیل اول استرس است","alternatives":[],"reason":"audit","cer":0.833}
+{"id":"gold-1386","input":"omad jelo goft khaste nabashid","expected":"خوب میشه نفری 28 هزار تومن","alternatives":[],"reason":"audit","cer":0.808}
 {"id":"gold-1390","input":"on az shokolat khoshesh miad","expected":"، بعضی وقتها ، نیمه شب","alternatives":[],"reason":"cer","cer":1}
 {"id":"gold-1391","input":"on dare print migire","expected":"من با مانیکا صحبت کردم","alternatives":[],"reason":"audit","cer":0.727}
-{"id":"gold-1392","input":"on neshatse rooye paye reychel","expected":".مطمئنم که رقاصم نیستم","alternatives":[],"reason":"cer","cer":0.905}
-{"id":"gold-1393","input":"ona akhar dorost hesabian","expected":"از عرفان خوشتون نمیاد؟","alternatives":[],"reason":"audit","cer":0.714}
+{"id":"gold-1392","input":"on neshatse rooye paye reychel","expected":".مطمئنم که رقاصم نیستم","alternatives":[],"reason":"audit","cer":0.81}
+{"id":"gold-1393","input":"ona akhar dorost hesabian","expected":"از عرفان خوشتون نمیاد؟","alternatives":[],"reason":"audit","cer":0.762}
 {"id":"gold-1394","input":"ona to jodaee bodn","expected":"من هیجان زده هستم","alternatives":[],"reason":"audit","cer":0.706}
-{"id":"gold-1414","input":"oon nesheste rooye paye rachel","expected":"ساخت محکم ، خیلی جادار","alternatives":[],"reason":"audit","cer":0.9}
+{"id":"gold-1414","input":"oon nesheste rooye paye rachel","expected":"ساخت محکم ، خیلی جادار","alternatives":[],"reason":"audit","cer":0.8}
 {"id":"gold-1436","input":"oun yeki az ghadimi hast","expected":"تو نمی خوای بازی کنی ؟","alternatives":[],"reason":"audit","cer":0.7}
-{"id":"gold-1438","input":"ouna hamdige ro daran","expected":"اول: دزدی حرفه ای","alternatives":[],"reason":"audit","cer":0.688}
+{"id":"gold-1438","input":"ouna hamdige ro daran","expected":"اول: دزدی حرفه ای","alternatives":[],"reason":"audit","cer":0.75}
 {"id":"gold-1449","input":"panj shanbe shab, 5ta belit","expected":".با هم شراب سیب خوردیم","alternatives":[],"reason":"audit","cer":0.81}
 {"id":"gold-1460","input":"pas in haman jahane motedavele fe'li","expected":"میگم بهتره یه خورده بخوابی","alternatives":[],"reason":"audit","cer":0.885}
-{"id":"gold-1463","input":"pas midoni ke kei hasti","expected":"شیرین بیان درست میکنیم","alternatives":[],"reason":"audit","cer":0.818}
-{"id":"gold-1466","input":"pas on faqat y mard khube","expected":"دوم اینکه نوع شواهد مهم است","alternatives":[],"reason":"audit","cer":0.704}
+{"id":"gold-1463","input":"pas midoni ke kei hasti","expected":"شیرین بیان درست میکنیم","alternatives":[],"reason":"audit","cer":0.864}
+{"id":"gold-1466","input":"pas on faqat y mard khube","expected":"دوم اینکه نوع شواهد مهم است","alternatives":[],"reason":"audit","cer":0.741}
 {"id":"gold-1469","input":"pas saye kon bikhialesh beshi","expected":"چون اون نقش خیلی خوبه","alternatives":[],"reason":"audit","cer":0.762}
 {"id":"gold-1480","input":"posht neghabe nashenas, chenin konim","expected":"احتمالا تو فکر می کنی","alternatives":[],"reason":"audit","cer":0.762}
-{"id":"gold-1482","input":"post instagerami sosha makani ke bad","expected":"من نمیفهمم تو چی میگی","alternatives":[],"reason":"cer","cer":1.238}
+{"id":"gold-1482","input":"post instagerami sosha makani ke bad","expected":"من نمیفهمم تو چی میگی","alternatives":[],"reason":"cer","cer":1.19}
 {"id":"gold-1501","input":"raje b chi hrf mizni?","expected":"این تو نمایشنامه نیست-","alternatives":[],"reason":"audit","cer":0.762}
-{"id":"gold-1508","input":"rooykardi bar asase ahdafo mohlathaye","expected":"مسواک می زدم بهم حمله کرد","alternatives":[],"reason":"cer","cer":1.12}
+{"id":"gold-1508","input":"rooykardi bar asase ahdafo mohlathaye","expected":"مسواک می زدم بهم حمله کرد","alternatives":[],"reason":"cer","cer":1.08}
 {"id":"gold-1562","input":"shalvaret ro ke darnayavordi","expected":"ولی فشار زیادی روم بود","alternatives":[],"reason":"audit","cer":0.818}
-{"id":"gold-1564","input":"sharge gushi shoma tamam mishavad","expected":"میشه زیپ منو بدی بالا؟","alternatives":[],"reason":"cer","cer":0.952}
+{"id":"gold-1564","input":"sharge gushi shoma tamam mishavad","expected":"میشه زیپ منو بدی بالا؟","alternatives":[],"reason":"cer","cer":0.905}
 {"id":"gold-1566","input":"sharj goshi shoma tamam mishavad","expected":"من میرم بهشون سلام کنم","alternatives":[],"reason":"audit","cer":0.864}
 {"id":"gold-1573","input":"shayad vaghtesh reside ke amedanetar","expected":"باهاش خودمو رو خنک کنم","alternatives":[],"reason":"audit","cer":0.864}
 {"id":"gold-1575","input":"sherkarhay dostyabi siasathaye khod r","expected":"میکشمت معتاد. میکشمت مفنگی. بی غیرت.","alternatives":[],"reason":"audit","cer":0.879}
-{"id":"gold-1596","input":"surly when we have each other","expected":".اون یکی از قدیمی هاست","alternatives":[],"reason":"cer","cer":1.048}
+{"id":"gold-1596","input":"surly when we have each other","expected":".اون یکی از قدیمی هاست","alternatives":[],"reason":"cer","cer":1}
 {"id":"gold-1597","input":"ta betuni rahat sor bokhori","expected":"ذره ذره٬قطره قطره٬ میسوزم اما میمونم","alternatives":[],"reason":"audit","cer":0.833}
 {"id":"gold-1598","input":"ta dast az man bar darand va dar kooh","expected":"من به یک شریک جوان و باهوش متصل شده بودم.","alternatives":[],"reason":"audit","cer":0.725}
-{"id":"gold-1599","input":"ta goftan jokhaye zanandeh ta payam d","expected":"من میدونم که حق با منه","alternatives":[],"reason":"cer","cer":1}
-{"id":"gold-1600","input":"ta hala barayash tofang nakharide am","expected":"همه از غذا خوششون اومد","alternatives":[],"reason":"cer","cer":0.955}
+{"id":"gold-1599","input":"ta goftan jokhaye zanandeh ta payam d","expected":"من میدونم که حق با منه","alternatives":[],"reason":"cer","cer":0.955}
+{"id":"gold-1600","input":"ta hala barayash tofang nakharide am","expected":"همه از غذا خوششون اومد","alternatives":[],"reason":"cer","cer":1}
 {"id":"gold-1642","input":"to az koja miduni nagoftan","expected":"یا نده ! هر جور راحتی","alternatives":[],"reason":"audit","cer":0.895}
-{"id":"gold-1659","input":"to midoni in yani chi ?","expected":"من همه جوره هواتو دارم","alternatives":[],"reason":"cer","cer":0.909}
+{"id":"gold-1659","input":"to midoni in yani chi ?","expected":"من همه جوره هواتو دارم","alternatives":[],"reason":"audit","cer":0.864}
 {"id":"gold-1660","input":"to miduni in yani chi","expected":"!زود باشین! عجله کنید","alternatives":[],"reason":"audit","cer":0.842}
 {"id":"gold-1673","input":"toop? delet toop mikhad?","expected":"پس میدونی که کی هستش","alternatives":[],"reason":"audit","cer":0.85}
 {"id":"gold-1689","input":"tu forushgaj ja gozashtid?","expected":"در آرژانتین، برنامه ای هست","alternatives":[],"reason":"audit","cer":0.8}
-{"id":"gold-1691","input":"un agha he bhm ejaze dd ino ba khodm bbrm","expected":"او گفت آنجا به نظر مانند یک زندان امنیتی کوچک بود","alternatives":[],"reason":"audit","cer":0.633}
-{"id":"gold-1694","input":"v zang khatar ra  braye ayandeshan be seda mi'avarad","expected":"تصور کنید که در دنیای امروز یک جوان هستید","alternatives":[],"reason":"audit","cer":0.854}
-{"id":"gold-1701","input":"va az komak khastan az ham timi hayeshan dast mikeshand","expected":"بنابراین، اولین باری است که فرصتی قوی در اختیار داریم","alternatives":[],"reason":"audit","cer":0.75}
+{"id":"gold-1691","input":"un agha he bhm ejaze dd ino ba khodm bbrm","expected":"او گفت آنجا به نظر مانند یک زندان امنیتی کوچک بود","alternatives":[],"reason":"audit","cer":0.673}
+{"id":"gold-1694","input":"v zang khatar ra  braye ayandeshan be seda mi'avarad","expected":"تصور کنید که در دنیای امروز یک جوان هستید","alternatives":[],"reason":"audit","cer":0.707}
+{"id":"gold-1701","input":"va az komak khastan az ham timi hayeshan dast mikeshand","expected":"بنابراین، اولین باری است که فرصتی قوی در اختیار داریم","alternatives":[],"reason":"audit","cer":0.769}
 {"id":"gold-1704","input":"va be javayezi manand, behtarin makan","expected":"ال:کادوی تولدت چی میخواد بگیره برات؟","alternatives":[],"reason":"audit","cer":0.686}
 {"id":"gold-1714","input":"va dar zamineh sanat mizbani etelaat","expected":"یه نفری میخای حرف بزنی","alternatives":[],"reason":"cer","cer":1.045}
 {"id":"gold-1727","input":"va javabi ke yaftim sade bood : ehter","expected":"بجای آن کامپیوتر یا گوشی همراه تان را بیاورید","alternatives":[],"reason":"audit","cer":0.733}
-{"id":"gold-1731","input":"va kheyli ha madar shodand vaghti khodeshan hanooz bache boodand","expected":"درست به همان اندازه که از نابغههای دیجیتالی جوانشان حمایت میکنند؟","alternatives":[],"reason":"audit","cer":0.75}
+{"id":"gold-1731","input":"va kheyli ha madar shodand vaghti khodeshan hanooz bache boodand","expected":"درست به همان اندازه که از نابغههای دیجیتالی جوانشان حمایت میکنند؟","alternatives":[],"reason":"audit","cer":0.766}
 {"id":"gold-1734","input":"va ma mikhahim royahaye bozoorg dashte bashim","expected":"چی باعث شد این همه سال","alternatives":[],"reason":"cer","cer":1.318}
 {"id":"gold-1739","input":"va migi in vasat ajibe ?","expected":"آرزوها و امیدهای بسیار جالبی دارند","alternatives":[],"reason":"audit","cer":0.735}
 {"id":"gold-1743","input":"va sadeghane begooyam in ghaziye man","expected":"از اساتید و سلاطین تقلید صدای سگ","alternatives":[],"reason":"audit","cer":0.75}
-{"id":"gold-1744","input":"va shadish baad az amali kardan in pishnahad chand barabar shod","expected":"امروز کلی گریه کردم چون نمیخام بابام و مامانم پیربشن","alternatives":[],"reason":"audit","cer":0.846}
+{"id":"gold-1744","input":"va shadish baad az amali kardan in pishnahad chand barabar shod","expected":"امروز کلی گریه کردم چون نمیخام بابام و مامانم پیربشن","alternatives":[],"reason":"audit","cer":0.808}
 {"id":"gold-1761","input":"vaghean o haghighatan intore","expected":": اساس هر رابطه سالمی","alternatives":[],"reason":"cer","cer":1}
-{"id":"gold-1780","input":"vaghti tamoom shod baresh gardoon","expected":"اگه طبق قانون پیش بریم","alternatives":[],"reason":"audit","cer":0.864}
-{"id":"gold-1800","input":"vali niazmande tafakore radikal o mot","expected":"اما در مورد تو چی؟","alternatives":[],"reason":"cer","cer":1.294}
-{"id":"gold-1810","input":"various studies show more than that in recent months the researchers are finding that a lot more people","expected":"و برای اکثر این مردم بسیاری هرگز قادر به سخن گفتن از آن با کارفرمای خود نخواهند بود","alternatives":[],"reason":"audit","cer":0.867}
+{"id":"gold-1780","input":"vaghti tamoom shod baresh gardoon","expected":"اگه طبق قانون پیش بریم","alternatives":[],"reason":"cer","cer":0.909}
+{"id":"gold-1800","input":"vali niazmande tafakore radikal o mot","expected":"اما در مورد تو چی؟","alternatives":[],"reason":"cer","cer":1.353}
+{"id":"gold-1810","input":"various studies show more than that in recent months the researchers are finding that a lot more people","expected":"و برای اکثر این مردم بسیاری هرگز قادر به سخن گفتن از آن با کارفرمای خود نخواهند بود","alternatives":[],"reason":"audit","cer":0.855}
 {"id":"gold-1812","input":"vase hamin baraye yek hafte","expected":"بیاین یه کم حرف بزنیم","alternatives":[],"reason":"audit","cer":0.857}
-{"id":"gold-1829","input":"ya maharat haye monaseb kar ya dar pe","expected":"بسیاری اوقات میبینیم مردم پیامهای فیسبوکی میآورند","alternatives":[],"reason":"audit","cer":0.755}
+{"id":"gold-1829","input":"ya maharat haye monaseb kar ya dar pe","expected":"بسیاری اوقات میبینیم مردم پیامهای فیسبوکی میآورند","alternatives":[],"reason":"audit","cer":0.776}
 {"id":"gold-1830","input":"ya maharat haye monasebe kar ya dar p","expected":"و در زمینه صنعت میزبانی اطلاعات انباشته دارم","alternatives":[],"reason":"audit","cer":0.727}
 {"id":"gold-1831","input":"ya mitavanad miyan farzandan bashad,","expected":"اونا تو جدایی بودن","alternatives":[],"reason":"cer","cer":1.111}
 {"id":"gold-1852","input":"ye chizhayi enteqal mide","expected":"قبل از اینکه شروع کنی","alternatives":[],"reason":"audit","cer":0.857}
 {"id":"gold-1857","input":"ye min pish sohbat krdi","expected":"هر کی ماشینای بیشتری می شمرد","alternatives":[],"reason":"audit","cer":0.679}
 {"id":"gold-1860","input":"ye nafari mikhay harf bezani","expected":". این، این میشله هست؟","alternatives":[],"reason":"cer","cer":1.059}
-{"id":"gold-1864","input":"ye shohar daram vaght azash kari milh","expected":"پنجشنبه شب ، 5 تا بلیط","alternatives":[],"reason":"cer","cer":1.1}
-{"id":"gold-1865","input":"ye sourakh ruzi ham toush gozashte ke","expected":"پرسیدند : چه می کنی ؟","alternatives":[],"reason":"cer","cer":1.471}
+{"id":"gold-1864","input":"ye shohar daram vaght azash kari milh","expected":"پنجشنبه شب ، 5 تا بلیط","alternatives":[],"reason":"cer","cer":1.15}
+{"id":"gold-1865","input":"ye sourakh ruzi ham toush gozashte ke","expected":"پرسیدند : چه می کنی ؟","alternatives":[],"reason":"cer","cer":1.412}
 {"id":"gold-1866","input":"ye tekke az nan to mokhay?","expected":"این غیر قابل باور هست","alternatives":[],"reason":"audit","cer":0.762}
 {"id":"gold-1870","input":"yek boad modern be aan biyafzayim","expected":"این بخشی خارقالعاده از کار است","alternatives":[],"reason":"audit","cer":0.733}
 {"id":"gold-1884","input":"yek rish sefid modern be haman andaze","expected":"دلیل دیگری که کارکنان مودبتر نیستند این است","alternatives":[],"reason":"audit","cer":0.674}
 {"id":"gold-1885","input":"yek rishsefide modern be haman andaze","expected":"من با فیبی برنامه دارم","alternatives":[],"reason":"cer","cer":0.955}
-{"id":"gold-1897","input":"zare zare,ghatre ghatre, misuzam ama","expected":"ولی اون کافی نبود","alternatives":[],"reason":"cer","cer":1.294}
+{"id":"gold-1897","input":"zare zare,ghatre ghatre, misuzam ama","expected":"ولی اون کافی نبود","alternatives":[],"reason":"cer","cer":1.353}

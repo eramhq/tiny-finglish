@@ -22,14 +22,14 @@
     "file": "data/gold/gold-misaligned.jsonl",
     "rows": 237,
     "byReason": {
-      "cer": 77,
-      "audit": 160
+      "cer": 76,
+      "audit": 161
     },
     "rule": "characterErrorRate > 0.9; otherwise the alignment audit's final verdict is misaligned",
     "measuredAgainst": "rules + frequency + lexicon",
     "fold": "ZWNJ and punctuation folded to spaces first — splitWords() from src/metrics.ts, so the threshold is stated in the same terms as the headline word accuracy",
     "why": "The word-delta filter above cannot see a row whose two sides have matching word counts and different content. These rows score 0% for any transliterator. They are moved rather than deleted: they are evidence about the source dataset.",
-    "sha256": "ad821b1758297c794da35062c7de9df29378b1ee22fd6629d1eb9f385d949903"
+    "sha256": "6a2e6f48d1c1f2b914c3eb84e709bfa4dcb22a39a80795f98d562f2103b112de"
   },
   "alignmentAudit": {
     "date": "2026-09-15",
@@ -73,8 +73,8 @@
     "cerRuleSubsetOfAudit": true,
     "file": "data/gold/audit.jsonl",
     "rowsAudited": 1906,
-    "quarantined": 160,
-    "quarantinedByBothJudges": 160,
+    "quarantined": 161,
+    "quarantinedByBothJudges": 161,
     "quarantinedByAdjudication": 0,
     "sha256": "7b99d58d68b911f95a96958d1e1b5232915b35b2a360345ac012373eeaafd57a"
   },
