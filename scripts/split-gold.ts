@@ -51,6 +51,14 @@ const GOLD = "data/gold/gold.jsonl";
 const MISALIGNED = "data/gold/gold-misaligned.jsonl";
 const PROVENANCE = "data/provenance/gold.json";
 const AUDIT = "data/gold/audit.jsonl";
+const FAITHFUL = "data/gold/faithful.jsonl";
+
+interface FaithfulRow {
+  id: string;
+  rowSha: string;
+  faithful: string;
+  by: "both" | "adjudicated";
+}
 
 interface AuditRow {
   id: string;
@@ -102,13 +110,18 @@ type Quarantined = Fixture & { reason: "cer" | "audit"; cer: number };
 
 // Strip the fields this script adds, so a rescued row returns to gold clean.
 const all = [...readRows(GOLD), ...readRows(MISALIGNED)]
-  .map(({ cer: _cer, reason: _reason, ...row }: Fixture & { cer?: number; reason?: string }) => row as Fixture)
+  .map(({ cer: _cer, reason: _reason, faithful: _faithful, ...row }: Fixture & { cer?: number; reason?: string }) =>
+    row as Fixture)
   .sort((a, b) => a.id.localeCompare(b.id));
 const transliterator = buildTransliterator({ model: false });
 
 const audit = new Map<string, AuditRow>();
 if (existsSync(new URL(AUDIT, root))) {
   for (const row of readRows(AUDIT) as unknown as AuditRow[]) audit.set(row.id, row);
+}
+const faithfulRows = new Map<string, FaithfulRow>();
+if (existsSync(new URL(FAITHFUL, root))) {
+  for (const row of readRows(FAITHFUL) as unknown as FaithfulRow[]) faithfulRows.set(row.id, row);
 }
 
 const kept: Fixture[] = [];
@@ -140,6 +153,29 @@ console.log(`  audit         ${byReason("audit")}  (${auditMoved.length - adjudi
 if (staleAudits) {
   console.error(`${staleAudits} audit rows no longer match their gold row; re-run the audit for them`);
   process.exit(1);
+}
+
+// The second reference, attached by content hash like the audit: a kept row
+// whose text changed, or that has none, stops the run rather than scoring
+// against a reference written for another sentence.
+if (faithfulRows.size) {
+  let staleFaithful = 0;
+  for (const [i, row] of kept.entries()) {
+    const f = faithfulRows.get(row.id);
+    if (row.expected === null) continue;
+    if (!f || f.rowSha !== rowSha(row)) {
+      staleFaithful++;
+      if (staleFaithful <= 5) console.error(`  no current faithful reference for ${row.id}`);
+      continue;
+    }
+    kept[i] = { ...row, faithful: f.faithful };
+  }
+  const changed = kept.filter((r) => r.faithful !== undefined && r.faithful !== r.expected).length;
+  console.log(`faithful        ${kept.length - staleFaithful} attached, ${changed} differ from expected; ${staleFaithful} stale or missing`);
+  if (staleFaithful) {
+    console.error(`${staleFaithful} gold rows have no current faithful reference; re-run gold_faithful for them`);
+    process.exit(1);
+  }
 }
 for (const row of misaligned.slice(0, 5)) {
   console.log(`  ${row.id}  ${JSON.stringify(row.input)} -> ${JSON.stringify(row.expected)}`);
@@ -194,6 +230,21 @@ writeFileSync(
             quarantinedByBothJudges: auditMoved.length - adjudicated,
             quarantinedByAdjudication: adjudicated,
             sha256: sha(AUDIT),
+          },
+        }
+        : {}),
+      ...(faithfulRows.size
+        ? {
+          faithfulPass: {
+            // The record of the labour (workers, prompt, shards, spot check)
+            // is written by hand at merge time; this script owns the counts.
+            ...(provenance["faithfulPass"] as Record<string, unknown> | undefined),
+            file: FAITHFUL,
+            rows: kept.filter((r) => r.faithful !== undefined).length,
+            byBoth: [...faithfulRows.values()].filter((r) => r.by === "both").length,
+            byAdjudication: [...faithfulRows.values()].filter((r) => r.by === "adjudicated").length,
+            differFromExpected: kept.filter((r) => r.faithful !== undefined && r.faithful !== r.expected).length,
+            sha256: sha(FAITHFUL),
           },
         }
         : {}),

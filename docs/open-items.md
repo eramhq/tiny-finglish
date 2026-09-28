@@ -174,8 +174,9 @@ Still open, in order of expected value:
    remaining 4.3-point gap to the rules. It is the largest cost item left.
 2. **The register gap** is still the largest error bucket (24% of the rules'
    remaining errors on dev): formal typing over a colloquial reference. It is
-   not reachable from the input. The `faithful` reference measures around it;
-   nothing fixes it.
+   not reachable from the input. The `faithful` reference measures around it,
+   on dev and, since 2026-09-28, on gold: every shipped setup scores about 7.5
+   points higher against it (hybrid 82.5% → 90.0%). Nothing fixes it.
 3. **LLM typing is 10–17 points easier to convert than human typing** of the
    same sentences. A distilled corpus that captured human noise (typos,
    mishearing, inconsistency) would be closer to the target distribution. No

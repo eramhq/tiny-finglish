@@ -459,3 +459,42 @@ The loanword guard (§9) was also changed this round: a collision now needs
 evidence from the LLM-typed corpus (the colliding word typed at least 10
 times, never with the loanword's spelling) before the loanword is kept. It
 brought back 11 loanwords; the review verdicts are unchanged.
+
+## 11. A `faithful` reference for gold — both families plus a blind adjudicator, 1,669 rows
+
+Gold had one reference, the Common Voice sentence, and about a quarter of
+the hybrid's dev errors are rows where that reference is not what was typed
+(`mishavad` over میشه). Dev already had a second reference, `faithful`, edited
+to the typing (§2). Gold now has one, made the same way: the `faithful` rules
+of the dev prompt copied word for word into `gold-faithful.md`, with no
+verdict or span step, since every gold row already passed the audit of §1.
+
+* Claude Opus 5.5 subagents (8 shards) and gpt-6-luna at xhigh (4 herdr
+  panes, 2 shards each) each wrote all 1,669 rows, seeing `input` and
+  `expected` only.
+* **Identical normalized text on 1,350 rows** (81%); 1,076 of those leave the
+  reference unchanged.
+* The 319 others went to four blind Claude subagents, A and B in random order
+  (`gold-faithful-adjudicate.md`). **They chose Claude's text 301 times,
+  luna's 16**, and wrote their own twice, both times because each proposal
+  broke a different rule (one dropped the reference's دورهٔ hamza, the other a
+  typed word).
+* The lead session read 30 agreed rows (all accepted) and 20 adjudicated ones
+  (18 accepted, 2 debatable, left as adjudicated).
+
+Result: 513 rows (31%) differ from `expected`, in `data/gold/faithful.jsonl`,
+attached to `gold.jsonl` by `scripts/split-gold.ts`; the record is
+`faithfulPass` in `data/provenance/gold.json`.
+
+**A metric correction, not accuracy.** Scored once on the unchanged engines,
+orthographic, against `expected` / `faithful`: rules 81.4 / 88.8, model 81.6 /
+89.0, hybrid 82.5 / 90.0. The ranking is unchanged: hybrid − rules +1.2 (95%
+CI +0.9 to +1.5), hybrid − model +1.0 (+0.6 to +1.4) against `faithful`.
+
+**How far to trust it.** As on dev, a Claude adjudicator took the Claude text
+far more often than luna's (19 to 1 here, 41 to 1 on dev). Of the 319
+disagreements, 81 are spacing only. In 96 luna left the reference unchanged
+where Claude edited it, and in 49 the reverse; the adjudicator mostly sided
+with the edit. That fits luna under-applying the rules, as on dev, but a blind
+judge from the same family cannot rule out self-preference. The headline stays the number
+against `expected`.

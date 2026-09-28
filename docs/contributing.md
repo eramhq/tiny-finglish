@@ -122,7 +122,9 @@ node scripts/ab.ts --dev --a "weights=training/runs/<old>/weights.json" --b "wei
 ```
 
 It scores both configs on the same rows, on the orthographic headline tier
-unless `--tier strict` or `--tier accepted` is given, and runs a paired
+unless `--tier strict`, `--tier accepted` or `--tier faithful` (orthographic
+against the reference edited to what was typed; dev and gold) is given, and
+runs a paired
 bootstrap over sentences. A difference is real only when its 95% CI excludes 0. Dev is 304
 rows, so a few words either way is noise: v8b's −0.3 on dev was about ten
 words net, inside a CI of −0.9 to +0.3. A candidate fails a "no regression"

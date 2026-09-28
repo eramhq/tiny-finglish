@@ -18,7 +18,9 @@
  * `--tier` picks the word-accuracy tier. The default is `orthographic`, the
  * headline, which forgives ZWNJ and compound spacing (`orthographicWordAccuracy`); `strict`
  * compares against `expected` exactly; `accepted` against the closest of
- * `expected` and the row's `alternatives` (how chat-dev is quoted).
+ * `expected` and the row's `alternatives` (how chat-dev is quoted);
+ * `faithful` is orthographic against the row's `faithful` reference, the one
+ * edited to what was typed (dev and gold carry it).
  * `--quiet` drops the per-row listing.
  */
 import { buildFixtureReport, type CaseResult } from "./_report.ts";
@@ -39,12 +41,17 @@ const file = flag("chat") ? "data/chat/chat-dev.jsonl"
     : "data/fixtures/fixtures.jsonl";
 
 const tier = value("tier") ?? "orthographic";
-if (tier !== "strict" && tier !== "accepted" && tier !== "orthographic") {
-  throw new Error(`--tier is strict, accepted or orthographic, not ${tier}`);
+if (tier !== "strict" && tier !== "accepted" && tier !== "orthographic" && tier !== "faithful") {
+  throw new Error(`--tier is strict, accepted, orthographic or faithful, not ${tier}`);
 }
-const score = (c: CaseResult): Counts => tier === "orthographic"
-  ? { correct: c.tiers.orthographic, total: c.tiers.orthographicTotal }
-  : { correct: tier === "accepted" ? c.tiers.accepted : c.wordsCorrect, total: c.wordsTotal };
+const score = (c: CaseResult): Counts => {
+  if (tier === "orthographic") return { correct: c.tiers.orthographic, total: c.tiers.orthographicTotal };
+  if (tier === "faithful") {
+    if (c.fixture.faithful === undefined) throw new Error(`${c.fixture.id} has no faithful reference`);
+    return { correct: c.tiers.faithfulOrthographic, total: c.tiers.faithfulOrthographicTotal };
+  }
+  return { correct: tier === "accepted" ? c.tiers.accepted : c.wordsCorrect, total: c.wordsTotal };
+};
 
 interface Side {
   label: string;

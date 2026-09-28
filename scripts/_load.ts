@@ -88,7 +88,7 @@ export interface Fixture {
   alternatives: string[];
   notes?: string;
   expectAction?: string;
-  /** Dev set only: the reference minimally edited to what was actually typed. */
+  /** Dev and gold: the reference minimally edited to what was actually typed. */
   faithful?: string;
   /** Chat sets: who typed the Finglish. `"llm"` throughout — the numbers are AI-typed. */
   typedBy?: string;

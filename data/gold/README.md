@@ -87,6 +87,62 @@ engine and both file hashes in `data/provenance/gold.json`. It is idempotent
 and re-derives the split from both files, so a future engine that rescues a row
 returns it to the set rather than leaving it stranded.
 
+## `faithful` — a second reference, edited to what was typed
+
+Every row carries `faithful` next to `expected`: the same sentence minimally
+edited so it is what the typist actually typed. Input `aan ham agar biaayand`,
+reference `اونم اگه بیان`: `expected` keeps it, `faithful` has `آن هم اگر
+بیایند`. It exists because a score against `expected` alone mixes accuracy with
+register (see the register limit below). 513 of the 1,669 rows (31%) differ
+from `expected`; on dev about a quarter do.
+
+**How it was made (2026-09-28).** The same way as dev's, so the two are
+comparable:
+
+* **Rules.** `data/provenance/prompts/gold-faithful.md` holds the `faithful`
+  rules of the dev repair prompt, word for word: change a word only when the
+  typing clearly says another form, insert or delete typed-only words, keep
+  the reference word when the typing is a misspelling, keep the reference's
+  spelling and joining, never add a ZWNJ, digits or words as typed. There is
+  no verdict or span step, because every row here already passed the alignment
+  audit.
+* **Two families.** Each row went to a Claude subagent (Opus 5.5, 8 shards)
+  and to Codex gpt-6-luna at xhigh (4 herdr panes, 2 shards each). Both saw
+  `input` and `expected` only, never an engine's output. **1,350 rows came back
+  identical** after normalization; 1,076 of those are unchanged from
+  `expected`.
+* **Blind adjudication.** The 319 disagreements went to four Claude subagents
+  that saw the two proposals as A and B in an order randomised per row
+  (prompt `gold-faithful-adjudicate.md`). They chose the Claude text 301
+  times and luna's 16, and wrote their own twice. The result is
+  `faithful-adjudications.jsonl`. 81 of the disagreements are spacing only
+  (آقاهم / آقا هم), which the orthographic tier forgives anyway; in 96 luna
+  left the reference unchanged where Claude edited it, in 49 the reverse.
+* **Lead spot check.** 30 random agreed rows were read and all 30 accepted. Of
+  20 adjudicated rows (every luna or edited choice, plus two), 18 were
+  accepted and 2 are debatable, left as adjudicated: gold-0637 keeps محیط over
+  typed `monitor`, and gold-0713 drops the ezafe of دنباله for typed `donbal`.
+
+The labels live in `faithful.jsonl`, keyed by the row's content hash like the
+audit, because `build_gold.py` rewrites `gold.jsonl` and would drop the field.
+`node scripts/split-gold.ts` attaches them and stops if any row's hash no longer
+matches. Rebuild with `python -m tiny_finglish_training.gold_faithful --merge
+<run dir>`; the record is `faithfulPass` in `data/provenance/gold.json`.
+
+**Its limits.** It is an LLM edit, checked but not a human's. The adjudicator
+is a Claude model and chose the Claude text 19 times in 20. On dev it did the
+same (123 to 3). That may be a better writer, or a judge favouring its own
+family; a blind Claude judge cannot tell the two apart. Where typing and
+reference say different words (`monitor` / محیط), "what was typed" is a call,
+not a fact. So the headline stays the number against `expected`, and the one
+against `faithful` sits beside it.
+
+**The leak guard does not read it.** `load_gold_keys` excludes corpus sentences
+by `expected` (dev: `source`), not `faithful`, for gold and for dev. A
+`faithful` sentence that differs from its reference is not excluded from the
+frequency or bigram corpora. That is left as is on purpose: changing the guard
+would change every future rebuild of the committed tables.
+
 ## Limits, which belong in any citation of a number from this file
 
 * **One annotator, not a panel.** Per-writer spelling habits are baked in. A
@@ -115,6 +171,8 @@ returns it to the set rather than leaving it stranded.
   real bucket is larger, and no transliterator can reach it, because the
   information needed to choose the colloquial form is not in the input. Any
   claim about the remaining headroom on this file should subtract it.
+  The `faithful` reference above now measures it: every shipped setup scores
+  about **7.5 points** higher against it (hybrid 82.5% → 90.0%).
 
   This is a property of the dataset, not a bug to fix. The product question it
   raises — whether the converter should offer a colloquial output mode — is a

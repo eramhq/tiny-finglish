@@ -17,7 +17,7 @@
     "min_words": 2,
     "max_words": 30
   },
-  "sha256": "a1bc2094c6951306ca82ee6cdc7e3d8d8706431e101414b033f92329ffaf786f",
+  "sha256": "c0ca539b69f0c4ab0964c233e7e21362adb2d63d08ee1801bb6f2c6c9cbc04bc",
   "contentMismatch": {
     "file": "data/gold/gold-misaligned.jsonl",
     "rows": 237,
@@ -77,5 +77,83 @@
     "quarantinedByBothJudges": 160,
     "quarantinedByAdjudication": 0,
     "sha256": "7b99d58d68b911f95a96958d1e1b5232915b35b2a360345ac012373eeaafd57a"
+  },
+  "faithfulPass": {
+    "date": "2026-09-28",
+    "workers": {
+      "claude": "Claude Opus 5.5 (claude-opus-5-5), in-session general-purpose subagents, one per shard",
+      "luna": "Codex CLI 0.157.1, gpt-6-luna, model_reasoning_effort=xhigh, interactive agents in herdr panes, two shards each"
+    },
+    "prompt": {
+      "file": "data/provenance/prompts/gold-faithful.md",
+      "sha256": "8702b7b793a41d5ab19a2f67a648d68754d12b81a58185961ace173c62d4483e"
+    },
+    "writersSaw": "input and expected only; never an engine output",
+    "rules": "the `faithful` rules of data/provenance/prompts/dev-repair.md, word for word; no verdict or span step, since gold rows are already audited as aligned",
+    "shards": {
+      "claude-0.jsonl": "73d1f9de1cf0f947",
+      "claude-1.jsonl": "ac74da961bc26dda",
+      "claude-2.jsonl": "3046fddbbf9a72cb",
+      "claude-3.jsonl": "e1c40e3be7c9c4a4",
+      "claude-4.jsonl": "f66eaf5679b5cd38",
+      "claude-5.jsonl": "d6cfe3f201e3c94a",
+      "claude-6.jsonl": "4f69afe60bed1cac",
+      "claude-7.jsonl": "f6caa7f7809c3d85",
+      "luna-0.jsonl": "6692e91f0327b9f4",
+      "luna-1.jsonl": "749f883b780e285a",
+      "luna-2.jsonl": "8c960e384af42ebe",
+      "luna-3.jsonl": "5d9eb89d89acbac8",
+      "luna-4.jsonl": "e7e3b048981b43ae",
+      "luna-5.jsonl": "a9c2ee3cbc7ae1cb",
+      "luna-6.jsonl": "a6de93a3c0f9f806",
+      "luna-7.jsonl": "81f3f5f7f15f9a31",
+      "shard-0.jsonl": "2d2980f7b9e9271a",
+      "shard-1.jsonl": "926dd09196092288",
+      "shard-2.jsonl": "c3a30775e0be82b0",
+      "shard-3.jsonl": "49e60986a3db26b7",
+      "shard-4.jsonl": "f684e81b1286b57c",
+      "shard-5.jsonl": "b8142ea120343ab6",
+      "shard-6.jsonl": "8f27bb9fb36a23e1",
+      "shard-7.jsonl": "ded2edab8d31b99a"
+    },
+    "agreement": {
+      "identicalNormalizedText": 1350,
+      "identicalAndUnchanged": 1076,
+      "disagreed": 319
+    },
+    "adjudication": {
+      "file": "data/gold/faithful-adjudications.jsonl",
+      "sha256": "94c174c99f89b11440636b8516a7e29fe5140f559ace08e4e4e7943bbfb2136c",
+      "prompt": {
+        "file": "data/provenance/prompts/gold-faithful-adjudicate.md",
+        "sha256": "ae40f85769d6835d168d977f5c72c111b80709c0c38b7f1f8099d2ffd4f005d7"
+      },
+      "by": "four Claude subagents, blind: the two proposals shown as A/B in an order randomised per row (seed 20260928); the key stayed in the ignored run directory",
+      "chose": {
+        "claude": 301,
+        "luna": 16,
+        "edited": 2
+      },
+      "files": {
+        "adjudicate-blind-0.jsonl": "c406c04d31b4a467",
+        "adjudicate-blind-1.jsonl": "a01bd039623faded",
+        "adjudicate-blind-2.jsonl": "b172692e2233dcb2",
+        "adjudicate-blind-3.jsonl": "da645e03f7a83598",
+        "adjudicated-0.jsonl": "c0a86a1228d57b4f",
+        "adjudicated-1.jsonl": "69004fc7d8406999",
+        "adjudicated-2.jsonl": "acf1c532a8716155",
+        "adjudicated-3.jsonl": "7c058ae71afe226e"
+      }
+    },
+    "leadSpotCheck": {
+      "agreedRows": "30 read (20 changed, 10 unchanged, random): 30 accepted",
+      "adjudicatedRows": "20 read (every luna or edited choice, plus 2 claude): 18 accepted, 2 debatable and left as adjudicated — gold-0637 keeps محیط over typed `monitor`, gold-0713 drops the ezafe of دنباله for typed `donbal`"
+    },
+    "file": "data/gold/faithful.jsonl",
+    "rows": 1669,
+    "byBoth": 1350,
+    "byAdjudication": 319,
+    "differFromExpected": 513,
+    "sha256": "b72844e66233484d372c2f46506aa5357d7d674315e0b4d0db91db4fb8848e34"
   }
 }

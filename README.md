@@ -100,6 +100,10 @@ Measured on the 1,669-row audited gold set, September 2026. The previous
 figures (62.3% for rules + frequency, 51.2% for the model) were on the
 1,835-row set before its audit; see
 [the September 2026 round](#september-2026-dictionary-decoding-llm-distillation-llm-measurement).
+Against a reference edited to what was actually typed, frequency + vowels,
+the model alone and the hybrid score 88.8%, 89.0% and 90.0%; the difference is
+register, not transliteration
+([gold scored against what was typed](#september-2026-gold-scored-against-what-was-typed)).
 
 **The headline is the orthographic tier**, which forgives only what Persian
 writers genuinely disagree on: می‌کنم, میکنم and می کنم are one word, as are
@@ -178,6 +182,29 @@ of 504 candidates per word and a p99 of ~92,000.
 Full detail in [`docs/architecture.md`](docs/architecture.md).
 
 ## Measured results
+
+### September 2026: gold scored against what was typed
+
+A metric correction, not an accuracy change: no engine code changed, 0 KiB.
+Gold's reference is the Common Voice sentence, and the typist often typed
+another register of it: `mishavad` over میشه, `agar` over اگه. No
+transliterator can recover the colloquial form from formal typing. Every gold
+row now also carries `faithful`, the reference minimally edited to what was
+typed, made the way dev's was (both LLM families, blind adjudication;
+`data/gold/README.md`). 513 of 1,669 rows (31%) differ from `expected`.
+
+| gold, 1,669 rows | orthographic vs expected (headline) | orthographic vs faithful | strict vs expected | strict vs faithful |
+|---|---:|---:|---:|---:|
+| rules + frequency + vowels | 81.4% | 88.8% | 75.1% | 81.4% |
+| model alone | 81.6% | 89.0% | 72.6% | 78.8% |
+| **hybrid (`"."` default)** | **82.5%** | **90.0%** | 73.3% | 79.6% |
+
+About 7.5 points of every engine's gold error is register, not
+transliteration. The ranking does not change: against `faithful`, the hybrid
+leads the rules by +1.2 (95% CI +0.9 to +1.5) and the model by +1.0 (+0.6 to
++1.4), both real (`node scripts/ab.ts --gold --tier faithful`). The headline
+stays the number against `expected`. `faithful` is an LLM edit, checked but
+not a human's, so it sits beside the headline rather than replacing it.
 
 ### September 2026: fair grading
 

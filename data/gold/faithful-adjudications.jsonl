@@ -1,0 +1,319 @@
+{"id": "gold-0012", "faithful": "آقاهم قبول کرد!", "chose": "claude", "why": "Typed space is joining only; keep reference spelling"}
+{"id": "gold-0017", "faithful": "اهای با شما هستم، معلوم هست دارید چه کار می کنید؟", "chose": "claude", "why": "typed che kaar, so چه کار"}
+{"id": "gold-0021", "faithful": "اخه با این گرونی سیگار من تا فیلتر سیگار را هم نکشم که فکرم اروم نمیشود", "chose": "claude", "why": "typed raa, not rou"}
+{"id": "gold-0022", "faithful": "اخه برایم جالب است آن چیزهایی که ازشان می شنویم با آن چیزهایی که خودمان می بینیم.", "chose": "luna", "why": "typed aan is آن, standard spelling"}
+{"id": "gold-0023", "faithful": "عالی شد. از این به بعد منو جزعی از خانواده خودتون بدونین خنده وحشتناکی می کند", "chose": "claude", "why": "Keep reference spelling جزعی; only بدونین changes"}
+{"id": "gold-0030", "faithful": "ان را دور زدند و به راه خود ادامه دادند", "chose": "claude", "why": "keeps reference plain ا"}
+{"id": "gold-0033", "faithful": "انقد زیباست که آدم دوست داره اونجا باجناق شو بکشه بعد رها کنه بره", "chose": "claude", "why": "keeps reference split باجناق شو as typed"}
+{"id": "gold-0040", "faithful": "آره دلم می خواد، چه طورم", "chose": "claude", "why": "typed toram is طورم, a different word"}
+{"id": "gold-0049", "faithful": "آشپز کوچلوی من چی برام پخته؟", "chose": "claude", "why": "Spelling variant of same word; keep reference"}
+{"id": "gold-0050", "faithful": "اسیابان گفت: تو که چنین مستجاب الدعوه هستی دعا کن گندمت ارد شود", "chose": "claude", "why": "typed shavad, not beshavad"}
+{"id": "gold-0058", "faithful": "اگر الان شوهرجان اینجا بود میگفت: من و این همه خوشبختی محاله", "chose": "claude", "why": "typed agar"}
+{"id": "gold-0061", "faithful": ".اگر بگویم خودش را می کشد", "chose": "claude", "why": "keeps reference spacing of می کشد"}
+{"id": "gold-0066", "faithful": "اگر خوشت نمیآید درس بخوانی و بیایی سرکلاس خب بشین خانهات", "chose": "claude", "why": "Correct forms, keeps solid joining, drops untyped تو"}
+{"id": "gold-0070", "faithful": "اگر وارد ناحیه زرد شویم، وارد نامطمئن خطرناکی شدهایم", "chose": "claude", "why": "keeps reference solid شدهایم"}
+{"id": "gold-0076", "faithful": "اگه دو دقیقه هم بیکار باشن کتابشون رو وا میکنن و شروع به خوندن میکنن", "chose": "claude", "why": "keeps باشن and خوندن as typed"}
+{"id": "gold-0077", "faithful": "اگه خوشت نمیاد درس بخونی و بیای سرکلاس خب بشین تو خونهت", "chose": "claude", "why": "keeps reference joining سرکلاس"}
+{"id": "gold-0083", "faithful": "اقا این اول صبحی چه دعایی رو پیشنهاد میدهی بهمان؟", "chose": "claude", "why": "Typed midehi behemaan, clearly different forms"}
+{"id": "gold-0097", "faithful": "الان هم منتظرم بیاید که بخابیم", "chose": "claude", "why": "bekhaabim matches reference بخابیم; keep spelling"}
+{"id": "gold-0102", "faithful": "الان تا حدودی می دانم", "chose": "claude", "why": "keeps reference spaced می convention"}
+{"id": "gold-0111", "faithful": "اما آیا در حس نادرستی از امنیت خواب رفتهایم؟ آیا راحتی با کلیک برروی یک جعبه آغاز میشود", "chose": "claude", "why": "no ma typed; rafteim is رفتهایم"}
+{"id": "gold-0120", "faithful": "اما از بعضی جهات خیر", "chose": "luna", "why": "Changes less; jahat ambiguous, keep جهات"}
+{"id": "gold-0127", "faithful": "آمدین حسین را نجات بدین؟", "chose": "claude", "why": "typed amadin, hosein, ra"}
+{"id": "gold-0128", "faithful": "عمل آوردن سریع هوش احساسی کار سختیست", "chose": "claude", "why": "typed sakhtist, contracted form"}
+{"id": "gold-0136", "faithful": "انجام دادن کارهایی که فراتر از وظیفه ت بود", "chose": "claude", "why": "typed karhaie is کارهایی"}
+{"id": "gold-0137", "faithful": "انجمن ملی جهانگردان حق عضویت علی رو باطل می کنه", "chose": "claude", "why": "Keeps reference spaced می joining"}
+{"id": "gold-0139", "faithful": "آنها مخصوصا درباره آیندهشان نگران هستند", "chose": "claude", "why": "typed darbaaye means درباره"}
+{"id": "gold-0143", "faithful": "آره. راست میگه. واسه همینه این دوتا رو همش روی این بدبختا آزمایش می کنن.", "chose": "claude", "why": "typed rou, inserted"}
+{"id": "gold-0145", "faithful": "عروسی ساعت شش شروع میشود", "chose": "claude", "why": "typed sheh as word, so شش"}
+{"id": "gold-0147", "faithful": "عصبانی تر می شود آره. راست میگه باید خفش کنیم.", "chose": "claude", "why": "Keeps reference final period"}
+{"id": "gold-0149", "faithful": "اسیابان گفت: تو که چنین مستجاب الدعوه هستی دعا کن گندمت ارد شود", "chose": "claude", "why": "typed shavad, not beshavad"}
+{"id": "gold-0159", "faithful": "اولا مرسی از دقت همگی، ثانیا منظور از ۴ برابر نسبت تولید و کارکنان است", "chose": "claude", "why": "typed ast"}
+{"id": "gold-0169", "faithful": "از آن شکلات خوشش میآید", "chose": "claude", "why": "keeps reference solid joining for میآید"}
+{"id": "gold-0185", "faithful": "از همه مهمتر موفق به کشف راز و معمای قدیمی خودم شدم", "chose": "claude", "why": "Typed khodam, not khod"}
+{"id": "gold-0188", "faithful": "از جلوی من برو آنطرف", "chose": "claude", "why": "keeps reference solid joining"}
+{"id": "gold-0189", "faithful": "از خیلی هاشنیدم که میگن", "chose": "claude", "why": "minimal; keeps reference spacing"}
+{"id": "gold-0190", "faithful": "از خدایم است که باهات بیایم", "chose": "claude", "why": "typed khodaayam ast and biaayam"}
+{"id": "gold-0199", "faithful": "ازاده اصلا برو توی همان اتاق بهش بده.", "chose": "claude", "why": "Typed haman, clearly همان"}
+{"id": "gold-0212", "faithful": "بافریاد چندبار بگم؟ چرا به خرج کسی نمیره؟ دوست دارین همیشه دست زور رو سرتون باشه؟", "chose": "claude", "why": "keeps reference joining بافریاد چندبار"}
+{"id": "gold-0215", "faithful": "با این آگاهی که دارم،اشتباهم رو تکرار نمیکنم", "chose": "claude", "why": "eshtebaham is singular اشتباهم"}
+{"id": "gold-0218", "faithful": "با مجید برای شکار رفته بودم افریقا", "chose": "claude", "why": "typed bara ye is برای"}
+{"id": "gold-0222", "faithful": "با تمسخر لابد میخوای با جارو و خاک انداز پرتم کنی بیرون؟ آره؟ وای ترسیدم.", "chose": "claude", "why": "Typist typed o between words; insert و"}
+{"id": "gold-0238", "faithful": "با شخص زیردست دیگری در بخش ارتباطات سرمایهگذار صحبت میکند", "chose": "claude", "why": "keeps reference solid سرمایهگذار"}
+{"id": "gold-0244", "faithful": "باشد الان من شوخی کردم", "chose": "claude", "why": "typed baashad"}
+{"id": "gold-0253", "faithful": "باید حواسش روپرت کنیم", "chose": "claude", "why": "keeps reference joining روپرت"}
+{"id": "gold-0257", "faithful": "بازار؟ برای ۲ کیلو شیرینی و یک گلدان!", "chose": "luna", "why": "Typed goldaan, so گلدان"}
+{"id": "gold-0265", "faithful": "بچه اینجا چه کار می کنی؟", "chose": "claude", "why": "typed che kaar, so چه کار"}
+{"id": "gold-0266", "faithful": "بچه اینجا چه کار می کنی؟", "chose": "claude", "why": "keeps reference spaced می کنی"}
+{"id": "gold-0267", "faithful": "بدمیگم؟", "chose": "claude", "why": "keeps reference joining بدمیگم"}
+{"id": "gold-0269", "faithful": "بعد یه هفته دیدم خیلی سخته تصمیم گرفتم فلج بشم", "chose": "claude", "why": "Typed besham, so بشم"}
+{"id": "gold-0279", "faithful": "بیا بشین رویا جون کاریم داشتی بگو جوانها انجام میدهند.", "chose": "claude", "why": "both fine; solid plural, no ZWNJ"}
+{"id": "gold-0285", "faithful": "بله من حتما خوبی شما را فراموش نمی کنم. تا دیر نشده از پشت بام فرار کنید. اگر جلوتان را گرفتند بگویید دوست فرموش هستیم.", "chose": "claude", "why": "follows typed order man hatman and baam"}
+{"id": "gold-0299", "faithful": "برایش ریش و سیبیل کشیدم", "chose": "claude", "why": "typed baraayash is برایش"}
+{"id": "gold-0300", "faithful": "برای عروسی خیلی کار دارم یک باغبان بیاورم این حیاط را برسد", "chose": "claude", "why": "Typed biavaram and raa: بیاورم, را"}
+{"id": "gold-0306", "faithful": "برای خودمون نیگه میداریم", "chose": "claude", "why": "typed midaarim; نیگه kept"}
+{"id": "gold-0333", "faithful": "باید اینقدر بلند باشد؟", "chose": "claude", "why": "typed bashad"}
+{"id": "gold-0334", "faithful": "باید کله اش را بکنیم تو قیف", "chose": "luna", "why": "keeps separation like reference کله شو"}
+{"id": "gold-0337", "faithful": "بعضی وقتها خودم اینجایم", "chose": "claude", "why": "Typed injaayam, so اینجایم"}
+{"id": "gold-0338", "faithful": "بعضی وقتا خودم اونجام", "chose": "claude", "why": "typed vaghtaa, colloquial وقتا"}
+{"id": "gold-0341", "faithful": "بعضیها باید ده برابر کار کنند تا جایگاه مشابهی بدست آورند", "chose": "claude", "why": "typed aavarand without bi-"}
+{"id": "gold-0342", "faithful": "به آن دل کوچک و صاف و زلالش حسودیم شد", "chose": "claude", "why": "typed koochak and zolaal"}
+{"id": "gold-0356", "faithful": "به خاطر فرار ازتنهایی یه موجودی رو وارد این دنیا بکنم", "chose": "claude", "why": "Spacing only; keep reference joining"}
+{"id": "gold-0358", "faithful": "به من بگید اگر چیزی خواستید واسه یه اقا اسفندیار.", "chose": "edited", "why": "typed ye; keep reference plain اقا"}
+{"id": "gold-0362", "faithful": "به نظرم این مجسمه رو از روی مراقب های یونان باستان ساختن", "chose": "claude", "why": "typed haye, plural های form"}
+{"id": "gold-0372", "faithful": "به سرعت یک ظرف پر از غذا برای موش می برد خیلی خوب حالا بگو. زود باش.", "chose": "claude", "why": "ye is izafe of bara, no extra یه"}
+{"id": "gold-0373", "faithful": "بطور خلاصه، برایان چسکی مدیرعامل مرا به دلیل دانشم در این صنعت دعوت به کار کرد، ولی چیزی که ارائه دادم خردی بود که به خوبی کسب کرده بودم", "chose": "claude", "why": "Typist omitted واقعا; delete it"}
+{"id": "gold-0374", "faithful": "یه وقت خوب پیش نیومده", "chose": "claude", "why": "be likely typo for ye; minimal edit"}
+{"id": "gold-0376", "faithful": "به یک چیز خاص گوش بدم؟", "chose": "claude", "why": "typed bedam"}
+{"id": "gold-0390", "faithful": "بدون اینکه باز سوالی کرده باشم با عصبانیت شروع کرد", "chose": "claude", "why": "minimal fix of انکه to اینکه, joining kept"}
+{"id": "gold-0391", "faithful": "بدون اینکه دورهٔ رسمی مدیریت دیده باشد", "chose": "edited", "why": "Keep reference hamza on دورهٔ; typed modiriat"}
+{"id": "gold-0394", "faithful": "بگذار دل خوش باشم مادر بعد هشت سال که دلم باز شده بگذار راحت باشم.", "chose": "claude", "why": "typed begzaar, clearly بگذار"}
+{"id": "gold-0395", "faithful": "به هم علاقه مند شده بودیم همدیگه رو خیلی دوست داشتیم خلاصه ترم اخر دانشگاه از راه رسید", "chose": "claude", "why": "typed dost, full دوست"}
+{"id": "gold-0401", "faithful": "بهش میگوید که دوستش دارد", "chose": "claude", "why": "reference joins میگوید solid"}
+{"id": "gold-0403", "faithful": "!بهت بگویند آشغالی ، خوب است", "chose": "claude", "why": "Typed khoob ast, so خوب است"}
+{"id": "gold-0404", "faithful": "بهتر نیست بیایی کنار من", "chose": "claude", "why": "typed biayi, full form بیایی"}
+{"id": "gold-0405", "faithful": "بهترین برخورد با کسی که اشغال می اندازد بیرون", "chose": "claude", "why": "keeps reference plain-alef اشغال"}
+{"id": "gold-0413", "faithful": "برین کنار بابا پیری دارد میآید", "chose": "claude", "why": "typed darad meayad"}
+{"id": "gold-0414", "faithful": "بشین امنه.خودم در را باز می کنم.", "chose": "claude", "why": "Typed ra, so را"}
+{"id": "gold-0425", "faithful": "بی هوش می شود بچه ام،اینقدر که بی حوصله است و خسته", "chose": "claude", "why": "typed in ghadr, so اینقدر"}
+{"id": "gold-0429", "faithful": "بیشتر آنها هر کدام بیش از دو دقیقه طول نمیکشد", "chose": "claude", "why": "typed nemikeshad, singular"}
+{"id": "gold-0441", "faithful": "چند روز است رسیدهاند اذر خانم؟", "chose": "claude", "why": "typed resideand is رسیدهاند"}
+{"id": "gold-0449", "faithful": "چطور به نظر میرسد وقتی", "chose": "claude", "why": "Typed miresad, so میرسد"}
+{"id": "gold-0450", "faithful": "چطوری حواس خدا را پرت کنیم تا دست از سر کرمانشاه بردارد", "chose": "claude", "why": "typed raa and bardaarad"}
+{"id": "gold-0456", "faithful": "چرا چشم هام برق نمی زنند؟", "chose": "luna", "why": "mirrors typed cheshm haam; B equally fine"}
+{"id": "gold-0457", "faithful": "چرا اینقدر طولش دادید ؟", "chose": "claude", "why": "typed dadid is دادید"}
+{"id": "gold-0460", "faithful": "چرا من را آوردید اینجا؟", "chose": "claude", "why": "Typed ra and aavardid"}
+{"id": "gold-0462", "faithful": "چرا، چه اتفاقی میافتد؟", "chose": "claude", "why": "typed mi oftad; solid like reference"}
+{"id": "gold-0477", "faithful": "چطوری آخه برانکو با دست خالی تیمش را برد فینال ؟", "chose": "claude", "why": "typed timash ra"}
+{"id": "gold-0482", "faithful": "چی میان از خاطره رفتنش که تو شهر حرف بزنید ؟", "chose": "claude", "why": "typed chi is چی"}
+{"id": "gold-0502", "faithful": "چونکه اندازه ام نیست", "chose": "claude", "why": "Spacing only; keep reference چونکه"}
+{"id": "gold-0528", "faithful": "دهنتان را ببندید", "chose": "luna", "why": "typed dahan, not dahaan"}
+{"id": "gold-0536", "faithful": "در حالی که خون از بدنش خارج می شد، به دکتر گفت:ایا من به بهشت می روم؟", "chose": "claude", "why": "keeps reference spaced می convention"}
+{"id": "gold-0542", "faithful": "درکار، در خانه، در اینترنت، در مدارس و در جوامع خودمان", "chose": "claude", "why": "keeps reference joining درکار"}
+{"id": "gold-0544", "faithful": "در خانه، آنلاین، در مدرسه در گروهایشان", "chose": "claude", "why": "Spacing only; keep reference گروهایشان"}
+{"id": "gold-0545", "faithful": "در خصوص من بیش از ۲٫۰۰۰ تصویر، و برخی از آنها کاملا شخصی", "chose": "claude", "why": "digits typed; keep reference digit spelling"}
+{"id": "gold-0551", "faithful": "در روزگار قدیم،پادشاهی سنگ بزرگی را در جاده ای قرار داد", "chose": "claude", "why": "typed jadei, drops یک and اصلی"}
+{"id": "gold-0555", "faithful": "در وضعیتی هستیم که میتواتیم به تحولات طی ۱۲ سال آینده و پس از آن فکر کنیم", "chose": "claude", "why": "keeps reference Persian digits and spelling"}
+{"id": "gold-0568", "faithful": "داشتم تغییری بزرگ رو در دنیا شکل میدادم", "chose": "claude", "why": "Typed ro, so رو"}
+{"id": "gold-0569", "faithful": "داشتیم با یک تخته سنگ حرف می زدیم", "chose": "claude", "why": "punctuation not required; minimal edit"}
+{"id": "gold-0576", "faithful": "دلم میخاد فقط بخابم و هیچ کاری نکنم", "chose": "claude", "why": "typed mikhaad matches reference spelling"}
+{"id": "gold-0581", "faithful": "دیگر نمیشه از آقاچیزی خواست که", "chose": "claude", "why": "keeps reference joining آقاچیزی"}
+{"id": "gold-0582", "faithful": "دیگر سرکار نمیروم", "chose": "claude", "why": "Keeps reference joining سرکار and solid نمی"}
+{"id": "gold-0588", "faithful": "دیگه نمیشه از آقاچیزی خواست که", "chose": "claude", "why": "keeps reference joining"}
+{"id": "gold-0597", "faithful": "دکتر بذارید اسحاق دوست داره امشب اینجا بمانه", "chose": "claude", "why": "typed bemaane matches reference"}
+{"id": "gold-0606", "faithful": "\"\"\" درست است؟ ولی وقتی به قدرت در محیط کار امروزی میرسیم، ۳۰ سالگی، ۵۰ سالگی جدید است\"", "chose": "claude", "why": "keeps reference Persian digits"}
+{"id": "gold-0615", "faithful": "دوم، چه کسی آنجا بود؟ شاهدی حضور داشت؟ این در ادامه بسیار ضروری خواهد بود", "chose": "claude", "why": "Typist omitted آیا, typed khaahad bood"}
+{"id": "gold-0617", "faithful": "دوم، پس از ۲۱ سال مذاکرات، ما توافقنامه الزام آور پاریس را پذیرفتیم", "chose": "claude", "why": "digits typed; keep reference digits"}
+{"id": "gold-0621", "faithful": "درباره ی من می نویسید؟", "chose": "claude", "why": "abbreviated typing; keep reference unchanged"}
+{"id": "gold-0632", "faithful": "امکان ندارد؟ مگر ممکن است؟ با عقل و منطق جور در نمیآید.", "chose": "claude", "why": "typed nemiaayad is نمیآید; keeps question mark"}
+{"id": "gold-0633", "faithful": "امروز کلی گریه کردم چون نمیخام بابا و مامانم پیربشن", "chose": "claude", "why": "Typed baabaa, not baabaam"}
+{"id": "gold-0634", "faithful": "امروز نرسیدم بروم فیلم بگیرم برای بچهام", "chose": "claude", "why": "solid بچهام follows reference convention"}
+{"id": "gold-0637", "faithful": "امروزه ما پنج نسل در محیط کار داریم", "chose": "luna", "why": "monitor is likely a slip for محیط; minimal"}
+{"id": "gold-0657", "faithful": "فاطمه ستوده: اگر جلد بعدیای در کار باشد، قطعا همین کار را خواهم کرد", "chose": "claude", "why": "badii ambiguous; keep reference بعدیای"}
+{"id": "gold-0658", "faithful": "فقط آنجایش که دوباره نفس میگیرد و زور میزند", "chose": "claude", "why": "Typed aanjayash, migirad, mizanad"}
+{"id": "gold-0670", "faithful": "فاطمه صالحی: دخترم ساره در پارک سعی میکرد صخرهنوردی کند", "chose": "claude", "why": "keeps reference solid صخرهنوردی"}
+{"id": "gold-0696", "faithful": "قبلا جلو ویترین نمایشگاه های ماشین وایمیستادم و حسرت میخوردیم", "chose": "claude", "why": "typed vaymistadam, first person singular"}
+{"id": "gold-0704", "faithful": "قشنگ اندازه یه مسافرت خستگی رواز تنت خارج میکنه", "chose": "claude", "why": "keeps reference joining رواز"}
+{"id": "gold-0705", "faithful": "قطر قصد دارد از سازمان کشورهای صادرکننده نفت خارج شود", "chose": "claude", "why": "Typist omitted (اوپک); delete it"}
+{"id": "gold-0707", "faithful": "قدرت، به شکل بیسابقهای به سمت جوانان سرازیر میشود به دلیل وابستگی ما به DQ", "chose": "claude", "why": "typed be samt, javanan; omitted words deleted"}
+{"id": "gold-0713", "faithful": "گفته دنبال بازنشستگیمم!", "chose": "luna", "why": "typed donbal, no ezafe"}
+{"id": "gold-0715", "faithful": "گمش کردی، هان؟ تعجبی هم ندارد", "chose": "claude", "why": "typed han and nadarad"}
+{"id": "gold-0726", "faithful": "حالا برای اینکار لازم نیست خود را داخل اتومبیل حبس کنیم", "chose": "claude", "why": "Spacing only for اینکار; konim changed"}
+{"id": "gold-0729", "faithful": "حالا فردا پرسپولیس یک ستاره ی کمرنگ میزند روی لباسش", "chose": "claude", "why": "typed yek, mizanad, rooye"}
+{"id": "gold-0733", "faithful": "حالا خوب است مامان تو جوانیش خودش اتش پاره ای بوده ها.", "chose": "claude", "why": "typed too, keeps plain alef اتش"}
+{"id": "gold-0737", "faithful": "حال خوبی که کسی نباشه باهاش قسمتش کنی، خودش میشه کم کم عامل حال بد آدم", "chose": "claude", "why": "follows typed word order mishe kam kam"}
+{"id": "gold-0744", "faithful": "حالا خوبه فرش ننداختیم تو آشپزخانه", "chose": "claude", "why": "Typed khaneh, so آشپزخانه"}
+{"id": "gold-0746", "faithful": "حالا تا ببینیم چه میشود", "chose": "claude", "why": "typed che; solid like reference"}
+{"id": "gold-0747", "faithful": "حالا یک بار هم ما اومدیم", "chose": "claude", "why": "typed oomadim, keeps اومدیم"}
+{"id": "gold-0750", "faithful": "هم خانه ما بزرگ است هم دختر بزرگ دارم", "chose": "claude", "why": "no am typed after bozorg"}
+{"id": "gold-0753", "faithful": "همه گمان میکردند که مسئله حلشده است", "chose": "claude", "why": "Spacing only; keep reference حلشده"}
+{"id": "gold-0759", "faithful": "همه از ترس توی شکم هم می لولند و به سرعت جارو و خاک انداز برایش می آورند", "chose": "claude", "why": "typed o, insert و"}
+{"id": "gold-0775", "faithful": "هر ۷ دقیقه یک نوجوان دختر یا پسر در جایی از دنیا به دلیل خشونت به قتل میرسد", "chose": "claude", "why": "keeps reference Persian digit style"}
+{"id": "gold-0778", "faithful": "هر روز یکی دوتا مداد کش می رفتتم تااین که تا پایان ترم از تمامی دوستانم مداد برداشته بودم", "chose": "claude", "why": "minimal; typed yeki douta, reference spellings kept"}
+{"id": "gold-0779", "faithful": "هر وقت رسیدی بالامنم بکش بالا", "chose": "claude", "why": "Typist omitted اون; delete it"}
+{"id": "gold-0782", "faithful": "حرف دیگه ای نداری بزنی؟", "chose": "claude", "why": "typed nadari bezani and digeie"}
+{"id": "gold-0788", "faithful": "حسن، دلش برایم تنگ میشود", "chose": "claude", "why": "typed baraayam and mishavad"}
+{"id": "gold-0791", "faithful": "هوا دم کرده بود از بس دود ماشینها تو شهر بلند شده بود", "chose": "claude", "why": "typed maashin haa is ماشینها"}
+{"id": "gold-0804", "faithful": "هیچچی نگفت", "chose": "claude", "why": "Keep reference هیچچی spelling; typed nagoft"}
+{"id": "gold-0805", "faithful": "هیچچی نگفتم", "chose": "claude", "why": "hichi same word; keep reference spelling"}
+{"id": "gold-0809", "faithful": "حوصله معاشرت بادوستانتان را ندارید؟", "chose": "claude", "why": "keeps reference joining"}
+{"id": "gold-0810", "faithful": "حوصله انجام کارهای ضروری راهم ندارید؟", "chose": "claude", "why": "keeps reference joining راهم"}
+{"id": "gold-0811", "faithful": "ایمان قوی داشته باشید و بدانید هر چه رخ میدهد خواست خداوند است", "chose": "claude", "why": "Doubled va is a typo; keep reference"}
+{"id": "gold-0813", "faithful": "این عکس را خیلی دوست دارم به 2 دلیل", "chose": "claude", "why": "typed raa, so را"}
+{"id": "gold-0825", "faithful": "این بهترین داستانیه که تابه حال شنیدم", "chose": "claude", "why": "keeps reference joining تابه حال"}
+{"id": "gold-0835", "faithful": "این داستان واقعی نیس", "chose": "claude", "why": "typed nis, colloquial نیس"}
+{"id": "gold-0841", "faithful": "این حرف ازش بعید بودواقعا", "chose": "claude", "why": "Spacing only; keep reference joining"}
+{"id": "gold-0842", "faithful": "این حرفها آشنا به نظر میرسد", "chose": "claude", "why": "typed miresad, present tense"}
+{"id": "gold-0856", "faithful": "این میتواند خیلی مهم باشد، بویژه وقتی موقعیت مرگ و زندگی باشد", "chose": "claude", "why": "keeps reference spelling بویژه"}
+{"id": "gold-0858", "faithful": "این نقاشی را قبلا دیده ام", "chose": "claude", "why": "typed ra and dide am"}
+{"id": "gold-0864", "faithful": "این تنها راهی است که میشود", "chose": "claude", "why": "Keeps reference solid joining for میشود"}
+{"id": "gold-0865", "faithful": "این تعداد زنانی است که قبل از هجده سالگی ازدواج کردهاند", "chose": "claude", "why": "number typed as words"}
+{"id": "gold-0870", "faithful": "این ویروس سیاسی، پس از نفوذ، بهآرامی دشمن خود را از درون نابود میکرد", "chose": "claude", "why": "keeps reference joining بهآرامی"}
+{"id": "gold-0879", "faithful": "اینجا اطلاعاتی که از دنیای واقعی بدست آمده را میبینید", "chose": "claude", "why": "keeps reference joining بدست"}
+{"id": "gold-0880", "faithful": "اینجا حیاط مشرف دارد معذب می شوم اونجوری.", "chose": "claude", "why": "Keeps reference spaced می شوم"}
+{"id": "gold-0887", "faithful": "اینطوری همدیگر را صدا میزنیم", "chose": "claude", "why": "typed ham digar, ra, mizanim"}
+{"id": "gold-0889", "faithful": "جای دقیقا؟", "chose": "luna", "why": "typed daghighan, دقیقا"}
+{"id": "gold-0896", "faithful": "جاش ، اینها دوستام هستند", "chose": "luna", "why": "اینها solid, like reference اینا"}
+{"id": "gold-0898", "faithful": "جوانان ۲۵ درصد جمعیت هستند", "chose": "claude", "why": "Unchanged reference; digits already present"}
+{"id": "gold-0901", "faithful": "جوانان نمیخواهند که روی مزرعه یا مناطق روستایی باشند", "chose": "claude", "why": "mazraeye includes یا; no روی typed"}
+{"id": "gold-0905", "faithful": "جویی ، اون را بزارش زمین", "chose": "claude", "why": "typed oon ra"}
+{"id": "gold-0913", "faithful": "کاشیما خوب انتقام باخت سایپا تو جام حذفی را گرفت", "chose": "claude", "why": "no be typed; raa is را"}
+{"id": "gold-0917", "faithful": "کم کم عادت کردم به فضا و وقتی به خودم آمدم دیدم یکماه از دانشگاه گذشته", "chose": "claude", "why": "Spacing only; keep reference یکماه"}
+{"id": "gold-0925", "faithful": "کاش می شد یکیشان را پیش خودم نگه دارم", "chose": "claude", "why": "typed ra; insert را"}
+{"id": "gold-0934", "faithful": "که بهتر از تو قایم کند", "chose": "claude", "why": "typed konad"}
+{"id": "gold-0947", "faithful": "کی این روزها تموم میشه خدا؟", "chose": "claude", "why": "typed rouz ha is روزها"}
+{"id": "gold-0951", "faithful": "خانه ی مهر بازنشستگان، عجب", "chose": "claude", "why": "Ezafe ی is spelling; keep reference"}
+{"id": "gold-0956", "faithful": "خانوما میومدن توی مغازه میگفتن آقا این لباس پلنگی رنگهای دیگهای هم داره؟", "chose": "claude", "why": "typed touye, ranghaye, digeie"}
+{"id": "gold-0958", "faithful": "خطاب به موش می بینی چه زندگی برای من درست کردی؟ دسته گلیه که خودت آب دادی حالا بیا جمعش کن.", "chose": "claude", "why": "typed bara ye man, no be before aab"}
+{"id": "gold-0961", "faithful": "خیلی درس میخوندم شب و روزم شده بود درس روز کنکوراز راه رسید", "chose": "claude", "why": "shode fixed; keeps reference joining کنکوراز"}
+{"id": "gold-0965", "faithful": "خیلی شلوغ بود،تو یکی از کوچه ها پارک کردیم و رفتیم شیرینی فروشی", "chose": "claude", "why": "Deletes ماشینو, keeps reference spacing otherwise"}
+{"id": "gold-0967", "faithful": "خیال کردم خدا بیامرز شدیم", "chose": "claude", "why": "typed shodim"}
+{"id": "gold-0969", "faithful": "خب ۵ سال اینجا بودی", "chose": "claude", "why": "typed khob and digit 5"}
+{"id": "gold-0970", "faithful": "خوب ادمها هم عوض شده اند.", "chose": "claude", "why": "deletes دیگه, keeps final period"}
+{"id": "gold-0971", "faithful": "خب اگر مدیون آن هستیم", "chose": "claude", "why": "Keep خب; khob matches it"}
+{"id": "gold-0980", "faithful": "خوب این امر منجر به چی شد؟ کایلا در کشور آلمان ممنوع شد", "chose": "claude", "why": "typed chi"}
+{"id": "gold-0983", "faithful": ".خوب ، اینم قهوه خانه است", "chose": "claude", "why": "keeps reference خوب spelling, typed ast"}
+{"id": "gold-0985", "faithful": "خب او مطمئنا دیر کرده", "chose": "claude", "why": "typed oo is او"}
+{"id": "gold-0992", "faithful": "خدا ذلیل کند این پول رو که نجس تر از این من ندیدم تو دنیا.", "chose": "claude", "why": "Typed konad, so کند"}
+{"id": "gold-0996", "faithful": "خدایا میشه یه کاری کنی این سه ماه پائیز که اینقدر برام دوست داشتنیه تلخ نشه و آرامشبخش باشه؟؟؟", "chose": "claude", "why": "typed inghadr, so اینقدر"}
+{"id": "gold-0999", "faithful": "خداحافظی کرد اینقدر هنگ بودم که نفهمیدم کی برگشتم خوابگاه تو فکر بودم", "chose": "claude", "why": "typed inghadr, همش dropped"}
+{"id": "gold-1007", "faithful": "خوب ، حداقل لباس خوبی است", "chose": "claude", "why": "typed khoobi ast"}
+{"id": "gold-1019", "faithful": "کریستیانو رونالدو برای خرید این گربه ۲۶۰۰ پوند هزینه کرده است!", "chose": "claude", "why": "Typed karde ast; insert است"}
+{"id": "gold-1023", "faithful": "کدام مرد به رنگ موی مادرش توجه می کند", "chose": "claude", "why": "keeps reference spaced می"}
+{"id": "gold-1027", "faithful": "کلوپ مردان طلاق گرفته", "chose": "claude", "why": "mardaane read as ezafe; keep reference"}
+{"id": "gold-1028", "faithful": "کمکم کن به اون چیزی که قسمتم هست قانع باشم و بتونم به زندگیم ادامه بدم", "chose": "claude", "why": "no ke typed after kon"}
+{"id": "gold-1037", "faithful": "ما ازاون محافظت میکنیم", "chose": "claude", "why": "Spacing only; keep reference ازاون"}
+{"id": "gold-1045", "faithful": "ما شادی تو را ندزدیدهایم", "chose": "claude", "why": "typed nadozdideim, perfect tense"}
+{"id": "gold-1062", "faithful": "مادربزرگ می گوید این دیگر جایشان را بلد است، می آید همشان را می برد", "chose": "claude", "why": "typed hameshan; fewer changes"}
+{"id": "gold-1064", "faithful": "مگه اینکه یه حرفی بزنی", "chose": "claude", "why": "keeps reference joining اینکه"}
+{"id": "gold-1072", "faithful": "مملو از گیاهان و حیوانات می باشد", "chose": "claude", "why": "Typed heyvanat, not heyvanati"}
+{"id": "gold-1082", "faithful": "من از جی پی س ام استفاده کردم و راهو پیدا کردم", "chose": "claude", "why": "es same letter; keep reference spelling"}
+{"id": "gold-1096", "faithful": "- من باید تو را ببوسم", "chose": "claude", "why": "keeps reference leading dash"}
+{"id": "gold-1125", "faithful": "من حال و حوصله ندارم پا بشوم تا بازار راه بیفتم و بیایم.", "chose": "claude", "why": "typed paa beshavam and biayam"}
+{"id": "gold-1126", "faithful": "من همچنین به عنوان یک ریشسفید مدرن دریافتم", "chose": "claude", "why": "Spacing only; keep reference ریشسفید"}
+{"id": "gold-1129", "faithful": "من همیشه توی فیلما میدیدم که آدم ها میگفتن چیزی برای از دست دادن ندارن", "chose": "claude", "why": "typed touye, adam ha, nadaran"}
+{"id": "gold-1145", "faithful": "من کنکور رو دادم بعده کنکور خیلی خشحال بودم چون امتحان رو عالی دادم", "chose": "claude", "why": "keeps reference spelling خشحال"}
+{"id": "gold-1146", "faithful": "من ماشینای ابی میشمردم، اونم ماشینای قرمز", "chose": "claude", "why": "typed maashinaaye matches ماشینای"}
+{"id": "gold-1153", "faithful": "من می خواهم اینجا بمانی", "chose": "claude", "why": "Keeps reference spaced می خواهم"}
+{"id": "gold-1156", "faithful": "من می خواهم بیشتر بدانم", "chose": "claude", "why": "keeps reference spaced می"}
+{"id": "gold-1158", "faithful": "من معتقدم که این محیطها شبکه خرد میان نسلی را میگشاید بنابراین همه ما میتوانیم از هم بیاموزیم", "chose": "claude", "why": "typed migoshaayad, singular"}
+{"id": "gold-1159", "faithful": "من موقتا نیامدهام اینجا", "chose": "claude", "why": "solid joining like reference convention"}
+{"id": "gold-1167", "faithful": "من اون رو متعاقد کردم", "chose": "claude", "why": "Keep reference spelling; typist meant same word"}
+{"id": "gold-1174", "faithful": "من واقعا معذرت می خواهم", "chose": "claude", "why": "keeps reference spaced می"}
+{"id": "gold-1182", "faithful": "من یک هدیه کوچک دارم", "chose": "claude", "why": "typed koochak"}
+{"id": "gold-1190", "faithful": "منم موافقم. تو چرا اینقدر بی مسئولیتی؟ چرا به فکر آسایش خواهر مادرت نیستی؟", "chose": "claude", "why": "typed in ghadr is اینقدر; keeps spacing"}
+{"id": "gold-1218", "faithful": "میبرم می گردونمش،جاشو تمیز می کنم", "chose": "luna", "why": "Truncated typing; typist meant می کنم"}
+{"id": "gold-1221", "faithful": "میدانم یک روز دوباره می توانم تو را ببینم", "chose": "claude", "why": "keeps reference spaced می توانم"}
+{"id": "gold-1230", "faithful": "میدونم یک روز دوباره می توانم تو را ببینم", "chose": "claude", "why": "keeps reference spaced می convention"}
+{"id": "gold-1231", "faithful": "می فهمی که منظورم چی است؟", "chose": "claude", "why": "typed chi ast is چی است"}
+{"id": "gold-1236", "faithful": "میگویم قصد ندارم بهش ذهنیت بدم", "chose": "claude", "why": "Typed bedam, so بدم"}
+{"id": "gold-1242", "faithful": "می خوام بچه دار شم", "chose": "claude", "why": "typed sham, not besham"}
+{"id": "gold-1248", "faithful": "میخان قهوه خانه بکنندش", "chose": "claude", "why": "typed khaane and bokonandesh"}
+{"id": "gold-1250", "faithful": ".میخاستی تو کار مد بری", "chose": "claude", "why": "typing matches reference misspelling; keep"}
+{"id": "gold-1258", "faithful": "می ریم پایین، یک ایستگاه اتوبوس پیدا می کنیم", "chose": "claude", "why": "Keeps reference spaced می ریم"}
+{"id": "gold-1259", "faithful": "میریم یه جا استخدام میشیم که کمک کنیم یک نفر دیگر رویاهایش را دنبال کند", "chose": "claude", "why": "typed digar, so دیگر"}
+{"id": "gold-1263", "faithful": "میشه کمکش کنین بره خانه اش؟", "chose": "claude", "why": "typed khaneh, formal خانه"}
+{"id": "gold-1269", "faithful": "می ترسم که شوکه بشین", "chose": "claude", "why": "typed mitarsam; keeps reference spacing"}
+{"id": "gold-1273", "faithful": "می توانم کمک کنم از حیاط تان رد بشوید", "chose": "claude", "why": "Keeps reference spacing for می and تان"}
+{"id": "gold-1274", "faithful": "میتوانیم ترجمه همزمان برای جوان داشته باشیم", "chose": "luna", "why": "typed javan, singular"}
+{"id": "gold-1286", "faithful": "موقعی که داشتم دندان هایم را مسواک می زدم", "chose": "luna", "why": "mirrors typed separation dandaan haayam"}
+{"id": "gold-1301", "faithful": "مسری است، و با بودن اطراف اون ما نیز مبتلا میشویم", "chose": "claude", "why": "typed un is اون"}
+{"id": "gold-1309", "faithful": "نه ، هنوز هم شرت می پوشم", "chose": "claude", "why": "Typed hanooz ham separately, a different form"}
+{"id": "gold-1310", "faithful": "نه ، هنوز هم شرت می پوشن", "chose": "claude", "why": "typed mipooshan, colloquial پوشن"}
+{"id": "gold-1317", "faithful": "نه یک وسیله سرگرمی که", "chose": "claude", "why": "typed yek"}
+{"id": "gold-1319", "faithful": "نه ، تموم نیست تا وقتی", "chose": "claude", "why": "typed tamoom matches تموم"}
+{"id": "gold-1327", "faithful": "نباید این کار رو می کردی", "chose": "claude", "why": "Typed kar rou, not kaaro"}
+{"id": "gold-1338", "faithful": "نمیدانم افسرده شدم یا بقایای جنین تو دلم مانده که اینطوری میشوم", "chose": "claude", "why": "keeps reference solid joining"}
+{"id": "gold-1340", "faithful": "نمیدانیم بگم. بابا. یک صدایی از آن تو آمد. خودم شنیدم.", "chose": "claude", "why": "keeps reference solid نمی convention"}
+{"id": "gold-1348", "faithful": ".نمیخواهی که عصبانیش کنی", "chose": "claude", "why": "reference joins نمیخواهی solid"}
+{"id": "gold-1349", "faithful": "نمی خوام دیگه ببینم!", "chose": "claude", "why": "nemikhaam matches reference"}
+{"id": "gold-1351", "faithful": "نمی خواهیم دیگر بیشتر از این", "chose": "claude", "why": "keeps reference spaced نمی"}
+{"id": "gold-1352", "faithful": "نمی شود جلویش مقاومت کرد", "chose": "claude", "why": "typed jelooyash"}
+{"id": "gold-1359", "faithful": "نمی تونست سرش رو بندازد پایین بیاد اینجا", "chose": "claude", "why": "typed nemitounest, bendazad, saresh rou"}
+{"id": "gold-1361", "faithful": "نشون کمک به سالمندان رو هنوز نگرفتم", "chose": "claude", "why": "neshoone is neshoon plus ezafe; keep reference"}
+{"id": "gold-1362", "faithful": "نوشته یه بار دیگر بخون", "chose": "claude", "why": "typed neveshte, ye bar, digar"}
+{"id": "gold-1366", "faithful": "نیمه ی اول تمام شد", "chose": "luna", "why": "typed tamam"}
+{"id": "gold-1369", "faithful": "نمیخواهم من به ذائقه هایش جهت بدهم", "chose": "claude", "why": "typed zaeghe hayash"}
+{"id": "gold-1374", "faithful": "اوقات خوشی داشته باشید", "chose": "claude", "why": "Typed bashid, so باشید"}
+{"id": "gold-1396", "faithful": "!او با من به گور میرود", "chose": "claude", "why": "keeps reference solid joining"}
+{"id": "gold-1401", "faithful": "او یک زن خوشکل دارد؟", "chose": "claude", "why": "keeps reference spelling خوشکل"}
+{"id": "gold-1408", "faithful": "اونها اصلا درک نمی کنن", "chose": "claude", "why": "typed double space is not a word"}
+{"id": "gold-1421", "faithful": "اون جاها،کسی را نمیبینی که کتاب دستش باشد", "chose": "claude", "why": "Correct edits, keeps reference comma joining"}
+{"id": "gold-1425", "faithful": "اوشون: تو به این زشتی همه بهت میگن خوشگل ماچیزی میگیم!", "chose": "claude", "why": "keeps reference joining ماچیزی"}
+{"id": "gold-1431", "faithful": "اون دختره خوشکل میزدم", "chose": "claude", "why": "typed khoushgel without final -e"}
+{"id": "gold-1432", "faithful": "اون جاها، کسی رو نمیبینی تو دستش کتاب نباشه", "chose": "claude", "why": "no ke typed"}
+{"id": "gold-1459", "faithful": "پس این بساط اش و نذری چیه؟", "chose": "claude", "why": "Plain ا for آ kept per rules"}
+{"id": "gold-1462", "faithful": "پس کارشان چیست؟ بقیه کارها را رها کرده و با مدیریت کار میکنند، جمعی و سازنده، تا تغییرات جهت بهبود مالی شرکت ایجاد شود", "chose": "claude", "why": "typist omitted عملکرد"}
+{"id": "gold-1464", "faithful": "پس میشه بفرمائید دلیل این اغتشاشات و سر و صداها چیه؟", "chose": "claude", "why": "keeps reference spelling بفرمائید"}
+{"id": "gold-1474", "faithful": "پسری که الان 45 سال داره اما بابزرگتر شدن سنش معرفتش زیاد نشده", "chose": "claude", "why": "keeps reference joining بابزرگتر"}
+{"id": "gold-1489", "faithful": "راست ، باورم نمیشود گفتی", "chose": "claude", "why": "Typed raast, so راست"}
+{"id": "gold-1491", "faithful": "راست می گه پروانه. تا حالا ندیده بودم اینقدر سرحال باشین. بزنم به تخته.", "chose": "claude", "why": "typed inghadr, so اینقدر"}
+{"id": "gold-1493", "faithful": "رفیقم موشش را آورد", "chose": "luna", "why": "typing clearly says a different sentence"}
+{"id": "gold-1497", "faithful": "رفتی یه نیت هم بکن مادر، تو جوانی.", "chose": "claude", "why": "typed javani is جوانی"}
+{"id": "gold-1500", "faithful": "رئیس بنده خوشحال میشود اگر شما بیایید", "chose": "claude", "why": "Keeps reference solid joining for میشود"}
+{"id": "gold-1512", "faithful": "رو بهت دادیم تو دیگر پررو نشو. ضربه های محکمی به در می زنند", "chose": "claude", "why": "typed digar, mizanand; keeps spacing"}
+{"id": "gold-1513", "faithful": "روزی در دفتر وکیلی نشسته بودم که با بزرگترین سارق حرفه ای آشنا شدم", "chose": "claude", "why": "typed vakili, no yek"}
+{"id": "gold-1525", "faithful": "صاحبم این قلاده را برایم درست کرد", "chose": "claude", "why": "typed ra and barayam"}
+{"id": "gold-1527", "faithful": "سعید میگه می خواد حسنو اسیر کنه", "chose": "claude", "why": "Typed hasano, so حسنو"}
+{"id": "gold-1533", "faithful": "سلام، رفیق همش رو نخور", "chose": "claude", "why": "typed hamash rou separately"}
+{"id": "gold-1536", "faithful": "سرسیلندر تراکتور، چقدرم سالمه، ۸۰۰ تومن، نمیخواین؟", "chose": "luna", "why": "keeps reference تومن"}
+{"id": "gold-1569", "faithful": "شواهد دستنخورده و همزمان ارزش طلا دارد", "chose": "claude", "why": "keeps reference joining دستنخورده"}
+{"id": "gold-1571", "faithful": "شاید خیلیاتون هم شکست را تجربه کردهاید و آمدهاید اینجا که آرام شوید", "chose": "claude", "why": "Typed kardeid and amdeid: perfect forms"}
+{"id": "gold-1580", "faithful": "شما بدل نگیر مونس خانم.", "chose": "claude", "why": "keeps reference joining بدل"}
+{"id": "gold-1582", "faithful": "شما میخواهید چه کسی باشید؟ سوال سادهای است، و چه بدانید و چه ندانید، جواب آن را هر روز با رفتارتان میدهید", "chose": "claude", "why": "typed va before che nadaanid"}
+{"id": "gold-1602", "faithful": "تا رسیدیم خانه حدود یک ساعت به بازی باقی مونده بود", "chose": "claude", "why": "typed khaneh but mondeh"}
+{"id": "gold-1605", "faithful": "تا بتوانی راحت سر بخوری", "chose": "claude", "why": "Typed betavaani, so بتوانی"}
+{"id": "gold-1617", "faithful": "تقریبا صدو پنجاه گز دورتر از جاده", "chose": "claude", "why": "keeps reference spelling صدو"}
+{"id": "gold-1619", "faithful": "تمام مسیر تا ۲۰۵۰، که توانمندی مشابه برای بدست آمدن اهداف توسعه پایدار را نشان میدهد", "chose": "claude", "why": "keeps reference Persian digits"}
+{"id": "gold-1623", "faithful": "تماس تلفنی رشیدپور با زنی که کد ملیش رو به فروش گذاشته،شام ندارم به بچه م بدم!", "chose": "claude", "why": "typed melish ro"}
+{"id": "gold-1625", "faithful": "تنهایی وسکوت رو پیشونی من حک شده", "chose": "claude", "why": "Spacing only; keep reference وسکوت"}
+{"id": "gold-1636", "faithful": "تلویزیون ساعت و خرت و پرتاتون با خودتون ببرین", "chose": "claude", "why": "typed va, insert و"}
+{"id": "gold-1649", "faithful": "تو دنبال خونوادت اومدی", "chose": "claude", "why": "typed khoonevaadat"}
+{"id": "gold-1651", "faithful": "تو جدی کالسکه میخواهی؟", "chose": "claude", "why": "typed mikhaahi is میخواهی"}
+{"id": "gold-1653", "faithful": "تو کی هستی؟ کی تو را فرستاده؟", "chose": "claude", "why": "Typed ra, so را"}
+{"id": "gold-1667", "faithful": "، تو آسمون منور میزدن، عکسای یادگاری میگرفتن", "chose": "claude", "why": "typed aksaaye, colloquial عکسای"}
+{"id": "gold-1668", "faithful": "تو آشپزخانه میز نبود؟", "chose": "claude", "why": "typed aashpazkhaane"}
+{"id": "gold-1674", "faithful": "توی گردهمآیی ها میبینن", "chose": "claude", "why": "keeps reference spelling گردهمآیی"}
+{"id": "gold-1675", "faithful": "توی یک اتاق بند نمیشوم", "chose": "claude", "why": "Keeps reference solid joining for نمیشوم"}
+{"id": "gold-1684", "faithful": "تو زندگی ما فقط آب و هواس هست که تغییر میکند", "chose": "claude", "why": "typed hast; insert word"}
+{"id": "gold-1685", "faithful": "توی آشپزخونه میز نبود؟", "chose": "claude", "why": "typed touye"}
+{"id": "gold-1686", "faithful": "توی کلاسمون فضای خیلی خوبی بود تقریبا همه با هم راحت بودیم", "chose": "claude", "why": "typed touye is توی"}
+{"id": "gold-1692", "faithful": "اون غیر قابل باور", "chose": "claude", "why": "Typist did not type bood; delete it"}
+{"id": "gold-1695", "faithful": "و آن را تماشا می کردی ؟", "chose": "claude", "why": "keeps reference spaced می"}
+{"id": "gold-1700", "faithful": "واز جاده به دور افتاده است.", "chose": "claude", "why": "keeps reference joining واز"}
+{"id": "gold-1705", "faithful": "وبه مقامات آمریکایی توصیه می کنیم که ابتدا با نظامیان خود در خلیج فارس صحبت کنند و سپس به اظهار نظر بپردازند", "chose": "claude", "why": "keeps reference joining وبه"}
+{"id": "gold-1706", "faithful": "و به منظور فهم آن از تمام زوایا و به منظورانجام کامل و درست یک کار", "chose": "claude", "why": "Typed tamaame; keep reference joining منظورانجام"}
+{"id": "gold-1713", "faithful": "و در حالی که خونم به جوش امده بود با اعتراض گفتم", "chose": "claude", "why": "keeps reference plain ا"}
+{"id": "gold-1715", "faithful": "ودیگه به تلویزیون توجهی نکرد", "chose": "claude", "why": "keeps reference joining ودیگه"}
+{"id": "gold-1718", "faithful": "و حالا با این برنامه و این مربیها، میتوانند اینکار را بکنند", "chose": "claude", "why": "punctuation not a word; keep comma"}
+{"id": "gold-1730", "faithful": "و خیلیها مادر شدند وقتی هنوز خودشان بچه بودند", "chose": "claude", "why": "Typed hanouz before khdeshan; follow word order"}
+{"id": "gold-1732", "faithful": "وا خدا مرگم بدهد چطور مگه شد مونس جون؟", "chose": "claude", "why": "va likely وا; keep reference"}
+{"id": "gold-1740", "faithful": "و میگویم جنگ را برد، بجای این که پولش را در یک نوبت بگیرد ۲۰ برابر مبلغ اولیه را پس گرفت", "chose": "claude", "why": "typed be jaaye, not bejaayi"}
+{"id": "gold-1762", "faithful": "واقعا راست است که میگویند پاییز یک دفه میآید", "chose": "claude", "why": "typed yek dafe miayad"}
+{"id": "gold-1764", "faithful": "وقت آن رسیده است که صدای آنهایی باشیم که دیرزمانی است از داشتن صدا محروم ماندهاند", "chose": "claude", "why": "Typed ast and ke"}
+{"id": "gold-1777", "faithful": "وقتی پلیس ها پارتی دلشان می خواهد و شما از پارتی بیزارید", "chose": "claude", "why": "keeps reference spaced می"}
+{"id": "gold-1784", "faithful": ".ولی شکایت نمی کنه.", "chose": "claude", "why": "typed shekayat without -i"}
+{"id": "gold-1785", "faithful": "ولی آنها ۱۰۰ درصد آینده هستند", "chose": "claude", "why": "keeps reference Persian digits"}
+{"id": "gold-1803", "faithful": "ولی صبر کنید -- اینجا یک نقطهٔ روشن است", "chose": "claude", "why": "Keep reference hamza on نقطهٔ"}
+{"id": "gold-1811", "faithful": "واسه هالوین میخواهم مقنعه سبز با چادر سر کنم با باتوم برم بیرون", "chose": "claude", "why": "typed ba instead of و"}
+{"id": "gold-1819", "faithful": "وزیر که در انجا بود گفت:نگران نباشید تمام چیزهایی که رخ میدهد در جهت خیر و صلاح شماست !", "chose": "claude", "why": "keeps reference plain-alef انجا"}
+{"id": "gold-1821", "faithful": "\"وضعیت گروه \"\"استقلال\"\" و گروه \"\"پرسپولیس\"\" تو لیگ قهرمانان آسیا ۲۰۱۹ \"", "chose": "claude", "why": "keeps reference Persian digits"}
+{"id": "gold-1832", "faithful": "یا ماشین چیزیش شده که پلیس می فهمد از جای برخورد مقصر کی است", "chose": "claude", "why": "Typed mifahmad and ki ast"}
+{"id": "gold-1836", "faithful": "یاد گرفنم وقتی ناراحتم لبخند بزنم و اجازه ندم کسی متوجه درونم بشه", "chose": "claude", "why": "same word; keep reference spelling"}
+{"id": "gold-1839", "faithful": "یاد بگیرین، ببینید چجوری از پسرش حرف می زند.", "chose": "claude", "why": "typed bebinid and mizanad"}
+{"id": "gold-1846", "faithful": "یعنی قلبت بود. مارو بگو کلی نگران شدیم.", "chose": "claude", "why": "typed bood without na; no negaranet"}
+{"id": "gold-1856", "faithful": "یه مادرشوهردارم: برام لوبیا خرد کرده و با گوجه فرنگی رنده شده پخته و داده بهم تا موقع درست کردنش راحت باشم", "chose": "claude", "why": "Spacing only; keep reference joining"}
+{"id": "gold-1858", "faithful": "یه مدت با خواهر محسن تلفنی اشنا شده بودم و او هم از رابطه و علاقه ما خبر داشت", "chose": "claude", "why": "no ham typed; ou ham"}
+{"id": "gold-1862", "faithful": "یه شوهر داریم بهش میگیم یکی از اخلاقای خوب من رو بگو،میگه اگه بگم پررو میشی", "chose": "claude", "why": "typed migim"}
+{"id": "gold-1863", "faithful": "یه شوهرداریم وقتی بهش گفتم تلویزیون برات مهمتره بغلم کردو گفت", "chose": "claude", "why": "keeps reference joining شوهرداریم"}
+{"id": "gold-1868", "faithful": "یک بار این رو گفتهام، نه؟", "chose": "claude", "why": "Typed gofteam, so گفتهام"}
+{"id": "gold-1871", "faithful": "یک کیک پنیر دیگر آمده", "chose": "claude", "why": "amadeh here means آمده, came"}
+{"id": "gold-1877", "faithful": "یک کیف هم دست می گیرم-", "chose": "claude", "why": "keeps reference spaced می convention"}
+{"id": "gold-1879", "faithful": "یک لحظه گوشی را نگهدار", "chose": "claude", "why": "keeps reference joining نگهدار"}
+{"id": "gold-1881", "faithful": "یک مقدار پارچه میآورم", "chose": "claude", "why": "Typed miavaram, so میآورم"}
+{"id": "gold-1887", "faithful": "یک زن تو آن گربه است؟", "chose": "claude", "why": "typed yek, aan, ast"}
+{"id": "gold-1890", "faithful": "یکی یکی حرف بزنید ببینم چی میگید", "chose": "claude", "why": "typed bezanid and migid"}
+{"id": "gold-1893", "faithful": "زحمت نکشین مونس خانم نمی خوریم بخدا هیچی.", "chose": "claude", "why": "keeps reference joining بخدا"}
+{"id": "gold-1896", "faithful": "ذره ذره٬قطره قطره٬ میسوزم اما میمانم", "chose": "claude", "why": "Typed mimaanam, so میمانم"}
+{"id": "gold-1901", "faithful": "ژاپنی ها اخلاق را باختند چون نتوانستند همهی ورزشگاه را تمیز کنند", "chose": "claude", "why": "keeps reference همهی spelling"}
+{"id": "gold-1905", "faithful": "زیرا علفها و ساقههای خیزران همه شکسته و خورد شده بود", "chose": "claude", "why": "keeps reference spelling خورد"}
