@@ -3,6 +3,9 @@
 Convert **Finglish** — Persian typed in Latin/ASCII — into Persian script,
 entirely in the browser. No server, no API key, no network call.
 
+**[Try the demo](https://eramhq.github.io/tiny-finglish/)** — type Finglish,
+see Persian, and score the engine on real typed sentences, all in your tab.
+
 ```ts
 import { transliterate } from "tiny-finglish";
 
