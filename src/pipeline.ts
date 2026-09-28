@@ -98,7 +98,7 @@ const CONTEXT_CANDIDATES = 8;
  * (کتاب‌ها); the rule engine's no-ZWNJ convention is kept here for the same
  * reason as in `SkeletonIndex`.
  */
-const DETACHED_SUFFIX = /^(h[aā]{1,2}(ye|yi|ei|yam|yat|yash|yeshaan|yetaan|yemaan|yeman|yeshan)?|tar|tarin)$/;
+const DETACHED_SUFFIX = /^(h[aā]{1,2}(ye|yeh|yi|ei|yam|yat|yash|yeshaan|yetaan|yemaan|yeman|yeshan)?|tar|tarin)$/;
 
 const DEFAULT_OPTIONS: Required<Pick<TransliterateOptions,
   "alternatives" | "beamWidth" | "candidatesPerSpan" | "persianPunctuation" | "backend">> = {
@@ -192,8 +192,10 @@ export abstract class Pipeline {
     const spans: Span[] = [];
     tokens.forEach((token, i) => spans.push(this.spanFor(token, opts, final[i]!)));
 
-    const attach = this.detachedEzafe(spans);
+    const attach = this.detachedEzafe(spans, opts);
     this.sentencePass(spans);
+    this.detachedPossessive(spans);
+    this.naPrefix(spans);
     this.numberConjunction(spans, opts);
     for (const index of attach) this.appendYe(spans[index]!);
     // Trim to the reported width only after the sentence pass, which needs a
@@ -242,7 +244,7 @@ export abstract class Pipeline {
    * cases. Returns the spans that need their ی appended after the sentence
    * pass, which may still change their output.
    */
-  private detachedEzafe(spans: Span[]): number[] {
+  private detachedEzafe(spans: Span[], opts: TransliterateOptions): number[] {
     const attach: number[] = [];
     for (let i = 2; i < spans.length; i++) {
       const span = spans[i]!;
@@ -253,6 +255,12 @@ export abstract class Pipeline {
       const token = span.input.toLowerCase();
       if (DETACHED_SUFFIX.test(token)) {
         gap.output = "";
+        // `hayeh` is `haye` with a trailing h, and converted as typed it is هیه.
+        if (token.endsWith("yeh")) {
+          span.candidates = [...this.convert(token.slice(0, -1), opts)];
+          span.output = span.candidates[0]?.output ?? span.output;
+          span.confidence = round4(span.candidates[0]?.probability ?? 0);
+        }
         continue;
       }
       const vowelFinal = /[aeiou]$/.test(previous.input.toLowerCase());
@@ -265,6 +273,85 @@ export abstract class Pipeline {
       }
     }
     return attach;
+  }
+
+  /**
+   * The possessive `ash` typed as a word of its own: `tahdid ash` تهدیدش,
+   * `lebas ash` لباسش, `eydeh ash` ایدهاش.
+   *
+   * Converted alone it is اش, a word apart. When it follows a converted word
+   * across one space it joins that word: after a typed consonant as ش, and
+   * after a typed `e` or `eh` as اش on the word's ه-final frequency-table
+   * candidate (`lenge ash` لنگهاش, `sale ash` سالهاش), as the faithful
+   * references write it; with no such candidate it is left alone, and so it is
+   * after any other vowel. After a demonstrative it is the noun آش, "soup":
+   * `sari be oun ash bezan` is اون اش. It runs after the sentence pass, which may still
+   * change the word before it. `kaseh ash`, "a bowl of soup", becomes کاسهاش
+   * too; no evaluation set has one.
+   */
+  private detachedPossessive(spans: Span[]): void {
+    for (let i = 2; i < spans.length; i++) {
+      const span = spans[i]!;
+      const gap = spans[i - 1]!;
+      const previous = spans[i - 2]!;
+      if (span.action !== "convert" || span.input.toLowerCase() !== "ash") continue;
+      if (gap.action !== "space" || gap.input !== " " || previous.action !== "convert") continue;
+      if (!previous.output || DEMONSTRATIVES.has(previous.output)) continue;
+      const typed = previous.input.toLowerCase();
+      let output: string | undefined;
+      if (/eh?$/.test(typed)) {
+        const he = [previous.output, ...(previous.candidates ?? []).map((c) => c.output)]
+          .map((o) => (o.endsWith("ه") ? this.tableForm(o) : undefined))
+          .find((o) => o !== undefined);
+        if (he) output = `${he}اش`;
+      } else if (/[^aeiou]$/.test(typed)) {
+        output = `${previous.output}ش`;
+      }
+      if (!output) continue;
+      previous.output = output;
+      previous.confidence = 1;
+      previous.candidates = [
+        { output, probability: 1, reason: "detached possessive, joined" },
+        ...(previous.candidates ?? []).filter((c) => c.output !== output).map((c) => ({ ...c, probability: 0 })),
+      ];
+      gap.output = "";
+      span.output = "";
+      span.confidence = 1;
+      span.candidates = [{ output: "", probability: 1, reason: "detached possessive, joined" }];
+    }
+  }
+
+  /**
+   * The negative prefix نا typed as a word of its own: `na omid` ناامید, `na
+   * omidi` ناامیدی.
+   *
+   * `na` alone is نه, "no" (`WORD_EXCEPTIONS`). When a word typed with a vowel
+   * first follows it across one space and نا joined to that word is a
+   * frequency-table word, the two are written as that word. The vowel is the
+   * guard: `na chiz` is "not a thing", نه چیز, though ناچیز is a word too, and
+   * a prefix نا before a consonant is typed joined (`nakhoshi`). `na aslan`
+   * stays, because نااصلا is not a word.
+   */
+  private naPrefix(spans: Span[]): void {
+    for (let i = 0; i + 2 < spans.length; i++) {
+      const span = spans[i]!;
+      const gap = spans[i + 1]!;
+      const next = spans[i + 2]!;
+      if (span.action !== "convert" || span.input.toLowerCase() !== "na") continue;
+      if (gap.action !== "space" || gap.input !== " " || next.action !== "convert" || !/^[aeiou]/i.test(next.input)) continue;
+      const output = this.tableForm(`نا${next.output}`);
+      if (!output) continue;
+      span.output = output;
+      span.confidence = 1;
+      span.candidates = [
+        { output, probability: 1, reason: `prefix نا on ${next.output}` },
+        ...(span.candidates ?? []).map((c) => ({ ...c, probability: 0 })),
+      ];
+      gap.output = "";
+      next.output = "";
+      next.confidence = 1;
+      next.candidates = [{ output: "", probability: 1, reason: "joined to the prefix نا" }];
+    }
   }
 
   /**
@@ -386,6 +473,8 @@ export abstract class Pipeline {
     candidates = this.hiatusYe(word, candidates);
     candidates = this.shortVowelVav(word, candidates);
     candidates = this.gluedEzafe(word, candidates, opts);
+    candidates = this.suffixAfterHe(word, candidates, opts);
+    candidates = this.tanvinAdverb(word, candidates, opts);
     candidates = this.objectMarker(word, candidates, opts);
     candidates = this.pluralObjectMarker(word, candidates, opts);
     candidates = this.copulaCandidate(word, candidates, opts);
@@ -485,6 +574,54 @@ export abstract class Pipeline {
       return top.output === output ? candidates : promote(candidates, output, `glued ezafe on ${output}`);
     }
     return candidates;
+  }
+
+  /**
+   * A suffix after a silent ه: `gooshei` گوشهای, `shodeand` شدهاند,
+   * `khanevadeam` خانوادهام.
+   *
+   * Read letter by letter the typed `e` is a short vowel and the suffix joins
+   * the consonant before it, so the engines wrote گوشی, شدند and خنودم. When the
+   * typed word is a stem ending in a consonant and `e`, then ای (`i`, `ei`,
+   * `ii`, `ee`, `ie`) or اند, ام, ایم, اید, and the stem's **top** reading is a
+   * ه-final frequency-table word, stem + suffix goes first, solid, as the
+   * references write it. The top reading only: `vaaghe` reads واقع first, so
+   * `vaaghei` stays واقعی, where a search of the whole list would reach واقعه.
+   * No possessives: `daste` and `badane` read دسته and بدنه first, and
+   * `dastetun` is دستتون. Three letters of stem at least, so `kei` stays کی.
+   */
+  private suffixAfterHe(key: string, candidates: Candidate[], opts: TransliterateOptions): Candidate[] {
+    const top = candidates[0];
+    const match = /^(.*[^aeiou]e)(ii|ee|ie|ei|i|and|am|im|id)$/.exec(key);
+    if (!this.frequency || !top || top.reason === "loanword" || !match || match[1]!.length < 3) return candidates;
+    const reading = this.convertBase(match[1]!, opts)[0]?.output;
+    const stem = reading?.endsWith("ه") ? this.tableForm(reading) : undefined;
+    if (!stem) return candidates;
+    const output = `${stem}${SUFFIX_AFTER_HE[match[2]!]}`;
+    return top.output === output ? candidates : promote(candidates, output, `suffix after ه on ${stem}`);
+  }
+
+  /**
+   * An adverb in tanvin typed with its `-an`: `masalan` مثلا, `lotfan` لطفا,
+   * `taghriban` تقریبا.
+   *
+   * Persian writes the ending as a final ا (مثلاً, commonly without the
+   * tanvin), and the engines read the typed `n` as ن: مسالن, لتفن, تقریبان.
+   * When the typed word ends in `an` (not `aan`) and a reading of the word less
+   * its `n` is in `TANVIN_ADVERBS`, that adverb goes first, unless the engine's
+   * answer is a frequency-table word at least as common: `aslan` اصلن becomes
+   * اصلا, and `badan` stays بدن, which is commoner than بعدا. A closed list and
+   * not a pattern, because a typed `-an` is mostly an infinitive, a plural or a
+   * name (`kardan`, `hamkaran`, `tehran`), and `dokhtaran` would reach دخترا.
+   */
+  private tanvinAdverb(key: string, candidates: Candidate[], opts: TransliterateOptions): Candidate[] {
+    const frequency = this.frequency;
+    const top = candidates[0];
+    if (!frequency || !top || top.reason === "loanword" || key.length < 4 || !/[^a]an$/.test(key)) return candidates;
+    const adverb = this.convertBase(key.slice(0, -1), opts).find((c) => TANVIN_ADVERBS.has(c.output))?.output;
+    if (!adverb || top.output === adverb) return candidates;
+    if ((frequency.get(top.output.replaceAll(ZWNJ, "")) ?? 0) >= (frequency.get(adverb) ?? 0)) return candidates;
+    return promote(candidates, adverb, `adverb in tanvin ${adverb}`);
   }
 
   /**
@@ -911,6 +1048,27 @@ const LOANWORD_SHARE = 0.9;
 const EZAFE_HEADS: ReadonlySet<string> = new Set([
   "بخاطر", "زیر", "داخل", "کنار", "وسط", "بیرون", "پشت", "بعد", "قبل", "بین",
   "مثل", "بدون", "طرف", "سمت", "دنبال", "پایین", "مقابل",
+]);
+
+/** The Persian of a suffix typed after a silent ه: `suffixAfterHe`. */
+const SUFFIX_AFTER_HE: Readonly<Record<string, string>> = {
+  i: "ای", ei: "ای", ii: "ای", ee: "ای", ie: "ای", and: "اند", am: "ام", im: "ایم", id: "اید",
+};
+
+/** After these `ash` is the noun آش, not the possessive: `detachedPossessive`. */
+const DEMONSTRATIVES: ReadonlySet<string> = new Set(["این", "اون", "آن", "همین", "همون", "همان"]);
+
+/**
+ * Adverbs written with a final ا for the tanvin, typed with `-an`:
+ * `tanvinAdverb`. A closed list, because the ending is not.
+ */
+const TANVIN_ADVERBS: ReadonlySet<string> = new Set([
+  "مثلا", "معمولا", "ظاهرا", "واقعا", "اخیرا", "تقریبا", "اصلا", "کاملا", "لطفا", "حتما",
+  "دقیقا", "فعلا", "بعدا", "قبلا", "ناچارا", "احتمالا", "اولا", "ثانیا", "ثالثا", "اساسا",
+  "اتفاقا", "عمدا", "فورا", "شخصا", "مجددا", "مستقیما", "نسبتا", "کلا", "اکثرا", "غالبا",
+  "عملا", "رسما", "صرفا", "تماما", "شدیدا", "جدا", "حقیقتا", "بعضا", "ابدا", "دائما",
+  "مطمئنا", "قطعا", "یقینا", "اصولا", "ضمنا", "مخصوصا", "خصوصا", "نهایتا", "مسلما", "عموما",
+  "موقتا", "مرتبا", "سریعا", "احیانا", "لزوما", "طبیعتا", "ذاتا", "حدودا", "اصطلاحا",
 ]);
 
 /** Persian number words that take a glued conjunction: `numberConjunction`. */

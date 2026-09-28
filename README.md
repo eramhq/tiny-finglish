@@ -74,8 +74,8 @@ Four entry points, measured with `node scripts/size.ts --tiers`:
 
 | entry | contents | gzip | Brotli |
 |---|---|---:|---:|
-| `tiny-finglish` | tokenizer, rules, dictionary, loanwords, beam, model runtime, sentence pass | 23.6 KiB | **20.6 KiB** |
-| `tiny-finglish/rules` | the same, without the model runtime | 20.6 KiB | **18.0 KiB** |
+| `tiny-finglish` | tokenizer, rules, dictionary, loanwords, beam, model runtime, sentence pass | 24.6 KiB | **21.4 KiB** |
+| `tiny-finglish/rules` | the same, without the model runtime | 21.5 KiB | **18.8 KiB** |
 | `tiny-finglish/normalize` | Persian text normalization alone | 0.9 KiB | **0.8 KiB** |
 | `tiny-finglish/metrics` | word accuracy and CER, to score it yourself | 0.5 KiB | **0.4 KiB** |
 
@@ -90,18 +90,18 @@ the accuracy you choose:
 
 | + data | Brotli | gold, orthographic (headline) | gold, strict |
 |---|---:|---:|---:|
-| nothing | 18.0 KiB | 70.2% | 65.0% |
-| frequency + vowels | 86.6 KiB | 82.3% | **75.6%** |
-| frequency + vowels + bigrams (opt-in) | 160.2 KiB | 82.7% | 76.0% |
-| ...and the model deciding alone (`hybrid: false`) | 173.6 KiB | 82.4% | 73.1% |
-| **...and the model, ranked jointly with the rules (`"."` default)** | **173.6 KiB** | **83.4%** | 73.9% |
+| nothing | 18.8 KiB | 70.2% | 65.0% |
+| frequency + vowels | 87.4 KiB | 83.1% | **76.3%** |
+| frequency + vowels + bigrams (opt-in) | 161.0 KiB | 83.5% | 76.7% |
+| ...and the model deciding alone (`hybrid: false`) | 174.4 KiB | 82.9% | 73.6% |
+| **...and the model, ranked jointly with the rules (`"."` default)** | **174.4 KiB** | **84.2%** | 74.6% |
 
 Measured on the 1,669-row audited gold set, September 2026. The previous
 figures (62.3% for rules + frequency, 51.2% for the model) were on the
 1,835-row set before its audit; see
 [the September 2026 round](#september-2026-dictionary-decoding-llm-distillation-llm-measurement).
 Against a reference edited to what was actually typed, frequency + vowels,
-the model alone and the hybrid score 89.8%, 89.9% and 91.0%; the difference is
+the model alone and the hybrid score 90.7%, 90.6% and 92.0%; the difference is
 register, not transliteration
 ([gold scored against what was typed](#september-2026-gold-scored-against-what-was-typed)).
 
@@ -123,12 +123,12 @@ how `salam` is سلام and not سالم, and `shohar` شوهر and not شهر. 
 
 **With a model, the hybrid is the default.** It is the most accurate setup on
 the headline: +1.1 points over the rules on gold (95% CI +0.9 to +1.4, better on
-166 sentences, worse on 43) and +1.0 over the model alone, and it writes the
+168 sentences, worse on 43) and +1.3 over the model alone, and it writes the
 half-space. On the strict tier the rules lead by 1.7, which is the half-space
 convention, not better words.
 
-**The bigram row is opt-in**, because 73.6 KiB for +0.5 points on the
-headline is 147 KiB per point, against 6 for the frequency table and 79 for the
+**The bigram row is opt-in**, because 73.6 KiB for +0.4 points on the
+headline is 184 KiB per point, against 5 for the frequency table and 79 for the
 model as the hybrid — the worst accuracy-per-byte artifact here, and worth
 only +0.2 once the model is loaded. It is built, committed, measured and documented; it is not in
 the default download and not in the headline. Turn it on with
@@ -182,6 +182,51 @@ of 504 candidates per word and a p99 of ~92,000.
 Full detail in [`docs/architecture.md`](docs/architecture.md).
 
 ## Measured results
+
+### September 2026: a silent ه before a suffix, `-an` adverbs, detached `ash`, `na` + word
+
+Four rule-side fixes for the rule-shaped part of the hybrid's "other" errors on
+dev, +0.8 KiB of code (20.6 → 21.4 KiB) and no data. Tuned on dev,
+chat-dev and the fixtures; gold and chat-test scored once.
+
+* **A suffix after a silent ه.** `shodeand` is شدهاند, not شدند, and likewise
+  `khanevadeam` خانوادهام, `fayedei` فایدهای, `saakhteam` ساختهام. The typed `e`
+  was read as a short vowel. When the stem's top reading is a ه-final table
+  word, stem + ای, اند, ام, ایم or اید goes first. The top reading only:
+  `vaaghe` reads واقع first, so `vaaghei` stays واقعی. Possessives are left
+  out, because `daste` reads دسته first and `dastetun` is دستتون.
+* **Adverbs in tanvin.** `masalan` is مثلا, not مسالن, and likewise `lotfan`,
+  `taghriban`, `zaheran`, `akhiran`. The word less its `n` must read as one of
+  59 listed adverbs, and the adverb must be commoner than the engine's answer:
+  `aslan` becomes اصلا, and `badan` stays بدن. A list, not a pattern, because a
+  typed `-an` is mostly `kardan`, `hamkaran`, `tehran`.
+* **Detached `ash` and `hayeh`.** `tahdid ash` is تهدیدش, `lenge ash`
+  لنگهاش, `eydeh ash` ایدهاش, and `vijegi hayeh` ویژگیهای. After a
+  demonstrative, `ash` is the noun آش: `be oun ash bezan` stays اون اش.
+* **`na` + a word.** `na omid` is ناامید, not نه امید. Only before a word
+  typed with a vowel first, and only when the join is a table word:
+  `na chiz` stays نه چیز, though ناچیز is a word.
+
+| | dev (faithful) | chat-dev | fixtures | gold, scored once |
+|---|---|---|---|---|
+| rules | **+1.08** (+0.64 to +1.56, real; 23 better, 0 worse) | +0.24 (2 better, 0 worse) | +1 row (`khanevadeam`) | **+0.85** (+0.68 to +1.03, real; 104 better, 6 worse) |
+| model | **+0.88** (+0.48 to +1.35, real; 18 better, 0 worse) | +0.24 (2 better, 0 worse) | +1 row | **+0.58** (+0.43 to +0.73, real; 75 better, 6 worse) |
+| hybrid | **+1.11** (+0.67 to +1.59, real; 24 better, 0 worse) | +0.24 (2 better, 0 worse) | +1 row | **+0.86** (+0.69 to +1.04, real; 106 better, 6 worse) |
+
+On the dev headline tier the hybrid gains +0.86 and the rules +0.83. The one
+worse row there is a reference that writes شدند for a typed `shodeand`. Against
+the faithful reference, gold gains +0.96 on the hybrid, and chat-test +0.21
+(1 better, 0 worse). The gold losses are the reference's own spellings: اصلن
+for `aslan` twice, خانه اش written apart, بچم for `bacheam`, گفتم for
+`gofteam`. The model alone never has مثلا or لطفا among its candidates, so
+`masalan` and `lotfan` are fixed on the rules and the hybrid only, and the
+hybrid's lead over the model alone grows from +1.0 to +1.3. In
+`scripts/error-groups.ts` the hybrid's own "other" on dev falls from 186 words
+to 150 and the rules' from 193 to 157. No new error enters another group. The 14
+words that join "reference is not what was typed" are now written as typed
+(سالهاش, شدهاند, ناامید) where the reference writes something else (سالش,
+شدند, نومید). The few others that change group are the rest of a run that was
+already wrong, left on its own once its first word came right.
 
 ### September 2026: به and چه, joined or apart
 
@@ -676,11 +721,11 @@ after Brotli at 500k, for no measurable accuracy cost — which is what makes th
 | keystroke, incremental word | < 0.01 ms | 16 ms |
 | keystroke, end of sentence (warm) | 0.03 ms | 16 ms |
 | sentence, cold | ~40 ms | 100 ms |
-| shipped bundle, Brotli | **173.6 KiB** | ~250 KiB soft cap |
+| shipped bundle, Brotli | **174.4 KiB** | ~250 KiB soft cap |
 
-The bundle is 20.6 KiB of code, 84.4 KiB of weights, 55.3 KiB of frequency and
+The bundle is 21.4 KiB of code, 84.4 KiB of weights, 55.3 KiB of frequency and
 13.3 KiB of vowels; the last two are separate fetches, never bundled, so a
-consumer who wants only the rules pays 18.0 KiB. About 3.8 KiB of the code is the
+consumer who wants only the rules pays 18.8 KiB. About 3.8 KiB of the code is the
 loanword and abbreviation tables, which is bundled because the rules-only tier needs it too. The 73.6 KiB bigram and the 98.3 KiB lexicon are built and
 measured but not counted — see the accuracy-per-byte table below. Both budgets
 are enforced in CI.

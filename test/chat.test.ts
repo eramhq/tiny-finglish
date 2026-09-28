@@ -440,3 +440,63 @@ describe("long vowels: hiatus یی, short o, glued ezafe, حتی", () => {
     expect(bare.transliterate("shiveye").text).not.toBe("شیوه");
   });
 });
+
+/**
+ * Endings and prefixes the typing detaches or glues: a suffix after a silent ه
+ * (`suffixAfterHe`), adverbs in tanvin (`tanvinAdverb`), the detached
+ * possessive `ash` and plural `hayeh` (`detachedPossessive`, `detachedEzafe`)
+ * and the prefix نا typed apart (`naPrefix`) — with the look-alikes each one
+ * must leave alone.
+ */
+describe("suffix after ه, tanvin adverbs, detached ash, na + word", () => {
+  const tiers = [["rules", rules], ["model", model], ["hybrid", hybrid]] as const;
+  for (const [name, engine] of tiers) {
+    it.skipIf(!engine)(`on the ${name} tier`, () => {
+      const text = (input: string) => engine!.transliterate(input).text.replaceAll("‌", "");
+      expect(text("shodeand")).toBe("شدهاند");
+      expect(text("khanevadeam")).toBe("خانوادهام");
+      expect(text("fayedei")).toBe("فایدهای");
+      // The stem's top reading is not ه-final: واقع, دست; no stem at all in `didam`.
+      expect(text("vaaghei")).toBe("واقعی");
+      expect(text("dastetun")).toBe("دستتون");
+      expect(text("didam")).toBe("دیدم");
+      expect(text("kei")).toBe("کی");
+
+      expect(text("taghriban")).toBe("تقریبا");
+      expect(text("aslan")).toBe("اصلا");
+      // بدن is commoner than بعدا; the rest are not in the list.
+      expect(text("badan")).toBe("بدن");
+      expect(text("kardan")).toBe("کردن");
+      expect(text("dokhtaran")).toBe("دختران");
+      expect(text("negaran")).toBe("نگران");
+
+      expect(text("tahdid ash kardand")).toBe("تهدیدش کردند");
+      expect(text("lebas ash kam bashad")).toBe("لباسش کم باشد");
+      expect(text("lenge ash kam ast")).toBe("لنگهاش کم است");
+      expect(text("vijegi hayeh jadid")).toBe("ویژگیهای جدید");
+      // Nothing before it, or a demonstrative: the noun آش.
+      expect(text("ash reshte")).toBe("اش رشته");
+      expect(text("be oun ash bezan")).toBe("به اون اش بزن");
+
+      expect(text("na omid shodam")).toBe("ناامید شدم");
+      expect(text("dar na omidi")).toBe("در ناامیدی");
+      // A consonant first, or no such word.
+      expect(text("na chiz")).toBe("نه چیز");
+      expect(text("na aslan")).toBe("نه اصلا");
+      expect(text("na mikham")).toBe("نه میخوام");
+    });
+  }
+  /** The model alone never has مثلا or لطفا in its list for `masala`, `lotfa`. */
+  for (const [name, engine] of [["rules", rules], ["hybrid", hybrid]] as const) {
+    it.skipIf(!engine)(`masalan and lotfan on the ${name} tier`, () => {
+      expect(engine!.transliterate("masalan").text).toBe("مثلا");
+      expect(engine!.transliterate("lotfan").text).toBe("لطفا");
+    });
+  }
+  it("needs the frequency table", () => {
+    const bare = new RuleTransliterator();
+    expect(bare.transliterate("shodeand").text).not.toBe("شدهاند");
+    expect(bare.transliterate("masalan").text).not.toBe("مثلا");
+    expect(bare.transliterate("na omid").text).not.toBe("ناامید");
+  });
+});

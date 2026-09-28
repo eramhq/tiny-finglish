@@ -9,6 +9,38 @@ as a result, and what remains genuinely open.
 
 ---
 
+## 0g. September 2026 — a silent ه before a suffix, `-an` adverbs, detached `ash`, `na` + word
+
+Record in the README round section. Closed: 0f's items 1 to 4. The hybrid's
+own "other" on dev falls from 186 words to 150, and the rules' from 193 to 157.
+
+Not done, by design:
+
+* **Possessives after a silent ه** (`khaneshan` خانه‌شان). `daste`, `badane`
+  and `teame` read دسته, بدنه and تیمه first, so `dastetun`, `badaneshaan` and
+  `teameshoon`, all right before, would break: 2 wrong words stood against 5
+  look-alikes.
+
+Still open:
+
+1. **`gooshei`** stays گوشی. The context-free top reading of `gooshe` is گوش
+   (گوشه wins only at a clause end), and reading further down the list is what
+   turns `vaaghei` into واقعه‌ای. Also `aamadeand` becomes آماده‌اند where آمده‌اند
+   was meant, because `aamade` reads آماده first.
+2. **Tanvin adverbs on the model tier.** The model alone never has مثلا or
+   لطفا in its list for `masala` or `lotfa`, so `masalan` and `lotfan` are
+   fixed on the rules and the hybrid only.
+3. **References in the colloquial register** write لنگش and سالش for typed
+   `lenge ash` and `sale ash`, and شدند for `shodeand`. The engine writes what
+   was typed; the faithful tier scores it right.
+4. **Gold losses, scored once and not patched:** gold writes اصلن for `aslan`
+   twice, خانه اش apart for `khaneh ash`, بچم for `bacheam` and گفتم for
+   `gofteam`; the model tier also loses `daghighan?` دقیقان.
+5. **`kaseh ash`**, "a bowl of soup", would become کاسه‌اش. No set has one.
+6. **A pronounced final h.** `leh ash` becomes له‌اش where لهش is meant: a
+   typed `eh` is read as a silent ه, which is right for `eydeh ash` ایده‌اش.
+   It was wrong before too (له اش).
+
 ## 0f. September 2026 — what "other" was
 
 Record in the README round section. `error-groups.ts` put 467 of the hybrid's
@@ -34,7 +66,7 @@ headline. The remaining 186 break down like this:
    nouns (KGB, UNICEF), `telephon` → تلپهون, and wrong words. It is not
    rule-shaped; the corpus work is what reaches it.
 
-Items 1 to 4 are one engine round, about +0.6 to +1.0 on dev.
+Items 1 to 4 are one engine round, about +0.6 to +1.0 on dev. Closed by 0g.
 
 ## 0e. September 2026 — long vowels
 
