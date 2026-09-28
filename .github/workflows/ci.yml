@@ -43,6 +43,14 @@ jobs:
       - name: Python/browser parity
         run: node scripts/parity.ts
 
+      - name: Package ships its data
+        run: |
+          npm run build
+          npm pack --dry-run 2>&1 | tee pack.txt
+          for f in dist/index.js dist/data/weights.json dist/data/frequency.bin dist/data/vowels.bin NOTICE; do
+            grep -q "$f" pack.txt || { echo "missing from package: $f"; exit 1; }
+          done
+
       # Reports, not gates. They exist because the two numbers that decide what
       # to work on next — how much a perfect reranker could buy, and what the
       # decoder never proposes at all — have both contradicted the roadmap's

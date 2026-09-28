@@ -114,6 +114,8 @@ export function buildFixtureReport(options: {
   useBigram?: boolean;
   useHybrid?: boolean;
   useVowels?: boolean;
+  /** The 100k-stem lexicon, which is not shipped; on unless `false`. */
+  useLexicon?: boolean;
   /** Repo-relative weights file; the shipped one by default. */
   weights?: string | undefined;
   /** Vowel table file; the shipped one by default. */
@@ -127,6 +129,7 @@ export function buildFixtureReport(options: {
     bigram: options.useBigram === true,
     hybrid: options.useHybrid === true,
     vowels: options.useVowels !== false,
+    lexicon: options.useLexicon !== false,
     ...(options.weights ? { weights: options.weights } : {}),
     ...(options.vowelsFile ? { vowelsFile: options.vowelsFile } : {}),
   });

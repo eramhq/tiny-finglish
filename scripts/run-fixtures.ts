@@ -7,6 +7,7 @@
  *   node scripts/run-fixtures.ts --rules         # rule baseline only
  *   node scripts/run-fixtures.ts --bigram        # + the sentence-context pass (opt-in)
  *   node scripts/run-fixtures.ts --no-vowels     # ablate the vowel-agreement term
+ *   node scripts/run-fixtures.ts --no-lexicon    # as shipped: without the optional 100k-stem lexicon
  *   node scripts/run-fixtures.ts --hybrid        # both engines, arbitrated per word
  *   node scripts/run-fixtures.ts --gold          # untouched gold: real human Finglish
  *   node scripts/run-fixtures.ts --gold --gold-set authored   # the old 71 authored pairs
@@ -29,6 +30,7 @@ const report = buildFixtureReport({
   useFrequency: !flag("no-frequency"),
   useBigram: flag("bigram"),
   useVowels: !flag("no-vowels"),
+  useLexicon: !flag("no-lexicon"),
   useHybrid: flag("hybrid"),
   file: flag("chat") ? "data/chat/chat-dev.jsonl"
     : flag("chat-test") ? "data/chat/chat-test.jsonl"

@@ -4,13 +4,12 @@ import { readFileSync } from "node:fs";
 import { brotliDecompressSync } from "node:zlib";
 
 const repoRoot = fileURLToPath(new URL("..", import.meta.url));
-const LEXICON_ROUTE = "/lexicon.bin";
 const FREQUENCY_ROUTE = "/frequency.bin";
 const BIGRAM_ROUTE = "/bigram.bin";
 const VOWELS_ROUTE = "/vowels.bin";
 
 /**
- * Serve the lexicon front-coded but *uncompressed*.
+ * Serve the data tables (frequency, vowels, bigrams) *uncompressed*.
  *
  * The committed artifact is Brotli, which is the right thing to store and the
  * right thing to put on the wire — but browsers do not expose a Brotli
@@ -21,8 +20,6 @@ const VOWELS_ROUTE = "/vowels.bin";
  * the bundle to undo work HTTP already does.
  */
 function lexiconPlugin(): Plugin {
-  const load = () =>
-    brotliDecompressSync(readFileSync(new URL("../data/lexicon/fa-stems.bin", import.meta.url)));
   const loadFrequency = () =>
     brotliDecompressSync(readFileSync(new URL("../data/lexicon/fa-frequency.bin", import.meta.url)));
   const loadBigram = () =>
@@ -34,7 +31,6 @@ function lexiconPlugin(): Plugin {
     name: "tiny-finglish-lexicon",
     configureServer(server) {
       for (const [route, read] of [
-        [LEXICON_ROUTE, load],
         [FREQUENCY_ROUTE, loadFrequency],
         [BIGRAM_ROUTE, loadBigram],
         [VOWELS_ROUTE, loadVowels],
@@ -47,7 +43,6 @@ function lexiconPlugin(): Plugin {
       }
     },
     generateBundle() {
-      this.emitFile({ type: "asset", fileName: "lexicon.bin", source: load() });
       this.emitFile({ type: "asset", fileName: "frequency.bin", source: loadFrequency() });
       this.emitFile({ type: "asset", fileName: "bigram.bin", source: loadBigram() });
       this.emitFile({ type: "asset", fileName: "vowels.bin", source: loadVowels() });
@@ -57,6 +52,8 @@ function lexiconPlugin(): Plugin {
 
 export default defineConfig({
   root: fileURLToPath(new URL(".", import.meta.url)),
+  // Relative asset and data URLs, so the build works from any subfolder.
+  base: "./",
   plugins: [lexiconPlugin()],
   server: {
     // src/ and data/ live above the playground root.

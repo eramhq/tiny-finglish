@@ -5,12 +5,16 @@
  *   How accurate is it? the three setups scored in this tab on the evaluation sets
  *   What's inside       sizes, the steps, speed (static)
  *
- * The accuracy panel scores exactly as `scripts/run-fixtures.ts` does: the same
- * engines (lexicon, frequency and vowels loaded, bigrams off), the same
- * `normalize`, and `wordAccuracy` on the orthographic tier, the headline, or on
- * the strict tier when asked. So its numbers match the README's.
+ * The accuracy panel scores exactly as `scripts/run-fixtures.ts --no-lexicon`
+ * does: the engines as the package ships them (frequency and vowels loaded,
+ * the optional lexicon and bigrams off), the same `normalize`, and
+ * `wordAccuracy` on the orthographic tier, the headline, or on the strict tier
+ * when asked. So its numbers match the README's table.
+ *
+ * Data is fetched relative to the page (Vite's `base` is `./`), so the build
+ * works from a subfolder such as a GitHub Pages project site.
  */
-import { Transliterator, decodeFrontCoded, normalize } from "../../src/index.ts";
+import { Transliterator, normalize } from "../../src/index.ts";
 import { decodeBigramTable, type BigramTable } from "../../src/bigram.ts";
 import { decodeFrequencyTable, type FrequencyTable } from "../../src/frequency.ts";
 import { decodeVowelTable, type VowelTable } from "../../src/vowels.ts";
@@ -36,7 +40,7 @@ const SETUP_NAMES: Record<Setup, string> = {
  * rules entry with frequency and vowels, the full entry plus the weights, and
  * the bigrams on top when sentence context is on.
  */
-const DOWNLOAD_KIB: Record<Setup, number> = { rules: 85.5, model: 172.6, hybrid: 172.6 };
+const DOWNLOAD_KIB: Record<Setup, number> = { rules: 87.4, model: 174.4, hybrid: 174.4 };
 const BIGRAM_KIB = 73.6;
 
 /** A converted word below this confidence is marked as unsure. */
@@ -67,7 +71,6 @@ const SETS: Record<string, { rows: Row[]; note: string }> = {
 // ---------------------------------------------------------------- assets
 
 let weights: WeightArtifact | undefined;
-let lexicon: Set<string> | undefined;
 let frequency: FrequencyTable | undefined;
 let vowels: VowelTable | undefined;
 let bigram: BigramTable | undefined;
@@ -89,10 +92,9 @@ async function loadAssets(): Promise<void> {
   } catch {
     weights = undefined;
   }
-  const [lex, freq, vow, bi] = await Promise.all(
-    ["/lexicon.bin", "/frequency.bin", "/vowels.bin", "/bigram.bin"].map(fetchBinary),
+  const [freq, vow, bi] = await Promise.all(
+    ["frequency.bin", "vowels.bin", "bigram.bin"].map((name) => fetchBinary(`${import.meta.env.BASE_URL}${name}`)),
   );
-  lexicon = lex ? new Set(decodeFrontCoded(lex)) : undefined;
   frequency = freq ? decodeFrequencyTable(freq) : undefined;
   vowels = vow && frequency ? decodeVowelTable(vow) : undefined;
   bigram = bi ? decodeBigramTable(bi) : undefined;
@@ -108,14 +110,13 @@ async function loadAssets(): Promise<void> {
 
 const engines = new Map<string, Transliterator>();
 
-/** One engine per setup, built once. Matches `buildTransliterator` in `scripts/_load.ts`. */
+/** One engine per setup, built once. Matches `buildTransliterator({ lexicon: false })` in `scripts/_load.ts`. */
 function engineFor(setup: Setup, context = false): Transliterator {
   const key = `${setup}${context ? "+context" : ""}`;
   let engine = engines.get(key);
   if (!engine) {
     engine = new Transliterator({
       ...(setup !== "rules" && weights ? { model: weights, hybrid: setup === "hybrid" } : {}),
-      ...(lexicon ? { lexicon } : {}),
       ...(frequency ? { frequency } : {}),
       ...(vowels ? { vowels } : {}),
       ...(context && bigram ? { bigram } : {}),

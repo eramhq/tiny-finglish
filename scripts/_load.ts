@@ -47,13 +47,19 @@ export function loadModel(file = DEFAULT_WEIGHTS): WeightArtifact | undefined {
 export function buildTransliterator(
   options: {
     model?: boolean; frequency?: boolean; bigram?: boolean; hybrid?: boolean; vowels?: boolean;
+    /**
+     * The 100k-stem lexicon. Loaded unless `false`, so tuning figures stay
+     * comparable across rounds; it is not shipped, so the README's
+     * size-against-accuracy table is measured with it off (`--no-lexicon`).
+     */
+    lexicon?: boolean;
     /** Repo-relative weights file; the shipped one by default. */
     weights?: string;
     /** Vowel table file; the shipped one by default. */
     vowelsFile?: string;
   } = {},
 ): Transliterator {
-  const lexicon = loadLexicon();
+  const lexicon = options.lexicon === false ? undefined : loadLexicon();
   const model = options.model === false ? undefined : loadModel(options.weights);
   if (options.weights && options.model !== false && !model) throw new Error(`no weights at ${options.weights}`);
   const frequency = options.frequency === false ? undefined : loadFrequency();

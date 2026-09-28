@@ -11,7 +11,7 @@ as a result, and what remains genuinely open.
 
 ## 0g. September 2026 — a silent ه before a suffix, `-an` adverbs, detached `ash`, `na` + word
 
-Record in the README round section. Closed: 0f's items 1 to 4. The hybrid's
+Record in [`docs/results.md`](results.md). Closed: 0f's items 1 to 4. The hybrid's
 own "other" on dev falls from 186 words to 150, and the rules' from 193 to 157.
 
 Not done, by design:
@@ -43,7 +43,7 @@ Still open:
 
 ## 0f. September 2026 — what "other" was
 
-Record in the README round section. `error-groups.ts` put 467 of the hybrid's
+Record in [`docs/results.md`](results.md). `error-groups.ts` put 467 of the hybrid's
 dev words in "other". Read against the faithful reference, the engine's own
 "other" was 230, and the rest was register sharing a run with one real
 mistake. Of the 230: 47 were به/چه joined or apart, now forgiven by the
@@ -70,7 +70,7 @@ Items 1 to 4 are one engine round, about +0.6 to +1.0 on dev. Closed by 0g.
 
 ## 0e. September 2026 — long vowels
 
-Record in the README round section. Closed: the rule-fixable part of the
+Record in [`docs/results.md`](results.md). Closed: the rule-fixable part of the
 long-vowel group, which is the hiatus یی (`begouim` بگوییم), `ou` for a short
 o (`kounam` کنم), the ezafe glued to a silent ه (`darbaareye` درباره) and
 `hata` حتی.
@@ -98,7 +98,7 @@ Still open:
 
 ## 0d. September 2026 — glued endings
 
-Record in the README round section. Closed: 0c's item 2 in part (plural +
+Record in [`docs/results.md`](results.md). Closed: 0c's item 2 in part (plural +
 object marker, `kelidaro` کلیدارو) and item 3 at a clause end (`raygane?`
 رایگانه؟), and numbers with a glued و (`bisto panj` بیست و پنج).
 
@@ -117,7 +117,7 @@ Still open:
 
 ## 0c. September 2026 — object marker, abbreviations, loanword guard
 
-Record in the README round section. Closed: 0b's item 1 in part (the guard
+Record in [`docs/results.md`](results.md). Closed: 0b's item 1 in part (the guard
 now asks the LLM-typed corpus whether typists spell the colliding word that
 way; `file` still lacks evidence), the `-o` object marker on native words,
 and texting skeletons (`mrc`, `nmdnm`). Chat-dev +1.7 / +0.4 / +1.8, gold
@@ -138,7 +138,7 @@ Still open:
 
 ## 0b. September 2026 — stretched words and loanwords
 
-Full record in the README's round section and `data/provenance/loanwords.json`.
+Full record in [`docs/results.md`](results.md) and `data/provenance/loanwords.json`.
 
 * **Stretched words are read without the stretch and written back with it**
   (`src/stretch.ts`), and the metric folds a stretch to one letter. Chat-dev
