@@ -111,6 +111,25 @@ fixed (`WORD_EXCEPTIONS` in `src/pipeline.ts`). Next, in order: decide
 whether compound spacing is a convention the headline should forgive, then
 the long vowels.
 
+**Repeated one-word mistakes on dev and chat-dev** (September 2026): `na`
+→ نا and `baad` → باد are fixed (`WORD_EXCEPTIONS`), and so is a stretched
+`naaa`. What is left is not a small fix:
+
+* `hal` → حل (for حال, 3 times) and `ghorme` → قرمه (for قورمه, twice): the
+  rules get both right and the hybrid follows the model, which learned them
+  from LLM-typed data that spells حال `haal`. A training-data problem.
+* `baram` → بارم (for برام): HomoRich has only the formal *beram* (99%), so
+  the vowel table charges the casual reading.
+* `vel` → ولع and `dom` → دوم since the و vowel groups: the table keeps one
+  reading per word, and ول is *val* 57% / *vel* 40%, دم *dam* 59% / *dom* 41%.
+  Keeping every reading with 20% or more of a word's pronunciations was tried
+  (+1.4 KiB): dev net 0, it broke مورد and باری. At 35% (+0.6 KiB) the hybrid
+  gained ول twice and دم once with nothing worse on dev, but the rules lost
+  پای → پی and every tier lost the `ghatar` → قطار fixture, because قطر keeps
+  *qatar* as well as *qotr*. About +0.1, within noise; not shipped. A second
+  reading helps its own word and also lets a different word match what was
+  typed.
+
 Still open, from the chat-dev errors that remain:
 
 1. **English-spelled loanwords**: `cake`, `backup`, `message`, `offside`,
