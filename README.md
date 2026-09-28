@@ -74,14 +74,14 @@ Four entry points, measured with `node scripts/size.ts --tiers`:
 
 | entry | contents | gzip | Brotli |
 |---|---|---:|---:|
-| `tiny-finglish` | tokenizer, rules, dictionary, loanwords, beam, model runtime, sentence pass | 22.2 KiB | **19.3 KiB** |
-| `tiny-finglish/rules` | the same, without the model runtime | 19.2 KiB | **16.8 KiB** |
+| `tiny-finglish` | tokenizer, rules, dictionary, loanwords, beam, model runtime, sentence pass | 23.3 KiB | **20.3 KiB** |
+| `tiny-finglish/rules` | the same, without the model runtime | 20.3 KiB | **17.7 KiB** |
 | `tiny-finglish/normalize` | Persian text normalization alone | 0.9 KiB | **0.8 KiB** |
 | `tiny-finglish/metrics` | word accuracy and CER, to score it yourself | 0.5 KiB | **0.4 KiB** |
 
 `./rules` is not a reduced reimplementation — `RuleTransliterator` extends the
 same `Pipeline` as `Transliterator` and overrides nothing, and the two produce
-byte-identical output on all 2,589 committed inputs. The 2.5 KiB it saves is
+byte-identical output on all 2,589 committed inputs. The 2.6 KiB it saves is
 the neural runtime, which `"."` imports unconditionally because its constructor
 builds a `Transducer`; `"sideEffects": false` cannot help a bundler there.
 
@@ -90,18 +90,18 @@ the accuracy you choose:
 
 | + data | Brotli | gold, orthographic (headline) | gold, strict |
 |---|---:|---:|---:|
-| nothing | 16.9 KiB | 69.9% | 65.0% |
-| frequency + vowels | 85.5 KiB | 81.4% | **75.1%** |
-| frequency + vowels + bigrams (opt-in) | 159.1 KiB | 81.9% | 75.5% |
-| ...and the model deciding alone (`hybrid: false`) | 172.6 KiB | 81.6% | 72.6% |
-| **...and the model, ranked jointly with the rules (`"."` default)** | **172.6 KiB** | **82.5%** | 73.3% |
+| nothing | 17.7 KiB | 70.0% | 65.0% |
+| frequency + vowels | 86.3 KiB | 81.5% | **75.2%** |
+| frequency + vowels + bigrams (opt-in) | 159.9 KiB | 81.9% | 75.5% |
+| ...and the model deciding alone (`hybrid: false`) | 173.3 KiB | 81.6% | 72.6% |
+| **...and the model, ranked jointly with the rules (`"."` default)** | **173.3 KiB** | **82.6%** | 73.4% |
 
 Measured on the 1,669-row audited gold set, September 2026. The previous
 figures (62.3% for rules + frequency, 51.2% for the model) were on the
 1,835-row set before its audit; see
 [the September 2026 round](#september-2026-dictionary-decoding-llm-distillation-llm-measurement).
 Against a reference edited to what was actually typed, frequency + vowels,
-the model alone and the hybrid score 88.8%, 89.0% and 90.0%; the difference is
+the model alone and the hybrid score 88.9%, 89.0% and 90.1%; the difference is
 register, not transliteration
 ([gold scored against what was typed](#september-2026-gold-scored-against-what-was-typed)).
 
@@ -123,7 +123,7 @@ how `salam` is سلام and not سالم, and `shohar` شوهر and not شهر. 
 
 **With a model, the hybrid is the default.** It is the most accurate setup on
 the headline: +1.1 points over the rules on gold (95% CI +0.8 to +1.3, better on
-163 sentences, worse on 43) and +0.9 over the model alone, and it writes the
+164 sentences, worse on 43) and +1.0 over the model alone, and it writes the
 half-space. On the strict tier the rules lead by 1.8, which is the half-space
 convention, not better words.
 
@@ -182,6 +182,38 @@ of 504 candidates per word and a p99 of ~92,000.
 Full detail in [`docs/architecture.md`](docs/architecture.md).
 
 ## Measured results
+
+### September 2026: glued endings — numbers, plural + `ro`, the clause-final copula
+
+Three rule-side fixes, +0.7 KiB of code (19.6 → 20.3 KiB). Tuned on dev,
+chat-dev and the fixtures; gold and chat-test scored once.
+
+* **Numbers.** `bisto panj` is بیست و پنج, not بیستو پنج, and likewise `sio do`,
+  `do hezaro yek`, `yeko nim`, `bisto 5`. A number word ending in `o`, followed
+  by a number, gets its و as a word. `yeko bede` stays یکو ("the one"). The
+  headline tier already forgave the joined و, so this is right Persian that
+  only the strict tier can see.
+* **Plural + `ro`.** `chizaro` is چیزارو, not چیزرو, and likewise `inaro`,
+  `fardaro`, `ketabharo`. The rules read the plural `a` as an unwritten short
+  vowel. A noun in `-ar` with the object marker is left alone (`pesaro` پسرو,
+  `khabaro` خبرو), because پسر and خبر are words and چیزر is not.
+* **The clause-final copula.** `ersal raygane?` is ارسال رایگانه؟. The ه form
+  was not among the candidates, so the clause-final term had nothing to pick.
+  It is now offered second for a word typed with a final `e` whose stem is a
+  table word. Mid-sentence nothing changes, and 17 ezafe heads (`bekhatere`
+  بخاطر, `zire` زیر) never get it.
+
+| | dev (faithful) | chat-dev | fixtures | gold, scored once |
+|---|---|---|---|---|
+| rules | no row changed | +0.24 (2 better, 0 worse) | no change | **+0.05** (+0.01 to +0.10, real; 7 better, 1 worse) |
+| model | +0.03 (1 better) | +0.24 (2 better, 0 worse) | no change | +0.02 (noise; 3 better, 1 worse) |
+| hybrid | no row changed | +0.24 (2 better, 0 worse) | +1 row (`halle` حله) | +0.06 (0.00 to +0.12; 8 better, 2 worse) |
+
+chat-test is unchanged. The gold losses are two cut-off sentences that end on
+an ezafe head the list lacks (`baraye` برایه, `morede` مورده). They are not
+added, because nothing is tuned on gold. About +0.1 point for 0.7 KiB is poor
+value per byte; it is here because it writes the right word, and it is the
+first thing to revisit if the budget tightens.
 
 ### September 2026: gold scored against what was typed
 
@@ -563,11 +595,11 @@ after Brotli at 500k, for no measurable accuracy cost — which is what makes th
 | keystroke, incremental word | < 0.01 ms | 16 ms |
 | keystroke, end of sentence (warm) | 0.03 ms | 16 ms |
 | sentence, cold | ~40 ms | 100 ms |
-| shipped bundle, Brotli | **172.6 KiB** | ~250 KiB soft cap |
+| shipped bundle, Brotli | **173.3 KiB** | ~250 KiB soft cap |
 
-The bundle is 19.6 KiB of code, 84.4 KiB of weights, 55.3 KiB of frequency and
+The bundle is 20.3 KiB of code, 84.4 KiB of weights, 55.3 KiB of frequency and
 13.3 KiB of vowels; the last two are separate fetches, never bundled, so a
-consumer who wants only the rules pays 16.9 KiB. About 3.8 KiB of the code is the
+consumer who wants only the rules pays 17.7 KiB. About 3.8 KiB of the code is the
 loanword and abbreviation tables, which is bundled because the rules-only tier needs it too. The 73.6 KiB bigram and the 98.3 KiB lexicon are built and
 measured but not counted — see the accuracy-per-byte table below. Both budgets
 are enforced in CI.

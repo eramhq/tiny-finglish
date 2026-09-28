@@ -342,3 +342,41 @@ describe("word exceptions, stretched and not", () => {
     });
   }
 });
+
+/**
+ * Three glued endings the rules lost: the conjunction on a number
+ * (`numberConjunction`), the plural before the object marker
+ * (`pluralObjectMarker`), and the copula ه at a clause end
+ * (`copulaCandidate`) — with the look-alikes each one must leave alone.
+ */
+describe("glued و on numbers, plural + ro, clause-final copula", () => {
+  const tiers = [["rules", rules], ["model", model], ["hybrid", hybrid]] as const;
+  for (const [name, engine] of tiers) {
+    it.skipIf(!engine)(`numbers on the ${name} tier`, () => {
+      expect(engine!.transliterate("bisto panj").text).toBe("بیست و پنج");
+      expect(engine!.transliterate("do hezaro yek").text).toBe("دو هزار و یک");
+      expect(engine!.transliterate("yeko nim").text).toBe("یک و نیم");
+      expect(engine!.transliterate("bisto 5").text).toBe("بیست و 5");
+      // Without a number after it the o is the object marker: "give me the one".
+      expect(engine!.transliterate("yeko bede").text).toBe("یکو بده");
+    });
+    it.skipIf(!engine)(`plural + ro on the ${name} tier`, () => {
+      expect(engine!.transliterate("chizaro").text).toBe("چیزارو");
+      expect(engine!.transliterate("inaro").text).toBe("اینارو");
+      expect(engine!.transliterate("ketabharo").text).toBe("کتابهارو");
+      // A noun in -ar with the object marker, not a plural.
+      expect(engine!.transliterate("pesaro").text).toBe("پسرو");
+      expect(engine!.transliterate("khabaro").text).toBe("خبرو");
+      expect(engine!.transliterate("dokhtaro").text).toBe("دخترو");
+    });
+  }
+  for (const [name, engine] of [["rules", rules], ["hybrid", hybrid]] as const) {
+    it.skipIf(!engine)(`the copula ه at a clause end on the ${name} tier`, () => {
+      expect(engine!.transliterate("ersal raygane?").text).toBe("ارسال رایگانه؟");
+      expect(engine!.transliterate("ghazaye self eftezahe").text).toBe("غذای سلف افتضاحه");
+      // Mid-sentence the bare word stays, and an ezafe head never takes it.
+      expect(engine!.transliterate("kheyli raygane in").text).toBe("خیلی رایگان این");
+      expect(engine!.transliterate("bekhatere").text).toBe("بخاطر");
+    });
+  }
+});

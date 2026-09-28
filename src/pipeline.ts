@@ -194,6 +194,7 @@ export abstract class Pipeline {
 
     const attach = this.detachedEzafe(spans);
     this.sentencePass(spans);
+    this.numberConjunction(spans, opts);
     for (const index of attach) this.appendYe(spans[index]!);
     // Trim to the reported width only after the sentence pass, which needs a
     // wider list than a caller asked to see.
@@ -264,6 +265,43 @@ export abstract class Pipeline {
       }
     }
     return attach;
+  }
+
+  /**
+   * `bisto panj` is بیست و پنج: a number word with the conjunction `o` glued
+   * on, followed by another number. Every engine wrote بیستو پنج, because a
+   * typed final `o` is و and nothing told it the و is a word of its own — the
+   * same for `sio do`, `sado bist`, `do hezaro yek`, `yeko nim`.
+   *
+   * It needs the next word, so it runs after the sentence pass: when a word
+   * ends in `o`, a candidate for the rest of it is a number word, and the next
+   * word across one space is a number (a number word, نیم, or digits), the word
+   * becomes that number, a space and و. Without a number after it the `o` is
+   * left alone — `yeko bede` is یکو, "give me the one". The typing path sees
+   * `bisto` as بیستو until `panj` is typed; that is the evidence arriving, as
+   * with the clause-final ه.
+   */
+  private numberConjunction(spans: Span[], opts: TransliterateOptions): void {
+    for (let i = 0; i + 2 < spans.length; i++) {
+      const span = spans[i]!;
+      const lower = span.input.toLowerCase();
+      if (span.action !== "convert" || lower.length < 3 || !lower.endsWith("o")) continue;
+      if (spans[i + 1]!.action !== "space" || spans[i + 1]!.input !== " ") continue;
+      const next = spans[i + 2]!;
+      const nextIsNumber = next.action === "convert"
+        ? NUMBER_WORDS.has(next.output) || next.output === "نیم"
+        : next.action === "copy" && /^[0-9۰-۹]+$/u.test(next.input);
+      if (!nextIsNumber) continue;
+      const number = this.convertBase(lower.slice(0, -1), opts).find((c) => NUMBER_WORDS.has(c.output));
+      if (!number) continue;
+      const output = `${number.output} و`;
+      span.output = output;
+      span.confidence = 1;
+      span.candidates = [
+        { output, probability: 1, reason: `number ${number.output} and و` },
+        ...(span.candidates ?? []).filter((c) => c.output !== output).map((c) => ({ ...c, probability: 0 })),
+      ];
+    }
   }
 
   private appendYe(span: Span): void {
@@ -342,9 +380,10 @@ export abstract class Pipeline {
     // the model and hybrid tiers get it too. The model tier is where it matters
     // most: v7 writes `salam` as سالم without it.
     const generated = this.convertWord(word, wide, marked);
-    const candidates = this.objectMarker(word, withLoanword(word, this.vowels
-      ? vowelPass(word, generated, this.vowels, this.scoring.vowelAgreement)
-      : generated), opts);
+    const candidates = this.copulaCandidate(word, this.pluralObjectMarker(word, this.objectMarker(word,
+      withLoanword(word, this.vowels
+        ? vowelPass(word, generated, this.vowels, this.scoring.vowelAgreement)
+        : generated), opts), opts), opts);
 
     if (this.cache.size >= this.cacheSize) {
       // Cheap FIFO eviction. A true LRU costs more bookkeeping than it saves at
@@ -403,6 +442,89 @@ export abstract class Pipeline {
     return [
       { output: best.output, probability: OBJECT_MARKER_SHARE, reason: best.reason },
       ...rest.map((c) => ({ ...c, probability: round4(((1 - OBJECT_MARKER_SHARE) * c.probability) / total) })),
+    ];
+  }
+
+  /**
+   * The colloquial plural with the object marker, `-a` + `ro`: `chizaro`
+   * چیزارو, `inaro` اینارو, `ketabharo` کتابهارو.
+   *
+   * The rules read the plural `a` as an unwritten short vowel and wrote
+   * چیزرو, اینرو, فردرو (for `fardaro`, فردا رو). `objectMarker` cannot help:
+   * that output already ends in و, which it leaves alone. So this reads the
+   * word as a stem, the plural (`a` → ا, `ha` → ها) and `ro` → رو, and puts
+   * that first when the stem converts to a frequency-table word.
+   *
+   * The same letters are a noun in `-ar` with the object marker `o`: `pesaro`
+   * پسرو, `khabaro` خبرو, `dokhtaro` دخترو, `safaro` سفرو. What tells them
+   * apart is that پسر, خبر, دختر and سفر are words and چیزر is not, so when the
+   * engine's own answer less its و is a table word, it is left alone. (Testing
+   * the stem converted on its own instead reads `khab` as خواب and turns
+   * `khabaro` into خوابارو.) A typed `aa` already reads as
+   * ا (`kelidaaro` کلیدارو), so only a single `a` is touched. Many `-aar` nouns
+   * come out the same either way (`kenaro` کنارو, `bazaro` بازارو).
+   */
+  private pluralObjectMarker(key: string, candidates: Candidate[], opts: TransliterateOptions): Candidate[] {
+    const frequency = this.frequency;
+    const top = candidates[0];
+    if (!frequency || !top || top.reason === "loanword" || !/[^a]aro$/.test(key)) return candidates;
+    if (top.output.endsWith("و") && frequency.get(top.output.slice(0, -1).replaceAll(ZWNJ, ""))) return candidates;
+    const readings: Array<[string, string]> = key.endsWith("haro")
+      ? [[key.slice(0, -4), "ها"], [key.slice(0, -3), "ا"]]
+      : [[key.slice(0, -3), "ا"]];
+    for (const [latin, plural] of readings) {
+      if (latin.length < 2) continue;
+      const stem = this.convertBase(latin, opts)[0]?.output.replaceAll(ZWNJ, "");
+      if (!stem || !frequency.get(stem)) continue;
+      const output = `${stem}${plural}رو`;
+      if (top.output === output) return candidates;
+      const rest = candidates.filter((c) => c.output !== output);
+      const total = rest.reduce((sum, c) => sum + c.probability, 0) || 1;
+      return [
+        { output, probability: OBJECT_MARKER_SHARE, reason: `plural and object marker on ${stem}` },
+        ...rest.map((c) => ({ ...c, probability: round4(((1 - OBJECT_MARKER_SHARE) * c.probability) / total) })),
+      ];
+    }
+    return candidates;
+  }
+
+  /**
+   * Offer the copula ه for a word typed with a final `e`: `raygane` رایگانه,
+   * `eftezahe` افتضاحه, `halle` حله.
+   *
+   * `finalHePass` can prefer a ه-final candidate at a clause end, but only one
+   * that is in the list, and for these it was not: the list for `raygane` was
+   * رایگان, ریگنه, ریگان. So when the word less its `e` converts to a
+   * frequency-table word and that word plus ه is not already a candidate, it
+   * is added **second**, with `COPULA_SHARE` of the probability. Never first:
+   * mid-sentence the bare word stays the answer (charging or boosting a ه
+   * there loses, see `finalHePass`), and at a clause end the existing
+   * `finalHe` term decides.
+   *
+   * Not for `EZAFE_HEADS`: `bekhatere` is بخاطر with the ezafe, "because of",
+   * and is clause-final only when typed alone or mid-typing. Its top reading is
+   * as sure as رایگان's (0.99 both), so no share separates them; the word does.
+   */
+  private copulaCandidate(key: string, candidates: Candidate[], opts: TransliterateOptions): Candidate[] {
+    const frequency = this.frequency;
+    const top = candidates[0];
+    const share = this.scoring.copulaShare;
+    if (!share || !frequency || !top || top.reason === "loanword" || key.length < 4 || !/[^e]e$/.test(key)) {
+      return candidates;
+    }
+    if (top.output.endsWith("ه")) return candidates;
+    const stem = this.convertBase(key.slice(0, -1), opts)[0]?.output;
+    if (!stem || /[هاو]$/u.test(stem) || EZAFE_HEADS.has(stem) || !frequency.get(stem.replaceAll(ZWNJ, ""))) {
+      return candidates;
+    }
+    const output = `${stem}ه`;
+    if (candidates.some((c) => c.output === output)) return candidates;
+    const rest = candidates.slice(1);
+    const scale = 1 - share;
+    return [
+      { ...top, probability: round4(top.probability * scale) },
+      { output, probability: share, reason: `copula ه on ${stem}` },
+      ...rest.map((c) => ({ ...c, probability: round4(c.probability * scale) })),
     ];
   }
 
@@ -700,6 +822,25 @@ const LOANWORD_SHARE = 0.9;
  * first; all 4 `baad` on dev mean بعد, none باد, and the model alone puts
  * بعد at 0.87. باد stays in the list, one choice away.
  */
+/**
+ * Words whose typed final `e` is the ezafe of a phrase that goes on, not the
+ * copula: `bekhatere` بخاطرِ, `zire` زیرِ. `copulaCandidate` leaves them alone.
+ * نزدیک and پیش are not here: `nazdike` and `pishe` are copulas in chat-dev.
+ */
+const EZAFE_HEADS: ReadonlySet<string> = new Set([
+  "بخاطر", "زیر", "داخل", "کنار", "وسط", "بیرون", "پشت", "بعد", "قبل", "بین",
+  "مثل", "بدون", "طرف", "سمت", "دنبال", "پایین", "مقابل",
+]);
+
+/** Persian number words that take a glued conjunction: `numberConjunction`. */
+const NUMBER_WORDS: ReadonlySet<string> = new Set([
+  "یک", "دو", "سه", "چهار", "پنج", "شش", "هفت", "هشت", "نه", "ده",
+  "یازده", "دوازده", "سیزده", "چهارده", "پانزده", "شانزده", "هفده", "هجده", "هیجده", "نوزده",
+  "بیست", "سی", "چهل", "پنجاه", "شصت", "هفتاد", "هشتاد", "نود",
+  "صد", "یکصد", "دویست", "سیصد", "چهارصد", "پانصد", "ششصد", "هفتصد", "هشتصد", "نهصد",
+  "هزار", "میلیون", "میلیارد",
+]);
+
 const WORD_EXCEPTIONS: ReadonlyMap<string, string> = new Map([["na", "نه"], ["baad", "بعد"]]);
 
 /**

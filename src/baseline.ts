@@ -159,6 +159,12 @@ export interface ScoringParams {
    */
   finalHe: number;
   /**
+   * Probability given to the copula ه candidate `Pipeline.copulaCandidate` adds
+   * second for a word typed with a final `e`; `finalHe` is what can promote it.
+   * 0 disables it.
+   */
+  copulaShare: number;
+  /**
    * Nats charged per typed vowel a candidate's own vowels contradict, among
    * candidates that differ only by ا/آ. Needs the vowel table; applied by
    * `Pipeline.convert` through `vowelPass` in `vowels.ts`.
@@ -290,6 +296,7 @@ export const SCORING: ScoringParams = {
   affix: -Infinity,
   stemBucket: 8,
   finalHe: 2.0,
+  copulaShare: 0.2,
   vowelAgreement: 3.0,
   fitted: FITTED_CHANNEL,
 };

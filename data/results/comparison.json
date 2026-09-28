@@ -16,14 +16,14 @@
   },
   "lexiconGain": {
     "ours-model-frequency": {
-      "withLexicon": 0.7334218542529095,
-      "withoutLexicon": 0.7327188940092166,
+      "withLexicon": 0.7339686011091151,
+      "withoutLexicon": 0.7332656408654221,
       "points": 0.0703
     },
     "ours-rules-frequency": {
-      "withLexicon": 0.7510739670389752,
-      "withoutLexicon": 0.750683433570257,
-      "points": 0.0391
+      "withLexicon": 0.7515426072014372,
+      "withoutLexicon": 0.7512301804264625,
+      "points": 0.0312
     },
     "ours-rules": {
       "withLexicon": 0.6496914785597125,
@@ -39,14 +39,14 @@
   },
   "bigramGain": {
     "ours-model-frequency": {
-      "shipped": 0.7334218542529095,
-      "withBigram": 0.7352964149027572,
-      "points": 0.1875
+      "shipped": 0.7339686011091151,
+      "withBigram": 0.735765055065219,
+      "points": 0.1796
     },
     "ours-rules-frequency": {
-      "shipped": 0.7510739670389752,
-      "withBigram": 0.7552136218073889,
-      "points": 0.414
+      "shipped": 0.7515426072014372,
+      "withBigram": 0.7554479418886199,
+      "points": 0.3905
     },
     "ours-rules": {
       "shipped": 0.6496914785597125,
@@ -93,41 +93,41 @@
       "accuracy": {
         "gold": {
           "n": 1669,
-          "wordsCorrect": 9390,
+          "wordsCorrect": 9397,
           "wordsTotal": 12803,
-          "wordAcc": 0.7334218542529095,
-          "sentence": 0.14140203714799282,
-          "cer": 0.0899
+          "wordAcc": 0.7339686011091151,
+          "sentence": 0.14379868184541642,
+          "cer": 0.0898
         },
         "fixtures": {
           "n": 244,
-          "wordsCorrect": 361,
+          "wordsCorrect": 362,
           "wordsTotal": 385,
-          "wordAcc": 0.9376623376623376,
-          "sentence": 0.9262295081967213,
-          "cer": 0.0331
+          "wordAcc": 0.9402597402597402,
+          "sentence": 0.930327868852459,
+          "cer": 0.0317
         },
         "authored": {
           "n": 71,
-          "wordsCorrect": 88,
+          "wordsCorrect": 87,
           "wordsTotal": 105,
-          "wordAcc": 0.8380952380952381,
-          "sentence": 0.8591549295774648,
-          "cer": 0.0324
+          "wordAcc": 0.8285714285714286,
+          "sentence": 0.8450704225352113,
+          "cer": 0.0359
         }
       },
-      "latencyMsPerSentence": 3.2359,
+      "latencyMsPerSentence": 3.2105,
       "preservesProtectedSpans": true,
       "size": {
-        "raw": 371045,
-        "gzip": 193251,
-        "brotli": 176753,
+        "raw": 374612,
+        "gzip": 194108,
+        "brotli": 177499,
         "breakdown": [
           {
             "component": "runtime + rules + tokenizer (JS)",
-            "raw": 68064,
-            "gzip": 23015,
-            "brotli": 20046
+            "raw": 71631,
+            "gzip": 23872,
+            "brotli": 20792
           },
           {
             "component": "model weights (int6)",
@@ -163,11 +163,11 @@
       "accuracy": {
         "gold": {
           "n": 1669,
-          "wordsCorrect": 9616,
+          "wordsCorrect": 9622,
           "wordsTotal": 12803,
-          "wordAcc": 0.7510739670389752,
-          "sentence": 0.15757938885560216,
-          "cer": 0.088
+          "wordAcc": 0.7515426072014372,
+          "sentence": 0.15877771120431397,
+          "cer": 0.0879
         },
         "fixtures": {
           "n": 244,
@@ -175,29 +175,29 @@
           "wordsTotal": 385,
           "wordAcc": 0.9012987012987013,
           "sentence": 0.8975409836065574,
-          "cer": 0.0403
+          "cer": 0.0389
         },
         "authored": {
           "n": 71,
-          "wordsCorrect": 99,
+          "wordsCorrect": 98,
           "wordsTotal": 105,
-          "wordAcc": 0.9428571428571428,
-          "sentence": 0.9154929577464789,
-          "cer": 0.0312
+          "wordAcc": 0.9333333333333333,
+          "sentence": 0.9014084507042254,
+          "cer": 0.0347
         }
       },
-      "latencyMsPerSentence": 0.4753,
+      "latencyMsPerSentence": 0.4938,
       "preservesProtectedSpans": true,
       "size": {
-        "raw": 235486,
-        "gzip": 101199,
-        "brotli": 90281,
+        "raw": 239053,
+        "gzip": 102056,
+        "brotli": 91027,
         "breakdown": [
           {
             "component": "runtime + rules + tokenizer (JS)",
-            "raw": 68064,
-            "gzip": 23015,
-            "brotli": 20046
+            "raw": 71631,
+            "gzip": 23872,
+            "brotli": 20792
           },
           {
             "component": "word frequency (25k words)",
@@ -250,18 +250,18 @@
           "cer": 0.1387
         }
       },
-      "latencyMsPerSentence": 0.3341,
+      "latencyMsPerSentence": 0.3194,
       "preservesProtectedSpans": true,
       "size": {
-        "raw": 68064,
-        "gzip": 23015,
-        "brotli": 20046,
+        "raw": 71631,
+        "gzip": 23872,
+        "brotli": 20792,
         "breakdown": [
           {
             "component": "runtime + rules + tokenizer (JS)",
-            "raw": 68064,
-            "gzip": 23015,
-            "brotli": 20046
+            "raw": 71631,
+            "gzip": 23872,
+            "brotli": 20792
           }
         ],
         "note": "Excludes the lexicon, which is not shipped by default — see `optionalLexicon` and `lexiconGain`, which measure exactly what leaving it out costs."
@@ -302,7 +302,7 @@
           "cer": 0.1932
         }
       },
-      "latencyMsPerSentence": 0.0056,
+      "latencyMsPerSentence": 0.0075,
       "preservesProtectedSpans": false,
       "size": {
         "raw": 4524,
@@ -345,7 +345,7 @@
           "cer": 0.8073
         }
       },
-      "latencyMsPerSentence": 5.3873,
+      "latencyMsPerSentence": 4.7207,
       "preservesProtectedSpans": false,
       "size": {
         "raw": 3775810,
@@ -440,7 +440,7 @@
           "cer": 0.0536
         }
       },
-      "latencyMsPerSentence": 4.0573,
+      "latencyMsPerSentence": 3.6324,
       "preservesProtectedSpans": false,
       "size": {
         "raw": 7132019,

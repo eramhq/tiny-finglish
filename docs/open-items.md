@@ -9,6 +9,25 @@ as a result, and what remains genuinely open.
 
 ---
 
+## 0d. September 2026 — glued endings
+
+Record in the README round section. Closed: 0c's item 2 in part (plural +
+object marker, `kelidaro` کلیدارو) and item 3 at a clause end (`raygane?`
+رایگانه؟), and numbers with a glued و (`bisto panj` بیست و پنج).
+
+Still open:
+
+1. **The copula mid-sentence** (`che garme emrooz`, `nazdike sabr kon`): the
+   ه form is a candidate but ranked second, and a medial tilt toward it has
+   measured as a loss before (`SCORING`).
+2. **A conjunction glued on a noun** (`resturano` رستوران و): the same letters
+   as the object marker, with nothing in the word to tell them apart.
+3. **Ezafe heads the list lacks.** Gold shows `baraye` برایه and `morede`
+   مورده on cut-off sentences. Adding them needs evidence from dev or chat-dev,
+   not gold.
+4. **`ketabo` on the model tier** (0c item 1): the hybrid and the rules write
+   کتابو; the model alone still writes کتاب.
+
 ## 0c. September 2026 — object marker, abbreviations, loanword guard
 
 Record in the README round section. Closed: 0b's item 1 in part (the guard
