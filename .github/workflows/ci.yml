@@ -35,14 +35,7 @@ jobs:
       - name: Latency budget
         run: node scripts/bench.ts
 
-      # Secondary: reported every build, soft-capped. Exceeding it is a
-      # deliberate decision, not an automatic failure, so this never fails.
-      - name: Size report
-        run: node scripts/size.ts --json
-
-      - name: Python/browser parity
-        run: node scripts/parity.ts
-
+      # Before the size report: `npm run build` empties dist/, where it writes.
       - name: Package ships its data
         run: |
           npm run build
@@ -50,6 +43,14 @@ jobs:
           for f in dist/index.js dist/data/weights.json dist/data/frequency.bin dist/data/vowels.bin NOTICE; do
             grep -q "$f" pack.txt || { echo "missing from package: $f"; exit 1; }
           done
+
+      # Secondary: reported every build, soft-capped. Exceeding it is a
+      # deliberate decision, not an automatic failure, so this never fails.
+      - name: Size report
+        run: node scripts/size.ts --json
+
+      - name: Python/browser parity
+        run: node scripts/parity.ts
 
       # Reports, not gates. They exist because the two numbers that decide what
       # to work on next — how much a perfect reranker could buy, and what the
