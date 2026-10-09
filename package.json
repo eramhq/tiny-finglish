@@ -1,6 +1,6 @@
 {
   "name": "tiny-finglish",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Finglish (Persian typed in Latin/ASCII) to Persian script, entirely in the browser. No server, no API key.",
   "license": "MIT",
   "repository": {

@@ -4,7 +4,7 @@ This revises [`PLAN.md`](PLAN.md) on two points and keeps the rest of its
 scaffolding — goals, non-goals, risk register, evaluation metrics — intact.
 
 **Implementation status is tracked in [Milestones](#milestones) below and
-summarised in the [README](README.md#where-this-actually-is).**
+summarised in the [historical README](docs/readme-history.md#where-this-actually-is).**
 
 ## Recommendation in five points
 

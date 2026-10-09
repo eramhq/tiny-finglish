@@ -3,7 +3,7 @@
 Every round of accuracy work on tiny-finglish, newest first: what changed, what
 it bought on each evaluation set, and what it cost in bytes. Tuning figures
 load the optional 100k-stem lexicon; the size-against-accuracy table in the
-[README](../README.md#pick-your-accuracy-per-byte-point) is measured as shipped,
+[historical README](readme-history.md#pick-your-accuracy-per-byte-point) is measured as shipped,
 without it. The older sections below record the numbers of their day; later
 rounds supersede them.
 

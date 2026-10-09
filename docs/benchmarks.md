@@ -156,7 +156,7 @@ What this changes:
   reference writes, the order reverses and is just as real: hybrid − rules
   +1.5 (+1.2 to +1.7), model − rules +0.6 (+0.1 to +1.1), with compound
   spacing forgiven as well. The headline is now
-  the orthographic tier (`README.md`, "fair grading").
+  the orthographic tier ([historical README](readme-history.md#pick-your-accuracy-per-byte-point), "fair grading").
 
 Reproduce any row with, for example:
 

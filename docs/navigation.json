@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "defaultLocale": "en",
+  "locales": [
+    "en",
+    "fa"
+  ],
+  "entry": "overview",
+  "sections": [
+    {
+      "id": "start",
+      "title": {
+        "en": "Getting started",
+        "fa": "شروع استفاده"
+      },
+      "pages": [
+        "overview",
+        "installation"
+      ]
+    },
+    {
+      "id": "setup",
+      "title": {
+        "en": "Set up the engine",
+        "fa": "راه‌اندازی موتور"
+      },
+      "pages": [
+        "browser",
+        "node",
+        "configurations"
+      ]
+    },
+    {
+      "id": "use",
+      "title": {
+        "en": "Convert and review text",
+        "fa": "تبدیل و بازبینی متن"
+      },
+      "pages": [
+        "input-options",
+        "results",
+        "ui-integration",
+        "workers"
+      ]
+    },
+    {
+      "id": "reference",
+      "title": {
+        "en": "Limits and evaluation",
+        "fa": "محدودیت‌ها و ارزیابی"
+      },
+      "pages": [
+        "limitations"
+      ]
+    }
+  ]
+}

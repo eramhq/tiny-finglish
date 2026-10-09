@@ -141,7 +141,7 @@ decisions re-read this way.
   at all, and strict folds ZWNJ to a space, so a correct `می‌کنم` scores as
   two words against a reference that spells `میکنم` solid. That is why the
   headline is the orthographic tier, where the model is ahead of the rules
-  and the hybrid further ahead (`README.md`, "fair grading").
+  and the hybrid further ahead ([historical README](readme-history.md#pick-your-accuracy-per-byte-point), "fair grading").
 * **Short-vowel quality varies in generated Finglish.** `ketab` and `kotab` are
   both reachable from کتاب. There is no redistributable Persian pronunciation
   dictionary; the generator samples. The syllable *structure* is engineered and
